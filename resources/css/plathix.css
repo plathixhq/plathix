@@ -1,0 +1,402 @@
+/* ============================================================
+   Plathix Admin UI — Design System
+   Warm Stone · Teal Accent · Light Sidebar
+   ============================================================ */
+
+:root {
+
+	/* [internal]: --plathix-bg / --plathix-text-1 / --plathix-font-ui остаются
+     на :root (не на .plathix-layout ниже) — body{} и admin-ui.css's
+     body.<page-class> селекторы их читают, а body физически родитель
+     .plathix-layout в DOM (views/admin-layout.php), не потомок — CSS custom
+     properties наследуются только вниз по дереву. */
+	--plathix-bg: #f8f7f4;
+	--plathix-text-1: #1c1917;
+	--plathix-font-ui: -apple-system, blinkmacsystemfont, "Segoe UI", helvetica, arial, sans-serif;
+}
+
+/* ---- Reset ---- */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+button {
+	font: inherit;
+	cursor: pointer;
+}
+
+input,
+select,
+textarea {
+	font: inherit;
+}
+
+html,
+body,
+#root {
+	height: 100%;
+	overflow: hidden;
+}
+
+body {
+	font-family: var(--plathix-font-ui);
+	font-size: 13px;
+	color: var(--plathix-text-1);
+	background: var(--plathix-bg);
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.5;
+}
+
+/* ============================================================
+   Plathix Inner Layout
+   ============================================================ */
+.plathix-layout {
+
+	/* [internal]: остальные design-tokens скоупятся сюда (единственный
+     root-контейнер всех страниц Plathix, views/admin-layout.php) вместо
+     голого :root. */
+	--plathix-bg-subtle: #f2f1ee;
+	--plathix-bg-hover: #edecea;
+	--plathix-card: #fff;
+
+	--plathix-border: #e7e5e4;
+	--plathix-border-hover: #c8c4bf;
+	--plathix-border-strong: #a8a29e;
+
+	--plathix-text-2: #57534e;
+	--plathix-text-3: #78716c;
+
+	/* --plathix-text-4: подписи/хинты/UPPERCASE-секции. Прежний #A8A29E давал
+     контраст ~2.5:1 на белом (~2.35 на --plathix-bg-subtle) — провал WCAG AA
+     (≥4.5:1) для мелкого текста ([internal]/C4). Поднят до #736D67
+     (5.1:1 на белом, 4.8:1 на --plathix-bg-subtle) — проходит AA на обоих
+     фонах. Сознательный размен: тон стал чуть темнее --plathix-text-3,
+     визуальная ступень «4 светлее 3» схлопнута — но оба используются как
+     ТЕКСТ, а контраст важнее декоративной градации. */
+	--plathix-text-4: #736d67;
+
+	--plathix-sidebar-background: #fff;
+	--plathix-sidebar-separator: rgba(0, 0, 0, 0.07);
+	--plathix-sidebar-text: #78716c;
+	--plathix-sidebar-text-hover: #1c1917;
+	--plathix-sidebar-text-active: #1c1917;
+	--plathix-sidebar-active-background: rgba(0, 0, 0, 0.05);
+	--plathix-sidebar-width: 240px;
+	--plathix-rail-w: 56px;   /* ширина свёрнутого rail-сайдбара (иконки-онли, [internal]) */
+
+	--plathix-accent: #0d9488;
+	--plathix-accent-hover: #0f766e;
+	--plathix-accent-bg: #f0fdfa;
+	--plathix-accent-border: #99f6e4;
+	--plathix-accent-text: #134e4a;
+
+	--plathix-pro: #7c3aed;
+	--plathix-pro-hover: #6d28d9;
+	--plathix-pro-bg: #f5f3ff;
+	--plathix-pro-border: #ddd6fe;
+
+	--plathix-ok: #16a34a;
+	--plathix-ok-background: #f0fdf4;
+	--plathix-ok-border: #bbf7d0;
+	--plathix-warn: #ca8a04;
+	--plathix-warn-background: #fefce8;
+	--plathix-warn-border: #fde047;
+	--plathix-error: #dc2626;
+	--plathix-error-background: #fef2f2;
+	--plathix-error-border: #fecaca;
+	--plathix-info: #2563eb;
+	--plathix-info-background: #eff6ff;
+	--plathix-info-border: #bfdbfe;
+
+	--plathix-radius-xs: 3px;
+	--plathix-radius-sm: 5px;
+	--plathix-radius-md: 7px;
+	--plathix-radius-lg: 10px;
+	--plathix-radius-xl: 14px;
+
+	--plathix-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--plathix-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.09);
+
+	--plathix-font-mono: "SF Mono", "Fira Code", "Cascadia Code", consolas, monospace;
+
+	display: flex;
+	width: 100%;
+}
+
+/* Plathix sidebar nav */
+.plathix-sidebar {
+	width: var(--plathix-sidebar-width);
+	background: var(--plathix-sidebar-background);
+	border-right: 1px solid var(--plathix-border);
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: column;
+	padding: 20px;
+}
+
+.plathix-logo__area {
+	padding: 20px 6px 18px;
+	display: flex;
+	align-items: center;
+	gap: 9px;
+}
+
+.plathix-logo__mark {
+	width: 28px;
+	height: 28px;
+	background: var(--plathix-accent);
+	border-radius: 7px;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 13px;
+	font-weight: 800;
+	color: #fff;
+	letter-spacing: -0.5px;
+	flex-shrink: 0;
+}
+
+.plathix-logo__text {
+	font-size: 15px;
+	font-weight: 800;
+	color: var(--plathix-text-1);
+	letter-spacing: -0.4px;
+}
+
+.plathix-nav__separator {
+	height: 1px;
+	background: var(--plathix-sidebar-separator);
+	margin: 6px 4px;
+}
+
+.plathix-nav__label {
+	padding: 6px 8px 3px;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--plathix-text-4);
+}
+
+.plathix-nav__item {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	padding: 8px 10px;
+	border-radius: var(--plathix-radius-md);
+	font-size: 13px;
+	color: var(--plathix-sidebar-text);
+	cursor: pointer;
+	transition: background 0.12s, color 0.12s;
+	white-space: nowrap;
+	position: relative;
+}
+
+.plathix-nav__item:hover {
+	background: var(--plathix-bg-hover);
+	color: var(--plathix-sidebar-text-hover);
+}
+
+.plathix-nav__item.active {
+	background: var(--plathix-sidebar-active-background);
+	color: var(--plathix-sidebar-text-active);
+}
+
+.plathix-nav__item.active::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 3px;
+	height: 18px;
+	background: var(--plathix-accent);
+	border-radius: 0 3px 3px 0;
+}
+
+.plathix-nav__item.pro-nav {
+	color: var(--plathix-pro);
+}
+
+.plathix-nav__item.pro-nav:hover {
+	color: var(--plathix-pro-hover);
+	background: var(--plathix-pro-bg);
+}
+
+.plathix-nav__item.pro-nav.active {
+	color: var(--plathix-pro-hover);
+	background: var(--plathix-pro-bg);
+}
+
+.plathix-nav__item.pro-nav.active::before {
+	background: var(--plathix-pro);
+}
+
+.plathix-nav__icon {
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	opacity: 0.8;
+}
+
+.plathix-nav__item.active .plathix-nav__icon,
+.plathix-nav__item:hover .plathix-nav__icon {
+	opacity: 1;
+}
+
+.plathix-sidebar__footer {
+	margin-top: auto;
+	padding: 12px 8px 4px;
+}
+
+/* ============================================================
+   Main Content Area
+   ============================================================ */
+.plathix-main {
+	flex: 1;
+	padding: 22px 28px 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+/* Page Header */
+.plathix-page__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.plathix-page__title {
+	font-size: 19px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	letter-spacing: -0.4px;
+}
+
+.plathix-page__desc {
+	font-size: 13px;
+	color: var(--plathix-text-3);
+	margin-top: 3px;
+	line-height: 1.5;
+}
+
+/* ============================================================
+   Cards
+   ============================================================ */
+.plathix-card {
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-lg);
+	overflow: hidden;
+	box-shadow: var(--plathix-shadow-xs);
+}
+
+.plathix-card__head {
+	padding: 13px 16px;
+	border-bottom: 1px solid var(--plathix-border);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.plathix-card__title {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+}
+
+.plathix-card__body {
+	padding: 16px;
+}
+
+/* ============================================================
+   Form Elements
+   ============================================================ */
+.plathix-input.plathix-input,
+.plathix-select.plathix-select {
+	padding: 6px 10px;
+	border: 1px solid var(--plathix-border-hover);
+	border-radius: var(--plathix-radius-md);
+	font-size: 13px;
+	color: var(--plathix-text-1);
+	background: var(--plathix-card);
+	outline: none;
+	transition: border-color 0.12s, box-shadow 0.12s;
+	width: 100%;
+}
+
+.plathix-input:focus,
+.plathix-select:focus {
+	border-color: var(--plathix-accent);
+	box-shadow: 0 0 0 3px var(--plathix-accent-bg);
+}
+
+.plathix-input::placeholder {
+	color: var(--plathix-text-4);
+}
+
+.plathix-input[disabled],
+.plathix-select[disabled] {
+	background: var(--plathix-bg-subtle);
+	color: var(--plathix-text-4);
+	cursor: not-allowed;
+}
+
+/* ============================================================
+   Tables
+   ============================================================ */
+.plathix-table-wrap {
+	overflow-x: auto;
+	border-radius: var(--plathix-radius-md);
+}
+
+.plathix-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.plathix-table th {
+	padding: 9px 12px;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--plathix-text-4);
+	text-align: left;
+	border-bottom: 1px solid var(--plathix-border);
+	white-space: nowrap;
+	background: var(--plathix-bg-subtle);
+}
+
+.plathix-table td {
+	padding: 10px 12px;
+	font-size: 13px;
+	color: var(--plathix-text-1);
+	border-bottom: 1px solid var(--plathix-border);
+	vertical-align: middle;
+}
+
+.plathix-table tr:last-child td {
+	border-bottom: none;
+}
+
+.plathix-table tbody tr:hover td {
+	background: #fafaf9;
+}

@@ -1,0 +1,1688 @@
+:root {
+	--plathix-sidebar-z: 100;
+	--plathix-overlay-z: 100000;
+	--plathix-lightbox-z: 160001;
+	--plathix-toast-z: 200000;
+}
+
+/* ── Design tokens (макет Plathix Sidebar.html) ─────────────────────────── */
+.plathix-sidebar {
+	--plathix-bg: #f0f0f1;
+	--plathix-bg-subtle: #e8e8e9;
+	--plathix-bg-hover: #e0e0e1;
+	--plathix-surface: #f8f8f8;
+	--plathix-border: #e7e5e4;
+	--plathix-border-strong: #c8c4bf;
+	--plathix-text: #1c1917;
+	--plathix-sidebar-text-2: #57534e;
+	--plathix-text-muted: #78716c;
+	--plathix-icon-muted: #a8a29e;
+	--plathix-accent: #1c1917;
+	--plathix-accent-light: #f2f1ee;
+	--plathix-favorite: #ca8a04;
+	--plathix-trash: #dc2626;
+	--plathix-green: #16a34a;
+	--plathix-radius: 5px;
+	--plathix-gap: 10px;
+	--plathix-indent: 14px;
+	--plathix-font-size: 13px;
+	--plathix-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.07);
+	--plathix-shadow-md: 0 4px 14px rgba(0, 0, 0, 0.09);
+	background: var(--plathix-bg);
+	border-right: none;
+	border-bottom: 1px solid var(--plathix-border);
+	border-radius: 0;
+	overflow: hidden;
+	position: relative;
+	z-index: var(--plathix-sidebar-z);
+	display: flex;
+	flex-direction: column;
+	padding-right: 0;
+	font-size: var(--plathix-font-size);
+	box-shadow: 4px 0 16px rgba(0, 0, 0, 0.15);
+	-webkit-font-smoothing: antialiased;
+}
+
+#plathix-sidebar-root {
+	float: left;
+	width: 280px;
+	margin-right: 16px;
+	position: sticky;
+	top: 32px; /* WP admin bar height */
+	max-height: calc(100vh - 32px);
+	overflow-y: auto;
+	z-index: var(--plathix-sidebar-z);
+}
+
+/* Remove WP's default left padding so sidebar touches the admin menu */
+#wpbody-content.plathix-has-sidebar {
+	padding-left: 0 !important;
+}
+
+/* Push the WP content area (.wrap) to start after the sidebar.
+   display:flow-root creates a new BFC so that internal clear:both elements
+   (e.g. <br class="clear"> inside .tablenav) don't escape the BFC and
+   accidentally clear the sidebar float — which would push all table content
+   to below the sidebar bottom (~100vh). */
+#wpbody-content.plathix-has-sidebar > .wrap {
+	margin-left: 300px;
+	display: flow-root;
+}
+
+/* ── Static sidebar: upload.php / edit.php (posts, pages, CPTs) ────────────
+   Sidebar is injected into #wpbody as a flex sibling of #wpbody-content.
+   The body class is set from PHP on page load to reserve space before JS
+   runs, eliminating layout shift. The #wpbody class is added by JS for
+   compatibility. */
+body.plathix-body-sidebar #wpbody,
+#wpbody.plathix-body-sidebar {
+	display: flex !important;
+	flex-direction: row !important;
+	align-items: flex-start !important;
+}
+
+html.js body.plathix-sidebar-shell #wpbody-content {
+	visibility: hidden;
+}
+
+body.plathix-sidebar-shell #wpbody::before {
+	content: "";
+	flex: 0 0 var(--plathix-sidebar-width-dynamic, 320px);
+	width: var(--plathix-sidebar-width-dynamic, 320px);
+	min-width: 0;
+	margin-right: 20px;
+}
+
+html.js body.plathix-static-ready #wpbody-content {
+	visibility: visible;
+}
+
+#wpbody-content > #plathix-sidebar-root {
+	display: none !important;
+}
+
+#wpbody.plathix-body-sidebar > #plathix-sidebar-root,
+body.plathix-body-sidebar #wpbody > #plathix-sidebar-root {
+	flex-shrink: 0 !important;
+	float: none !important;
+	width: 320px; /* JS overrides immediately from localStorage */
+	min-width: 0 !important;
+	margin-right: 20px;
+	position: sticky !important;
+	top: 32px !important;
+	max-height: calc(100vh - 32px) !important;
+	min-height: calc(100vh - 32px) !important;
+	overflow-y: auto !important;
+	background: #f0f0f1 !important;
+	transition: width 0.2s ease, margin-right 0.2s ease;
+}
+
+#wpbody.plathix-body-sidebar > #plathix-sidebar-root.is-resizing {
+	transition: none !important;
+}
+
+#wpbody.plathix-body-sidebar > #plathix-sidebar-root.is-collapsed {
+	overflow: hidden !important;
+
+	/* [internal]: раньше держалось на resize.js:62-63 inline
+	   (root.style.width='0'; root.style.marginRight='0'). Expanded-ветка
+	   (_width, динамическое значение) остаётся inline — сюда выносится только
+	   статичное collapsed-значение. */
+	width: 0;
+	margin-right: 0;
+}
+
+/* ── Resize handle (position:fixed, left positioned by JS) ──────────────── */
+.plathix-resize__handle {
+	position: fixed;
+	top: 32px;
+	bottom: 0;
+	width: 5px;
+	cursor: col-resize;
+	z-index: var(--plathix-sidebar-z);
+	background: transparent;
+	transition: background 0.15s;
+}
+
+/* Скрытие ручки resize в collapsed-состоянии — [internal], раньше
+   resize.js:86 писал .style.display напрямую. */
+.plathix-resize__handle.is-collapse-hidden {
+	display: none;
+}
+
+/* Курсор/выделение текста на время активного drag — [internal], раньше
+   resize.js:120-121/150-151 писал .style.cursor/.userSelect на body
+   напрямую. */
+body.plathix-resizing {
+	cursor: col-resize;
+	user-select: none;
+}
+
+.plathix-resize__handle:hover {
+	background: rgba(0, 0, 0, 0.07);
+}
+
+/* ── Collapse tab (position:fixed, left positioned by JS) ───────────────── */
+.plathix-collapse__tab {
+	position: fixed;
+	top: 50vh;
+	transform: translateY(-50%);
+	z-index: 9995;
+	width: 16px;
+	height: 36px;
+	padding: 0;
+	border: 1px solid var(--plathix-border);
+	border-left: none;
+	border-radius: 0 6px 6px 0;
+	background: var(--plathix-bg);
+	color: var(--plathix-icon-muted);
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 10px;
+	line-height: 1;
+	box-shadow: 2px 0 5px rgba(0, 0, 0, 0.06);
+	transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+.plathix-collapse__tab:hover {
+	background: #fff;
+	border-color: var(--plathix-border-strong);
+	color: var(--plathix-text);
+}
+
+.plathix-collapse__tab.is-collapsed {
+	background: #3858e9;
+	border-color: #3858e9;
+	color: #fff;
+}
+
+.plathix-collapse__tab.is-collapsed:hover {
+	background: #2d49d4;
+	border-color: #2d49d4;
+	color: #fff;
+}
+
+#wpbody.plathix-body-sidebar > #wpbody-content,
+body.plathix-body-sidebar #wpbody > #wpbody-content {
+	flex: 1 !important;
+	min-width: 0 !important;
+}
+
+/* ── Media modal sidebar in .media-menu ─────────────────────────────────── */
+.media-frame-menu.plathix-modal-panel {
+	height: 100% !important;
+	overflow-y: auto !important;
+	background: #f0f0f1 !important;
+}
+
+.media-frame.plathix-media-sidebar .media-menu.plathix-mounted {
+	padding: 0 !important;
+}
+
+/* [internal] (второй failure mode) + [internal] (унификация): WP core прячет
+   .media-menu по умолчанию на узком viewport (@media max-width:900px,
+   wp-includes/css/media-views.css) и требует класс .visible для показа —
+   наш код его не добавляет (сайдбар не временное mobile-меню, а постоянная
+   панель). Форсируем видимость ТОЛЬКО от 480px (WP UX Design skeptic pass,
+   [internal]): ниже этого порога панель шириной 320px не оставляет места
+   для остального контента модалки — на экстремально узких экранах отдаём
+   viewport целиком нативному WP dropdown-поведению. Toggle-кнопка
+   скрывается в том же диапазоне (WP Senior Dev skeptic pass): без этого
+   она остаётся в DOM, кликабельна, но ничего не делает (мы форсируем
+   display), и пишет неверный aria-expanded — a11y-регрессия.
+
+   [internal]: .media-frame-menu.plathix-modal-panel (панель-обёртка) несла
+   тот же безусловный display:block+width:320px без брейкпоинта — тот же
+   класс проблемы, что уже исправлен для .media-menu.plathix-mounted выше,
+   унифицировано под один @media-блок. left:320px на
+   media-frame-title/content/router/toolbar семантически зависит от ширины
+   панели — переносится сюда же, иначе на <480px контент модалки сдвинут
+   на 320px от края без видимой панели такой ширины (проверено live-stand,
+   [internal]). */
+@media (min-width: 480px) {
+
+	.media-frame-menu.plathix-modal-panel {
+		display: block !important;
+		width: 320px !important;
+	}
+
+	.media-frame.plathix-media-sidebar .media-frame-title,
+	.media-frame.plathix-media-sidebar .media-frame-content,
+	.media-frame.plathix-media-sidebar .media-frame-router,
+	.media-frame.plathix-media-sidebar .media-frame-toolbar {
+		left: 320px !important;
+	}
+
+	.media-frame.plathix-media-sidebar .media-menu.plathix-mounted {
+		display: block !important;
+	}
+
+	.media-frame.plathix-media-sidebar .button.media-frame-menu-toggle {
+		display: none !important;
+	}
+}
+
+.media-frame.plathix-media-sidebar.edit-attachment-frame .media-frame-title,
+.media-frame.plathix-media-sidebar.edit-attachment-frame .media-frame-content,
+.media-frame.plathix-media-sidebar.edit-attachment-frame .media-frame-router,
+.media-frame.plathix-media-sidebar.edit-attachment-frame .media-frame-toolbar {
+	left: 0 !important;
+}
+
+.media-frame.plathix-media-sidebar .media-menu.plathix-mounted .media-menu-item {
+	display: none !important;
+}
+
+.media-menu #plathix-modal-sidebar-root {
+	display: block !important;
+	width: 100% !important;
+	height: 100% !important;
+	box-sizing: border-box !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	padding-top: 20px !important;
+	position: static !important;
+}
+
+/* [internal]: bulk-restore кнопка из trashActionsHTML() живёт внутри
+   сайдбара, который на <480px скрыт целиком (брейкпоинт выше, issue
+   #31/#265) — но bulk-selection чекбоксов в Trash-гриде на этой ширине
+   остаётся доступен (core WP media grid, не зависит от нашего брейкпоинта).
+   Без этой кнопки на узком экране нечем явно завершить уже начатый
+   bulk-выбор. .plathix-mobile__bulk-restore — дубль той же Restore-кнопки
+   (trash-entry.js), смонтированный отдельным teleport-узлом в <body>,
+   видимый ТОЛЬКО на <480px. z-index 160005 — между WP media modal (~160000)
+   и нашими confirm-overlay (160010 !important, см. ниже в файле): кнопка
+   поверх грида, но confirm-диалог остаётся поверх кнопки, если он открыт
+   одновременно. */
+@media (max-width: 479px) {
+
+	.plathix-mobile__bulk-restore {
+		position: fixed;
+		left: 50%;
+		bottom: 16px;
+		transform: translateX(-50%);
+		z-index: 160005;
+	}
+}
+
+@media (min-width: 480px) {
+
+	.plathix-mobile__bulk-restore {
+		display: none !important;
+	}
+}
+
+.media-frame.plathix-media-sidebar .plathix-sidebar {
+	min-height: 100%;
+	padding-right: 0;          /* no scrollbar gutter — root handles scroll */
+	overflow: visible;         /* root handles scroll, sidebar must not clip */
+	border-radius: 0;
+	border-top: none;
+	border-left: none;
+	border-bottom: none;
+	border-right: 1px solid #dcdcde;
+	box-sizing: border-box;
+}
+
+.media-menu #plathix-modal-sidebar-root .plathix-sidebar {
+	background: none !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-sizing: border-box !important;
+	display: flex !important;
+	flex-direction: column !important;
+	min-height: 100% !important;
+	overflow: visible !important;
+	padding: 0 !important;
+	width: 100% !important;
+}
+
+#wpbody.plathix-body-sidebar > #plathix-sidebar-root .plathix-sidebar {
+	border: none !important;
+	border-right: 1px solid var(--plathix-border) !important;
+	border-radius: 0 !important;
+	min-height: calc(100vh - 32px) !important;
+	overflow: visible !important;
+	padding-right: 0 !important;
+	box-sizing: border-box !important;
+}
+
+/* ── Density modifier ───────────────────────────────────────────────────── */
+.plathix-sidebar.plathix-density-compact {
+	--plathix-gap: 6px;
+	--plathix-font-size: 12px;
+}
+
+/* System block (actions + search + protected folders) */
+.plathix-system__block {
+	background: var(--plathix-bg);
+	padding: 0;
+	flex-shrink: 0;
+}
+
+/* Divider between system and user blocks */
+.plathix-block__divider {
+	height: 0;
+	border: none;
+	border-top: 1px solid var(--plathix-border);
+	margin: 0;
+}
+
+/* User folders block */
+.plathix-user__block {
+	background: var(--plathix-bg);
+	padding: 6px 0;
+	flex: 1;
+}
+
+.media-menu #plathix-modal-sidebar-root .plathix-system__block {
+	background: none !important;
+}
+
+.media-menu #plathix-modal-sidebar-root .plathix-user__block {
+	background: none !important;
+}
+
+.plathix-actions {
+	display: flex;
+	gap: 1px;
+	align-items: center;
+	height: 44px;
+	padding: 0 11px;
+	background: var(--plathix-bg);
+	border-bottom: 1px solid var(--plathix-border);
+}
+
+.plathix-toolbar {
+	display: flex;
+	gap: 1px;
+	align-items: center;
+	margin-left: auto;
+}
+
+.plathix-tool__btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	padding: 0;
+	border: none;
+	border-radius: 7px;
+	background: transparent;
+	color: var(--plathix-icon-muted);
+	cursor: pointer;
+	transition: background 0.1s, color 0.1s;
+}
+
+.plathix-tool__btn:hover {
+	color: var(--plathix-text);
+	background: var(--plathix-bg-hover);
+	border-color: transparent;
+}
+
+.plathix-tool__btn.is-active {
+	color: var(--plathix-text);
+	background: var(--plathix-bg-subtle);
+	border-color: transparent;
+}
+
+.plathix-tool__btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.plathix-section__title {
+	font-size: 9.5px;
+	font-weight: 600;
+	color: var(--plathix-icon-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	user-select: none;
+}
+
+.plathix-item-actions-bar {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	padding: 7px 11px;
+}
+
+.plathix-item-actions-bar .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	border-radius: 7px !important;
+	background: transparent !important;
+	border: 1px solid rgba(0, 0, 0, 0.12) !important;
+	color: var(--plathix-text-muted) !important;
+	box-shadow: none !important;
+	padding: 4px 10px !important;
+	height: auto !important;
+	line-height: 1.4 !important;
+	font-family: inherit !important;
+	cursor: pointer;
+	transition: background 0.12s, border-color 0.12s;
+}
+
+.plathix-folder__select-bar .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 12px;
+	border-radius: 7px !important;
+	box-shadow: none !important;
+	height: auto !important;
+	line-height: 1.4 !important;
+	padding: 4px 10px !important;
+	font-family: inherit !important;
+	cursor: pointer;
+	transition: background 0.12s;
+}
+
+.plathix-delete__actions .button {
+	border-radius: 8px !important;
+	font-family: inherit;
+}
+
+.plathix-item-actions-bar .button:hover {
+	background: var(--plathix-bg-hover) !important;
+	border-color: rgba(0, 0, 0, 0.2) !important;
+	color: var(--plathix-text) !important;
+	box-shadow: none !important;
+}
+
+.plathix-item-actions-bar .button:focus {
+	outline: none !important;
+	box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Кнопка "Удалить (N)" — красная при наличии выбора */
+.plathix-delete-selected-btn {
+	flex: 1;
+	padding: 6px 10px;
+	border-radius: 7px;
+	font-size: 12.5px;
+	font-weight: 500;
+	cursor: pointer;
+	font-family: inherit;
+	border: 1px solid rgba(0, 0, 0, 0.08);
+	background: rgba(0, 0, 0, 0.04);
+	color: var(--plathix-icon-muted);
+	transition: all 0.15s;
+}
+
+.plathix-delete-selected-btn.has-selection {
+	background: rgba(220, 38, 38, 0.08);
+	border-color: rgba(220, 38, 38, 0.25);
+	color: var(--plathix-trash);
+	cursor: pointer;
+}
+
+/* Кнопка "Отмена" в select mode */
+.plathix-cancel-select-btn {
+	padding: 6px 12px;
+	border-radius: 7px;
+	font-size: 12.5px;
+	cursor: pointer;
+	font-family: inherit;
+	background: transparent;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	color: var(--plathix-text-muted);
+	transition: background 0.1s;
+}
+
+.plathix-cancel-select-btn:hover {
+	background: var(--plathix-bg-hover);
+}
+
+.plathix-folder__select-bar {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	padding: 7px 11px 6px;
+}
+
+.plathix-folder__select-bar .button:not(.plathix-btn--danger-folder) {
+	background: transparent !important;
+	border: 1px solid rgba(0, 0, 0, 0.12) !important;
+	color: var(--plathix-text-muted) !important;
+}
+
+.plathix-folder__select-bar .button:not(.plathix-btn--danger-folder):hover {
+	background: var(--plathix-bg-hover) !important;
+	color: var(--plathix-text) !important;
+}
+
+/* Чекбокс в select mode — квадратный с галочкой */
+.plathix-select__dot {
+	flex-shrink: 0;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	border: 1.5px solid rgba(0, 0, 0, 0.22);
+	background: transparent;
+	cursor: pointer;
+	transition: border-color 0.1s, background 0.1s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+
+	/* button-reset ([internal]): узел стал <button role=checkbox> ради клавиатуры —
+       гасим дефолтный padding/шрифт button, чтобы точка не раздулась. */
+	padding: 0;
+	font: inherit;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.plathix-select__dot.is-checked {
+	border-color: var(--plathix-accent);
+	background: rgba(0, 0, 0, 0.08);
+}
+
+.plathix-drag__handle {
+	flex-shrink: 0;
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--plathix-icon-muted);
+	cursor: grab;
+}
+
+.plathix-folder.is-selected {
+	background: var(--plathix-accent-light);
+	outline: 1px solid var(--plathix-accent);
+	outline-offset: -1px;
+}
+
+/* Search / Sort — уехали в resources/js/sidebar/search/search.css
+   ([internal]). Энкьюится
+   SearchFilters/Module.php::enqueue_scripts() как plathix-search CSS. */
+
+/* Folder dots button (hover action) */
+.plathix-folder__dots {
+	flex-shrink: 0;
+	width: 22px;
+	height: 22px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 5px;
+	border: none;
+	background: transparent;
+	color: var(--plathix-icon-muted);
+	cursor: pointer;
+	padding: 0;
+	opacity: 0;
+	transition: opacity 0.1s, background 0.08s;
+}
+
+.plathix-folder__dots:hover {
+	background: rgba(0, 0, 0, 0.08);
+	color: var(--plathix-text);
+}
+
+.plathix-folder:hover .plathix-folder__dots {
+	opacity: 1;
+}
+
+
+.plathix-folder {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 5px;
+	min-height: 29px;
+	padding: 0 8px 0 8px;
+	margin: 0 11px;
+	border-radius: 7px;
+	cursor: pointer;
+	border-left: 2px solid transparent;
+	transition: background 0.08s;
+	user-select: none;
+}
+
+.plathix-folder:hover {
+	background: #fff;
+}
+
+.plathix-folder.has-context-menu {
+	background: rgba(0, 0, 0, 0.06);
+}
+
+.plathix-folder.is-open {
+	background: rgba(0, 0, 0, 0.06);
+	border-left-color: transparent;
+	color: var(--plathix-text);
+}
+
+.plathix-folder.is-open .plathix-folder__icon {
+
+	/* цвет папки остаётся кастомным */
+}
+
+.plathix-folder .count {
+	opacity: 0.8;
+	margin-left: auto;
+	color: var(--plathix-text-muted);
+}
+
+/* [internal] (D7): звезда/шорткод/счётчик — ровный ряд одного
+   вертикального веса (высота 22, центр, кегль 12px), раньше высоты
+   12/18/~14 и кегль 12/13/11.5 «плясали». Кебаб НЕ здесь — у него свой
+   размер 22×22. Счётчик виден всегда (скрытия по hover нет). */
+.plathix-favorite__star,
+.plathix-shortcode-edit-btn,
+.plathix-folder .count {
+	height: 22px;
+	display: flex;
+	align-items: center;
+	line-height: 1;
+	flex-shrink: 0;
+	font-size: 12px;
+}
+
+.plathix-folder.is-open .count {
+	opacity: 1;
+	color: var(--plathix-text-muted);
+}
+
+/* Collapse toggle arrow */
+.plathix-collapse__btn {
+	flex-shrink: 0;
+	width: 13px;
+	height: 29px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	color: inherit;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0;
+	opacity: 1;
+	transition: opacity 0.1s;
+}
+
+.plathix-collapse__btn::before {
+	content: "";
+	display: block;
+	width: 0;
+	height: 0;
+	border-left: 3.5px solid transparent;
+	border-right: 3.5px solid transparent;
+	border-top: 4.5px solid var(--plathix-icon-muted);
+	transition: transform 0.12s ease;
+}
+
+.plathix-collapse__btn.is-collapsed::before {
+	transform: rotate(-90deg);
+}
+
+.plathix-folder:hover .plathix-collapse__btn::before {
+	border-top-color: rgba(0, 0, 0, 0.5);
+}
+
+.plathix-folder.is-open .plathix-collapse__btn::before {
+	border-top-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Placeholder to keep alignment for leaf folders (no children) */
+.plathix-collapse__placeholder {
+	flex-shrink: 0;
+	width: 13px;
+	display: inline-block;
+}
+
+/* Folder name takes all remaining space */
+.plathix-folder__name {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-size: 13px;
+	color: var(--plathix-text);
+	font-weight: 400;
+}
+
+.plathix-folder.is-open .plathix-folder__name {
+	font-weight: 500;
+}
+
+/* Folder icon */
+.plathix-folder__icon {
+	flex-shrink: 0;
+	color: var(--plathix-icon-muted);
+	transition: color 0.15s;
+}
+
+/* When folder has a custom color — it's set inline via style="color:..." */
+.plathix-folder__icon[style] {
+	opacity: 1;
+}
+
+/* Children indentation — тонкая вертикальная линия как в макете */
+.plathix-folder__children {
+	position: relative;
+
+	/* indent each nesting level by 16px — matches mockup depth*16 */
+	padding-left: 16px;
+	border-left: none;
+	margin-left: 0;
+}
+
+/* Вертикальная линия: сдвинута на 19px от левого края
+   .plathix-folder__children, то есть выровнена под центр шеврона
+   (12px padding + 13px/2 chevron) */
+.plathix-folder__children::before {
+	content: "";
+	position: absolute;
+	left: 19px;
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: rgba(0, 0, 0, 0.09);
+	pointer-events: none;
+}
+
+/* Inline new folder form */
+.plathix-new-folder__form {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 5px;
+	min-height: 29px;
+	padding: 0 8px;
+	margin: 0 11px;
+	border-radius: 7px;
+	background: #fff;
+	border: none;
+}
+
+.plathix-new-folder__form .plathix-folder__icon {
+	flex-shrink: 0;
+	color: var(--plathix-icon-muted);
+}
+
+.plathix-new-folder__input {
+	flex: 1;
+	min-width: 0;
+	background: transparent;
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	font-size: 13px;
+	font-family: inherit;
+	color: var(--plathix-text);
+	line-height: 1.4;
+}
+
+.plathix-new-folder__input:focus {
+	border: none !important;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+/* Rename form sits in place of the folder row — no extra margin */
+.plathix-rename__form {
+	margin: 0;
+}
+
+.plathix-folder.is-drag-over,
+.plathix-folder.folder-drag-inside {
+	background: #2271b1;
+	color: #fff;
+	outline: 2px dashed #2271b1;
+	outline-offset: -2px;
+}
+
+.plathix-folder.folder-drag-before {
+	box-shadow: 0 -2px 0 0 #2271b1;
+}
+
+.plathix-folder.folder-drag-after {
+	box-shadow: 0 2px 0 0 #2271b1;
+}
+
+/* Show grab cursor on draggable (non-protected) folders */
+.plathix-folder[draggable="true"] {
+	cursor: grab;
+}
+
+.plathix-folder[draggable="true"]:active {
+	cursor: grabbing;
+}
+
+/* Trash-узел: счётчик файлы/папки раздельно, иконка+число
+   ([internal], заменил Ф/П). Вертикальный вес как у .count (высота
+   22, кегль 12, muted). margin-left:auto прижимает вправо. */
+.plathix-trash-counts {
+	height: 22px;
+	display: flex;
+	align-items: center;
+	gap: 3px;
+	line-height: 1;
+	flex-shrink: 0;
+	font-size: 12px;
+	margin-left: auto;
+	opacity: 0.8;
+	color: var(--plathix-text-muted);
+	white-space: nowrap;
+}
+
+/* Иконки файла/папки в счётчике: 11px — мельче звезды избранного (12px) и
+   шорткода (~13px), т.к. счётчик корзины второстепенен и не должен
+   перетягивать ([internal]). Явный размер фиксирует флекс, число
+   вплотную (gap контейнера 3px). */
+.plathix-trash-counts .plathix-trash-counts__icon {
+	flex-shrink: 0;
+	display: block;
+	width: 11px;
+	height: 11px;
+}
+
+.plathix-trash-counts__separator {
+	opacity: 0.5;
+	margin: 0 1px;
+}
+
+.plathix-folder .ops {
+	display: inline-flex;
+	gap: 4px;
+}
+
+.plathix-context-menu {
+	position: fixed;
+	z-index: var(--plathix-overlay-z);
+	background: #fff;
+	border: 1px solid var(--plathix-border);
+	border-radius: 11px;
+	box-shadow: 0 8px 28px rgba(0, 0, 0, 0.13), 0 2px 6px rgba(0, 0, 0, 0.07);
+	padding: 5px;
+	display: flex;
+	flex-direction: column;
+	min-width: 214px;
+}
+
+.plathix-toast {
+	z-index: var(--plathix-toast-z);
+}
+
+#plathix-sidebar-root.plathix-folder-drag-over {
+	outline: 2px dashed #2271b1;
+	outline-offset: -3px;
+	background: rgba(34, 113, 177, 0.05);
+}
+
+.plathix-upload-counter {
+	text-align: right;
+	font-size: 12px;
+	color: #8c8f94;
+	margin-top: 4px;
+}
+
+.plathix-notifications {
+	position: fixed;
+	bottom: 32px;
+	right: 24px;
+	z-index: var(--plathix-toast-z);
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	pointer-events: none;
+	max-width: 380px;
+}
+
+.plathix-notification {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 14px 18px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+	font-size: 14px;
+	line-height: 1.4;
+	pointer-events: auto;
+	animation: plathix-notif-in 0.18s ease;
+}
+
+@keyframes plathix-notif-in {
+
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.plathix-notification__dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.plathix-notification--success .plathix-notification__dot {
+	background: #46b450;
+}
+
+.plathix-notification--error   .plathix-notification__dot {
+	background: #dc3232;
+}
+
+.plathix-notification--warning .plathix-notification__dot {
+	background: #dba617;
+}
+
+.plathix-notification__message {
+	flex: 1;
+	color: #1d2327;
+}
+
+.plathix-notification__close {
+	margin-left: 4px;
+	background: none;
+	border: none;
+	cursor: pointer;
+	color: #8c8f94;
+	padding: 0;
+	line-height: 1;
+	font-size: 18px;
+	flex-shrink: 0;
+}
+
+.plathix-notification__close:hover {
+	color: #1d2327;
+}
+
+.plathix-context-menu button {
+	border: 0;
+	background: transparent;
+	text-align: left;
+	padding: 7px 11px;
+	cursor: pointer;
+	font-size: 13px;
+	color: var(--plathix-text);
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	line-height: 1.4;
+	border-radius: 7px;
+	font-family: inherit;
+	transition: background 0.08s;
+}
+
+.plathix-delete__actions button {
+	border-radius: 8px !important;
+	font-family: inherit;
+}
+
+.plathix-folder .ops button {
+	border: 0;
+	background: transparent;
+	color: #2271b1;
+	cursor: pointer;
+	padding: 0;
+}
+
+/* [internal] (D4): hover действий — лёгкое выделение rgba(0,0,0,.05)
+   (≈#f3f3f4 на белом, стиль Notion/Linear). --plathix-bg-hover (#e0e0e1)
+   отвергнут скептиком UI Design как слишком тёмный. rgba не зависит от
+   переменных сайдбара (меню телепортируется в body). */
+.plathix-context-menu button:hover {
+	background: rgba(0, 0, 0, 0.05);
+	color: var(--plathix-text);
+}
+
+.plathix-context-menu button[aria-disabled="true"] {
+	opacity: 0.45;
+	cursor: not-allowed;
+}
+
+.plathix-context-menu button[aria-disabled="true"]:hover,
+.plathix-context-menu button[aria-disabled="true"]:focus {
+	background: transparent;
+	color: inherit;
+}
+
+/* [internal]: кнопка «Добавить медиафайл» при открытой «Корзине» — не WP
+   core, наш JS уже переписывает её href (upload-link-context.js),
+   дизейблим тем же паттерном, что и context-menu выше. */
+a.page-title-action[aria-disabled="true"] {
+	opacity: 0.45;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.plathix-context-menu button svg {
+	flex-shrink: 0;
+	color: var(--plathix-text-muted);
+}
+
+.plathix-context-menu__favorite:not(.plathix-context-menu__favorite--active) svg {
+	color: var(--plathix-favorite, #ca8a04) !important;
+}
+
+.plathix-context-menu button:hover svg {
+	color: var(--plathix-sidebar-text-2);
+}
+
+/* Кнопка "Удалить" — красная (деструктив, [internal]). Fallback #DC2626
+   обязателен: контекстное меню телепортируется в <body> (x-teleport), вне
+   .plathix-sidebar, где объявлена --plathix-trash — без fallback var()
+   пустой и цвет наследует серый. */
+.plathix-context-menu button.plathix-context-menu__danger {
+	color: var(--plathix-trash, #dc2626);
+}
+
+.plathix-context-menu button.plathix-context-menu__danger svg {
+	color: var(--plathix-trash, #dc2626);
+}
+
+.plathix-context-menu button.plathix-context-menu__danger:hover {
+	background: rgba(220, 38, 38, 0.07);
+}
+
+.plathix-context-menu button[aria-disabled="true"]:hover svg,
+.plathix-context-menu button[aria-disabled="true"]:focus svg {
+	color: var(--plathix-icon-muted);
+}
+
+.plathix-context-menu__separator {
+	height: 1px;
+	border: none;
+	background: var(--plathix-border);
+	margin: 3px 6px;
+}
+
+/* Изоляция деструктива «Удалить»: увеличенный вертикальный отступ
+   (anti-misclick, [internal]). */
+.plathix-context-menu__separator.plathix-context-menu__separator--danger {
+	margin-top: 7px;
+	margin-bottom: 5px;
+}
+
+/* Стили пункта «Цвет» (.plathix-context-menu__color, .plathix-color-*)
+   уехали в модуль resources/js/sidebar/color/color.css
+   ([internal]): импортируются в color-entry, webpack собирает
+   color.css, PHP-модуль FolderColor энкьюит его. Здесь их больше нет. */
+
+/* Sidebar footer */
+.plathix-sidebar__footer {
+	padding: 7px 14px;
+	font-size: 10.5px;
+	color: var(--plathix-icon-muted);
+	border-top: 1px solid var(--plathix-border);
+	text-align: left;
+	flex-shrink: 0;
+	user-select: none;
+}
+
+.plathix-sidebar__footer a {
+	color: var(--plathix-icon-muted);
+	text-decoration: none;
+}
+
+.plathix-sidebar__footer a:hover {
+	color: var(--plathix-sidebar-text-2);
+	text-decoration: underline;
+}
+
+/* Тонкий scrollbar как в макете */
+#plathix-sidebar-root::-webkit-scrollbar,
+.plathix-sidebar::-webkit-scrollbar {
+	width: 3px;
+}
+
+#plathix-sidebar-root::-webkit-scrollbar-track,
+.plathix-sidebar::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+#plathix-sidebar-root::-webkit-scrollbar-thumb,
+.plathix-sidebar::-webkit-scrollbar-thumb {
+	background: var(--plathix-border-strong);
+	border-radius: 2px;
+}
+
+#plathix-sidebar-root::-webkit-scrollbar-thumb:hover,
+.plathix-sidebar::-webkit-scrollbar-thumb:hover {
+	background: var(--plathix-icon-muted);
+}
+
+.plathix-alert__overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.28);
+	z-index: var(--plathix-overlay-z);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
+}
+
+.plathix-alert__box {
+	background: #fff;
+	border: 1px solid var(--plathix-border);
+	border-radius: 14px;
+	padding: 28px;
+	max-width: 320px;
+	width: 90%;
+	text-align: center;
+	box-shadow: 0 10px 32px rgba(0, 0, 0, 0.15);
+}
+
+.plathix-alert__box p {
+	margin: 0 0 16px;
+	font-size: 14px;
+	color: var(--plathix-text);
+	line-height: 1.55;
+}
+
+.plathix-delete__box {
+	background: #fff;
+	border: 1px solid var(--plathix-border);
+	border-radius: 14px;
+	padding: 24px;
+	max-width: 400px;
+	width: 90%;
+	box-shadow: 0 10px 32px rgba(0, 0, 0, 0.15);
+}
+
+.plathix-delete__title {
+	margin: 0 0 8px;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--plathix-text);
+}
+
+.plathix-delete__safe {
+	margin: 0 0 16px;
+	font-size: 13px;
+	color: var(--plathix-green);
+	background: rgba(22, 163, 74, 0.07);
+	border: 1px solid rgba(22, 163, 74, 0.2);
+	border-radius: 7px;
+	padding: 8px 10px;
+	line-height: 1.5;
+}
+
+/* Вариант предупреждения (вложенные подпапки при bulk-delete) —
+   [internal], раньше overlays.js:90 писал color/background/border-color
+   inline. */
+.plathix-delete__safe--warning {
+	color: #996800;
+	background: #fffaeb;
+	border-color: #f0c050;
+}
+
+.plathix-delete__folder-info {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 10px;
+	background: var(--plathix-bg);
+	border: 1px solid var(--plathix-border);
+	border-radius: 7px;
+	margin-bottom: 20px;
+}
+
+.plathix-delete__folder-name {
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--plathix-text);
+}
+
+.plathix-delete__folder-count {
+	font-size: 12px;
+	color: var(--plathix-icon-muted);
+}
+
+.plathix-bulk-delete__list {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	max-height: 180px;
+	overflow-y: auto;
+	margin-bottom: 20px;
+}
+
+.plathix-bulk-delete__list .plathix-delete__folder-info {
+	margin-bottom: 0;
+}
+
+.plathix-delete__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.plathix-search__only-hint {
+	padding: 8px 12px;
+	font-size: 12px;
+	color: #646970;
+	font-style: italic;
+}
+
+.plathix-search__only-hint p {
+	margin: 0;
+}
+
+.plathix-btn--danger-folder {
+	background: rgba(220, 38, 38, 0.08) !important;
+	border-color: rgba(220, 38, 38, 0.25) !important;
+	color: var(--plathix-trash) !important;
+	border-radius: 8px !important;
+}
+
+.plathix-btn--danger-folder:hover {
+	background: rgba(220, 38, 38, 0.14) !important;
+	border-color: rgba(220, 38, 38, 0.35) !important;
+}
+
+/* Hide WordPress upload overlay during internal drag-to-folder */
+body.plathix-internal-drag .uploader-window,
+body.plathix-internal-drag .uploader-editor {
+	display: none !important;
+}
+
+/* ── Sidebar appearance inside the media modal ──────────────────────────────
+   WordPress resets many styles inside .media-frame. We need to re-assert
+   the sidebar's background, borders, layout and z-index here explicitly.
+   ──────────────────────────────────────────────────────────────────────── */
+
+/* Bump all overlay z-indexes above the WP media modal (160000) */
+.media-frame.plathix-media-sidebar {
+	--plathix-overlay-z: 160010;
+}
+
+/* ── Folder info row ────────────────────────────────────────────────────── */
+.plathix-folder__info {
+	flex-basis: 100%;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 0 8px 4px 36px;
+	overflow: hidden;
+}
+
+.plathix-info__id {
+	flex-shrink: 0;
+	margin-left: auto;
+	font-size: 11px;
+	font-style: normal;
+	color: #646970;
+	background: #e0e0e2;
+	border-radius: 3px;
+	padding: 1px 5px;
+	line-height: 1.5;
+}
+
+.plathix-info__disk {
+	flex-shrink: 0;
+	color: #8c8f94;
+}
+
+.plathix-info__size {
+	font-family: Consolas, Monaco, monospace;
+	font-size: 11px;
+	color: #50575e;
+	white-space: nowrap;
+}
+
+.plathix-info__children {
+	font-family: Consolas, Monaco, monospace;
+	font-size: 11px;
+	font-weight: 600;
+	color: #2271b1;
+	white-space: nowrap;
+}
+
+.plathix-info__arrow {
+	font-size: 9px;
+	margin-right: 2px;
+	vertical-align: middle;
+}
+
+/* [internal] ([internal]): рекурсивное число
+   файлов — папка + все вложенные. Живёт рядом с
+   размером, правила строки виджета те же. Плоские
+   имена .plathix-info-* — существующий ряд блока;
+   общий BEM-долг вынесен в отдельный трекер и не
+   переименовывает половину блока в чужой задаче. */
+.plathix-info__count {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	flex-shrink: 0;
+	font-family: Consolas, Monaco, monospace;
+	font-size: 11px;
+	color: #50575e;
+	white-space: nowrap;
+}
+
+.plathix-info__file {
+	flex-shrink: 0;
+	color: #8c8f94;
+}
+
+.plathix-info__loading {
+	font-size: 11px;
+	color: #8c8f94;
+}
+
+/* [internal]: на активной строке (.is-open, светлый фон rgba(0,0,0,.06))
+   блок информации раньше красился в БЕЛЫЙ (наследие тёмной активной темы,
+   которой уже нет) → сливался и был не виден. Белые переопределения
+   удалены — инфо наследует свои тёмные цвета покоя (info-id #646970,
+   disk #8c8f94, size #50575e, children #2271b1), читаемые на светлом фоне.
+   Тот же класс фикса, что [internal] (значок шорткода на активной строке). */
+
+/* ── Системные папки (Медиафайлы, Несортированные, Корзина) ─────────────── */
+.plathix-system__folders .plathix-folder {
+	font-size: 12.5px;
+	color: var(--plathix-text-muted);
+}
+
+/* У системных папок нет вложений — убираем placeholder */
+
+/* .plathix-favorites__block .plathix-collapse__placeholder уехал в
+   favorites/favorites.css ([internal]) */
+.plathix-system__folders .plathix-collapse__placeholder {
+	display: none;
+}
+
+.plathix-system__folders .plathix-folder .plathix-folder__name {
+	font-size: 12.5px;
+	color: var(--plathix-text-muted);
+}
+
+.plathix-system__folders .plathix-folder.is-open .plathix-folder__name {
+	color: var(--plathix-text);
+	font-weight: 500;
+}
+
+.plathix-system__folders .plathix-folder .plathix-folder__icon {
+	color: var(--plathix-icon-muted);
+}
+
+.plathix-system__folders .plathix-folder.is-open .plathix-folder__icon {
+	color: var(--plathix-text-muted);
+}
+
+/* System action buttons (trash / restore) — уехали в
+   resources/js/sidebar/trash/trash.css ([internal]).
+   Энкьюится Trash/Module.php::enqueue_scripts() как plathix-trash CSS. */
+
+/* Star indicator on favorited folders */
+.plathix-favorite__star {
+	font-size: 12px;
+	color: var(--plathix-favorite);
+	flex-shrink: 0;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+}
+
+.plathix-folder.is-open .plathix-favorite__star {
+	color: var(--plathix-favorite);
+}
+
+.plathix-shortcode-edit-btn {
+
+	/* height:22px и вертикальное центрирование — из общего D7-бокса
+       ([internal]). Здесь только ширина иконки и визуал кнопки. */
+	justify-content: center;
+	width: 18px;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	color: var(--plathix-text-muted);
+	border-radius: 3px;
+	transition: background 0.1s, color 0.1s;
+}
+
+.plathix-shortcode-edit-btn:hover {
+	background: rgba(0, 0, 0, 0.08);
+	color: var(--plathix-text);
+}
+
+/* [internal] (D5): активная строка (.is-open) имеет светлый фон
+   rgba(0,0,0,.06), поэтому белая иконка шорткода на ней сливалась
+   (наследие тёмной активной темы, которой уже нет). Красим ТЕМНЕЕ — в тот
+   же muted-текст, что и в покое, чтобы значок читался. */
+.plathix-folder.is-open .plathix-shortcode-edit-btn {
+	color: var(--plathix-text-muted);
+}
+
+.plathix-folder.is-open .plathix-shortcode-edit-btn:hover {
+	background: rgba(0, 0, 0, 0.08);
+	color: var(--plathix-text);
+}
+
+/* [internal] (D3): золото ТОЛЬКО «Добавить в избранное» (папка ещё НЕ в
+   избранном). «Убрать из избранного»
+   (.plathix-context-menu__favorite--active) — обычный цвет как все пункты.
+   fallback #ca8a04 — меню телепортируется в <body>, где --plathix-favorite
+   пуста. */
+.plathix-context-menu__favorite:not(.plathix-context-menu__favorite--active) {
+	color: var(--plathix-favorite, #ca8a04) !important;
+}
+
+/* ── Static-list navigation: loading state ──────────────────────────────── */
+body.plathix-list__loading #the-list,
+body.plathix-list__loading .tablenav {
+	opacity: 0.4;
+	pointer-events: none;
+	transition: opacity 0.15s;
+}
+
+/* Корзина папок ([internal] / UI-FIX-203): блок квадратных плиток
+   МЕЖДУ .media-toolbar и .attachments-wrapper. Вид — эталон
+   resources/trash.html (DelFolderCard / TrashSquareTile). */
+.plathix-folder-trash-panel {
+	margin: 0 0 14px;
+	padding: 14px 16px;
+	background: #fff;
+	border: 1px solid #e8e8f0;
+	border-radius: 10px;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.plathix-folder-trash-panel:empty {
+	display: none;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__head {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	font-size: 13px;
+	font-weight: 600;
+	color: #1c1c28;
+	margin-bottom: 10px;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__head-icon {
+	color: #dc2626;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__count {
+	font-size: 11px;
+	font-weight: 500;
+	color: #b8b8cc;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__section {
+	font-size: 9.5px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #b8b8cc;
+	margin: 2px 2px 9px;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 9px;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__tile {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 3px;
+	padding: 12px 12px 10px;
+	border: 1px solid #e8e8f0;
+	border-radius: 9px;
+	background: #fff;
+	transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__tile:hover {
+	border-color: #d0d0e0;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__badge {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	min-width: 18px;
+	height: 18px;
+	padding: 0 5px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 10px;
+	font-weight: 600;
+	color: #8080a0;
+	background: #f2f2f7;
+	border: 1px solid #e8e8f0;
+	border-radius: 5px;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__icon {
+	color: #8a8aa8;
+	margin-bottom: 4px;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__tname {
+	max-width: 100%;
+	font-size: 13px;
+	font-weight: 500;
+	color: #1c1c28;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__meta {
+	font-size: 11px;
+	color: #b8b8cc;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__acts {
+	display: flex;
+	gap: 2px;
+	margin-top: 8px;
+	opacity: 0.55;
+	transition: opacity 0.1s;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__tile:hover .plathix-folder-trash-panel__acts {
+	opacity: 1;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__acts button {
+	width: 26px;
+	height: 26px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: none;
+	border-radius: 6px;
+	background: transparent;
+	cursor: pointer;
+	transition: background 0.12s;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__restore {
+	color: #16a34a;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__restore:hover {
+	background: rgba(22, 163, 74, 0.1);
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__purge {
+	color: #dc2626;
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__purge:hover {
+	background: rgba(220, 38, 38, 0.1);
+}
+
+.plathix-folder-trash-panel .plathix-folder-trash-panel__loading,
+.plathix-folder-trash-panel .plathix-folder-trash-panel__error {
+	font-size: 12px;
+	color: #8080a0;
+	padding: 4px 0;
+}
+
+/* Infinite scroll ([internal]): при включённой бесконечной прокрутке
+   нативную WP-кнопку «Load more» прячем — подгрузка идёт автоматически при
+   скролле, один механизм вместо двух. Класс plathix-infinite-active вешает
+   InfiniteScrollManager на frame root только когда опция включена (grid +
+   модалка). Скрытие безопасно: #loadMore видит offsetParent===null и
+   переключается на library.more() (backbone API), догрузка не ломается.
+   Реальный класс WP core media-grid кнопки — .load-more (подтверждено
+   Playwright-прогоном на живом проде клиента A); прежние
+   .load-more-button/.media-button-load-more не совпадали ни с чем в
+   реальном DOM, поэтому кнопка оставалась видимой. */
+.plathix-infinite-active .load-more {
+	display: none !important;
+}
+
+/* ── Overlays above WP media modal ────────────────────────────────────────
+   Overlays (context menu, delete modals) teleport to <body> and must sit
+   above the WP media modal which lives at z-index ~160000 */
+body > .plathix-context-menu,
+body > .plathix-alert__overlay {
+	z-index: 160010 !important;
+}
+
+/* ── ListScreen: Folder column ([internal]) ───────────────────────
+   Не Sidebar-специфика: Modules\ListScreen\FolderColumn не имеет своего
+   assets/, а sidebar.css уже единственный CSS, грузящийся на медиа-списке
+   (Admin\Assets::enqueue, screen_context 'upload') — минимальное
+   размещение для одного правила вместо новой enqueue-инфраструктуры. */
+.plathix-folder-column__empty {
+	color: #999;
+}

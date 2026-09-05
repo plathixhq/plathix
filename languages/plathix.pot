@@ -1,0 +1,2065 @@
+# Copyright (C) 2026 Plathix
+# This file is distributed under the GPLv3 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plathix - Media Library Folders 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/plathix\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: plathix\n"
+
+#. Plugin Name of the plugin
+msgid "Plathix - Media Library Folders"
+msgstr ""
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://plathix.com/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Everything in its place. Organize your WordPress Media Library with folders, ready sets, replace media, SVG handling, and Trash."
+msgstr ""
+
+#. Author of the plugin
+msgid "Plathix"
+msgstr ""
+
+#. translators: aria-подпись иконки «папки» в счётчике корзины (доступность).
+msgid "Folders"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Folder name:"
+msgstr ""
+
+msgid "Rename folder:"
+msgstr ""
+
+msgid "Delete this folder?"
+msgstr ""
+
+msgid "Folder is not empty."
+msgstr ""
+
+msgid "No items selected."
+msgstr ""
+
+msgid "Open a destination folder first."
+msgstr ""
+
+#. translators: %s: plural post type label e.g. "Posts", "Pages", "Products"
+#, php-format
+msgid "Move selected %s"
+msgstr ""
+
+msgid "+ Folder"
+msgstr ""
+
+msgid "New subfolder"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "A folder with this name already exists here."
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Move to Trash"
+msgstr ""
+
+msgid "Move this folder to Trash? You can restore it later."
+msgstr ""
+
+msgid "Files won't be deleted — depending on your Trash settings, they either move with the folder or become unassigned."
+msgstr ""
+
+msgid "Choose whether subfolders move to Trash together with this folder, or stay in place."
+msgstr ""
+
+msgid "Move folder to Trash"
+msgstr ""
+
+msgid "Move folder and subfolders to Trash"
+msgstr ""
+
+msgid "Select folders"
+msgstr ""
+
+msgid "Expand/collapse all"
+msgstr ""
+
+msgid "Drag mode"
+msgstr ""
+
+msgid "Move folders to Trash"
+msgstr ""
+
+msgid "Folder moved to Trash. You can restore it from there."
+msgstr ""
+
+msgid "Gallery shortcode"
+msgstr ""
+
+msgid "Documents"
+msgstr ""
+
+msgid "Show file size"
+msgstr ""
+
+msgid "Refresh"
+msgstr ""
+
+msgid "Maximum nesting depth reached"
+msgstr ""
+
+msgid "All Files"
+msgstr ""
+
+#. translators: %s: plural post type label e.g. "posts", "pages", "products"
+#, php-format
+msgid "No folders yet. Create your first folder to organize your %s."
+msgstr ""
+
+msgid "No folders found."
+msgstr ""
+
+msgid "Favorites"
+msgstr ""
+
+msgid "Add to favorites"
+msgstr ""
+
+msgid "Remove from favorites"
+msgstr ""
+
+msgid "Failed to save favorites."
+msgstr ""
+
+msgid "Unable to refresh nonce."
+msgstr ""
+
+msgid "Request failed."
+msgstr ""
+
+msgid "file uploaded"
+msgstr ""
+
+msgid "files uploaded"
+msgstr ""
+
+msgid "Upload is still running. The view will return to the upload folder when it finishes."
+msgstr ""
+
+msgid "Upload is still running in the selected folder. The view will return there when it finishes."
+msgstr ""
+
+msgid "Uploads are still in progress. Leaving now may interrupt them."
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "File replaced successfully."
+msgstr ""
+
+msgid "File replaced, but some cleanup steps need manual review."
+msgstr ""
+
+msgid "Replace failed."
+msgstr ""
+
+msgid "Replacing…"
+msgstr ""
+
+msgid "File replaced, but the preview could not be refreshed. Reload the page to see the new file."
+msgstr ""
+
+msgid "The file may have been replaced, but the server response could not be confirmed. Reload the page to check."
+msgstr ""
+
+#. translators: 1: image width in pixels, 2: image height in pixels.
+#, php-format
+msgid "%1$s by %2$s pixels"
+msgstr ""
+
+msgid "The server is blocking REST write requests. Contact your hosting."
+msgstr ""
+
+msgid "The server is corrupting REST responses (both /wp-json/ and rest_route returned invalid data). Contact your hosting."
+msgstr ""
+
+msgid "The server accepted the request, but the response could not be read. Refreshing to confirm the result."
+msgstr ""
+
+msgid "Upload failed."
+msgstr ""
+
+msgid "Move to folder"
+msgstr ""
+
+msgid "Failed to load folders."
+msgstr ""
+
+msgid "Failed to move file."
+msgstr ""
+
+msgid "Too many requests. Please try again later."
+msgstr ""
+
+msgid "Folder changed."
+msgstr ""
+
+msgid "SORT"
+msgstr ""
+
+msgid "A → Z"
+msgstr ""
+
+msgid "Z → A"
+msgstr ""
+
+msgid "Newest first"
+msgstr ""
+
+msgid "Oldest first"
+msgstr ""
+
+msgid "By size"
+msgstr ""
+
+msgid "By default"
+msgstr ""
+
+msgid "Sort"
+msgstr ""
+
+msgid "Folder created"
+msgstr ""
+
+msgid "Folder renamed"
+msgstr ""
+
+msgid "Moved to Trash"
+msgstr ""
+
+msgid "folders moved to Trash"
+msgstr ""
+
+msgid "Position saved. Switch sorting to \"Default\" to see it."
+msgstr ""
+
+msgid "folder could not be deleted"
+msgstr ""
+
+msgid "folders could not be deleted"
+msgstr ""
+
+msgid "items will be moved. Continue?"
+msgstr ""
+
+msgid "1 file moved"
+msgstr ""
+
+msgid "files moved"
+msgstr ""
+
+msgid "Move the selected folders to Trash? You can restore them later."
+msgstr ""
+
+msgid "Files won't be deleted — depending on your Trash settings, they either move with the folders or become unassigned."
+msgstr ""
+
+msgid "Some selected folders contain subfolders. Choose how to handle them:"
+msgstr ""
+
+msgid "Move only selected, keep subfolders"
+msgstr ""
+
+msgid "Move selected and all subfolders to Trash"
+msgstr ""
+
+msgid "Create folder"
+msgstr ""
+
+msgid "Rename folder"
+msgstr ""
+
+msgid "Select folder"
+msgstr ""
+
+msgid "File"
+msgstr ""
+
+#. translators: aria-подпись иконки «файлы» в счётчике корзины (доступность).
+msgid "Files"
+msgstr ""
+
+msgid "Uncategorized"
+msgstr ""
+
+msgid "Trash"
+msgstr ""
+
+msgid "Cannot create subfolders inside Uncategorized."
+msgstr ""
+
+msgid "Maximum folder nesting depth reached."
+msgstr ""
+
+msgid "Folder structure is temporarily locked. Please try again in a moment."
+msgstr ""
+
+msgid "Cannot create a folder inside a folder that is in Trash."
+msgstr ""
+
+msgid "Uncategorized cannot be renamed."
+msgstr ""
+
+msgid "This folder was removed. Please refresh the folder tree and try again."
+msgstr ""
+
+msgid "Cannot move a folder into one of its own subfolders."
+msgstr ""
+
+msgid "Cannot move a folder into a folder that is in Trash."
+msgstr ""
+
+msgid "Folder name cannot be empty."
+msgstr ""
+
+msgid "Folder name contains control or bidirectional characters."
+msgstr ""
+
+msgid "Folder name is too long."
+msgstr ""
+
+msgid "Invalid taxonomy."
+msgstr ""
+
+msgid "A folder cannot be moved to itself."
+msgstr ""
+
+msgid "Attachment ID must be positive."
+msgstr ""
+
+msgid "A trash operation is already in progress for this attachment."
+msgstr ""
+
+msgid "Restore"
+msgstr ""
+
+msgid "Delete permanently"
+msgstr ""
+
+msgid "Folder"
+msgstr ""
+
+msgid "Insufficient permissions."
+msgstr ""
+
+msgid "Folder no longer exists."
+msgstr ""
+
+msgid "Not logged in."
+msgstr ""
+
+msgid "Too many requests."
+msgstr ""
+
+msgid "No folders selected."
+msgstr ""
+
+msgid "You are creating folders too quickly. Please wait about a minute and try again."
+msgstr ""
+
+msgid "You are changing folders too quickly. Please wait about a minute and try again."
+msgstr ""
+
+msgid "You are deleting folders too quickly. Please wait about a minute and try again."
+msgstr ""
+
+msgid "Folder is not in Trash or no longer exists."
+msgstr ""
+
+msgid "Trash is busy, try again."
+msgstr ""
+
+msgid "Folder is not in Trash."
+msgstr ""
+
+msgid "Media trash is only available for attachments."
+msgstr ""
+
+msgid "Media restore is only available for attachments."
+msgstr ""
+
+msgid "Service tokens cannot modify personal preferences."
+msgstr ""
+
+msgid "Media replace is only available for attachments."
+msgstr ""
+
+msgid "Attachment ID is required."
+msgstr ""
+
+msgid "Replacement file is required."
+msgstr ""
+
+msgid "File replaced successfully"
+msgstr ""
+
+msgid "Invalid folder ID."
+msgstr ""
+
+msgid "Unable to delete folder."
+msgstr ""
+
+msgid "WP Cron / Action Scheduler"
+msgstr ""
+
+msgid "Enabled"
+msgstr ""
+
+msgid "DISABLE_WP_CRON, Action Scheduler idle (nothing scheduled)"
+msgstr ""
+
+msgid "DISABLE_WP_CRON but Action Scheduler active"
+msgstr ""
+
+msgid "WP-Cron disabled, Action Scheduler stalled — ZIP/import jobs may not run"
+msgstr ""
+
+msgid "Temp Dir Writable"
+msgstr ""
+
+msgid "Writable"
+msgstr ""
+
+msgid "Temp directory is not writable. ZIP downloads will fail."
+msgstr ""
+
+msgid "Temp Dir Size"
+msgstr ""
+
+#. translators: 1: current size, 2: limit.
+#, php-format
+msgid "%1$s of %2$s limit"
+msgstr ""
+
+#. translators: 1: current size, 2: limit.
+#, php-format
+msgid "Temp directory exceeds size limit (%1$s of %2$s) — cleanup job may be stalled."
+msgstr ""
+
+msgid "Stuck Running Jobs"
+msgstr ""
+
+msgid "Action Scheduler not available"
+msgstr ""
+
+#. translators: 1: running ZIP jobs count, 2: running import jobs count.
+#, php-format
+msgid "ZIP: %1$d running, import: %2$d running"
+msgstr ""
+
+#. translators: 1: running ZIP jobs count, 2: running import jobs count.
+#, php-format
+msgid "Possibly stuck — ZIP: %1$d, import: %2$d"
+msgstr ""
+
+msgid "Boot Integrity"
+msgstr ""
+
+msgid "Init interrupted by another plugin — system terms recovered lazily. Check for a plugin fataling on the init hook."
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "SVG Sanitizer"
+msgstr ""
+
+msgid "Missing or outdated"
+msgstr ""
+
+msgid "Provided by another plugin — not verifiable"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Presets Directory Guard"
+msgstr ""
+
+msgid "Directory not created yet — guard will be added automatically on first preset upload."
+msgstr ""
+
+msgid "Protected"
+msgstr ""
+
+#. translators: %s: comma-separated list of missing guard files, e.g. "index.php, .htaccess".
+#, php-format
+msgid "Guard incomplete — missing: %s"
+msgstr ""
+
+msgid "Folder & file"
+msgstr ""
+
+msgid "Replace file"
+msgstr ""
+
+msgid "Keeps the same attachment ID and WordPress relationships. Direct URL references may require manual review if filename or file type changes."
+msgstr ""
+
+msgid "— No folder —"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+#. translators: %s: current PHP version.
+#, php-format
+msgid "PHP %s is below the minimum required 8.1."
+msgstr ""
+
+msgid "Enable infinite scroll"
+msgstr ""
+
+msgid "Replace default pagination with seamless infinite loading in the Media Library grid."
+msgstr ""
+
+msgid "Review SVG policy"
+msgstr ""
+
+msgid "SVG uploads are enabled. Review the allowed roles and safe mode setting."
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Missing card id."
+msgstr ""
+
+msgid "Unknown source."
+msgstr ""
+
+msgid "You do not have sufficient permissions."
+msgstr ""
+
+msgid "Plathix Dashboard"
+msgstr ""
+
+msgid "New to Plathix?"
+msgstr ""
+
+msgid "Read the getting started guide →"
+msgstr ""
+
+msgid "Other"
+msgstr ""
+
+msgid "No folders yet"
+msgstr ""
+
+msgid "Apply a preset to instantly create a folder structure, or start from scratch."
+msgstr ""
+
+msgid "Apply preset"
+msgstr ""
+
+msgid "content type"
+msgid_plural "content types"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: content types count, 2: content types word (already pluralized), 3: unsorted count. The "%d %s" segment and " · %d unsorted" may be reordered per-language.
+#, php-format
+msgid "across %1$d %2$s · %3$d unsorted"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
+msgid "DISK USED"
+msgstr ""
+
+msgid "Max depth"
+msgstr ""
+
+msgid "levels"
+msgstr ""
+
+msgid "Fav. folders"
+msgstr ""
+
+msgid "Open Media Library →"
+msgstr ""
+
+#. translators: %s: plugin name
+#, php-format
+msgid "%s detected"
+msgstr ""
+
+#. translators: %s: plugin name
+#, php-format
+msgid "We found an existing folder structure from %s. Import it to Plathix in one click — your organisation will be preserved."
+msgstr ""
+
+#. translators: %s: source name (plugin or import adapter, e.g. FileBird).
+#, php-format
+msgid "Import from %s"
+msgstr ""
+
+msgid "Dismiss"
+msgstr ""
+
+msgid "MIME Types"
+msgstr ""
+
+msgid "No media files yet."
+msgstr ""
+
+msgid "FILES"
+msgstr ""
+
+msgid "Set up Plathix"
+msgstr ""
+
+msgid "Dismiss this card"
+msgstr ""
+
+msgid "Configure →"
+msgstr ""
+
+msgid "Unsorted"
+msgstr ""
+
+#. translators: %s: total file count
+#, php-format
+msgid "of %s"
+msgstr ""
+
+msgid "Fix"
+msgstr ""
+
+msgid "Blog & Content"
+msgstr ""
+
+msgid "E-Commerce"
+msgstr ""
+
+msgid "Creative Agency"
+msgstr ""
+
+msgid "Preset"
+msgstr ""
+
+#. translators: 1: folder count, 2: human time diff
+#, php-format
+msgid "%1$d folders · applied %2$s ago"
+msgstr ""
+
+#. translators: %d: folder count
+#, php-format
+msgid "%d folders · applied"
+msgstr ""
+
+msgid "Applied"
+msgstr ""
+
+msgid "8 presets available — Blog, E-Commerce, Agency and more. Import a custom structure via ZIP."
+msgstr ""
+
+msgid "Import ZIP"
+msgstr ""
+
+msgid "Browse presets →"
+msgstr ""
+
+msgid "Export current structure →"
+msgstr ""
+
+msgid "Start with a ready-made structure for your type of site."
+msgstr ""
+
+#. translators: %d: folder count
+#, php-format
+msgid "%d folders"
+msgstr ""
+
+msgid "Browse all presets →"
+msgstr ""
+
+msgid "Plathix is active"
+msgstr ""
+
+msgid "folder"
+msgid_plural "folders"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "file"
+msgid_plural "files"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: types count, 2: types word (already pluralized), 3: folders count, 4: folders word (already pluralized), 5: files count, 6: files word (already pluralized). The three "%d %s" pairs and the " · " separator between them may be reordered/changed per-language.
+#, php-format
+msgid "%1$d %2$s · %3$d %4$s · %5$d %6$s"
+msgstr ""
+
+msgid "All good"
+msgstr ""
+
+#. translators: %d: issue count
+#, php-format
+msgid "%d issue"
+msgid_plural "%d issues"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Uploads"
+msgstr ""
+
+msgid "7d"
+msgstr ""
+
+msgid "30d"
+msgstr ""
+
+#. translators: %d: peak uploads per day
+#, php-format
+msgid "files · last 7d · peak %d/day"
+msgstr ""
+
+#. translators: %d: peak uploads per day
+#, php-format
+msgid "files · last 30d · peak %d/day"
+msgstr ""
+
+msgid "Delete all plugin data"
+msgstr ""
+
+msgid "Permanently removes everything Plathix created — folders, presets, settings. Your media files, images and posts are NOT touched."
+msgstr ""
+
+msgid "Delete all data…"
+msgstr ""
+
+msgid "Delete all Plathix data?"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "This cannot be undone."
+msgstr ""
+
+msgid "Will be permanently deleted:"
+msgstr ""
+
+msgid "NOT touched:"
+msgstr ""
+
+msgid "your images, files and posts stay in the Media Library — they only lose their folder assignment."
+msgstr ""
+
+msgid "I understand this is permanent and cannot be undone."
+msgstr ""
+
+msgid "Delete all data"
+msgstr ""
+
+msgid "Deleting…"
+msgstr ""
+
+msgid "Cleanup failed. Please try again."
+msgstr ""
+
+msgid "All folders and their structure"
+msgstr ""
+
+msgid "Folder presets and applied-preset history"
+msgstr ""
+
+msgid "All plugin settings and preferences"
+msgstr ""
+
+msgid "Favorites, colors and folder positions"
+msgstr ""
+
+msgid "Danger Zone"
+msgstr ""
+
+msgid "Service tokens cannot modify personal favorites."
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "First setup"
+msgstr ""
+
+msgid "Set up your media library"
+msgstr ""
+
+msgid "Pick a starting folder structure or start from scratch. You can always change this later."
+msgstr ""
+
+msgid "Skip setup"
+msgstr ""
+
+#. translators: %d — количество папок, которые создаст этот пресет.
+#, php-format
+msgid "%d folder"
+msgid_plural "%d folders"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Apply this preset? It adds a ready-made folder structure to your media library. Your existing folders and media are not deleted; folders with matching names are created with an \"— imported\" suffix."
+msgstr ""
+
+msgid "Apply"
+msgstr ""
+
+msgid "Browse all presets"
+msgstr ""
+
+#. translators: %d: number of Plathix folders that will be deleted
+#, php-format
+msgid "This will delete %d Plathix folder. Media files will not be deleted. Continue?"
+msgid_plural "This will delete %d Plathix folders. Media files will not be deleted. Continue?"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Start from scratch →"
+msgstr ""
+
+msgid "Wizard reset. It will appear on the Dashboard on next visit."
+msgstr ""
+
+msgid "Reset wizard"
+msgstr ""
+
+msgid "Import is already running for this adapter — cannot restart yet."
+msgstr ""
+
+msgid "Import job already queued for this user."
+msgstr ""
+
+msgid "Import queue is busy."
+msgstr ""
+
+msgid "Invalid job id."
+msgstr ""
+
+msgid "Import queued. Waiting for Action Scheduler..."
+msgstr ""
+
+msgid "Import is running..."
+msgstr ""
+
+#. translators: %d: number of moved items.
+#, php-format
+msgid "Import completed. Moved items: %d"
+msgstr ""
+
+msgid "Import failed."
+msgstr ""
+
+msgid "Import is still pending. Action Scheduler runner may be unavailable."
+msgstr ""
+
+msgid "Could not check import status — connection is unstable. Please wait or try again later."
+msgstr ""
+
+msgid "Import is already running for this adapter."
+msgstr ""
+
+msgid "Import from Other Plugins"
+msgstr ""
+
+msgid "Migrate your folder structure from another plugin. Plathix will attempt to recreate the hierarchy and reassign all media attachments. This is non-destructive — original plugin data is preserved."
+msgstr ""
+
+msgid "Imported"
+msgstr ""
+
+msgid "Detected"
+msgstr ""
+
+msgid "Not detected"
+msgstr ""
+
+msgid "An unfinished import was detected. You can continue where it left off or start over."
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Start over"
+msgstr ""
+
+#. translators: 1: removed folders count, 2: skipped folders count, 3: error count.
+#, php-format
+msgid "Folder structure reset: %1$d removed, %2$d skipped, %3$d errors."
+msgstr ""
+
+msgid "Preset not found."
+msgstr ""
+
+msgid "Preset is not valid and cannot be applied."
+msgstr ""
+
+msgid "Media taxonomy is not registered."
+msgstr ""
+
+msgid "Preset apply is temporarily locked by another request. Please try again in a moment."
+msgstr ""
+
+msgid "Failed to reset folder structure before applying preset."
+msgstr ""
+
+#. translators: 1: preset title, 2: created folders count.
+#, php-format
+msgid "Preset \"%1$s\" applied (%2$d folders created)."
+msgstr ""
+
+#. translators: 1: site name, 2: tagline
+#, php-format
+msgid "Preset created for %1$s — %2$s using the Plathix plugin."
+msgstr ""
+
+#. translators: 1: site name
+#, php-format
+msgid "Preset created for %s using the Plathix plugin."
+msgstr ""
+
+#. translators: %s: missing preset metadata field key.
+#, php-format
+msgid "Missing required export metadata: %s"
+msgstr ""
+
+msgid "Preview image is required for export."
+msgstr ""
+
+msgid "Preview image must be webp, png, jpg, or jpeg."
+msgstr ""
+
+msgid "Preview image exceeds 300 KB limit."
+msgstr ""
+
+msgid "Preview image could not be validated."
+msgstr ""
+
+msgid "PHP zip extension is not available."
+msgstr ""
+
+msgid "Could not create temporary directory for export."
+msgstr ""
+
+msgid "Could not create export archive."
+msgstr ""
+
+msgid "Invalid metadata line."
+msgstr ""
+
+msgid "Metadata field name has wrong letter case."
+msgstr ""
+
+msgid "Metadata field is defined more than once."
+msgstr ""
+
+msgid "Format version must be a whole number."
+msgstr ""
+
+msgid "This preset was created by a newer version of Plathix. Update the plugin to use it."
+msgstr ""
+
+msgid "Structure indentation must use spaces, not tabs."
+msgstr ""
+
+msgid "This preset uses the old format. Convert it with bin/convert-preset-format.php."
+msgstr ""
+
+msgid "Invalid structure line."
+msgstr ""
+
+msgid "Structure indentation must be a multiple of two spaces."
+msgstr ""
+
+msgid "Structure line is nested deeper than its parent allows."
+msgstr ""
+
+msgid "Folder name must be wrapped in double quotes."
+msgstr ""
+
+msgid "Invalid folder attributes."
+msgstr ""
+
+#. translators: %d: number of structure lines left unchecked.
+#, php-format
+msgid "Too many errors: %d more structure lines were not checked."
+msgstr ""
+
+msgid "Missing ## Structure section."
+msgstr ""
+
+msgid "Apply failed."
+msgstr ""
+
+#. translators: 1: preset title, 2: folder count
+#, php-format
+msgid "Preset \"%1$s\" applied. %2$d folders created."
+msgstr ""
+
+msgid "Built-in presets cannot be deleted."
+msgstr ""
+
+msgid "Preset deleted."
+msgstr ""
+
+msgid "No file uploaded."
+msgstr ""
+
+#. translators: %s: preset title
+#, php-format
+msgid "Preset \"%s\" uploaded successfully."
+msgstr ""
+
+#. translators: %d: error count
+#, php-format
+msgid "Reset completed with %d errors."
+msgstr ""
+
+msgid "All folders have been reset. You can now start from scratch."
+msgstr ""
+
+msgid "Preset storage is unavailable."
+msgstr ""
+
+msgid "Failed to store preset record."
+msgstr ""
+
+msgid "Invalid preset id."
+msgstr ""
+
+msgid "Preset record was not found."
+msgstr ""
+
+msgid "Preset slug already exists."
+msgstr ""
+
+msgid "Presets"
+msgstr ""
+
+msgid "Apply a folder structure preset, upload your own package, or start from scratch."
+msgstr ""
+
+msgid "Upload preset (.zip)"
+msgstr ""
+
+msgid "Search presets…"
+msgstr ""
+
+msgid "Most Popular"
+msgstr ""
+
+msgid "Built-in first"
+msgstr ""
+
+msgid "Custom / Uploaded"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Built-in"
+msgstr ""
+
+msgid "Custom"
+msgstr ""
+
+msgid "Community"
+msgstr ""
+
+msgid "Exported"
+msgstr ""
+
+msgid "No presets found."
+msgstr ""
+
+msgid "No presets match your search."
+msgstr ""
+
+msgid "Official"
+msgstr ""
+
+msgid "· Media Library only"
+msgstr ""
+
+msgid "Apply Preset ›"
+msgstr ""
+
+msgid "Delete this preset record? This cannot be undone."
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Upload preset package (.zip)"
+msgstr ""
+
+msgid "Drop your ZIP preset here"
+msgstr ""
+
+msgid "or click to browse · .zip files only"
+msgstr ""
+
+msgid "Preset files define folder names and hierarchy."
+msgstr ""
+
+msgid "They apply to your Media Library only."
+msgstr ""
+
+msgid "Reading preset file…"
+msgstr ""
+
+msgid "Don't forget to apply the preset."
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "Upload different"
+msgstr ""
+
+msgid "Try again"
+msgstr ""
+
+msgid "Start from scratch"
+msgstr ""
+
+msgid "No file was uploaded."
+msgstr ""
+
+msgid "Upload must be a .zip file."
+msgstr ""
+
+msgid "Archive exceeds the 1 MB size limit."
+msgstr ""
+
+msgid "Could not open the zip archive."
+msgstr ""
+
+msgid "Archive must contain exactly 2 files."
+msgstr ""
+
+msgid "Could not read archive entries."
+msgstr ""
+
+msgid "Archive contains unsafe file paths."
+msgstr ""
+
+msgid "Preset description exceeds the size limit."
+msgstr ""
+
+msgid "Preview image exceeds the size limit."
+msgstr ""
+
+msgid "Archive is missing the preset description file."
+msgstr ""
+
+msgid "Archive is missing a valid preview image."
+msgstr ""
+
+msgid "Could not create temporary directory."
+msgstr ""
+
+msgid "Could not extract archive."
+msgstr ""
+
+msgid "Could not read the preset description file."
+msgstr ""
+
+msgid "The preset description file must be UTF-8 without BOM."
+msgstr ""
+
+msgid "The Preview field does not match the preview file in the archive."
+msgstr ""
+
+msgid "Preview file could not be found after extraction."
+msgstr ""
+
+msgid "Preview image exceeds the 300 KB size limit."
+msgstr ""
+
+msgid "Preview image has an unsupported format."
+msgstr ""
+
+msgid "Preview file is not a valid image."
+msgstr ""
+
+msgid "Missing required metadata field."
+msgstr ""
+
+msgid "Preset version cannot be empty."
+msgstr ""
+
+msgid "Invalid preset slug."
+msgstr ""
+
+msgid "Preview must be one of: preview.webp, preview.png, preview.jpg, preview.jpeg."
+msgstr ""
+
+msgid "Invalid tags format."
+msgstr ""
+
+msgid "This slug is reserved by a built-in preset. Rename the preset before uploading."
+msgstr ""
+
+msgid "This preset already exists."
+msgstr ""
+
+msgid "Preset exceeds the maximum number of structure lines."
+msgstr ""
+
+msgid "Folder name contains forbidden characters."
+msgstr ""
+
+msgid "Folder name is too long in bytes."
+msgstr ""
+
+msgid "Invalid color value."
+msgstr ""
+
+msgid "Preset exceeds maximum depth."
+msgstr ""
+
+#. translators: %d — number of sites included in the plan.
+#, php-format
+msgid "%d site"
+msgid_plural "%d sites"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "License"
+msgstr ""
+
+msgid "Upgrade"
+msgstr ""
+
+msgid "Plathix License"
+msgstr ""
+
+msgid "Plathix PRO"
+msgstr ""
+
+msgid "See the full feature comparison →"
+msgstr ""
+
+#. translators: %d — refund window in days.
+#, php-format
+msgid "%d-day money-back guarantee"
+msgstr ""
+
+msgid "Secure checkout"
+msgstr ""
+
+msgid "Annual subscription — cancel anytime"
+msgstr ""
+
+msgid "Your media library,"
+msgstr ""
+
+msgid "finally under control"
+msgstr ""
+
+msgid "Free gives you folders. PRO adds per-role access control, a gallery builder, bulk ZIP downloads, an audit log and WP-CLI — for sites and teams that need more than organization."
+msgstr ""
+
+#. translators: %s — starting price from the pricing map, already formatted with the currency symbol.
+#, php-format
+msgid "Upgrade to PRO — from %s"
+msgstr ""
+
+msgid "See what's included ↓"
+msgstr ""
+
+msgid "Per-role folder access &amp; upload permissions"
+msgstr ""
+
+msgid "Gallery shortcode &amp; bulk ZIP downloads"
+msgstr ""
+
+msgid "Audit log &amp; WP-CLI commands"
+msgstr ""
+
+msgid "Free vs PRO"
+msgstr ""
+
+msgid "Feature"
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "PRO"
+msgstr ""
+
+msgid "Unlimited folders"
+msgstr ""
+
+msgid "Nested sub-folders (unlimited depth)"
+msgstr ""
+
+msgid "Folder colors"
+msgstr ""
+
+msgid "Favorite folders"
+msgstr ""
+
+msgid "Ready folder sets for common site types"
+msgstr ""
+
+msgid "Media tools"
+msgstr ""
+
+msgid "Bulk move to folder"
+msgstr ""
+
+msgid "Bulk trash / restore"
+msgstr ""
+
+msgid "Replace media (keeps attachment ID)"
+msgstr ""
+
+msgid "SVG upload with sanitization &amp; role controls"
+msgstr ""
+
+msgid "Export / import folder structure"
+msgstr ""
+
+msgid "Gallery shortcode &amp; layouts"
+msgstr ""
+
+msgid "Bulk download as ZIP"
+msgstr ""
+
+msgid "Access & roles"
+msgstr ""
+
+msgid "Per-role folder access"
+msgstr ""
+
+msgid "Per-role upload permission"
+msgstr ""
+
+msgid "REST API service token authentication"
+msgstr ""
+
+msgid "Developer tools"
+msgstr ""
+
+msgid "WP-CLI commands"
+msgstr ""
+
+msgid "Audit log"
+msgstr ""
+
+msgid "Support"
+msgstr ""
+
+msgid "Community support"
+msgstr ""
+
+msgid "Priority email support"
+msgstr ""
+
+msgid "One-click site migration"
+msgstr ""
+
+msgid "/ year"
+msgstr ""
+
+msgid "Most popular"
+msgstr ""
+
+msgid "Get started"
+msgstr ""
+
+#. translators: %d — refund window in days.
+#, php-format
+msgid "%d-day money-back guarantee. All plans include all PRO features."
+msgstr ""
+
+msgid "Plathix PRO — active"
+msgstr ""
+
+msgid "You're on PRO. Everything is unlocked."
+msgstr ""
+
+msgid "Manage your license below. Need help? Our docs and support are a click away."
+msgstr ""
+
+msgid "Documentation"
+msgstr ""
+
+msgid "Priority support"
+msgstr ""
+
+#. translators: %s — subscription expiry date.
+#, php-format
+msgid "Subscription active until %s."
+msgstr ""
+
+#. translators: 1: days left, 2: renew link (opening <a>), 3: closing </a>.
+#, php-format
+msgid "Subscription expires in %1$d days. %2$sRenew%3$s to keep PRO active."
+msgstr ""
+
+#. translators: 1: expiry date, 2: renew link (opening <a>), 3: closing </a>.
+#, php-format
+msgid "Subscription expired on %1$s. %2$sRenew%3$s to restore PRO."
+msgstr ""
+
+msgid "What you unlocked with PRO"
+msgstr ""
+
+msgid "Can I upgrade from Free to PRO at any time?"
+msgstr ""
+
+msgid "Yes, upgrade is instant. Your existing folders and settings are preserved."
+msgstr ""
+
+msgid "What happens to my folders if I cancel?"
+msgstr ""
+
+msgid "Your folders remain in the database. PRO-only features (access control, gallery, audit log, WP-CLI, etc.) are deactivated but your structure stays intact."
+msgstr ""
+
+msgid "Is it a one-time payment or subscription?"
+msgstr ""
+
+msgid "Annual subscription. You can cancel anytime — no long-term commitment."
+msgstr ""
+
+msgid "Do you offer refunds?"
+msgstr ""
+
+#. translators: 1: refund window in days, 2: same value repeated.
+#, php-format
+msgid "%1$d-day money-back guarantee, no questions asked. Contact support within %2$d days of purchase."
+msgstr ""
+
+msgid "FAQ"
+msgstr ""
+
+msgid "License Key"
+msgstr ""
+
+msgid "Active"
+msgstr ""
+
+msgid "Awaiting re-check"
+msgstr ""
+
+msgid "Invalid"
+msgstr ""
+
+msgid "License activated successfully. Enjoy Plathix PRO!"
+msgstr ""
+
+msgid "License deactivated."
+msgstr ""
+
+msgid "License key not found or could not be verified. Please check and try again."
+msgstr ""
+
+msgid "Enter your license key to activate PRO features on this site."
+msgstr ""
+
+msgid "Reactivate"
+msgstr ""
+
+msgid "Activate"
+msgstr ""
+
+msgid "Deactivate"
+msgstr ""
+
+#. translators: %s: human-readable time difference, e.g. "2 days".
+#, php-format
+msgid "Last confirmed by the license server: %s ago."
+msgstr ""
+
+msgid "Your key is in the purchase confirmation email you received after buying Plathix PRO. It looks like <code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code>."
+msgstr ""
+
+msgid "License checks run over a standard HTTPS connection to our license server; the response is not cryptographically signed, so this check protects against typos and expired keys, not against a compromised network path."
+msgstr ""
+
+msgid "A replace operation is already in progress for this attachment."
+msgstr ""
+
+msgid "Attachment does not exist."
+msgstr ""
+
+msgid "Actor is not allowed to replace this attachment."
+msgstr ""
+
+msgid "Uploaded file type is not allowed."
+msgstr ""
+
+msgid "Uploaded file result is incomplete."
+msgstr ""
+
+msgid "Unable to update attachment file path."
+msgstr ""
+
+msgid "Failed to update attachment metadata."
+msgstr ""
+
+msgid "Upload input must contain name and tmp_name."
+msgstr ""
+
+msgid "Upload input contains a file error."
+msgstr ""
+
+msgid "Unable to back up the original file before replacing it."
+msgstr ""
+
+msgid "Upload base directory is unavailable."
+msgstr ""
+
+msgid "Unable to create Plathix temporary directory."
+msgstr ""
+
+msgid "Plathix temporary directory is not writable."
+msgstr ""
+
+msgid "Compressed SVGZ files are not supported."
+msgstr ""
+
+msgid "SVG file is not readable."
+msgstr ""
+
+msgid "Unable to read SVG file."
+msgstr ""
+
+msgid "SVG replacement requires an identified actor context."
+msgstr ""
+
+msgid "Unable to rewrite sanitized SVG file."
+msgstr ""
+
+msgid "Sideload source file is not readable."
+msgstr ""
+
+msgid "Unable to stage sideload file into temporary directory."
+msgstr ""
+
+msgid "Upload handler returned an invalid result."
+msgstr ""
+
+msgid "Failed to generate attachment metadata."
+msgstr ""
+
+#. translators: 1: original error message, 2: path to the backup copy that still holds the original file
+#, php-format
+msgid "%1$s Additionally, the original file could not be restored from its backup at %2$s — restore it manually before retrying."
+msgstr ""
+
+msgid "Search folders"
+msgstr ""
+
+msgid "Type to browse folders"
+msgstr ""
+
+msgid "Clear search"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "General"
+msgstr ""
+
+msgid "Media Grid"
+msgstr ""
+
+msgid "Enable infinite scroll in media library grid"
+msgstr ""
+
+msgid "Automatically loads more files when scrolling down in the media grid and media picker (Gutenberg, Elementor, Classic editor)."
+msgstr ""
+
+msgid "Failed to generate export JSON."
+msgstr ""
+
+msgid "Export failed."
+msgstr ""
+
+msgid "Export archive not found."
+msgstr ""
+
+msgid "WP-Cron is unavailable. ZIP generation and import jobs will not run until WP-Cron or a real system cron is configured."
+msgstr ""
+
+msgid "Configure Plathix plugin behaviour, access and integrations."
+msgstr ""
+
+msgid "Settings sections"
+msgstr ""
+
+msgid "Save Settings"
+msgstr ""
+
+msgid "Saved!"
+msgstr ""
+
+msgid "Save failed"
+msgstr ""
+
+msgid "Enables infinite scroll in the Media Library grid and media picker modals."
+msgstr ""
+
+msgid "Default upload folder"
+msgstr ""
+
+msgid "New uploads go to this folder when no folder is chosen explicitly."
+msgstr ""
+
+msgid "Behavior"
+msgstr ""
+
+msgid "Confirm bulk actions"
+msgstr ""
+
+msgid "Ask for confirmation before moving, deleting or restructuring 10 or more items at once."
+msgstr ""
+
+msgid "(folder unavailable)"
+msgstr ""
+
+msgid "No folder"
+msgstr ""
+
+msgid "The selected folder is no longer available — it was deleted or moved to trash. New uploads go to the media library root until you pick another folder. Restoring the folder brings this setting back."
+msgstr ""
+
+msgid "Enable infinite scroll in Media Grid"
+msgstr ""
+
+msgid "Replaces default pagination with seamless infinite loading."
+msgstr ""
+
+msgid "Confirm bulk actions on 10 or more items"
+msgstr ""
+
+msgid "SVG"
+msgstr ""
+
+msgid "SVG Uploads"
+msgstr ""
+
+msgid "Choose how Plathix handles .svg uploads across the whole site."
+msgstr ""
+
+msgid "Multisite notice:"
+msgstr ""
+
+msgid "SVG upload is enabled network-wide. Each sub-site's allowed role list applies independently. Consider restricting to Administrator only on untrusted sites."
+msgstr ""
+
+msgid "SVG Allowed Roles"
+msgstr ""
+
+msgid "Select which roles are permitted to upload SVG files."
+msgstr ""
+
+msgid "SVG Safe Mode"
+msgstr ""
+
+msgid "Strips more aggressively — disallows &lt;use&gt; elements and external references. Recommended for sites with untrusted editors."
+msgstr ""
+
+msgid "Allow SVG uploads with sanitisation (recommended)"
+msgstr ""
+
+msgid "Block SVG uploads site-wide (including SVG allowed by other plugins)"
+msgstr ""
+
+msgid "Do not manage SVG (leave it to other plugins; Plathix will not sanitise)"
+msgstr ""
+
+msgid "Enable strict safe mode"
+msgstr ""
+
+msgid "More restrictive sanitisation. May affect complex SVG animations."
+msgstr ""
+
+msgid "You are not allowed to upload SVG files."
+msgstr ""
+
+msgid "SVG file exceeds the maximum allowed size."
+msgstr ""
+
+msgid "Unable to process SVG file."
+msgstr ""
+
+msgid "System Info"
+msgstr ""
+
+msgid "Environment diagnostics and health checks."
+msgstr ""
+
+msgid "Copy for support"
+msgstr ""
+
+msgid "Copied!"
+msgstr ""
+
+msgid "Health Checks"
+msgstr ""
+
+msgid "Database Tables"
+msgstr ""
+
+msgid "Server Environment"
+msgstr ""
+
+msgid "WordPress Environment"
+msgstr ""
+
+msgid "Theme"
+msgstr ""
+
+msgid "Active Plugins"
+msgstr ""
+
+msgid "Exists"
+msgstr ""
+
+msgid "Missing"
+msgstr ""
+
+msgid "not required while SVG is disabled"
+msgstr ""
+
+msgid "Plugin Version"
+msgstr ""
+
+msgid "Plugin Build"
+msgstr ""
+
+msgid "Enabled Post Types"
+msgstr ""
+
+msgid "SVG Support"
+msgstr ""
+
+#. translators: %d: retention period in days.
+msgid "Audit Log Retention"
+msgstr ""
+
+#. translators: %d: retention period in days.
+msgid "Keep forever"
+msgstr ""
+
+#. translators: %d: retention period in days.
+#, php-format
+msgid "%d days"
+msgstr ""
+
+msgid "Plugin PRO Build"
+msgstr ""
+
+msgid "Object Cache"
+msgstr ""
+
+msgid "External (Redis/Memcached)"
+msgstr ""
+
+msgid "Transients (DB)"
+msgstr ""
+
+msgid "MySQL Advisory Locks"
+msgstr ""
+
+msgid "Operating System"
+msgstr ""
+
+msgid "Web Server"
+msgstr ""
+
+msgid "MySQL Version"
+msgstr ""
+
+msgid "PHP Version"
+msgstr ""
+
+msgid "PHP Memory Limit"
+msgstr ""
+
+msgid "PHP Max Execution"
+msgstr ""
+
+msgid "PHP Upload Max"
+msgstr ""
+
+msgid "GD Library"
+msgstr ""
+
+msgid "Not installed"
+msgstr ""
+
+msgid "ZipArchive"
+msgstr ""
+
+msgid "Installed"
+msgstr ""
+
+msgid "Upload Dir Writable"
+msgstr ""
+
+msgid "Yes"
+msgstr ""
+
+msgid "No"
+msgstr ""
+
+msgid "Temp Dir"
+msgstr ""
+
+msgid "Not configured"
+msgstr ""
+
+msgid "WordPress Version"
+msgstr ""
+
+msgid "Site URL"
+msgstr ""
+
+msgid "Multisite"
+msgstr ""
+
+msgid "Max Upload Size"
+msgstr ""
+
+msgid "WP Memory Limit"
+msgstr ""
+
+msgid "Permalink Structure"
+msgstr ""
+
+msgid "Plain"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "Timezone"
+msgstr ""
+
+msgid "Debug Mode"
+msgstr ""
+
+msgid "Inactive"
+msgstr ""
+
+msgid "Debug Log"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Version"
+msgstr ""
+
+msgid "Author"
+msgstr ""
+
+msgid "Child Theme"
+msgstr ""
+
+msgid "Parent Theme"
+msgstr ""
+
+msgid "Unavailable — queue deduplication degraded"
+msgstr ""
+
+msgid "Tools"
+msgstr ""
+
+msgid "Data operations, migrations and integrations — things you run occasionally, not configure daily."
+msgstr ""
+
+msgid "Export Structure"
+msgstr ""
+
+msgid "Export your entire folder structure as a portable preset ZIP file. The package can be imported on any other site running Plathix."
+msgstr ""
+
+msgid "Export to ZIP"
+msgstr ""
+
+msgid "files selected"
+msgstr ""
+
+msgid "Files will be moved to trash and can be restored from there."
+msgstr ""
+
+msgid "1 file moved to trash"
+msgstr ""
+
+msgid "files moved to trash"
+msgstr ""
+
+msgid "files could not be moved to trash"
+msgstr ""
+
+msgid "Loading…"
+msgstr ""
+
+msgid "Delete this folder permanently? This cannot be undone."
+msgstr ""
+
+msgid "deleted today"
+msgstr ""
+
+msgid "deleted yesterday"
+msgstr ""
+
+#. translators: %d — number of days since the folder was moved to Trash.
+#, php-format
+msgid "deleted %d days ago"
+msgstr ""
+
+msgid "1 file restored"
+msgstr ""
+
+msgid "files restored"
+msgstr ""
+
+msgid "files could not be restored"
+msgstr ""
+
+msgid "folder could not be restored"
+msgstr ""
+
+msgid "folder could not be deleted permanently"
+msgstr ""
+
+#. translators: короткая подпись «файлы» в счётчике корзины «N Ф / N П» (напр. рус. «Ф»).
+msgid "F"
+msgstr ""
+
+#. translators: короткая подпись «папки» в счётчике корзины «N Ф / N П» (напр. рус. «П»).
+msgid "D"
+msgstr ""
+
+msgid "Trash retention"
+msgstr ""
+
+msgid "How many days files stay in the Trash folder before they are permanently deleted (1–180). Overrides the WordPress default without editing wp-config."
+msgstr ""
+
+msgid "days"
+msgstr ""
+
+msgid "Delete files with folder"
+msgstr ""
+
+msgid "When a folder is moved to Trash, also move its attached files to the WordPress Trash. When off, files are unassigned from the folder and appear in Uncategorized — restoring the folder does not bring them back."
+msgstr ""
+
+msgid "Move attached files to Trash together with the folder"
+msgstr ""
+
+msgid "Import adapter is not available."
+msgstr ""
+
+msgid "Unable to queue import job."
+msgstr ""
+
+msgid "Could not resolve a preview image for the preset. Please add a site logo or icon first."
+msgstr ""
+
+msgid "Sanitize on upload"
+msgstr ""
+
+msgid "Blocked site-wide"
+msgstr ""
+
+msgid "Not managed by Plathix"
+msgstr ""
+
+msgid "SVG file contains unsafe content and was rejected."
+msgstr ""
+
+msgid "Collapse navigation"
+msgstr ""
+
+msgid "Plathix navigation"
+msgstr ""
+
+msgid "System"
+msgstr ""
+
+msgid "Docs"
+msgstr ""
+
+msgid "More power in PRO"
+msgstr ""
+
+msgid "Expand navigation"
+msgstr ""
+
+msgid "upload"
+msgid_plural "uploads"
+msgstr[0] ""
+msgstr[1] ""
+
+msgid "Only .zip files are accepted. Please upload a valid Plathix preset package."
+msgstr ""
+
+msgid "File is too large. Preset files should be under 512 KB."
+msgstr ""
+
+msgid "Could not validate the archive."
+msgstr ""
+
+#. translators: %s = file size in KB
+msgid "Preset package"
+msgstr ""
+
+msgid "Could not reach the server to validate the archive."
+msgstr ""
+
+msgid "Reveal"
+msgstr ""
+
+msgid "Hide"
+msgstr ""

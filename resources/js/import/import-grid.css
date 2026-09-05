@@ -1,0 +1,103 @@
+/* Import grid CSS — co-located с Import-модулем ([internal],
+ * #113).
+ * Сетка карточек импорта, рендерит ТОЛЬКО ImportToolsCard на странице Tools.
+ * Вынесена из общего admin-ui.css: грузится через ImportEnqueueService (entry
+ * `import`) только на Tools, а не на каждой admin-странице. НЕ самодостаточна
+ * (@container опирается на container-name px-main из .px-main платформы в
+ * admin-ui.css) — dep ['plathix-admin-ui'] обязателен, admin-ui.css грузится на
+ * Tools (is_ui_page). Механизм — зеркало preset/dashboard.
+ */
+
+/* Сетка карточек импорта на странице Tools (5 адаптеров). Десктоп — 3 в ряд
+ * (как было); на телефоне (<640px) — 1 колонка на всю ширину, иначе 3 карточки
+ * вылезают за экран ([internal]).
+ */
+.plathix-import-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 12px;
+}
+
+/* По container-ширине `.px-main`, НЕ вьюпорта: на vp900 сайдбар 240px съедает
+ * ширину, main~480, и @media(640) не срабатывал → 3 карточки импорта жались и
+ * вылезали (+19px). container-query считает реальную ширину (DASHOF-201
+ * доработка, регрессия сетки импорта пакета 4).
+ */
+@container px-main (max-width: 620px) {
+
+	.plathix-import-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@container px-main (max-width: 420px) {
+
+	.plathix-import-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* [internal]: вынос статических inline из ImportToolsCard.php (14). */
+
+.plathix-import__desc {
+	margin-bottom: 16px;
+	line-height: 1.6;
+}
+
+.plathix-import__status {
+	margin-bottom: 12px;
+}
+
+.plathix-import-adapter {
+	background: var(--plathix-bg-subtle);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.plathix-import-adapter__head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.plathix-import-adapter__label {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+}
+
+.plathix-import-adapter__badge {
+	margin-top: 4px;
+}
+
+.plathix-import-adapter__undetected {
+	font-size: 12px;
+	color: var(--plathix-text-4);
+	margin-top: 2px;
+	display: block;
+}
+
+.plathix-import-checkpoint-banner {
+	margin: 0;
+	padding: 12px;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.plathix-import-checkpoint-banner__text {
+	margin: 0 0 10px;
+}
+
+.plathix-import-checkpoint-banner__actions {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.plathix-import__action-btn {
+	width: 100%;
+}

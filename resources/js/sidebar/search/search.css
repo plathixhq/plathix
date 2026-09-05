@@ -1,0 +1,173 @@
+/* ── Search ([internal]) ────────────────────────────────────── */
+
+/* Search wrap — единая строка, иконки внутри поля */
+.plathix-search__wrap {
+	padding: 7px 11px;
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid var(--plathix-border);
+	background: var(--plathix-bg);
+	flex-shrink: 0;
+	position: relative;
+}
+
+/* Внутренний контейнер — имитирует поле ввода */
+.plathix-search__inner {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	height: 30px;
+	padding: 0 8px;
+	background: var(--plathix-surface);
+	border: 1px solid var(--plathix-border);
+	border-radius: 7px;
+	transition: border-color 0.12s;
+}
+
+.plathix-search__inner:focus-within {
+	border-color: var(--plathix-border-strong);
+	background: #fff;
+	outline: none;
+	box-shadow: none;
+}
+
+.plathix-search__inner input:focus {
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+/* Иконка лупы внутри */
+.plathix-search__icon {
+	flex-shrink: 0;
+	color: var(--plathix-icon-muted);
+	display: flex;
+	align-items: center;
+}
+
+.plathix-sidebar input[type="search"],
+.plathix-search__input {
+	flex: 1;
+	background: transparent;
+	border: none;
+	color: var(--plathix-text);
+	font-size: 12.5px;
+	outline: none;
+	font-family: inherit;
+	width: 100%;
+	margin-bottom: 0;
+
+	/* убираем нативную иконку search в webkit */
+	-webkit-appearance: none;
+}
+
+.plathix-sidebar input[type="search"]::-webkit-search-decoration,
+.plathix-sidebar input[type="search"]::-webkit-search-cancel-button {
+	-webkit-appearance: none;
+}
+
+.plathix-sidebar input[type="search"]:focus,
+.plathix-search__input:focus {
+	outline: none !important;
+	box-shadow: none !important;
+	border-color: transparent !important;
+}
+
+/* Фокус поля поиска БЕЗ outline-ring ([internal]): прежний `outline:
+ * 2px solid var(--plathix-accent)` (=#1C1917, чёрный) браузер применял и при
+ * клике МЫШЬЮ (textbox — keyboard-interactive для :focus-visible), из-за чего
+ * вокруг поля появлялась чёрная жирная рамка. Индикатор фокуса СОХРАНЁН через
+ * `.plathix-search__inner:focus-within` (фон #fff + рамка
+ * --plathix-border-strong на обёртке-«поле») — фокус виден без чёрного outline.
+ */
+.plathix-sidebar input[type="search"]:focus-visible,
+.plathix-search__input:focus-visible {
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.plathix-sidebar input[type="search"]::placeholder,
+.plathix-search__input::placeholder {
+	color: var(--plathix-icon-muted);
+}
+
+/* Sort button in search bar */
+.plathix-sort__btn {
+	flex-shrink: 0;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 5px;
+	border: none;
+	cursor: pointer;
+	background: transparent;
+	color: var(--plathix-icon-muted);
+	transition: background 0.1s;
+	padding: 0;
+}
+
+/* Кнопка сортировки внутри поля: компактнее общего варианта. Стоит ПОСЛЕ
+ * `.plathix-sort__btn` намеренно — no-descending-specificity требует порядка
+ * по возрастанию специфичности. На результат перестановка не влияет: селектор
+ * из двух классов выигрывает у одного независимо от места в файле. */
+.plathix-search__inner .plathix-sort__btn {
+	width: 20px;
+	height: 20px;
+	border-radius: 4px;
+}
+
+.plathix-sort__btn:hover,
+.plathix-sort__btn.is-active {
+	background: rgba(0, 0, 0, 0.07);
+	color: var(--plathix-text);
+}
+
+/* Sort dropdown */
+.plathix-sort__dropdown {
+	position: absolute;
+	top: calc(100% + 4px);
+	right: 8px;
+	z-index: 9999;
+	background: var(--plathix-surface);
+	border: 1px solid var(--plathix-border);
+	border-radius: 9px;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+	min-width: 160px;
+	padding: 6px;
+}
+
+.plathix-sort__header {
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	color: var(--plathix-icon-muted);
+	padding: 4px 8px 6px;
+}
+
+.plathix-sort__opt {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	padding: 6px 8px;
+	border: none;
+	background: transparent;
+	border-radius: 5px;
+	font-size: 13px;
+	color: var(--plathix-text-muted);
+	cursor: pointer;
+	text-align: left;
+	font-family: inherit;
+	transition: background 0.08s;
+}
+
+.plathix-sort__opt:hover {
+	background: var(--plathix-bg-hover);
+}
+
+.plathix-sort__opt.is-active {
+	color: var(--plathix-text);
+	font-weight: 500;
+}

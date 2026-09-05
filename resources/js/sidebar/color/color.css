@@ -1,0 +1,130 @@
+/* Стили фичи цвета папки ([internal]) — перенесены из
+ * resources/css/sidebar.css. Фича цвета целиком в модуле color/; правка стилей
+ * = только этот файл. Импортируется в color-entry.js → webpack выделяет
+ * color.css, PHP-модуль FolderColor энкьюит его рядом с color.js. Вынос в PRO =
+ * перенос этого файла с модулем.
+ */
+
+/* [internal] (D2): пункт «Цвет» — виджет (клик по строке НЕ выполняет команду,
+ * действует только круглый пикер внутри). Поэтому hover-фона НЕ должно быть,
+ * курсор не pointer.
+ */
+.plathix-context-menu__color {
+	padding: 7px 11px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 13px;
+	color: var(--plathix-text);
+	border-radius: 7px;
+	cursor: default;
+}
+
+.plathix-context-menu__color svg {
+	flex-shrink: 0;
+	color: var(--plathix-text-muted);
+}
+
+/* Группа контролов цвета (HEX-поле + круглый пикер) прижата вправо,
+ * [internal]. */
+.plathix-color__controls {
+	margin-left: auto;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* HEX-текстовое поле удалено ([internal]) — остался только круглый
+ * нативный пикер. */
+
+/* Круглый пикер через обёртку: нативный input растянут и обрезан по кругу
+ * (кроссбраузерно, в отличие от ::-webkit-color-swatch, который в Firefox не
+ * работает). [internal].
+ */
+.plathix-color__swatch {
+	position: relative;
+	width: 18px;
+	height: 18px;
+	border-radius: 50%;
+	overflow: hidden;
+	box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+	flex-shrink: 0;
+	cursor: pointer;
+}
+
+/* Видимый цвет кружка рисует ОБЁРТКА через :style="background:color"
+ * (реактивно, мгновенно — [internal]). Нативный input — ВСЕГДА прозрачный
+ * кликабельный слой сверху (клик открывает системный пикер), его видимый swatch
+ * скрыт. Это выводит видимый цвет из-под капризного репейнта нативного контрола
+ * (он не перерисовывался при смене .value в открытом меню).
+ */
+.plathix-color__swatch input[type="color"] {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 150%;
+	height: 150%;
+	transform: translate(-50%, -50%);
+	border: none;
+	padding: 0;
+	background: none;
+	cursor: pointer;
+	opacity: 0;
+}
+
+/* Убрать браузерные рамки/паддинги внутреннего swatch, чтобы обрезка по
+ * кругу была чистой. */
+.plathix-color__swatch input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+
+.plathix-color__swatch input[type="color"]::-webkit-color-swatch {
+	border: none;
+}
+
+.plathix-color__swatch input[type="color"]::-moz-color-swatch {
+	border: none;
+}
+
+/* Плейсхолдер «цвет не задан» ([internal]): тот же размер (18px), белый круг,
+ * штриховой бордер, «+» по центру, лёгкая тень по ховеру. Нативный input
+ * прячется opacity:0 (остаётся кликабельным сверху — клик открывает системный
+ * пикер), «+» рисуется на обёртке.
+ */
+.plathix-color__swatch--empty {
+	background: #fff;
+	box-shadow: none;
+	border: 1px dashed var(--plathix-border-strong, #c8c4bf);
+	transition: box-shadow 0.12s;
+}
+
+.plathix-color__swatch--empty input[type="color"] {
+	opacity: 0;
+}
+
+.plathix-color__swatch--empty::before,
+.plathix-color__swatch--empty::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	background: var(--plathix-icon-muted, #a8a29e);
+	pointer-events: none;
+}
+
+/* «+»: горизонтальная и вертикальная перекладины */
+.plathix-color__swatch--empty::before {
+	width: 8px;
+	height: 1px;
+	transform: translate(-50%, -50%);
+}
+
+.plathix-color__swatch--empty::after {
+	width: 1px;
+	height: 8px;
+	transform: translate(-50%, -50%);
+}
+
+.plathix-color__swatch--empty:hover {
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+}

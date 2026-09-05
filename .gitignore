@@ -1,0 +1,54 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+*.temp
+*~
+
+# Local IDE / tool state
+.idea/
+.vscode/
+
+# Node / frontend
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Composer / PHP local deps and tooling caches
+vendor/
+dist/vendor/
+.phpunit.result.cache
+.php-cs-fixer.cache
+.phpstan.cache/
+
+# Test / coverage artifacts
+coverage/
+.coverage/
+tests/output/
+playwright-report/
+test-results/
+tests/e2e/.auth/
+
+# Local WP / env helpers
+.wp-env/
+
+# Build output — this repository ships sources, not compiled assets.
+# Run `npm run build` to generate these locally.
+assets/css/
+assets/js/
+
+# Build / package artifacts
+*.zip
+builds/
+
+# Local backups and technical temp files
+*.bak
+plugin.bak/
+tmp/
+
+# Logs
+*.log

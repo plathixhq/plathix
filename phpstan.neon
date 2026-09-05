@@ -1,0 +1,76 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    level: 8
+    # tests/ намеренно выведены из анализа: тестовые моки/анонимные классы на level 8
+    # дают структурный шум, а tests/stubs.php переопределяет WP-функции в namespace-блоках
+    # без сигнатур — из-за этого phpstan ложно репортил вызовы WP-функций в src.
+    # Тесты по-прежнему исполняются phpunit'ом.
+    paths:
+        - src
+    bootstrapFiles:
+        - vendor/autoload.php
+    # WP_CLI существует только в рантайме под wp-cli; официальные стабы дают его символы
+    # для анализа (WP_CLI::error(): never, WP_CLI\Utils\make_progress_bar(): \cli\progress\Bar).
+    # scanFiles, а не paths — сам стаб не анализируется, только сканируется на символы.
+    scanFiles:
+        - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
+    treatPhpDocTypesAsCertain: false
+    parallel:
+        maximumNumberOfProcesses: 1
+    ignoreErrors:
+        # WP constants defined at runtime
+        - '#Constant (PLATHIX_|ABSPATH|WPINC|DB_|AUTH_|SECURE_|LOGGED_IN_|NONCE_|WP_DEBUG|WP_CONTENT_|WP_PLUGIN_|WPMU_|SUBDOMAIN_INSTALL|COOKIEHASH|WEEK_IN_SECONDS|DAY_IN_SECONDS|HOUR_IN_SECONDS|MINUTE_IN_SECONDS|MONTH_IN_SECONDS|YEAR_IN_SECONDS|ARRAY_A|ARRAY_N|OBJECT)#'
+
+services:
+    # Regression-gate против межмодульного hardcode
+    # implementation-detail классов (см. src/PhpstanRules/ForbiddenCrossModuleInternalsRule.php).
+    # Должно быть зелёным без baseline-исключений — введено после полной миграции 21 случая.
+    -
+        class: Plathix\PhpstanRules\ForbiddenCrossModuleInternalsRule
+        tags:
+            - phpstan.rules.rule
+    # ForbiddenCrossModuleInternalsRule матчит только `use`-statement
+    # — не ловит инлайн FQCN (new \Plathix\Modules\X\Y(), Y::CONST, Y::method() по полному пути)
+    # и строковые литералы в class_exists/call_user_func/is_a/class_implements/method_exists.
+    # Живой прогон нашёл 9 нарушений в 5 файлах — все мигрированы на PublicApi-фасады или
+    # do_action-слот (задачи 105-108) до включения этого правила. Должно быть зелёным без
+    # baseline-исключений (см. src/PhpstanRules/ForbiddenCrossModuleInternalsInlineReferenceRule.php).
+    -
+        class: Plathix\PhpstanRules\ForbiddenCrossModuleInternalsInlineReferenceRule
+        tags:
+            - phpstan.rules.rule
+    # Запрет ручного ||/&&-сравнения 2+ AccessLevel case вместо
+    # AccessLevel::satisfies() — см. src/PhpstanRules/ForbiddenManualAccessLevelRankingRule.php.
+    # Тот же паттерн переизобретался 3 раза (2 во Free, 1 в PRO) до введения этого правила.
+    -
+        class: Plathix\PhpstanRules\ForbiddenManualAccessLevelRankingRule
+        tags:
+            - phpstan.rules.rule
+    # Закрывает известный gap первого правила — детектирует numeric
+    # rank-таблицу (второй реальный исторический паттерн, RestController::level_satisfies()
+    # до фикса), которую ForbiddenManualAccessLevelRankingRule не видит (другой AST-узел).
+    -
+        class: Plathix\PhpstanRules\ForbiddenManualAccessLevelRankTableRule
+        tags:
+            - phpstan.rules.rule
+    # Запрет ручного current_user_can('manage_options')
+    # && AccessResolver::for_current_user() === AccessLevel::Full вместо
+    # AccessResolver::currentUserIsFullAdmin() — см.
+    # src/PhpstanRules/ForbiddenManualFullAdminGateRule.php. Другой AST-паттерн, чем ranking-
+    # правила выше (ForbiddenManualAccessLevelRankingRule их не ловит — подтверждено живым
+    # прогоном при паковке), тот же паттерн переизобретался 8 раз (3 во Free, 5 в PRO) до
+    # извлечения единого helper'а.
+    -
+        class: Plathix\PhpstanRules\ForbiddenManualFullAdminGateRule
+        tags:
+            - phpstan.rules.rule
+    # Guard против дрейфа snake_case-ключей обратно
+    # в REST/AJAX response payload после переименования в camelCase.
+    # См. src/PhpstanRules/ForbiddenSnakeCaseResponseKeyRule.php.
+    -
+        class: Plathix\PhpstanRules\ForbiddenSnakeCaseResponseKeyRule
+        tags:
+            - phpstan.rules.rule

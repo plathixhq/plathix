@@ -1,0 +1,38 @@
+{
+  "name": "plathix",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "bash bin/build-assets.sh",
+    "build:i18n": "bash bin/build-i18n.sh",
+    "build:test-zip": "bash bin/build-test-zip.sh test",
+    "build:release-zip": "bash bin/build-test-zip.sh release",
+    "build:stand-artifact": "bash bin/build-stand-artifact.sh release",
+    "deploy:stand": "bash bin/stand-deploy.sh release",
+    "check:js-coverage": "bash bin/check-js-coverage.sh",
+    "start": "wp-scripts start",
+    "typecheck:js": "tsc -p jsconfig.json --noEmit",
+    "wp-env:start": "wp-env start",
+    "wp-env:stop": "wp-env stop",
+    "wp-env:destroy": "wp-env destroy",
+    "lint:js": "wp-scripts lint-js resources/js",
+    "lint:css": "node bin/lint-css.js",
+    "test:unit:js": "wp-scripts test-unit-js",
+    "test:e2e": "playwright test --project=full",
+    "test:e2e:wp": "wp-env start && playwright test --project=full",
+    "test:e2e:modal": "playwright test --project=full tests/e2e/modal-lifecycle.spec.js",
+    "test:e2e:full": "playwright test --project=full",
+    "test:e2e:smoke": "playwright test --project=stand-smoke"
+  },
+  "dependencies": {
+    "alpinejs": "^3.14.9",
+    "photoswipe": "^5.4.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.62.1",
+    "@wordpress/env": "^11.13.0",
+    "@wordpress/scripts": "^30.10.0",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@11.21.0+sha512.521705bce689924eac72f5a3587122f362689ef6571e55ba80076fd637c11132ecffada26fad4ea79c485bfddbfd3d5a2a5b05805a77e893de71ec8a6cca3bb1"
+}

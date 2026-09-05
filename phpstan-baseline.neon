@@ -1,0 +1,39 @@
+# 2026-07-21: обнулено с 20 до 5 доказанных записей.
+# Каждая запись ниже — сторонний стаб-шум или обоснованная инфраструктурная заготовка,
+# не реальный баг.
+parameters:
+	ignoreErrors:
+		-
+			# Класс стороннего пакета Action Scheduler — существует в рантайме только когда пакет
+			# активен, статическому анализу недоступен.
+			message: "#^Class ActionScheduler_NullAction not found\\.$#"
+			count: 1
+			path: src/Infrastructure/RateLimiter.php
+
+		-
+			# Тот же сторонний класс, тот же паттерн:
+			# age-check по самой старой running-задаче, симметрично RateLimiter::can_dispatch_heavy_job.
+			message: "#^Class ActionScheduler_NullAction not found\\.$#"
+			count: 1
+			path: src/Infrastructure/Health/HealthCheckRegistry.php
+
+		-
+			# Вызов protected-метода родительского WP core класса WP_List_Table — обхода без
+			# copy-paste родительской реализации нет.
+			message: "#^Call to protected method display_tablenav\\(\\) of class WP_List_Table\\.$#"
+			count: 2
+			path: src/Modules/ListScreen/ListScreenFragmentsController.php
+
+		-
+			# Намеренный приём: hidden admin page, parent_slug=null —
+			# см. spec/_backlog/VPORG-READINESS-registry.md секция B3.
+			message: "#^Parameter \\#1 \\$parent_slug of function add_submenu_page expects string, null given\\.$#"
+			count: 1
+			path: src/Modules/SystemInfo/SystemInfoPage.php
+
+		-
+			# WP core константа, определяется в рантайме (wp-includes/default-constants.php),
+			# phpstan-wordpress её не знает.
+			message: "#^Constant WP_MEMORY_LIMIT not found\\.$#"
+			count: 1
+			path: src/Modules/SystemInfo/SystemInfoProvider.php

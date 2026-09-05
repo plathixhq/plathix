@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<ruleset name="Plathix">
+    <description>PSR-12 base + WordPress security/DB/style sniffs.</description>
+
+    <file>src</file>
+    <file>plathix.php</file>
+
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <!-- ── Base: PSR-12 ──────────────────────────────────────────────────── -->
+    <rule ref="PSR12">
+        <!-- WP uses tabs, not 4-space indent -->
+        <exclude name="Generic.WhiteSpace.DisallowTabIndent"/>
+
+        <!-- WP style requires spaces inside parens: foo( $x ) not foo($x).
+             PSR-12 bans them. Exclude entire PSR2 sniff, enforce WP via PEAR below. -->
+        <exclude name="PSR2.Methods.FunctionCallSignature"/>
+
+        <!-- Same conflict for control structures: if ( $x ) vs if ($x) -->
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace"/>
+        <exclude name="PSR12.ControlStructures.ControlStructureSpacing.SpaceBeforeCloseBrace"/>
+
+        <!-- WP allows snake_case method names for hook callbacks -->
+        <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps"/>
+
+        <!-- Multi-line function signatures: WP puts brace on new line,
+             PSR-12 (via Squiz) flags that as an error -->
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+    </rule>
+
+    <!-- [internal]: warning-severity=0 (removed above) was hiding WordPress security/DB
+         warning-level sniffs (NonceVerification.Recommended, DirectDatabaseQuery,
+         AlternativeFunctions, PreparedSQLPlaceholders) from the report entirely, not just
+         from blocking. Line-length is the only warning-level noise that should stay
+         suppressed — it is unrelated PSR12 base-rule style, not a security/DB concern. -->
+    <rule ref="Generic.Files.LineLength">
+        <severity>0</severity>
+    </rule>
+
+    <!-- PSR1.Files.SideEffects false-positives on the plugin main file by design: a WP
+         plugin bootstrap file always declares symbols (plugin header, functions) AND
+         causes side effects (register_activation_hook etc.) — that is the standard shape
+         of any WP plugin entry file, further reinforced here by the PHP-version
+         compatibility guard from [internal] (functions declared inside a
+         version_compare() conditional, side effect follows). -->
+    <rule ref="PSR1.Files.SideEffects">
+        <exclude-pattern>plathix\.php$</exclude-pattern>
+    </rule>
+
+    <!-- ── Indentation: tabs (WordPress style) ───────────────────────────── -->
+    <rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+
+    <!-- ── WordPress spacing style ───────────────────────────────────────── -->
+    <!-- Spaces inside control structure parens: if ( $x ) { -->
+    <rule ref="WordPress.WhiteSpace.ControlStructureSpacing"/>
+    <!-- WP uses spaces inside function call parens: foo( $x )
+         No PHPCS sniff enforces this automatically — maintained by convention. -->
+    <!-- Cast spacing: (int) $x not (int)$x -->
+    <rule ref="WordPress.WhiteSpace.CastStructureSpacing"/>
+    <!-- Operator spacing: $x = 1 not $x=1 -->
+    <rule ref="WordPress.WhiteSpace.OperatorSpacing"/>
+
+    <!-- ── WordPress Security ────────────────────────────────────────────── -->
+    <rule ref="WordPress.Security.EscapeOutput"/>
+    <rule ref="WordPress.Security.NonceVerification"/>
+    <rule ref="WordPress.Security.ValidatedSanitizedInput"/>
+
+    <!-- ── WordPress DB ──────────────────────────────────────────────────── -->
+    <rule ref="WordPress.DB.DirectDatabaseQuery"/>
+    <rule ref="WordPress.DB.PreparedSQL"/>
+    <rule ref="WordPress.DB.PreparedSQLPlaceholders"/>
+
+    <!-- ── WordPress WP alternatives ────────────────────────────────────── -->
+    <rule ref="WordPress.WP.AlternativeFunctions"/>
+
+    <!-- ── WordPress i18n ───────────────────────────────────────────────── -->
+    <!-- translators-комментарии для плейсхолдеров + корректный текст-домен.
+         Согласовано с plugin-check: translators-ERROR ловится на pre-commit,
+         а не только в CI. src сейчас чист (0 нарушений). -->
+    <rule ref="WordPress.WP.I18n"/>
+
+    <!-- ── Explicitly not adopted ────────────────────────────────────────── -->
+    <!-- Keep [] short array syntax — modern PHP, WP Core uses it too -->
+    <rule ref="Universal.Arrays.DisallowShortArraySyntax">
+        <severity>0</severity>
+    </rule>
+    <!-- Keep PSR-4 file names — Composer autoloader, not class-*.php -->
+    <rule ref="WordPress.Files.FileName">
+        <severity>0</severity>
+    </rule>
+    <!-- camelCase is fine — snake_case only for actual WP hook callbacks -->
+    <rule ref="WordPress.NamingConventions.ValidFunctionName">
+        <severity>0</severity>
+    </rule>
+
+    <!-- ── Exclude paths ─────────────────────────────────────────────────── -->
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>node_modules/*</exclude-pattern>
+    <exclude-pattern>assets/*</exclude-pattern>
+    <exclude-pattern>dist/*</exclude-pattern>
+    <!-- tests excluded — stubs intentionally not WP-style -->
+    <exclude-pattern>tests/*</exclude-pattern>
+</ruleset>

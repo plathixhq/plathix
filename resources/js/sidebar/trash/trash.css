@@ -1,0 +1,42 @@
+/* ── Trash action buttons ([internal]) ──────────────────────── */
+
+.plathix-system__action-btns {
+	padding: 6px 11px 8px;
+}
+
+.plathix-system__action-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	width: 100%;
+	padding: 7px 12px;
+	border-radius: 8px;
+	border: 1px solid var(--plathix-border);
+	background: transparent;
+	color: var(--plathix-text-muted);
+	font-size: 12.5px;
+	font-family: inherit;
+	cursor: default;
+	opacity: 0.6;
+	transition: background 0.12s, color 0.12s, opacity 0.12s, border-color 0.12s;
+}
+
+.plathix-system__action-btn.is-active {
+	opacity: 1;
+	cursor: pointer;
+	color: var(--plathix-text);
+	border-color: var(--plathix-border-strong);
+}
+
+.plathix-system__action-btn.is-active:hover {
+	background: var(--plathix-bg-hover);
+}
+
+/* [internal]/#271/[internal]: скрытие core
+ * `.delete-selected-button` (не понимает нашу Trash-таксономию, клик молча
+ * ничего не делает в обоих режимах) перенесено с CSS-класса-маркера на нативный
+ * Backbone toolbar API (`toolbar.get('deleteSelectedButton').$el.hide()` в
+ * syncMediaToolbarTrashClass, trash-entry.js) — WP-native-first рефакторинг,
+ * см. spec [internal].
+ */

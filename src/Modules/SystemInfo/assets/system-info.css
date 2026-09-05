@@ -1,0 +1,75 @@
+/* System Info CSS — co-located с SystemInfo-модулем
+ * ([internal], #113).
+ * Кнопка «Скопировать» отчёта System Info + уведомление о копировании. Рендерит
+ * ТОЛЬКО SystemInfoPage. Вынесена из общего admin-ui.css: грузится через
+ * SystemInfoPage::enqueue_scripts (entry admin-ui/system-info) только на
+ * странице System Info, а не на каждой admin-странице. НЕ самодостаточна
+ * (var(--plathix-card/border/accent/tx-3/ok/r-md) из admin-ui.css/plathix.css)
+ * — dep ['plathix-admin-ui'] обязателен, admin-ui.css грузится на SysInfo
+ * (is_ui_page).
+ */
+
+.plathix-copy-support {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	cursor: pointer;
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	padding: 6px 12px;
+	color: var(--plathix-text-3);
+	font-weight: 500;
+	transition: border-color 0.1s, color 0.1s;
+}
+
+.plathix-copy-support:hover {
+	border-color: var(--plathix-accent);
+	color: var(--plathix-accent);
+}
+
+.plathix-copy-support__notice {
+	font-size: 11px;
+	color: var(--plathix-ok);
+	margin-left: 8px;
+	opacity: 0;
+	transition: opacity 0.2s;
+}
+
+.plathix-copy-support__notice.is-visible {
+	opacity: 1;
+}
+
+/* [internal]: вынос статических inline из SystemInfoPage.php (6). */
+
+.plathix-system-info__actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.plathix-system-info__table-wrap {
+	border: none;
+	border-radius: 0;
+	border-top: 1px solid var(--plathix-border);
+}
+
+.plathix-system-info__label-cell {
+	width: 38%;
+	font-weight: 500;
+}
+
+.plathix-system-info__value--ok {
+	color: var(--plathix-ok);
+	font-weight: 500;
+}
+
+.plathix-system-info__value--error {
+	color: var(--plathix-error);
+	font-weight: 500;
+}
+
+.plathix-system-info__value--neutral {
+	color: var(--plathix-text-2);
+}

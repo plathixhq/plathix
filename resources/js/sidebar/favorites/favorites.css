@@ -1,0 +1,62 @@
+/* ── Favorites block ([internal]) ───────────────────────────────── */
+.plathix-favorites__block {
+	padding: 9px 0 4px;
+}
+
+.plathix-favorites__title {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	font-size: 9.5px;
+	font-weight: 600;
+	color: var(--plathix-favorite);
+	text-transform: uppercase;
+	letter-spacing: 0.09em;
+	padding: 0 19px 5px;
+
+	/* button-reset ([internal]): узел стал <button> ради клавиатуры — гасим
+	 * дефолтные рамку/фон/ширину/шрифт, чтобы визуал совпал с прежним div.
+	 */
+	width: 100%;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	text-align: left;
+	font-family: inherit;
+
+	/* [internal]: было style="user-select:none;" — двойной клик по
+	   заголовку не должен выделять текст (частый клик toggle collapse). */
+	user-select: none;
+}
+
+.plathix-favorites__title svg {
+	flex-shrink: 0;
+	width: 9px;
+	height: 9px;
+}
+
+.plathix-favorites__chevron {
+	color: var(--plathix-favorite);
+	transition: transform 0.15s ease;
+	width: 10px !important;
+	height: 10px !important;
+}
+
+.plathix-favorites__chevron.is-collapsed {
+	transform: rotate(-90deg);
+}
+
+.plathix-favorites__count {
+	margin-left: auto;
+	font-size: 11px;
+	font-weight: 500;
+	color: var(--plathix-text-muted);
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+/* Избранные папки не имеют вложений — убираем placeholder
+ * ([internal]) */
+.plathix-favorites__block .plathix-collapse__placeholder {
+	display: none;
+}

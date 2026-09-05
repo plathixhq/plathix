@@ -1,0 +1,1108 @@
+/* Dashboard widgets CSS — co-located с модулем Dashboard
+ * ([internal], #113).
+ * Free-Dashboard-виджет-специфика, вынесенная из общего admin-ui.css: грузится
+ * ТОЛЬКО на Dashboard (через wp_enqueue_style в HomeDashboardPage), а не на
+ * всех admin-страницах.
+ * НЕ самодостаточен: опирается на shared plathix-bento-каркас
+ * (plathix-bento-card/-label/-num/-sub/-footer/-link/
+ * -card-hd-row/-empty-icon/-empty-title/-activity/-sc-*), .plathix-btn*,
+ * .plathix-card*, .plathix-badge* и CSS-переменные из admin-ui.css — валидно,
+ * т.к. admin-ui.css грузится на той же Dashboard-странице (dep
+ * ['plathix-admin-ui']). Зеркало free-wizard.css. Shared bento остаётся
+ * платформенным, т.к. его рендерят и PRO-виджеты (Shortcodes/Activity) через
+ * фильтр plathix/dashboard/widgets.
+ */
+
+/* ── Home layout rows (Dashboard grid) ──────────────────────────────────── */
+
+/* Ряды дашборда. Реагируют на container-ширину `.plathix-main` (платформенный
+ * layout-класс, его container-type остаётся в admin-ui.css) — не вьюпорта.
+ */
+
+.plathix-home__row {
+	display: grid;
+	gap: 14px;
+	align-items: stretch;
+}
+
+.plathix-home__row--top {
+	grid-template-columns: 2fr 1fr;
+}
+
+.plathix-home__row--bottom {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+/* Пороги по container-ширине `.plathix-main` (clientWidth, вкл. padding 56px).
+ * Немонотонность вьюпорта (≤782px сайдбар уходит наверх → main шире; >782
+ * сайдбар сбоку 240px → main уже) именно поэтому решается container-query, а не
+ * @media.
+ */
+@container plathix-main (max-width: 820px) {
+
+	.plathix-home__row--bottom {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.plathix-home__row--analytics-top {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@container plathix-main (max-width: 760px) {
+
+	.plathix-home__row--top {
+		grid-template-columns: 1fr;
+	}
+
+	.plathix-home__row--analytics-top {
+		grid-template-columns: 1fr;
+	}
+}
+
+@container plathix-main (max-width: 520px) {
+
+	.plathix-home__row--bottom {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* Грид-ячейки ряда не распираются неразрывным контентом карточки (min-width:0
+ * снимает grid min-width:auto). Глобально — нужно и на десктопе в 2fr-колонке.
+ */
+.plathix-home__row--top > *,
+.plathix-home__row--bottom > *,
+.plathix-home__row--analytics-top > * {
+	min-width: 0;
+}
+
+/* ── Analytics widgets row layout ───────────────────────────────────────── */
+
+.plathix-home__row--analytics-top,
+.plathix-home__row--analytics-bottom {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: minmax(0, 60fr) minmax(0, 25fr) minmax(0, 15fr);
+}
+
+.plathix-home__row--analytics-bottom {
+	grid-template-columns: 1fr;
+}
+
+@media (max-width: 1100px) {
+
+	.plathix-home__row--analytics-top,
+	.plathix-home__row--analytics-bottom {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ── Uploads widget ──────────────────────────────────────────────────────── */
+
+.plathix-uploads-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 4px;
+}
+
+.plathix-uploads-tabs {
+	display: flex;
+	gap: 0;
+	border: 1px solid var(--plathix-border);
+	border-radius: 20px;
+	overflow: hidden;
+}
+
+.plathix-uploads-tab {
+	background: none;
+	border: none;
+	padding: 2px 10px;
+	font-size: 11px;
+	font-weight: 600;
+	color: var(--plathix-text-3);
+	cursor: pointer;
+	line-height: 1.8;
+}
+
+.plathix-uploads-tab--active {
+	background: var(--plathix-text-1);
+	color: var(--plathix-card);
+	border-radius: 20px;
+}
+
+.plathix-uploads-count {
+	font-size: 36px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	line-height: 1.1;
+	margin-top: 4px;
+}
+
+.plathix-uploads-sub {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	margin-top: 2px;
+	margin-bottom: 10px;
+}
+
+.plathix-uploads-spark {
+	flex: 1;
+	min-height: 60px;
+	position: relative;
+}
+
+.plathix-spark-wrap {
+	width: 100%;
+	height: 60px;
+}
+
+.plathix-spark-wrap svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+}
+
+.plathix-spark-line {
+	fill: none;
+	stroke: #0d9488;
+	stroke-width: 2;
+	stroke-linejoin: round;
+	stroke-linecap: round;
+}
+
+.plathix-spark-area {
+	fill: rgba(13, 148, 136, 0.12);
+	stroke: none;
+}
+
+/* Активный маркер на снапнутой точке: кружок в цвет линии с белой обводкой и
+ * мягким гало. Позиционируется JS-оверлеем (left/top в пикселях), центрируется
+ * через translate(-50%,-50%).
+ */
+.plathix-spark-marker {
+	display: none;
+	position: absolute;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: #0d9488;
+	border: 2px solid #fff;
+	box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.18);
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+	z-index: 9;
+}
+
+/* Вертикальная пунктирная guide-линия от точки вниз к базовой линии графика. */
+.plathix-spark-guide {
+	display: none;
+	position: absolute;
+	width: 0;
+	border-left: 1px dashed rgba(13, 148, 136, 0.55);
+	transform: translateX(-50%);
+	pointer-events: none;
+	z-index: 8;
+}
+
+/* Тултип-карточка: светлая, с тенью; дата капсом сверху, крупное число
+ * + единица снизу. */
+.plathix-spark-tooltip {
+	display: none;
+	position: absolute;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	box-shadow: 0 6px 18px rgba(15, 23, 42, 0.14);
+	padding: 8px 12px;
+	white-space: nowrap;
+	pointer-events: none;
+	z-index: 10;
+	transform: translateX(-50%);
+}
+
+.plathix-spark-tip-date {
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: #9ca3af;
+	margin-bottom: 3px;
+}
+
+.plathix-spark-tip-val {
+	display: flex;
+	align-items: baseline;
+	gap: 5px;
+}
+
+.plathix-spark-tip-dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: #0d9488;
+	align-self: center;
+}
+
+.plathix-spark-tip-num {
+	font-size: 16px;
+	font-weight: 700;
+	color: #111827;
+}
+
+.plathix-spark-tip-unit {
+	font-size: 12px;
+	color: #6b7280;
+}
+
+/* ── Orphaned Files widget ───────────────────────────────────────────────── */
+
+.plathix-orphaned-widget {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	text-align: center;
+}
+
+.plathix-orphaned-body {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 4px;
+	margin: 16px 0;
+}
+
+.plathix-orphaned-count {
+	font-size: 40px;
+	font-weight: 700;
+	color: #d97706;
+	line-height: 1;
+}
+
+.plathix-orphaned-of {
+	font-size: 12px;
+	color: var(--plathix-text-2);
+}
+
+.plathix-orphaned-fix {
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: 7px 12px;
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--plathix-text-2);
+	text-decoration: none;
+	transition: border-color 0.15s, color 0.15s;
+	box-sizing: border-box;
+}
+
+.plathix-orphaned-fix:hover {
+	border-color: var(--plathix-text-3);
+	color: var(--plathix-text-1);
+	text-decoration: none;
+}
+
+/* ── MIME Types widget ───────────────────────────────────────────────────── */
+
+.plathix-mime-body {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: 12px;
+	flex: 1;
+}
+
+.plathix-mime-donut-wrap {
+	position: relative;
+	flex-shrink: 0;
+	width: 80px;
+	height: 80px;
+}
+
+.plathix-mime-donut {
+	width: 80px;
+	height: 80px;
+}
+
+.plathix-mime-total {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 1px;
+}
+
+.plathix-mime-total-num {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	line-height: 1;
+}
+
+.plathix-mime-total-label {
+	font-size: 8px;
+	font-weight: 700;
+	color: var(--plathix-text-3);
+	letter-spacing: 0.05em;
+}
+
+.plathix-mime-list {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.plathix-mime-row {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	font-size: 12px;
+}
+
+.plathix-mime-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.plathix-mime-name {
+	flex: 1;
+	white-space: nowrap;
+	color: var(--plathix-text-2);
+}
+
+.plathix-mime-pct {
+	color: var(--plathix-text-3);
+	font-variant-numeric: tabular-nums;
+	min-width: 34px;
+	text-align: right;
+	flex-shrink: 0;
+}
+
+/* ── Folders widget inner layout ─────────────────────────────────────────── */
+
+.plathix-bento-folders-head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	margin-bottom: 16px;
+}
+
+.plathix-bento-folders-headleft {
+	flex: 1;
+	min-width: 0;
+}
+
+.plathix-bento-folders-right {
+	flex-shrink: 0;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 20px;
+}
+
+.plathix-bento-folders-disk {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 12px;
+}
+
+.plathix-storage-donut-wrap {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.plathix-storage-donut {
+	width: 76px;
+	height: 76px;
+}
+
+.plathix-storage-donut-label {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	line-height: 1.2;
+}
+
+.plathix-storage-gb {
+	font-size: 11px;
+	font-weight: 600;
+	color: #111827;
+}
+
+.plathix-storage-gb-of {
+	font-size: 10px;
+	color: #6b7280;
+}
+
+.plathix-bento-folders-disk-info {
+	text-align: left;
+}
+
+.plathix-bento-folders-disk-label {
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	color: #6b7280;
+	text-transform: uppercase;
+}
+
+.plathix-bento-folders-disk-pct {
+	font-size: 16px;
+	font-weight: 700;
+	color: #111827;
+	line-height: 1.2;
+}
+
+.plathix-bento-folders-disk-sub {
+	font-size: 10px;
+	color: #9ca3af;
+}
+
+.plathix-bento-folders-meta {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding-left: 16px;
+	border-left: 1px solid var(--plathix-border);
+}
+
+.plathix-bento-folders-meta-row {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.plathix-bento-folders-meta-label {
+	font-size: 10px;
+	color: #6b7280;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	white-space: nowrap;
+}
+
+.plathix-bento-folders-meta-val {
+	font-size: 14px;
+	font-weight: 600;
+	color: #111827;
+}
+
+.plathix-bento-folders-meta-val--purple {
+	color: #7c3aed;
+}
+
+.plathix-bento-folders-meta-val--gold {
+	color: #d97706;
+}
+
+/* Карточка «Папки» на телефоне (<640px): зажатая flex-строка (число слева |
+ * пончик+метрики справа с flex-shrink:0) не помещается в узкую карточку — число
+ * наезжает на пончик, метрики уезжают за край. Переводим в вертикальный стек:
+ * число сверху на всю ширину, ниже пончик+инфо, ниже метрики. Десктоп (>640px)
+ * не меняется ([internal]).
+ */
+
+/* Карточка «Папки» реагирует на СВОЮ ширину, а не вьюпорта: в ряду --top
+ * (2fr-колонка) на широком мониторе (1280px) она сжимается до ~430px → число
+ * наезжает на пончик, подпись рассыпается в лапшу. @media(640) по вьюпорту это
+ * НЕ ловит. Container query включает стек по ширине САМОЙ карточки на любой
+ * ширине экрана ([internal] DASHOF-103).
+ */
+.plathix-bento-card--folders {
+	container-type: inline-size;
+}
+
+@container (max-width: 560px) {
+
+	.plathix-bento-folders-head {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.plathix-bento-folders-right {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.plathix-bento-folders-meta {
+		border-left: none;
+		border-top: 1px solid var(--plathix-border);
+		padding-left: 0;
+		padding-top: 12px;
+	}
+
+	.plathix-bento-folders-disk {
+		flex-wrap: wrap;
+	}
+}
+
+.plathix-bento-empty-desc {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	text-align: center;
+	line-height: 1.6;
+	flex: 1;
+}
+
+.plathix-bento-actions {
+	display: flex;
+	gap: 8px;
+	margin-top: 16px;
+	width: 100%;
+}
+
+.plathix-bento-btn-full {
+	flex: 1;
+	justify-content: center;
+	font-size: 11px;
+}
+
+/* --------------------------------------------------------------------------
+ * Bento — Folders distribution
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-bento-dist {
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+	flex: 1;
+	margin-top: 4px;
+}
+
+.plathix-bento-dist-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.plathix-bento-dist-dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 2px;
+	flex-shrink: 0;
+}
+
+.plathix-bento-dist-name {
+	font-size: 12px;
+	color: var(--plathix-text-2);
+	flex: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.plathix-bento-dist-track {
+	flex: 2;
+	height: 4px;
+	background: var(--plathix-bg-subtle);
+	border-radius: 100px;
+	overflow: hidden;
+}
+
+.plathix-bento-dist-fill {
+	height: 100%;
+	border-radius: 100px;
+	transition: width 0.4s ease;
+}
+
+.plathix-bento-dist-count {
+	font-size: 11px;
+	color: var(--plathix-text-4);
+	width: 18px;
+	text-align: right;
+	flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Bento — Preset widget
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-bento-preset-applied {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	margin: 8px 0 12px;
+}
+
+.plathix-bento-preset-applied__info {
+	flex: 1;
+	min-width: 0;
+}
+
+.plathix-bento-preset-applied__name {
+	font-size: 15px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.plathix-bento-preset-applied__meta {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	margin-top: 2px;
+}
+
+.plathix-bento-preset-note {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	line-height: 1.55;
+	background: var(--plathix-bg-subtle);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-sm);
+	padding: 8px 12px;
+	flex: 1;
+}
+
+.plathix-bento-preset-desc {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	line-height: 1.5;
+	margin: 6px 0 10px;
+}
+
+.plathix-bento-preset-list {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	flex: 1;
+}
+
+.plathix-bento-preset-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 11px;
+	background: var(--plathix-bg-subtle);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-sm);
+	text-decoration: none;
+	transition: border-color 0.13s;
+	cursor: pointer;
+}
+
+.plathix-bento-preset-row:hover {
+	border-color: var(--plathix-accent);
+}
+
+.plathix-bento-preset-row__name {
+	flex: 1;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+}
+
+.plathix-bento-preset-row__count {
+	font-size: 11px;
+	color: var(--plathix-text-4);
+	flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Content Types grid
+ * --------------------------------------------------------------------------
+ */
+
+.ct-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 10px;
+}
+
+@media (max-width: 900px) {
+
+	.ct-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.ct-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 14px;
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	text-decoration: none;
+	transition: border-color 0.13s, box-shadow 0.13s;
+	box-shadow: var(--plathix-shadow-xs);
+}
+
+.ct-item:hover {
+	border-color: var(--plathix-accent);
+	box-shadow: 0 0 0 3px var(--plathix-accent-bg);
+}
+
+.ct-item__icon {
+	width: 36px;
+	height: 36px;
+	border-radius: var(--plathix-radius-sm);
+	border: 1px solid transparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.ct-item__label {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+}
+
+.ct-item__count {
+	font-size: 11px;
+	color: var(--plathix-text-4);
+	margin-top: 1px;
+}
+
+/* --------------------------------------------------------------------------
+ * Bento — Quick Links
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-bento-ql-list {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	flex: 1;
+	margin-top: 4px;
+}
+
+.plathix-bento-ql-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 9px 10px;
+	border-radius: var(--plathix-radius-sm);
+	text-decoration: none;
+	transition: background 0.12s;
+	cursor: pointer;
+}
+
+.plathix-bento-ql-row:hover {
+	background: var(--plathix-bg-subtle);
+}
+
+.plathix-bento-ql-row > div {
+	flex: 1;
+}
+
+.plathix-bento-ql-row__label {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+}
+
+.plathix-bento-ql-row__sub {
+	font-size: 11px;
+	color: var(--plathix-text-4);
+}
+
+/* ==========================================================================
+ * Dashboard-виджет-CSS, co-located из admin-ui.css
+ * ([internal], #113). Достройка dashboard-widgets-среза: эти
+ * 4 блока рендерятся только на HomeDashboardPage (StatusBarWidget /
+ * MigrationBannerWidget / OnboardingWidget / docs-nudge), раньше сидели в
+ * платформенном admin-ui.css и грузились на КАЖДОЙ admin-странице. Теперь едут
+ * в модульном dashboard.css, который грузится только на дашборде
+ * (HomeDashboardPage::render enqueue, dep plathix-admin-ui). Несамодостаточны:
+ * опираются на переменные/базу из admin-ui.css/plathix.css.
+ * ==========================================================================
+ */
+
+/* --------------------------------------------------------------------------
+ * Status bar (StatusBarWidget)
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-status-bar {
+	background: var(--plathix-accent-bg);
+	border: 1px solid var(--plathix-accent-border);
+	border-radius: var(--plathix-radius-md);
+	padding: 9px 14px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+}
+
+.plathix-status-pulse {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--plathix-accent);
+	flex-shrink: 0;
+	animation: plathix-pulse 2s ease-in-out infinite;
+}
+
+@keyframes plathix-pulse {
+
+	0%,
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+
+	50% {
+		opacity: 0.5;
+		transform: scale(0.85);
+	}
+}
+
+.plathix-status-text {
+	font-size: 13px;
+	color: var(--plathix-accent-text);
+	flex: 1;
+	font-weight: 500;
+}
+
+.plathix-status-meta {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	font-weight: 400;
+}
+
+.plathix-status-badges {
+	display: flex;
+	gap: 6px;
+	flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Migration banner (MigrationBannerWidget)
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-migration-banner {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 14px 16px;
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-accent-border);
+	border-left: 3px solid var(--plathix-accent);
+	border-radius: var(--plathix-radius-lg);
+	box-shadow: var(--plathix-shadow-xs);
+	flex-wrap: wrap;
+}
+
+.plathix-migration-banner__icon {
+	width: 38px;
+	height: 38px;
+	border-radius: var(--plathix-radius-sm);
+	background: var(--plathix-accent-bg);
+	border: 1px solid var(--plathix-accent-border);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--plathix-accent);
+	flex-shrink: 0;
+}
+
+.plathix-migration-banner__body {
+	flex: 1;
+	min-width: 200px;
+}
+
+.plathix-migration-banner__title {
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	margin-bottom: 3px;
+}
+
+.plathix-migration-banner__desc {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	line-height: 1.5;
+}
+
+.plathix-migration-banner__actions {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+ * Docs nudge (HomeDashboardPage, bottom of home)
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-docs-nudge {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 11px 16px;
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	font-size: 12px;
+	color: var(--plathix-text-3);
+}
+
+.plathix-docs-nudge svg {
+	color: var(--plathix-text-4);
+	flex-shrink: 0;
+}
+
+.plathix-docs-nudge a {
+	color: var(--plathix-accent);
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.plathix-docs-nudge a:hover {
+	text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+ * Onboarding Block (OnboardingWidget)
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-onboarding {
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-lg);
+	overflow: hidden;
+	box-shadow: var(--plathix-shadow-xs);
+}
+
+.plathix-onboarding__header {
+
+	/* Спокойный светлый header ([internal]/B1): раньше был тёмный градиент
+	 * tx-1→#292524 с белым текстом — самый контрастный элемент дашборда,
+	 * перетягивал внимание с данных. Онбординг опционален, ему не нужен
+	 * алярм-акцент. Светлый фон в тон секций.
+	 */
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 14px 18px;
+	background: var(--plathix-bg-subtle);
+	border-bottom: 1px solid var(--plathix-border);
+}
+
+.plathix-onboarding__title {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+	margin: 0;
+}
+
+.plathix-onboarding__dismiss {
+	width: 24px;
+	height: 24px;
+	border-radius: var(--plathix-radius-sm);
+	background: transparent;
+	border: 1px solid var(--plathix-border);
+	color: var(--plathix-text-3);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background 0.13s, color 0.13s;
+}
+
+.plathix-onboarding__dismiss:hover {
+	background: var(--plathix-bg-subtle);
+	color: var(--plathix-text-1);
+}
+
+.plathix-onboarding__cards {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 10px;
+	padding: 14px;
+}
+
+.plathix-onboarding__card {
+	background: var(--plathix-bg-subtle);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	padding: 13px;
+	transition: border-color 0.13s;
+	display: flex;
+	flex-direction: column;
+}
+
+.plathix-onboarding__card:hover {
+	border-color: var(--plathix-accent);
+}
+
+/* [internal]: per-card dismiss, паттерн как .plathix-onboarding__header. */
+.plathix-onboarding__card-header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 8px;
+	margin: 0 0 4px;
+}
+
+.plathix-onboarding__card-title {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+	margin: 0;
+}
+
+.plathix-onboarding__card-dismiss {
+	flex-shrink: 0;
+	width: 20px;
+	height: 20px;
+}
+
+.plathix-onboarding__card-desc {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	margin: 0 0 10px;
+	line-height: 1.5;
+	flex: 1;
+}
+
+.plathix-onboarding__card-link {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--plathix-accent);
+	text-decoration: none;
+}
+
+.plathix-onboarding__card-link:hover {
+	text-decoration: underline;
+}
+
+/* [internal]: вынос статического inline из FoldersWidget.php (1 из 3;
+   2 остаются inline — динамический цвет/ширина из данных распределения). */
+.plathix-bento__empty-icon__svg {
+	opacity: 0.25;
+}
+
+/* [internal]: вынос статического inline из MimeTypesWidget.php
+   (1 из 2; второй остаётся inline — динамический цвет из данных). */
+.plathix-mime-widget__empty {
+	margin-top: 8px;
+}

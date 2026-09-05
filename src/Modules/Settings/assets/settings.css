@@ -1,0 +1,115 @@
+/* Settings page CSS — co-located с модулем Settings ([internal]).
+ *
+ * Собирает специфику всех табов страницы Settings, вынесенную из общего
+ * admin-ui.css: General (SettingsView), Danger Zone (DataWipe\DangerZoneTab),
+ * SVG (Svg\SvgSettings). Владелец — страница Settings, не отдельный таб;
+ * зеркало dashboard.css ([internal]: несколько виджетов, один файл владельца).
+ *
+ * НЕ самодостаточен: опирается на классы .plathix-btn, .plathix-card,
+ * .plathix-modal__box, .plathix-notice и переменные из admin-ui.css — валидно,
+ * т.к. admin-ui.css грузится на той же странице Settings
+ * (dep ['plathix-admin-ui']).
+ */
+
+/* Danger Zone tab (DataWipe\DangerZoneTab). */
+
+.plathix-danger-zone__label {
+	color: #b91c1c;
+}
+
+.plathix-danger-zone__trigger-row {
+	margin-top: 14px;
+}
+
+.plathix-danger-zone__modal-title {
+	font-size: 15px;
+	font-weight: 700;
+	color: #b91c1c;
+}
+
+.plathix-danger-zone__warning {
+	margin-bottom: 12px;
+}
+
+.plathix-danger-zone__list-title {
+	font-weight: 600;
+	margin-bottom: 6px;
+}
+
+.plathix-danger-zone__list {
+	margin: 0 0 14px 18px;
+	list-style: disc;
+}
+
+.plathix-danger-zone__safe-notice {
+	margin-bottom: 14px;
+}
+
+.plathix-danger-zone__confirm-row {
+	margin-bottom: 14px;
+	cursor: pointer;
+}
+
+.plathix-danger-zone__actions {
+	display: flex;
+	gap: 10px;
+}
+
+.plathix-danger-zone__error {
+	margin-top: 12px;
+}
+
+/* General tab (SettingsView). */
+
+.plathix-settings__save-bar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.plathix-settings__enabled-row {
+	margin-top: 8px;
+}
+
+.plathix-settings__always-enabled-badge {
+	margin-left: 8px;
+}
+
+/* .plathix-select.plathix-settings__folder-select (два класса, не один) —
+   специфичность (0,2,0) обязана перебить WP core .wp-core-ui select
+   (0,1,1 → max-width:25rem/400px). Раньше побеждал inline style
+   (1,0,0,0), после выноса в класс с одним селектором core-правило
+   выигрывало каскад: select рисовался шире эталона ([internal]
+   browser-proof, найдено сравнением с reference/*.png). */
+.plathix-select.plathix-settings__folder-select {
+	margin-top: 8px;
+	max-width: 340px;
+}
+
+.plathix-settings__folder-broken-notice {
+	margin-top: 6px;
+	padding: 8px 10px;
+	border-left: 3px solid #d63638;
+	background: #fcf0f1;
+	color: #8a2424;
+}
+
+/* SVG tab (Svg\SvgSettings). */
+
+.plathix-svg__multisite-notice {
+	margin-top: 0;
+}
+
+.plathix-svg__policy-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-top: 8px;
+}
+
+/* .plathix-select.plathix-svg__policy-select — тот же specificity-фикс,
+   что и .plathix-settings__folder-select выше (см. комментарий там). */
+.plathix-select.plathix-svg__policy-select {
+	max-width: 340px;
+}

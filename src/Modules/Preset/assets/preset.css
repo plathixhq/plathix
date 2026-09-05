@@ -1,0 +1,386 @@
+/* Preset page CSS — co-located с модулем Preset ([internal], #113).
+ * CSS страницы Пресетов (карточки, панель поиска/сортировки, теги, каталог,
+ * drop-zone, модалка загрузки), вынесенный из общего admin-ui.css: грузится
+ * ТОЛЬКО на странице Пресетов (через wp_enqueue_style в PresetsPage), а не на
+ * всех admin-страницах.
+ * НЕ самодостаточен: опирается на .plathix-btn*, .plathix-card*,
+ * .plathix-modal__box и CSS-переменные из admin-ui.css — валидно, т.к.
+ * admin-ui.css грузится на той же Presets-странице (dep ['plathix-admin-ui']).
+ * Зеркало dashboard.css / free-wizard.css. `.plathix-modal__box` остаётся
+ * платформенным в admin-ui.css (его делят Preset и DataWipe/DangerZoneTab).
+ */
+
+.plathix-drop-zone {
+	border: 2px dashed var(--plathix-border-hover);
+	border-radius: var(--plathix-radius-lg);
+	padding: 36px 24px;
+	text-align: center;
+	background: var(--plathix-bg-subtle);
+	cursor: pointer;
+	transition: border-color 0.15s, background 0.15s;
+}
+
+.plathix-drop-zone.is-over {
+	border-color: var(--plathix-accent);
+	background: var(--plathix-accent-bg);
+}
+
+.plathix-drop-title {
+	font-size: 14px;
+	font-weight: 600;
+	margin-bottom: 5px;
+	color: var(--plathix-text-1);
+}
+
+.plathix-drop-sub {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	margin-bottom: 14px;
+}
+
+.plathix-drop-hint {
+	font-size: 11px;
+	color: var(--plathix-text-4);
+	line-height: 1.6;
+}
+
+/* --------------------------------------------------------------------------
+ * Preset cards
+ * --------------------------------------------------------------------------
+ */
+
+.plathix-preset-card {
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-lg);
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	transition: border-color 0.13s, box-shadow 0.13s;
+	box-shadow: var(--plathix-shadow-xs);
+}
+
+.plathix-preset-card:hover {
+	border-color: var(--plathix-accent);
+	box-shadow: 0 0 0 3px var(--plathix-accent-bg), var(--plathix-shadow-sm);
+}
+
+/* [internal]: кратковременная подсветка только что загруженного
+ * пресета. */
+.plathix-preset-card--highlight {
+	border-color: var(--plathix-accent);
+	box-shadow: 0 0 0 4px var(--plathix-accent-bg), var(--plathix-shadow-md);
+	animation: plathix-preset-highlight-pulse 1.8s ease-out;
+}
+
+@keyframes plathix-preset-highlight-pulse {
+
+	0% {
+		box-shadow: 0 0 0 6px var(--plathix-accent-bg), var(--plathix-shadow-md);
+	}
+
+	100% {
+		box-shadow: 0 0 0 4px var(--plathix-accent-bg), var(--plathix-shadow-md);
+	}
+}
+
+.plathix-preset-card__accent-bar {
+	height: 3px;
+	background: var(--plathix-accent);
+	flex-shrink: 0;
+}
+
+.plathix-preset-card__body {
+	padding: 14px 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	flex: 1;
+}
+
+.plathix-preset-card__badges {
+	display: flex;
+	gap: 5px;
+	min-height: 20px;
+}
+
+.plathix-preset-card__title-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.plathix-preset-card__icon {
+	font-size: 26px;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.plathix-preset-card__name {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	line-height: 1.3;
+}
+
+.plathix-preset-card__category {
+	font-size: 11px;
+	color: var(--plathix-text-4);
+	margin-top: 2px;
+}
+
+.plathix-preset-card__desc {
+	font-size: 12px;
+	color: var(--plathix-text-2);
+	line-height: 1.55;
+	margin: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.plathix-preset-card__tree {
+	background: var(--plathix-bg-subtle);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-sm);
+	padding: 8px 10px;
+	font-size: 12px;
+	color: var(--plathix-text-2);
+	font-family: var(--plathix-font-mono, monospace);
+}
+
+.plathix-preset-card__sep {
+	height: 1px;
+	background: var(--plathix-border);
+	margin: 2px 0;
+}
+
+.plathix-preset-card__meta {
+	font-size: 12px;
+	color: var(--plathix-text-2);
+}
+
+.plathix-preset-card__cta {
+	width: 100%;
+	justify-content: center;
+	margin-top: 2px;
+}
+
+.plathix-preset-card__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin-top: 2px;
+}
+
+/* Search + sort bar above presets */
+.plathix-presets-bar {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	flex-wrap: nowrap;
+}
+
+.plathix-presets-bar__search {
+	flex: 1;
+	min-width: 200px;
+}
+
+.plathix-presets-bar__sort {
+	width: 240px;
+	max-width: 240px;
+}
+
+.plathix-presets-tags {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.plathix-presets-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 40px;
+	padding: 0 18px;
+	border-radius: 999px;
+	border: 1px solid var(--plathix-border-hover);
+	background: var(--plathix-card);
+	color: var(--plathix-text-2);
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: 500;
+	transition: border-color 0.14s, background 0.14s, color 0.14s;
+}
+
+.plathix-presets-tag:hover {
+	border-color: var(--plathix-accent);
+	color: var(--plathix-text-1);
+}
+
+.plathix-presets-tag.is-active {
+	border-color: var(--plathix-accent);
+	background: var(--plathix-accent-bg);
+	color: var(--plathix-accent);
+}
+
+.plathix-presets-catalog {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.plathix-presets-section {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.plathix-presets-section__title {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--plathix-text-4);
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+}
+
+.plathix-presets-section__title::after {
+	content: "";
+	flex: 1;
+	height: 1px;
+	background: var(--plathix-border);
+}
+
+.plathix-presets-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 16px;
+}
+
+.plathix-page--presets {
+	position: relative;
+}
+
+@media (max-width: 900px) {
+
+	.plathix-presets-bar {
+		flex-wrap: wrap;
+	}
+
+	.plathix-presets-bar__sort {
+		width: 100%;
+		max-width: none;
+	}
+}
+
+.plathix-upload-state {
+	text-align: center;
+	padding: 36px 24px;
+}
+
+.plathix-upload-state__icon {
+	font-size: 28px;
+	margin-bottom: 10px;
+}
+
+.plathix-upload-state__text {
+	font-size: 14px;
+	color: var(--plathix-text-2);
+}
+
+.plathix-upload-ready-card {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 16px;
+	margin-top: 14px;
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-lg);
+	background: var(--plathix-bg-subtle);
+}
+
+.plathix-upload-ready-card__icon {
+	font-size: 24px;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.plathix-upload-ready-card__body {
+	min-width: 0;
+}
+
+.plathix-upload-ready-card__title {
+	font-size: 13px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	word-break: break-word;
+}
+
+.plathix-upload-ready-card__meta {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	margin-top: 4px;
+}
+
+.plathix-upload-ready-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-top: 14px;
+}
+
+/* [internal]: вынос статических inline из PresetsPage.php (15). */
+
+.plathix-presets__notice {
+	margin-bottom: 4px;
+}
+
+.plathix-presets__actions {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.plathix-presets__no-results {
+	text-align: center;
+	padding: 32px;
+	color: var(--plathix-text-4);
+	font-size: 13px;
+}
+
+.plathix-preset-card__badge--sm {
+	font-size: 10px;
+}
+
+.plathix-preset-card__tag {
+	text-decoration: none;
+}
+
+.plathix-preset-card__delete {
+	margin-top: 2px;
+}
+
+.plathix-presets-upload__title {
+	font-size: 15px;
+	font-weight: 700;
+}
+
+.plathix-presets-upload__icon {
+	font-size: 34px;
+	margin-bottom: 10px;
+}
+
+.plathix-presets-upload__error {
+	padding: 8px 0;
+}
+
+.plathix-presets-upload__retry {
+	margin-top: 14px;
+}

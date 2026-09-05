@@ -1,0 +1,27 @@
+/* Tools page CSS — co-located с ToolsPage ([internal]).
+ *
+ * CSS хостовой export-карточки страницы Tools, вынесенный из общего
+ * admin-ui.css: грузится ТОЛЬКО на странице Tools (через
+ * ToolsPage::enqueue_scripts), а не на всех admin-страницах.
+ *
+ * НЕ самодостаточен: опирается на классы .plathix-card, .plathix-btn и
+ * переменные из admin-ui.css — валидно, т.к. admin-ui.css грузится на той
+ * же странице Tools (dep ['plathix-admin-ui']).
+ */
+
+.plathix-tools__title-with-icon {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.plathix-tools__export-desc {
+	margin-bottom: 16px;
+	line-height: 1.6;
+}
+
+.plathix-tools__export-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}

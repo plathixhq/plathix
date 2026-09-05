@@ -1,0 +1,9 @@
+https://plathix.com/
+
+# 2026-08-10: plugin-header Description строки
+# в plathix.php (docblock метаданные для WP.org каталога, не рендерятся в UI-экранах
+# админки) — обнаружены случайно при верификации этой задачи, не в её scope (plathix.php
+# не менялся этим пакетом). Признанный долг, не блокирует.
+Everything in its place. Organize your WordPress Media Library with folders, ready sets, replace media, SVG handling, and Trash.
+Free gives you folders. PRO adds per-role access control, a gallery builder, bulk ZIP downloads, an audit log and WP-CLI — for sites and teams that need more than organization.
+Your folders remain in the database. PRO-only features (access control, gallery, audit log, WP-CLI, etc.) are deactivated but your structure stays intact.

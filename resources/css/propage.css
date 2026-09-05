@@ -1,0 +1,438 @@
+/* ProPage CSS — co-located с Pro-модулем ([internal],
+ * #113).
+ *
+ * CSS апселл-страницы «Перейти на PRO» (ProPage: hero, таблица
+ * сравнения, планы), вынесенный из общего admin-ui.css: грузится
+ * ТОЛЬКО на странице ProPage (через ProPageAssets::enqueue), а не на
+ * всех admin-страницах.
+ *
+ * НЕ самодостаточен: опирается на .plathix-btn* (вкл. .plathix-btn--lg),
+ * .plathix-card* и CSS-переменные из admin-ui.css — валидно, т.к. admin-ui.css
+ * грузится на той же ProPage-странице (dep ['plathix-admin-ui']). Механизм —
+ * зеркало free-wizard.css (CSS-only standalone-entry), т.к. у ProPage нет
+ * своего JS-entry (страница серверная).
+ */
+
+.plathix-pro-hero {
+	background: linear-gradient(135deg, #1e1035 0%, #3b1c78 40%, #1c1917 100%);
+	border-radius: var(--plathix-radius-xl);
+	padding: 48px 36px 36px;
+	text-align: center;
+	color: #fff;
+	position: relative;
+	overflow: hidden;
+}
+
+.plathix-pro-hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(ellipse 80% 60% at 50% -20%, rgba(139, 92, 246, 0.3) 0%, transparent 60%);
+	pointer-events: none;
+}
+
+.plathix-pro-hero__badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background: rgba(139, 92, 246, 0.25);
+	border: 1px solid rgba(139, 92, 246, 0.4);
+	border-radius: 100px;
+	padding: 4px 14px;
+	font-size: 12px;
+	font-weight: 600;
+	color: #c4b5fd;
+	margin-bottom: 16px;
+}
+
+.plathix-pro-hero__title {
+	font-size: 32px;
+	font-weight: 800;
+	letter-spacing: -1.2px;
+	margin-bottom: 10px;
+	line-height: 1.2;
+	color: #fff;
+}
+
+.plathix-pro-hero__sub {
+	font-size: 14px;
+	color: rgba(255, 255, 255, 0.6);
+	margin-bottom: 26px;
+	line-height: 1.6;
+	max-width: 480px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.plathix-pro-hero__actions {
+	display: flex;
+	gap: 10px;
+	justify-content: center;
+	flex-wrap: wrap;
+	margin-bottom: 16px;
+}
+
+.plathix-pro-hero__checks {
+	display: flex;
+	gap: 24px;
+	justify-content: center;
+	flex-wrap: wrap;
+	margin-top: 8px;
+}
+
+.plathix-pro-hero__check {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.75);
+}
+
+.plathix-pro-hero__check-mark {
+	color: #6ee7b7;
+	font-weight: 700;
+}
+
+/* Compare table */
+.plathix-pro-compare__section td {
+	background: var(--plathix-bg);
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--plathix-text-4);
+	padding: 10px 14px 6px;
+}
+
+/* На очень узких телефонах (≤400px) 3-колоночная матрица Free/PRO не
+   помещается и вылезает за экран (+34px на 320). Сжимаем: фикс.
+   раскладка, компактный padding, перенос заголовков — ✓/— и короткий
+   текст остаются читаемыми ([internal]
+   DASHOF-104). */
+@media (max-width: 400px) {
+
+	.plathix-pro-compare {
+		table-layout: fixed;
+		width: 100%;
+	}
+
+	.plathix-pro-compare th,
+	.plathix-pro-compare td {
+		padding-left: 6px;
+		padding-right: 6px;
+		white-space: normal;
+		overflow-wrap: anywhere;
+	}
+
+	.plathix-pro-compare th:first-child,
+	.plathix-pro-compare td:first-child {
+		width: 54%;
+	}
+}
+
+/* Plans grid */
+.plathix-pro-plans {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 16px;
+}
+
+@media (max-width: 800px) {
+
+	.plathix-pro-plans {
+		grid-template-columns: 1fr;
+	}
+}
+
+.plathix-pro-plan {
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	padding: 24px 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	position: relative;
+}
+
+.plathix-pro-plan--featured {
+	border-color: var(--plathix-accent);
+	box-shadow: 0 0 0 2px rgba(20, 184, 166, 0.15);
+}
+
+.plathix-pro-plan__badge {
+	position: absolute;
+	top: -12px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: var(--plathix-accent);
+	color: #fff;
+	font-size: 11px;
+	font-weight: 700;
+	padding: 2px 12px;
+	border-radius: 20px;
+	white-space: nowrap;
+}
+
+.plathix-pro-plan__name {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	text-align: center;
+}
+
+.plathix-pro-plan__price {
+	font-size: 32px;
+	font-weight: 800;
+	color: var(--plathix-text-1);
+	text-align: center;
+	line-height: 1;
+}
+
+.plathix-pro-plan__period {
+	font-size: 13px;
+	font-weight: 400;
+	color: var(--plathix-text-4);
+}
+
+.plathix-pro-plan__sites {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	text-align: center;
+}
+
+/* [internal]: вынос статических inline из ProPage.php (43). */
+
+.plathix-pro-compare-link {
+	text-align: center;
+	font-size: 12px;
+	margin: 2px 0 8px;
+}
+
+.plathix-pro-compare-link__cta {
+	color: var(--plathix-accent);
+}
+
+.plathix-pro-trust-strip {
+	margin-top: 4px;
+}
+
+.plathix-pro-trust-strip__body {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	justify-content: center;
+	font-size: 12px;
+	color: var(--plathix-text-2);
+}
+
+/* Кнопка-модификатор на тёмном hero-фоне (secondary CTA, status-card links). */
+.plathix-pro-hero__btn--ghost {
+	background: rgba(255, 255, 255, 0.1);
+	border-color: rgba(255, 255, 255, 0.2);
+	color: #fff;
+}
+
+.plathix-pro-compare-wrap {
+	border: none;
+	border-radius: 0;
+	border-top: 1px solid var(--plathix-border);
+}
+
+.plathix-pro-compare__col--feature {
+	width: 48%;
+}
+
+.plathix-pro-compare__col--free,
+.plathix-pro-compare__col--pro {
+	width: 26%;
+	text-align: center;
+}
+
+.plathix-pro-compare__col--pro {
+	color: var(--plathix-accent);
+}
+
+.plathix-pro-compare__row--highlight {
+	background: var(--plathix-accent-bg);
+}
+
+.plathix-pro-compare__cell {
+	text-align: center;
+}
+
+.plathix-pro-compare__mark--yes {
+	color: var(--plathix-ok);
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.plathix-pro-compare__mark--no {
+	color: var(--plathix-text-4);
+	font-size: 16px;
+}
+
+.plathix-pro-compare__mark--text {
+	font-size: 12px;
+	color: var(--plathix-text-2);
+}
+
+.plathix-pro-plan__cta {
+	width: 100%;
+	text-align: center;
+}
+
+.plathix-pro-plans__disclaimer {
+	text-align: center;
+	font-size: 12px;
+	color: var(--plathix-text-4);
+	margin-top: 8px;
+}
+
+/*
+ * Сервисная шапка PRO выравнивается по левому краю — под левые карточки
+ * страницы, в отличие от продающего Free-hero, который центрируется.
+ * Ось задаётся ЗДЕСЬ, потомковыми селекторами: базовый блок центрируется
+ * тремя механизмами сразу (text-align, auto-марджины у __sub,
+ * justify-content у __actions/__checks), и одного text-align не хватает —
+ * подзаголовок и кнопки остаются по центру ([internal]).
+ * Базовые классы не переопределяем: они общие с Free-hero.
+ * __sub тут рендерится дважды (обычный и --expiry, строка срока лицензии) —
+ * селектор потомка покрывает оба; max-width сохраняется, это мера длины
+ * строки, а не центрирование.
+ */
+.plathix-pro-hero--status {
+	text-align: start;
+}
+
+.plathix-pro-hero--status .plathix-pro-hero__sub {
+	margin-inline: 0;
+}
+
+.plathix-pro-hero--status .plathix-pro-hero__actions,
+.plathix-pro-hero--status .plathix-pro-hero__checks {
+	justify-content: flex-start;
+}
+
+.plathix-pro-hero__title--compact {
+	font-size: 22px;
+}
+
+.plathix-pro-hero__sub--expiry {
+	margin-top: -6px;
+}
+
+.plathix-pro-hero__renew-link {
+	color: #fff;
+	text-decoration: underline;
+}
+
+.plathix-pro-unlocked {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+}
+
+.plathix-pro-unlocked__section-title {
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: var(--plathix-text-4);
+	margin-bottom: 6px;
+}
+
+.plathix-pro-unlocked__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.plathix-pro-unlocked__item {
+	font-size: 13px;
+	color: var(--plathix-text-2);
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+}
+
+.plathix-pro-unlocked__item-mark {
+	color: var(--plathix-ok);
+	font-weight: 700;
+	flex-shrink: 0;
+}
+
+.plathix-pro-faq {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.plathix-pro-faq__item {
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	padding: 12px 16px;
+	cursor: pointer;
+}
+
+.plathix-pro-faq__question {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+	list-style: none;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 8px;
+}
+
+.plathix-pro-faq__toggle {
+	color: var(--plathix-text-4);
+	flex-shrink: 0;
+}
+
+.plathix-pro-faq__answer {
+	font-size: 13px;
+	color: var(--plathix-text-2);
+	margin: 10px 0 0;
+	line-height: 1.6;
+}
+
+/* Notice-варианты нуждаются в отступе снизу перед следующим блоком;
+   базовый .plathix-notice (admin-ui.css) отступа не задаёт —
+   специфика ProPage. */
+.plathix-pro-license__notice {
+	margin-bottom: 14px;
+}
+
+.plathix-pro-license__desc {
+	margin-bottom: 12px;
+}
+
+.plathix-pro-license__form {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+	align-items: flex-start;
+}
+
+.plathix-pro-license__input {
+	flex: 1;
+	min-width: 240px;
+	max-width: 420px;
+	font-family: var(--plathix-font-mono);
+	font-size: 12px;
+}
+
+.plathix-pro-license__deactivate-form {
+	margin-top: 8px;
+}
+
+.plathix-pro-license__meta {
+	margin-top: 10px;
+	font-size: 12px;
+	color: var(--plathix-text-4);
+}

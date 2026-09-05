@@ -1,0 +1,2081 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Plathix 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/plathix\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2026-06-15T18:13:01+00:00\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. Plugin Name of the plugin
+msgid "Plathix - Media Library Folders"
+msgstr "Plathix - папки медиабиблиотеки"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://plathix.com/"
+msgstr ""
+
+#. Description of the plugin
+msgid "Everything in its place. Organize your WordPress Media Library with folders, ready sets, replace media, SVG handling, and Trash."
+msgstr ""
+
+#. Author of the plugin
+msgid "Plathix"
+msgstr "Plathix"
+
+#. translators: aria-подпись иконки «папки» в счётчике корзины (доступность).
+msgid "Folders"
+msgstr "Папки"
+
+msgid "Loading..."
+msgstr "Загрузка..."
+
+msgid "Folder name:"
+msgstr "Название папки:"
+
+msgid "Rename folder:"
+msgstr "Переименовать папку:"
+
+msgid "Delete this folder?"
+msgstr "Удалить эту папку?"
+
+msgid "Folder is not empty."
+msgstr "Папка не пуста."
+
+msgid "No items selected."
+msgstr "Элементы не выбраны."
+
+msgid "Open a destination folder first."
+msgstr "Сначала откройте папку назначения."
+
+#. translators: %s: plural post type label e.g. "Posts", "Pages", "Products"
+#, php-format
+msgid "Move selected %s"
+msgstr "Переместить выбранные %s"
+
+msgid "+ Folder"
+msgstr "+ Папка"
+
+msgid "New subfolder"
+msgstr "Новая вложенная папка"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Create"
+msgstr "Создать"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "A folder with this name already exists here."
+msgstr "Папка с таким названием уже существует."
+
+msgid "Rename"
+msgstr "Переименовать"
+
+msgid "Move to Trash"
+msgstr "Переместить в корзину"
+
+msgid "Move this folder to Trash? You can restore it later."
+msgstr "Переместить папку в корзину? Позже её можно восстановить."
+
+msgid "Files won't be deleted — depending on your Trash settings, they either move with the folder or become unassigned."
+msgstr "Файлы не удаляются — в зависимости от настроек корзины они либо переезжают вместе с папкой, либо отвязываются от неё."
+
+msgid "Choose whether subfolders move to Trash together with this folder, or stay in place."
+msgstr "Выберите: подпапки уйдут в корзину вместе с этой папкой или останутся на месте."
+
+msgid "Move folder to Trash"
+msgstr "Папку в корзину"
+
+msgid "Move folder and subfolders to Trash"
+msgstr "Папку и подпапки в корзину"
+
+msgid "Select folders"
+msgstr "Выбрать папки"
+
+msgid "Expand/collapse all"
+msgstr "Развернуть/свернуть всё"
+
+msgid "Drag mode"
+msgstr "Режим перетаскивания"
+
+msgid "Move folders to Trash"
+msgstr "Папки в корзину"
+
+msgid "Folder moved to Trash. You can restore it from there."
+msgstr "Папка перемещена в корзину. Её можно восстановить оттуда."
+
+msgid "Gallery shortcode"
+msgstr "Галерея шорткод"
+
+msgid "Documents"
+msgstr "Документы"
+
+msgid "Show file size"
+msgstr "Показывать размер файла"
+
+msgid "Refresh"
+msgstr "Обновить"
+
+msgid "Maximum nesting depth reached"
+msgstr "Достигнута максимальная глубина вложенности"
+
+msgid "All Files"
+msgstr "Все файлы"
+
+#. translators: %s: plural post type label e.g. "posts", "pages", "products"
+#, php-format
+msgid "No folders yet. Create your first folder to organize your %s."
+msgstr "Папок ещё нет. Создайте первую папку для организации %s."
+
+msgid "No folders found."
+msgstr "Папки не найдены."
+
+msgid "Favorites"
+msgstr "Избранное"
+
+msgid "Add to favorites"
+msgstr "Добавить в избранное"
+
+msgid "Remove from favorites"
+msgstr "Убрать из избранного"
+
+msgid "Failed to save favorites."
+msgstr "Не удалось сохранить избранное."
+
+msgid "Unable to refresh nonce."
+msgstr "Не удалось обновить nonce."
+
+msgid "Request failed."
+msgstr "Запрос завершился ошибкой."
+
+msgid "file uploaded"
+msgstr "файл загружен"
+
+msgid "files uploaded"
+msgstr "файлов загружено"
+
+msgid "Upload is still running. The view will return to the upload folder when it finishes."
+msgstr "Загрузка ещё выполняется. После завершения откроется папка загрузки."
+
+msgid "Upload is still running in the selected folder. The view will return there when it finishes."
+msgstr "Загрузка ещё выполняется в выбранной папке. После завершения вернётесь туда."
+
+msgid "Uploads are still in progress. Leaving now may interrupt them."
+msgstr "Загрузка ещё идёт. Уход со страницы может прервать её."
+
+msgid "Error"
+msgstr "Ошибка"
+
+msgid "File replaced successfully."
+msgstr "Файл успешно заменён."
+
+msgid "File replaced, but some cleanup steps need manual review."
+msgstr "Файл заменён, но некоторые шаги очистки требуют ручной проверки."
+
+msgid "Replace failed."
+msgstr "Замена не удалась."
+
+msgid "Replacing…"
+msgstr "Замена…"
+
+msgid "File replaced, but the preview could not be refreshed. Reload the page to see the new file."
+msgstr "Файл заменён, но превью не удалось обновить. Обновите страницу, чтобы увидеть новый файл."
+
+msgid "The file may have been replaced, but the server response could not be confirmed. Reload the page to check."
+msgstr "Файл мог быть заменён, но подтвердить ответ сервера не удалось. Обновите страницу, чтобы проверить."
+
+#. translators: 1: image width in pixels, 2: image height in pixels.
+#, php-format
+msgid "%1$s by %2$s pixels"
+msgstr "%1$s на %2$s пикселей"
+
+msgid "The server is blocking REST write requests. Contact your hosting."
+msgstr "Сервер блокирует REST-запросы на запись. Обратитесь к хостингу."
+
+msgid "The server is corrupting REST responses (both /wp-json/ and rest_route returned invalid data). Contact your hosting."
+msgstr "Сервер искажает ответы REST (оба endpoint /wp-json/ и rest_route вернули невалидные данные). Обратитесь к хостингу."
+
+msgid "The server accepted the request, but the response could not be read. Refreshing to confirm the result."
+msgstr "Сервер принял запрос, но ответ не удалось прочитать. Обновляем данные, чтобы подтвердить результат."
+
+msgid "Upload failed."
+msgstr "Загрузка не удалась."
+
+msgid "Move to folder"
+msgstr "Переместить в папку"
+
+msgid "Failed to load folders."
+msgstr "Не удалось загрузить папки."
+
+msgid "Failed to move file."
+msgstr "Не удалось переместить файл."
+
+msgid "Too many requests. Please try again later."
+msgstr "Слишком много запросов. Повторите попытку позже."
+
+msgid "Folder changed."
+msgstr "Папка изменена."
+
+msgid "SORT"
+msgstr "СОРТ"
+
+msgid "A → Z"
+msgstr "А → Я"
+
+msgid "Z → A"
+msgstr "Я → А"
+
+msgid "Newest first"
+msgstr "Сначала новые"
+
+msgid "Oldest first"
+msgstr "Сначала старые"
+
+msgid "By size"
+msgstr "По размеру"
+
+msgid "By default"
+msgstr "По умолчанию"
+
+msgid "Sort"
+msgstr "Сортировка"
+
+msgid "Folder created"
+msgstr "Папка создана"
+
+msgid "Folder renamed"
+msgstr "Папка переименована"
+
+msgid "Moved to Trash"
+msgstr "Перемещено в корзину"
+
+msgid "folders moved to Trash"
+msgstr "папок перемещено в корзину"
+
+msgid "Position saved. Switch sorting to \"Default\" to see it."
+msgstr "Позиция сохранена. Переключите сортировку на «По умолчанию», чтобы увидеть её."
+
+msgid "folder could not be deleted"
+msgstr "папку не удалось удалить"
+
+msgid "folders could not be deleted"
+msgstr "папки не удалось удалить"
+
+msgid "items will be moved. Continue?"
+msgstr "элементов будет перемещено. Продолжить?"
+
+msgid "1 file moved"
+msgstr "1 файл перемещён"
+
+msgid "files moved"
+msgstr "файлов перемещено"
+
+msgid "Move the selected folders to Trash? You can restore them later."
+msgstr "Переместить выбранные папки в корзину? Их можно будет восстановить."
+
+msgid "Files won't be deleted — depending on your Trash settings, they either move with the folders or become unassigned."
+msgstr "Файлы не будут удалены — в зависимости от настроек корзины, они либо переместятся вместе с папками, либо станут неприкреплёнными."
+
+msgid "Some selected folders contain subfolders. Choose how to handle them:"
+msgstr "Некоторые выбранные папки содержат подпапки. Выберите, как с ними поступить:"
+
+msgid "Move only selected, keep subfolders"
+msgstr "Переместить только выбранные, оставить вложенные"
+
+msgid "Move selected and all subfolders to Trash"
+msgstr "Переместить выбранные и все вложенные папки в корзину"
+
+msgid "Create folder"
+msgstr "Создать папку"
+
+msgid "Rename folder"
+msgstr "Переименовать папку"
+
+msgid "Select folder"
+msgstr "Выбрать папку"
+
+msgid "File"
+msgstr "Файл"
+
+#. translators: aria-подпись иконки «файлы» в счётчике корзины (доступность).
+msgid "Files"
+msgstr "Файлы"
+
+msgid "Uncategorized"
+msgstr "Несортированные"
+
+msgid "Trash"
+msgstr "Корзина"
+
+msgid "Cannot create subfolders inside Uncategorized."
+msgstr "Нельзя создавать подпапки внутри Несортированных."
+
+msgid "Maximum folder nesting depth reached."
+msgstr "Достигнута максимальная глубина вложенности папок."
+
+msgid "Folder structure is temporarily locked. Please try again in a moment."
+msgstr "Структура папок временно заблокирована. Попробуйте снова через мгновение."
+
+msgid "Cannot create a folder inside a folder that is in Trash."
+msgstr "Нельзя создать папку внутри папки, которая находится в Корзине."
+
+msgid "Uncategorized cannot be renamed."
+msgstr "Папку Несортированные нельзя переименовать."
+
+msgid "This folder was removed. Please refresh the folder tree and try again."
+msgstr "Эта папка была удалена. Обновите дерево папок и попробуйте снова."
+
+msgid "Cannot move a folder into one of its own subfolders."
+msgstr "Нельзя переместить папку в одну из её подпапок."
+
+msgid "Cannot move a folder into a folder that is in Trash."
+msgstr "Нельзя переместить папку в папку, которая находится в Корзине."
+
+msgid "Folder name cannot be empty."
+msgstr "Название папки не может быть пустым."
+
+msgid "Folder name contains control or bidirectional characters."
+msgstr "Имя папки содержит управляющие или двунаправленные символы."
+
+msgid "Folder name is too long."
+msgstr "Название папки слишком длинное."
+
+msgid "Invalid taxonomy."
+msgstr "Неверная таксономия."
+
+msgid "A folder cannot be moved to itself."
+msgstr "Папку нельзя переместить в саму себя."
+
+msgid "Attachment ID must be positive."
+msgstr "ID вложения должен быть положительным."
+
+msgid "A trash operation is already in progress for this attachment."
+msgstr "Для этого вложения уже выполняется операция перемещения в корзину."
+
+msgid "Restore"
+msgstr "Восстановить"
+
+msgid "Delete permanently"
+msgstr "Удалить навсегда"
+
+msgid "Folder"
+msgstr "Папка"
+
+msgid "Insufficient permissions."
+msgstr "Недостаточно прав."
+
+msgid "Folder no longer exists."
+msgstr "Папка больше не существует."
+
+msgid "Not logged in."
+msgstr "Вы не авторизованы."
+
+msgid "Too many requests."
+msgstr "Слишком много запросов."
+
+msgid "No folders selected."
+msgstr "Папки не выбраны."
+
+msgid "You are creating folders too quickly. Please wait about a minute and try again."
+msgstr "Вы создаёте папки слишком быстро. Подождите примерно минуту и попробуйте снова."
+
+msgid "You are changing folders too quickly. Please wait about a minute and try again."
+msgstr "Вы изменяете папки слишком быстро. Подождите примерно минуту и попробуйте снова."
+
+msgid "You are deleting folders too quickly. Please wait about a minute and try again."
+msgstr "Вы удаляете папки слишком быстро. Подождите примерно минуту и попробуйте снова."
+
+msgid "Folder is not in Trash or no longer exists."
+msgstr "Папка не в корзине или больше не существует."
+
+msgid "Trash is busy, try again."
+msgstr "Корзина занята, попробуйте ещё раз."
+
+msgid "Folder is not in Trash."
+msgstr "Папка не в корзине."
+
+msgid "Media trash is only available for attachments."
+msgstr "Корзина медиатеки доступна только для вложений."
+
+msgid "Media restore is only available for attachments."
+msgstr "Восстановление медиафайлов доступно только для вложений."
+
+msgid "Service tokens cannot modify personal preferences."
+msgstr "Сервисные токены не могут изменять личные настройки."
+
+msgid "Media replace is only available for attachments."
+msgstr "Замена медиафайлов доступна только для вложений."
+
+msgid "Attachment ID is required."
+msgstr "Необходимо указать ID вложения."
+
+msgid "Replacement file is required."
+msgstr "Необходимо загрузить файл для замены."
+
+msgid "File replaced successfully"
+msgstr "Файл успешно заменён"
+
+msgid "Invalid folder ID."
+msgstr "Неверный ID папки."
+
+msgid "Unable to delete folder."
+msgstr "Не удалось удалить папку."
+
+msgid "WP Cron / Action Scheduler"
+msgstr "WP Cron / Action Scheduler"
+
+msgid "Enabled"
+msgstr "Включено"
+
+msgid "DISABLE_WP_CRON, Action Scheduler idle (nothing scheduled)"
+msgstr "DISABLE_WP_CRON, Action Scheduler простаивает (ничего не запланировано)"
+
+msgid "DISABLE_WP_CRON but Action Scheduler active"
+msgstr "DISABLE_WP_CRON, но Action Scheduler активен"
+
+msgid "WP-Cron disabled, Action Scheduler stalled — ZIP/import jobs may not run"
+msgstr "WP-Cron отключён, Action Scheduler остановлен — задания ZIP/импорта могут не выполняться"
+
+msgid "Temp Dir Writable"
+msgstr "Доступность временной папки"
+
+msgid "Writable"
+msgstr "Доступна для записи"
+
+msgid "Temp directory is not writable. ZIP downloads will fail."
+msgstr "Временная директория недоступна для записи. Скачивание ZIP не будет работать."
+
+msgid "Temp Dir Size"
+msgstr "Размер временной папки"
+
+#. translators: 1: current size, 2: limit.
+#, php-format
+msgid "%1$s of %2$s limit"
+msgstr "%1$s из лимита %2$s"
+
+#. translators: 1: current size, 2: limit.
+#, php-format
+msgid "Temp directory exceeds size limit (%1$s of %2$s) — cleanup job may be stalled."
+msgstr "Временная директория превышает лимит размера (%1$s из %2$s) — задание очистки могло зависнуть."
+
+msgid "Stuck Running Jobs"
+msgstr "Зависшие задания"
+
+msgid "Action Scheduler not available"
+msgstr "Action Scheduler недоступен"
+
+#. translators: 1: running ZIP jobs count, 2: running import jobs count.
+#, php-format
+msgid "ZIP: %1$d running, import: %2$d running"
+msgstr "ZIP: %1$d выполняется, импорт: %2$d выполняется"
+
+#. translators: 1: running ZIP jobs count, 2: running import jobs count.
+#, php-format
+msgid "Possibly stuck — ZIP: %1$d, import: %2$d"
+msgstr "Возможно зависли — ZIP: %1$d, импорт: %2$d"
+
+msgid "Boot Integrity"
+msgstr "Целостность загрузки"
+
+msgid "Init interrupted by another plugin — system terms recovered lazily. Check for a plugin fataling on the init hook."
+msgstr "Инициализация прервана другим плагином — системные термины восстановлены отложенно. Проверьте наличие плагина, вызывающего Fatal на хуке init."
+
+msgid "Normal"
+msgstr "Норма"
+
+msgid "SVG Sanitizer"
+msgstr "Очистщик SVG"
+
+msgid "Missing or outdated"
+msgstr "Отсутствует или устарел"
+
+msgid "Provided by another plugin — not verifiable"
+msgstr "Предоставлен другим плагином — проверить невозможно"
+
+msgid "Available"
+msgstr "Доступно"
+
+msgid "Presets Directory Guard"
+msgstr "Защита папки пресетов"
+
+msgid "Directory not created yet — guard will be added automatically on first preset upload."
+msgstr "Папка ещё не создана — защита будет добавлена автоматически при первой загрузке пресета."
+
+msgid "Protected"
+msgstr "Защищено"
+
+#. translators: %s: comma-separated list of missing guard files, e.g. "index.php, .htaccess".
+#, php-format
+msgid "Guard incomplete — missing: %s"
+msgstr "Защита неполная — отсутствует: %s"
+
+msgid "Folder & file"
+msgstr "Папка и файл"
+
+msgid "Replace file"
+msgstr "Заменить файл"
+
+msgid "Keeps the same attachment ID and WordPress relationships. Direct URL references may require manual review if filename or file type changes."
+msgstr "ID вложения и связи WordPress сохраняются. При изменении имени или типа файла прямые ссылки могут потребовать ручной проверки."
+
+msgid "— No folder —"
+msgstr "— Без папки —"
+
+msgid "Change"
+msgstr "Сменить"
+
+#. translators: %s: current PHP version.
+#, php-format
+msgid "PHP %s is below the minimum required 8.1."
+msgstr "Версия PHP %s ниже минимально необходимой 8.1."
+
+msgid "Enable infinite scroll"
+msgstr "Включить бесконечную прокрутку"
+
+msgid "Replace default pagination with seamless infinite loading in the Media Library grid."
+msgstr "Заменяет постраничную навигацию плавной бесконечной подгрузкой в сетке медиабиблиотеки."
+
+msgid "Review SVG policy"
+msgstr "Проверьте политику SVG"
+
+msgid "SVG uploads are enabled. Review the allowed roles and safe mode setting."
+msgstr "Загрузка SVG включена. Проверьте разрешённые роли и настройку безопасного режима."
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "Missing card id."
+msgstr "Не указан идентификатор карточки."
+
+msgid "Unknown source."
+msgstr "Неизвестный источник."
+
+msgid "You do not have sufficient permissions."
+msgstr "У вас недостаточно прав."
+
+msgid "Plathix Dashboard"
+msgstr "Панель Plathix"
+
+msgid "New to Plathix?"
+msgstr "Впервые в Plathix?"
+
+msgid "Read the getting started guide →"
+msgstr "Руководство по началу работы →"
+
+msgid "Other"
+msgstr "Другие"
+
+msgid "No folders yet"
+msgstr "Папок ещё нет"
+
+msgid "Apply a preset to instantly create a folder structure, or start from scratch."
+msgstr "Примените пресет для быстрого создания структуры папок или начните с нуля."
+
+msgid "Apply preset"
+msgstr "Применить пресет"
+
+msgid "content type"
+msgid_plural "content types"
+msgstr[0] "тип контента"
+msgstr[1] "типа контента"
+msgstr[2] "типов контента"
+
+#. translators: 1: content types count, 2: content types word (already pluralized), 3: unsorted count. The "%d %s" segment and " · %d unsorted" may be reordered per-language.
+#, php-format
+msgid "across %1$d %2$s · %3$d unsorted"
+msgstr "в %1$d %2$s · %3$d вне папок"
+
+msgid "of"
+msgstr "из"
+
+msgid "DISK USED"
+msgstr "ЗАНЯТО НА ДИСКЕ"
+
+msgid "Max depth"
+msgstr "Макс. глубина"
+
+msgid "levels"
+msgstr "ур."
+
+msgid "Fav. folders"
+msgstr "Избр. папки"
+
+msgid "Open Media Library →"
+msgstr "Открыть медиабиблиотеку →"
+
+#. translators: %s: plugin name
+#, php-format
+msgid "%s detected"
+msgstr "Обнаружен плагин %s"
+
+#. translators: %s: plugin name
+#, php-format
+msgid "We found an existing folder structure from %s. Import it to Plathix in one click — your organisation will be preserved."
+msgstr "Обнаружена структура папок из %s. Импортируйте её в Plathix одним нажатием — организация будет сохранена."
+
+#. translators: %s: source name (plugin or import adapter, e.g. FileBird).
+#, php-format
+msgid "Import from %s"
+msgstr "Импорт из %s"
+
+msgid "Dismiss"
+msgstr "Скрыть"
+
+msgid "MIME Types"
+msgstr "Типы файлов"
+
+msgid "No media files yet."
+msgstr "Медиафайлов пока нет."
+
+msgid "FILES"
+msgstr "ФАЙЛОВ"
+
+msgid "Set up Plathix"
+msgstr "Настроить Plathix"
+
+msgid "Dismiss this card"
+msgstr "Скрыть эту карточку"
+
+msgid "Configure →"
+msgstr "Настроить →"
+
+msgid "Unsorted"
+msgstr "Несортированные"
+
+#. translators: %s: total file count
+#, php-format
+msgid "of %s"
+msgstr "из %s"
+
+msgid "Fix"
+msgstr "Исправить"
+
+msgid "Blog & Content"
+msgstr "Блог и контент"
+
+msgid "E-Commerce"
+msgstr "Интернет-магазин"
+
+msgid "Creative Agency"
+msgstr "Креативное агентство"
+
+msgid "Preset"
+msgstr "Пресет"
+
+#. translators: 1: folder count, 2: human time diff
+#, php-format
+msgid "%1$d folders · applied %2$s ago"
+msgstr "%1$d папок · применено %2$s назад"
+
+#. translators: %d: folder count
+#, php-format
+msgid "%d folders · applied"
+msgstr "%d папок · применено"
+
+msgid "Applied"
+msgstr "Применено"
+
+msgid "8 presets available — Blog, E-Commerce, Agency and more. Import a custom structure via ZIP."
+msgstr "Доступно 8 пресетов — Блог, Магазин, Агентство и другие. Импортируйте свою структуру через ZIP."
+
+msgid "Import ZIP"
+msgstr "Импортировать ZIP"
+
+msgid "Browse presets →"
+msgstr "Все пресеты →"
+
+msgid "Export current structure →"
+msgstr "Экспорт текущей структуры →"
+
+msgid "Start with a ready-made structure for your type of site."
+msgstr "Начните с готовой структуры для вашего типа сайта."
+
+#. translators: %d: folder count
+#, php-format
+msgid "%d folders"
+msgstr "%d папок"
+
+msgid "Browse all presets →"
+msgstr "Все пресеты →"
+
+msgid "Plathix is active"
+msgstr "Plathix активен"
+
+msgid "folder"
+msgid_plural "folders"
+msgstr[0] "папка"
+msgstr[1] "папки"
+msgstr[2] "папок"
+
+msgid "file"
+msgid_plural "files"
+msgstr[0] "файл"
+msgstr[1] "файла"
+msgstr[2] "файлов"
+
+#. translators: 1: types count, 2: types word (already pluralized), 3: folders count, 4: folders word (already pluralized), 5: files count, 6: files word (already pluralized). The three "%d %s" pairs and the " · " separator between them may be reordered/changed per-language.
+#, php-format
+msgid "%1$d %2$s · %3$d %4$s · %5$d %6$s"
+msgstr "%1$d %2$s · %3$d %4$s · %5$d %6$s"
+
+msgid "All good"
+msgstr "Всё в порядке"
+
+#. translators: %d: issue count
+#, php-format
+msgid "%d issue"
+msgid_plural "%d issues"
+msgstr[0] "%d проблема"
+msgstr[1] "%d проблемы"
+msgstr[2] "%d проблем"
+
+msgid "Uploads"
+msgstr "Загрузки"
+
+msgid "7d"
+msgstr "7д"
+
+msgid "30d"
+msgstr "30д"
+
+#. translators: %d: peak uploads per day
+#, php-format
+msgid "files · last 7d · peak %d/day"
+msgstr "файлов · за 7д · пик %d/день"
+
+#. translators: %d: peak uploads per day
+#, php-format
+msgid "files · last 30d · peak %d/day"
+msgstr "файлов · за 30д · пик %d/день"
+
+msgid "Delete all plugin data"
+msgstr "Удалить все данные плагина"
+
+msgid "Permanently removes everything Plathix created — folders, presets, settings. Your media files, images and posts are NOT touched."
+msgstr "Безвозвратно удаляет всё, что создал Plathix — папки, пресеты, настройки. Ваши медиафайлы, изображения и записи НЕ затрагиваются."
+
+msgid "Delete all data…"
+msgstr "Удалить все данные…"
+
+msgid "Delete all Plathix data?"
+msgstr "Удалить все данные Plathix?"
+
+msgid "Close"
+msgstr "Закрыть"
+
+msgid "This cannot be undone."
+msgstr "Это действие необратимо."
+
+msgid "Will be permanently deleted:"
+msgstr "Будет безвозвратно удалено:"
+
+msgid "NOT touched:"
+msgstr "НЕ затрагивается:"
+
+msgid "your images, files and posts stay in the Media Library — they only lose their folder assignment."
+msgstr "ваши изображения, файлы и записи остаются в Медиатеке — теряется только их привязка к папкам."
+
+msgid "I understand this is permanent and cannot be undone."
+msgstr "Я понимаю, что это действие необратимо."
+
+msgid "Delete all data"
+msgstr "Удалить все данные"
+
+msgid "Deleting…"
+msgstr "Удаление…"
+
+msgid "Cleanup failed. Please try again."
+msgstr "Не удалось выполнить очистку. Попробуйте ещё раз."
+
+msgid "All folders and their structure"
+msgstr "Все папки и их структура"
+
+msgid "Folder presets and applied-preset history"
+msgstr "Пресеты папок и история применённых пресетов"
+
+msgid "All plugin settings and preferences"
+msgstr "Все настройки и параметры плагина"
+
+msgid "Favorites, colors and folder positions"
+msgstr "Избранное, цвета и позиции папок"
+
+msgid "Danger Zone"
+msgstr "Опасная зона"
+
+msgid "Service tokens cannot modify personal favorites."
+msgstr "Сервисные токены не могут изменять личное избранное."
+
+msgid "Color"
+msgstr "Цвет"
+
+msgid "First setup"
+msgstr "Первоначальная настройка"
+
+msgid "Set up your media library"
+msgstr "Настройте медиабиблиотеку"
+
+msgid "Pick a starting folder structure or start from scratch. You can always change this later."
+msgstr "Выберите начальную структуру папок или начните с нуля. Изменить можно в любое время."
+
+msgid "Skip setup"
+msgstr "Пропустить настройку"
+
+#. translators: %d — количество папок, которые создаст этот пресет.
+#, php-format
+msgid "%d folder"
+msgid_plural "%d folders"
+msgstr[0] "%d папка"
+msgstr[1] "%d папки"
+msgstr[2] "%d папок"
+
+msgid "Apply this preset? It adds a ready-made folder structure to your media library. Your existing folders and media are not deleted; folders with matching names are created with an \"— imported\" suffix."
+msgstr "Применить пресет? Он добавит готовую структуру папок в вашу медиабиблиотеку. Существующие папки и медиафайлы не будут удалены; папки с совпадающими именами создаются с пометкой «— imported»."
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Browse all presets"
+msgstr "Все пресеты"
+
+#. translators: %d: number of Plathix folders that will be deleted
+#, php-format
+msgid "This will delete %d Plathix folder. Media files will not be deleted. Continue?"
+msgid_plural "This will delete %d Plathix folders. Media files will not be deleted. Continue?"
+msgstr[0] "Будет удалена %d папка Plathix. Медиафайлы удалены не будут. Продолжить?"
+msgstr[1] "Будет удалено %d папки Plathix. Медиафайлы удалены не будут. Продолжить?"
+msgstr[2] "Будет удалено %d папок Plathix. Медиафайлы удалены не будут. Продолжить?"
+
+msgid "Start from scratch →"
+msgstr "Начать с нуля →"
+
+msgid "Wizard reset. It will appear on the Dashboard on next visit."
+msgstr "Мастер настройки сброшен. Он появится на дашборде при следующем посещении."
+
+msgid "Reset wizard"
+msgstr "Сбросить мастер"
+
+msgid "Import is already running for this adapter — cannot restart yet."
+msgstr "Импорт для этого адаптера уже выполняется — пока нельзя начать заново."
+
+msgid "Import job already queued for this user."
+msgstr "Задание импорта для этого пользователя уже в очереди."
+
+msgid "Import queue is busy."
+msgstr "Очередь импорта занята."
+
+msgid "Invalid job id."
+msgstr "Неверный идентификатор задания."
+
+msgid "Import queued. Waiting for Action Scheduler..."
+msgstr "Импорт поставлен в очередь. Ожидание планировщика..."
+
+msgid "Import is running..."
+msgstr "Выполняется импорт..."
+
+#. translators: %d: number of moved items.
+#, php-format
+msgid "Import completed. Moved items: %d"
+msgstr "Импорт завершён. Перемещено элементов: %d"
+
+msgid "Import failed."
+msgstr "Импорт не удался."
+
+msgid "Import is still pending. Action Scheduler runner may be unavailable."
+msgstr "Импорт ещё ожидает выполнения. Возможно, Action Scheduler недоступен."
+
+msgid "Could not check import status — connection is unstable. Please wait or try again later."
+msgstr "Не удалось проверить статус импорта — нестабильное соединение. Подождите или повторите попытку позже."
+
+msgid "Import is already running for this adapter."
+msgstr "Импорт для этого адаптера уже выполняется."
+
+msgid "Import from Other Plugins"
+msgstr "Импорт из других плагинов"
+
+msgid "Migrate your folder structure from another plugin. Plathix will attempt to recreate the hierarchy and reassign all media attachments. This is non-destructive — original plugin data is preserved."
+msgstr "Перенесите структуру папок из другого плагина. Plathix попытается воссоздать иерархию и переназначить все медиавложения. Операция безопасна — данные исходного плагина сохраняются."
+
+msgid "Imported"
+msgstr "Импортировано"
+
+msgid "Detected"
+msgstr "Обнаружен"
+
+msgid "Not detected"
+msgstr "Не обнаружен"
+
+msgid "An unfinished import was detected. You can continue where it left off or start over."
+msgstr "Обнаружен незавершённый импорт. Можно продолжить с того же места или начать заново."
+
+msgid "Continue"
+msgstr "Продолжить"
+
+msgid "Start over"
+msgstr "Начать заново"
+
+#. translators: 1: removed folders count, 2: skipped folders count, 3: error count.
+#, php-format
+msgid "Folder structure reset: %1$d removed, %2$d skipped, %3$d errors."
+msgstr "Структура папок сброшена: %1$d удалено, %2$d пропущено, %3$d ошибок."
+
+msgid "Preset not found."
+msgstr "Пресет не найден."
+
+msgid "Preset is not valid and cannot be applied."
+msgstr "Пресет недействителен и не может быть применён."
+
+msgid "Media taxonomy is not registered."
+msgstr "Таксономия медиафайлов не зарегистрирована."
+
+msgid "Preset apply is temporarily locked by another request. Please try again in a moment."
+msgstr "Применение пресета временно заблокировано другим запросом. Пожалуйста, повторите через момент."
+
+msgid "Failed to reset folder structure before applying preset."
+msgstr "Не удалось сбросить структуру папок перед применением пресета."
+
+#. translators: 1: preset title, 2: created folders count.
+#, php-format
+msgid "Preset \"%1$s\" applied (%2$d folders created)."
+msgstr "Пресет «%1$s» применён (создано папок: %2$d)."
+
+#. translators: 1: site name, 2: tagline
+#, php-format
+msgid "Preset created for %1$s — %2$s using the Plathix plugin."
+msgstr "Пресет создан для %1$s — %2$s с помощью плагина Plathix."
+
+#. translators: 1: site name
+#, php-format
+msgid "Preset created for %s using the Plathix plugin."
+msgstr "Пресет создан для %s с помощью плагина Plathix."
+
+#. translators: %s: missing preset metadata field key.
+#, php-format
+msgid "Missing required export metadata: %s"
+msgstr "Отсутствуют обязательные метаданные экспорта: %s"
+
+msgid "Preview image is required for export."
+msgstr "Для экспорта необходимо изображение предпросмотра."
+
+msgid "Preview image must be webp, png, jpg, or jpeg."
+msgstr "Изображение предпросмотра должно быть в формате webp, png, jpg или jpeg."
+
+msgid "Preview image exceeds 300 KB limit."
+msgstr "Изображение предпросмотра превышает лимит 300 КБ."
+
+msgid "Preview image could not be validated."
+msgstr "Не удалось проверить изображение предпросмотра."
+
+msgid "PHP zip extension is not available."
+msgstr "Расширение PHP zip недоступно."
+
+msgid "Could not create temporary directory for export."
+msgstr "Не удалось создать временную директорию для экспорта."
+
+msgid "Could not create export archive."
+msgstr "Не удалось создать архив для экспорта."
+
+msgid "Invalid metadata line."
+msgstr "Неверная строка метаданных."
+
+msgid "Metadata field name has wrong letter case."
+msgstr "Неверный регистр в названии поля метаданных."
+
+msgid "Metadata field is defined more than once."
+msgstr "Поле метаданных указано более одного раза."
+
+msgid "Format version must be a whole number."
+msgstr "Версия формата должна быть целым числом."
+
+msgid "This preset was created by a newer version of Plathix. Update the plugin to use it."
+msgstr "Пресет создан более новой версией Plathix. Обновите плагин, чтобы использовать его."
+
+msgid "Structure indentation must use spaces, not tabs."
+msgstr "Отступы в структуре должны быть пробелами, а не табуляцией."
+
+msgid "This preset uses the old format. Convert it with bin/convert-preset-format.php."
+msgstr "Пресет использует старый формат. Сконвертируйте его через bin/convert-preset-format.php."
+
+msgid "Invalid structure line."
+msgstr "Неверная строка структуры."
+
+msgid "Structure indentation must be a multiple of two spaces."
+msgstr "Отступ в структуре должен быть кратен двум пробелам."
+
+msgid "Structure line is nested deeper than its parent allows."
+msgstr "Строка структуры вложена глубже, чем допускает родительская папка."
+
+msgid "Folder name must be wrapped in double quotes."
+msgstr "Имя папки должно быть заключено в двойные кавычки."
+
+msgid "Invalid folder attributes."
+msgstr "Некорректные атрибуты папки."
+
+#. translators: %d: number of structure lines left unchecked.
+#, php-format
+msgid "Too many errors: %d more structure lines were not checked."
+msgstr "Слишком много ошибок: ещё %d строк структуры не проверены."
+
+msgid "Missing ## Structure section."
+msgstr "Отсутствует раздел ## Structure."
+
+msgid "Apply failed."
+msgstr "Не удалось применить."
+
+#. translators: 1: preset title, 2: folder count
+#, php-format
+msgid "Preset \"%1$s\" applied. %2$d folders created."
+msgstr "Пресет «%1$s» применён. Создано папок: %2$d."
+
+msgid "Built-in presets cannot be deleted."
+msgstr "Встроенные пресеты нельзя удалить."
+
+msgid "Preset deleted."
+msgstr "Пресет удалён."
+
+msgid "No file uploaded."
+msgstr "Файл не загружен."
+
+#. translators: %s: preset title
+#, php-format
+msgid "Preset \"%s\" uploaded successfully."
+msgstr "Пресет «%s» успешно загружен."
+
+#. translators: %d: error count
+#, php-format
+msgid "Reset completed with %d errors."
+msgstr "Сброс завершён с %d ошибками."
+
+msgid "All folders have been reset. You can now start from scratch."
+msgstr "Все папки сброшены. Теперь можно начать с нуля."
+
+msgid "Preset storage is unavailable."
+msgstr "Хранилище пресетов недоступно."
+
+msgid "Failed to store preset record."
+msgstr "Не удалось сохранить запись пресета."
+
+msgid "Invalid preset id."
+msgstr "Неверный ID пресета."
+
+msgid "Preset record was not found."
+msgstr "Запись пресета не найдена."
+
+msgid "Preset slug already exists."
+msgstr "Слаг пресета уже существует."
+
+msgid "Presets"
+msgstr "Пресеты"
+
+msgid "Apply a folder structure preset, upload your own package, or start from scratch."
+msgstr "Примените пресет структуры папок, загрузите свой пакет или начните с нуля."
+
+msgid "Upload preset (.zip)"
+msgstr "Загрузить пресет (.zip)"
+
+msgid "Search presets…"
+msgstr "Поиск пресетов…"
+
+msgid "Most Popular"
+msgstr "Популярные"
+
+msgid "Built-in first"
+msgstr "Сначала встроенные"
+
+msgid "Custom / Uploaded"
+msgstr "Свои / Загруженные"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Built-in"
+msgstr "Встроенные"
+
+msgid "Custom"
+msgstr "Свои"
+
+msgid "Community"
+msgstr "Сообщество"
+
+msgid "Exported"
+msgstr "Экспортированные"
+
+msgid "No presets found."
+msgstr "Пресеты не найдены."
+
+msgid "No presets match your search."
+msgstr "Нет пресетов, соответствующих поиску."
+
+msgid "Official"
+msgstr "Официальный"
+
+msgid "· Media Library only"
+msgstr "· только медиабиблиотека"
+
+msgid "Apply Preset ›"
+msgstr "Применить пресет ›"
+
+msgid "Delete this preset record? This cannot be undone."
+msgstr "Удалить пресет? Это действие необратимо."
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Upload preset package (.zip)"
+msgstr "Загрузить пакет пресета (.zip)"
+
+msgid "Drop your ZIP preset here"
+msgstr "Перетащите ZIP-пресет сюда"
+
+msgid "or click to browse · .zip files only"
+msgstr "или нажмите для выбора файла · только .zip"
+
+msgid "Preset files define folder names and hierarchy."
+msgstr "Файлы пресетов задают названия и иерархию папок."
+
+msgid "They apply to your Media Library only."
+msgstr "Применяются только к медиабиблиотеке."
+
+msgid "Reading preset file…"
+msgstr "Чтение файла пресета…"
+
+msgid "Don't forget to apply the preset."
+msgstr "Не забудьте применить пресет."
+
+msgid "Upload"
+msgstr "Загрузка"
+
+msgid "Upload different"
+msgstr "Загрузить другой"
+
+msgid "Try again"
+msgstr "Попробовать снова"
+
+msgid "Start from scratch"
+msgstr "Начать с нуля"
+
+msgid "No file was uploaded."
+msgstr "Файл не был загружен."
+
+msgid "Upload must be a .zip file."
+msgstr "Загрузка должна быть .zip-файлом."
+
+msgid "Archive exceeds the 1 MB size limit."
+msgstr "Архив превышает лимит 1 МБ."
+
+msgid "Could not open the zip archive."
+msgstr "Не удалось открыть ZIP-архив."
+
+msgid "Archive must contain exactly 2 files."
+msgstr "Архив должен содержать ровно 2 файла."
+
+msgid "Could not read archive entries."
+msgstr "Не удалось прочитать содержимое архива."
+
+msgid "Archive contains unsafe file paths."
+msgstr "Архив содержит небезопасные пути к файлам."
+
+msgid "Preset description exceeds the size limit."
+msgstr "Файл описания пресета превышает допустимый размер."
+
+msgid "Preview image exceeds the size limit."
+msgstr "Изображение превью превышает допустимый размер."
+
+msgid "Archive is missing the preset description file."
+msgstr "В архиве отсутствует файл описания пресета."
+
+msgid "Archive is missing a valid preview image."
+msgstr "В архиве отсутствует корректное изображение предпросмотра."
+
+msgid "Could not create temporary directory."
+msgstr "Не удалось создать временную директорию."
+
+msgid "Could not extract archive."
+msgstr "Не удалось распаковать архив."
+
+msgid "Could not read the preset description file."
+msgstr "Не удалось прочитать файл описания пресета."
+
+msgid "The preset description file must be UTF-8 without BOM."
+msgstr "Файл описания пресета должен быть в кодировке UTF-8 без BOM."
+
+msgid "The Preview field does not match the preview file in the archive."
+msgstr "Поле Preview не совпадает с файлом превью в архиве."
+
+msgid "Preview file could not be found after extraction."
+msgstr "Файл предпросмотра не найден после распаковки."
+
+msgid "Preview image exceeds the 300 KB size limit."
+msgstr "Изображение предпросмотра превышает лимит 300 КБ."
+
+msgid "Preview image has an unsupported format."
+msgstr "Изображение предпросмотра имеет неподдерживаемый формат."
+
+msgid "Preview file is not a valid image."
+msgstr "Файл предпросмотра не является корректным изображением."
+
+msgid "Missing required metadata field."
+msgstr "Отсутствует обязательное поле метаданных."
+
+msgid "Preset version cannot be empty."
+msgstr "Версия пресета не может быть пустой."
+
+msgid "Invalid preset slug."
+msgstr "Неверный слаг пресета."
+
+msgid "Preview must be one of: preview.webp, preview.png, preview.jpg, preview.jpeg."
+msgstr "Превью должно называться одним из: preview.webp, preview.png, preview.jpg, preview.jpeg."
+
+msgid "Invalid tags format."
+msgstr "Неверный формат тегов."
+
+msgid "This slug is reserved by a built-in preset. Rename the preset before uploading."
+msgstr "Этот слаг занят встроенным пресетом. Переименуйте пресет перед загрузкой."
+
+msgid "This preset already exists."
+msgstr "Этот пресет уже существует."
+
+msgid "Preset exceeds the maximum number of structure lines."
+msgstr "Пресет превышает максимальное количество строк структуры."
+
+msgid "Folder name contains forbidden characters."
+msgstr "Название папки содержит недопустимые символы."
+
+msgid "Folder name is too long in bytes."
+msgstr "Имя папки слишком длинное в байтах."
+
+msgid "Invalid color value."
+msgstr "Неверное значение цвета."
+
+msgid "Preset exceeds maximum depth."
+msgstr "Пресет превышает максимальную глубину вложенности."
+
+#. translators: %d — number of sites included in the plan.
+#, php-format
+msgid "%d site"
+msgid_plural "%d sites"
+msgstr[0] "%d сайт"
+msgstr[1] "%d сайта"
+msgstr[2] "%d сайтов"
+
+msgid "License"
+msgstr "Лицензия"
+
+msgid "Upgrade"
+msgstr "Перейти на PRO"
+
+msgid "Plathix License"
+msgstr "Лицензия Plathix"
+
+msgid "Plathix PRO"
+msgstr "Plathix PRO"
+
+msgid "See the full feature comparison →"
+msgstr "Смотреть полное сравнение возможностей →"
+
+#. translators: %d — refund window in days.
+#, php-format
+msgid "%d-day money-back guarantee"
+msgstr "Возврат средств в течение %d дней"
+
+msgid "Secure checkout"
+msgstr "Безопасная оплата"
+
+msgid "Annual subscription — cancel anytime"
+msgstr "Годовая подписка — отмена в любой момент"
+
+msgid "Your media library,"
+msgstr "Ваша медиабиблиотека,"
+
+msgid "finally under control"
+msgstr "наконец под контролем"
+
+msgid "Free gives you folders. PRO adds per-role access control, a gallery builder, bulk ZIP downloads, an audit log and WP-CLI — for sites and teams that need more than organization."
+msgstr ""
+
+#. translators: %s — starting price from the pricing map, already formatted with the currency symbol.
+#, php-format
+msgid "Upgrade to PRO — from %s"
+msgstr "Перейти на PRO — от %s"
+
+msgid "See what's included ↓"
+msgstr "Что входит в PRO ↓"
+
+msgid "Per-role folder access &amp; upload permissions"
+msgstr "Доступ к папкам и права загрузки по ролям"
+
+msgid "Gallery shortcode &amp; bulk ZIP downloads"
+msgstr "Шорткод галереи и массовое скачивание ZIP"
+
+msgid "Audit log &amp; WP-CLI commands"
+msgstr "Журнал аудита и команды WP-CLI"
+
+msgid "Free vs PRO"
+msgstr "Бесплатно vs PRO"
+
+msgid "Feature"
+msgstr "Функция"
+
+msgid "Free"
+msgstr "Бесплатно"
+
+msgid "PRO"
+msgstr "PRO"
+
+msgid "Unlimited folders"
+msgstr "Неограниченное количество папок"
+
+msgid "Nested sub-folders (unlimited depth)"
+msgstr "Вложенные подпапки (неограниченная глубина)"
+
+msgid "Folder colors"
+msgstr "Цвета папок"
+
+msgid "Favorite folders"
+msgstr "Избранные папки"
+
+msgid "Ready folder sets for common site types"
+msgstr "Готовые наборы папок для типовых сайтов"
+
+msgid "Media tools"
+msgstr "Инструменты медиа"
+
+msgid "Bulk move to folder"
+msgstr "Массовое перемещение в папку"
+
+msgid "Bulk trash / restore"
+msgstr "Массовое удаление в корзину / восстановление"
+
+msgid "Replace media (keeps attachment ID)"
+msgstr "Замена медиафайла (сохраняет ID вложения)"
+
+msgid "SVG upload with sanitization &amp; role controls"
+msgstr "Загрузка SVG с санитизацией и контролем по ролям"
+
+msgid "Export / import folder structure"
+msgstr "Экспорт / импорт структуры папок"
+
+msgid "Gallery shortcode &amp; layouts"
+msgstr "Шорткод галереи и макеты"
+
+msgid "Bulk download as ZIP"
+msgstr "Массовая загрузка в виде ZIP"
+
+msgid "Access & roles"
+msgstr "Доступ и роли"
+
+msgid "Per-role folder access"
+msgstr "Доступ к папкам по ролям"
+
+msgid "Per-role upload permission"
+msgstr "Права загрузки по ролям"
+
+msgid "REST API service token authentication"
+msgstr "Аутентификация через сервисный токен REST API"
+
+msgid "Developer tools"
+msgstr "Инструменты разработчика"
+
+msgid "WP-CLI commands"
+msgstr "Команды WP-CLI"
+
+msgid "Audit log"
+msgstr "Журнал аудита"
+
+msgid "Support"
+msgstr "Поддержка"
+
+msgid "Community support"
+msgstr "Поддержка сообщества"
+
+msgid "Priority email support"
+msgstr "Приоритетная поддержка по email"
+
+msgid "One-click site migration"
+msgstr "Перенос сайта в один клик"
+
+msgid "/ year"
+msgstr "/ год"
+
+msgid "Most popular"
+msgstr "Популярный выбор"
+
+msgid "Get started"
+msgstr "Начать"
+
+#. translators: %d — refund window in days.
+#, php-format
+msgid "%d-day money-back guarantee. All plans include all PRO features."
+msgstr "Гарантия возврата денег в течение %d дней. Все тарифы включают все возможности PRO."
+
+msgid "Plathix PRO — active"
+msgstr "Plathix PRO — активна"
+
+msgid "You're on PRO. Everything is unlocked."
+msgstr "У вас PRO. Все возможности разблокированы."
+
+msgid "Manage your license below. Need help? Our docs and support are a click away."
+msgstr "Управляйте лицензией ниже. Нужна помощь? Документация и поддержка в один клик."
+
+msgid "Documentation"
+msgstr "Документация"
+
+msgid "Priority support"
+msgstr "Приоритетная поддержка"
+
+#. translators: %s — subscription expiry date.
+#, php-format
+msgid "Subscription active until %s."
+msgstr "Подписка активна до %s."
+
+#. translators: 1: days left, 2: renew link (opening <a>), 3: closing </a>.
+#, php-format
+msgid "Subscription expires in %1$d days. %2$sRenew%3$s to keep PRO active."
+msgstr "Подписка истекает через %1$d дн. %2$sПродлите%3$s, чтобы сохранить PRO активным."
+
+#. translators: 1: expiry date, 2: renew link (opening <a>), 3: closing </a>.
+#, php-format
+msgid "Subscription expired on %1$s. %2$sRenew%3$s to restore PRO."
+msgstr "Подписка истекла %1$s. %2$sПродлите%3$s, чтобы восстановить PRO."
+
+msgid "What you unlocked with PRO"
+msgstr "Что вы разблокировали с PRO"
+
+msgid "Can I upgrade from Free to PRO at any time?"
+msgstr "Можно ли перейти с бесплатной версии на PRO в любое время?"
+
+msgid "Yes, upgrade is instant. Your existing folders and settings are preserved."
+msgstr "Да, переход мгновенный. Ваши папки и настройки сохраняются."
+
+msgid "What happens to my folders if I cancel?"
+msgstr "Что будет с папками при отмене подписки?"
+
+msgid "Your folders remain in the database. PRO-only features (access control, gallery, audit log, WP-CLI, etc.) are deactivated but your structure stays intact."
+msgstr ""
+
+msgid "Is it a one-time payment or subscription?"
+msgstr "Это разовый платёж или подписка?"
+
+msgid "Annual subscription. You can cancel anytime — no long-term commitment."
+msgstr "Годовая подписка. Отменить можно в любое время без обязательств."
+
+msgid "Do you offer refunds?"
+msgstr "Есть ли возврат средств?"
+
+#. translators: 1: refund window in days, 2: same value repeated.
+#, php-format
+msgid "%1$d-day money-back guarantee, no questions asked. Contact support within %2$d days of purchase."
+msgstr "Возврат средств в течение %1$d дней без лишних вопросов. Обратитесь в поддержку в течение %2$d дней после покупки."
+
+msgid "FAQ"
+msgstr "Вопросы и ответы"
+
+msgid "License Key"
+msgstr "Лицензионный ключ"
+
+msgid "Active"
+msgstr "Активен"
+
+msgid "Awaiting re-check"
+msgstr "Ожидает перепроверки"
+
+msgid "Invalid"
+msgstr "Недействителен"
+
+msgid "License activated successfully. Enjoy Plathix PRO!"
+msgstr "Лицензия успешно активирована. Приятной работы с Plathix PRO!"
+
+msgid "License deactivated."
+msgstr "Лицензия деактивирована."
+
+msgid "License key not found or could not be verified. Please check and try again."
+msgstr "Лицензионный ключ не найден или не прошёл проверку. Проверьте ключ и повторите попытку."
+
+msgid "Enter your license key to activate PRO features on this site."
+msgstr "Введите лицензионный ключ для активации функций PRO на этом сайте."
+
+msgid "Reactivate"
+msgstr "Активировать повторно"
+
+msgid "Activate"
+msgstr "Активировать"
+
+msgid "Deactivate"
+msgstr "Деактивировать"
+
+#. translators: %s: human-readable time difference, e.g. "2 days".
+#, php-format
+msgid "Last confirmed by the license server: %s ago."
+msgstr "Последнее подтверждение сервером лицензий: %s назад."
+
+msgid "Your key is in the purchase confirmation email you received after buying Plathix PRO. It looks like <code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code>."
+msgstr "Ключ — в письме о подтверждении покупки Plathix PRO. Он выглядит как <code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code>."
+
+msgid "License checks run over a standard HTTPS connection to our license server; the response is not cryptographically signed, so this check protects against typos and expired keys, not against a compromised network path."
+msgstr "Проверка лицензии выполняется по обычному HTTPS-соединению с нашим сервером лицензий; ответ не подписан криптографически, поэтому эта проверка защищает от опечаток и просроченных ключей, но не от скомпрометированного сетевого пути."
+
+msgid "A replace operation is already in progress for this attachment."
+msgstr "Для этого вложения уже выполняется операция замены."
+
+msgid "Attachment does not exist."
+msgstr "Вложение не существует."
+
+msgid "Actor is not allowed to replace this attachment."
+msgstr "Нет прав на замену этого вложения."
+
+msgid "Uploaded file type is not allowed."
+msgstr "Тип загруженного файла не разрешён."
+
+msgid "Uploaded file result is incomplete."
+msgstr "Результат загрузки файла неполный."
+
+msgid "Unable to update attachment file path."
+msgstr "Не удалось обновить путь к файлу вложения."
+
+msgid "Failed to update attachment metadata."
+msgstr "Не удалось обновить метаданные вложения."
+
+msgid "Upload input must contain name and tmp_name."
+msgstr "Данные загрузки должны содержать name и tmp_name."
+
+msgid "Upload input contains a file error."
+msgstr "Данные загрузки содержат ошибку файла."
+
+msgid "Unable to back up the original file before replacing it."
+msgstr "Не удалось создать резервную копию исходного файла перед заменой."
+
+msgid "Upload base directory is unavailable."
+msgstr "Базовая директория загрузок недоступна."
+
+msgid "Unable to create Plathix temporary directory."
+msgstr "Не удалось создать временную директорию Plathix."
+
+msgid "Plathix temporary directory is not writable."
+msgstr "Временная директория Plathix недоступна для записи."
+
+msgid "Compressed SVGZ files are not supported."
+msgstr "Сжатые файлы SVGZ не поддерживаются."
+
+msgid "SVG file is not readable."
+msgstr "SVG-файл недоступен для чтения."
+
+msgid "Unable to read SVG file."
+msgstr "Не удалось прочитать SVG-файл."
+
+msgid "SVG replacement requires an identified actor context."
+msgstr "Замена SVG требует идентифицированного контекста пользователя."
+
+msgid "Unable to rewrite sanitized SVG file."
+msgstr "Не удалось перезаписать очищенный SVG-файл."
+
+msgid "Sideload source file is not readable."
+msgstr "Исходный файл для боковой загрузки недоступен для чтения."
+
+msgid "Unable to stage sideload file into temporary directory."
+msgstr "Не удалось поместить файл во временную директорию."
+
+msgid "Upload handler returned an invalid result."
+msgstr "Обработчик загрузки вернул неверный результат."
+
+msgid "Failed to generate attachment metadata."
+msgstr "Не удалось сформировать метаданные вложения."
+
+#. translators: 1: original error message, 2: path to the backup copy that still holds the original file
+#, php-format
+msgid "%1$s Additionally, the original file could not be restored from its backup at %2$s — restore it manually before retrying."
+msgstr "%1$s Кроме того, не удалось восстановить исходный файл из резервной копии по пути %2$s — восстановите его вручную перед повторной попыткой."
+
+msgid "Search folders"
+msgstr "Поиск папок"
+
+msgid "Type to browse folders"
+msgstr "Начните вводить для поиска папок"
+
+msgid "Clear search"
+msgstr "Очистить поиск"
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "General"
+msgstr "Общие"
+
+msgid "Media Grid"
+msgstr "Сетка медиафайлов"
+
+msgid "Enable infinite scroll in media library grid"
+msgstr "Включить бесконечную прокрутку в сетке медиабиблиотеки"
+
+msgid "Automatically loads more files when scrolling down in the media grid and media picker (Gutenberg, Elementor, Classic editor)."
+msgstr "Автоматически загружает файлы при прокрутке вниз в сетке медиафайлов и медиавыборщике (Gutenberg, Elementor, классический редактор)."
+
+msgid "Failed to generate export JSON."
+msgstr "Не удалось сформировать экспортный JSON."
+
+msgid "Export failed."
+msgstr "Не удалось выполнить экспорт."
+
+msgid "Export archive not found."
+msgstr "Архив экспорта не найден."
+
+msgid "WP-Cron is unavailable. ZIP generation and import jobs will not run until WP-Cron or a real system cron is configured."
+msgstr "WP-Cron недоступен. Создание ZIP и задания импорта не будут выполняться до настройки WP-Cron или системного cron."
+
+msgid "Configure Plathix plugin behaviour, access and integrations."
+msgstr "Настройте поведение, доступ и интеграции плагина Plathix."
+
+msgid "Settings sections"
+msgstr "Разделы настроек"
+
+msgid "Save Settings"
+msgstr "Сохранить настройки"
+
+msgid "Saved!"
+msgstr "Сохранено!"
+
+msgid "Save failed"
+msgstr "Не удалось сохранить"
+
+msgid "Enables infinite scroll in the Media Library grid and media picker modals."
+msgstr "Включает бесконечную прокрутку в сетке медиабиблиотеки и модальных окнах выбора медиафайлов."
+
+msgid "Default upload folder"
+msgstr "Папка по умолчанию"
+
+msgid "New uploads go to this folder when no folder is chosen explicitly."
+msgstr "Новые загрузки попадают в эту папку, если папка не выбрана явно."
+
+msgid "Behavior"
+msgstr "Поведение"
+
+msgid "Confirm bulk actions"
+msgstr "Подтверждение массовых действий"
+
+msgid "Ask for confirmation before moving, deleting or restructuring 10 or more items at once."
+msgstr "Запрашивать подтверждение перед перемещением, удалением или реструктуризацией 10 и более элементов за раз."
+
+msgid "(folder unavailable)"
+msgstr "(папка недоступна)"
+
+msgid "No folder"
+msgstr "Без папки"
+
+msgid "The selected folder is no longer available — it was deleted or moved to trash. New uploads go to the media library root until you pick another folder. Restoring the folder brings this setting back."
+msgstr "Выбранная папка больше недоступна — она удалена или перемещена в корзину. Новые загрузки будут попадать в корень медиабиблиотеки, пока вы не выберете другую папку. Восстановление папки вернёт эту настройку."
+
+msgid "Enable infinite scroll in Media Grid"
+msgstr "Включить бесконечную прокрутку в сетке медиафайлов"
+
+msgid "Replaces default pagination with seamless infinite loading."
+msgstr "Заменяет постраничную навигацию бесконечной загрузкой."
+
+msgid "Confirm bulk actions on 10 or more items"
+msgstr "Подтверждать массовые действия для 10 и более элементов"
+
+msgid "SVG"
+msgstr "SVG"
+
+msgid "SVG Uploads"
+msgstr "Загрузка SVG"
+
+msgid "Choose how Plathix handles .svg uploads across the whole site."
+msgstr "Выберите, как Plathix обрабатывает загрузку .svg на всём сайте."
+
+msgid "Multisite notice:"
+msgstr "Уведомление для мультисайта:"
+
+msgid "SVG upload is enabled network-wide. Each sub-site's allowed role list applies independently. Consider restricting to Administrator only on untrusted sites."
+msgstr "Загрузка SVG включена на уровне сети. Список разрешённых ролей применяется независимо для каждого подсайта. На ненадёжных сайтах рекомендуется ограничить доступ только для администраторов."
+
+msgid "SVG Allowed Roles"
+msgstr "Роли с доступом к загрузке SVG"
+
+msgid "Select which roles are permitted to upload SVG files."
+msgstr "Выберите роли, которым разрешена загрузка SVG-файлов."
+
+msgid "SVG Safe Mode"
+msgstr "Безопасный режим SVG"
+
+msgid "Strips more aggressively — disallows &lt;use&gt; elements and external references. Recommended for sites with untrusted editors."
+msgstr "Более строгая очистка — запрещает элементы &lt;use&gt; и внешние ссылки. Рекомендуется для сайтов с ненадёжными редакторами."
+
+msgid "Allow SVG uploads with sanitisation (recommended)"
+msgstr "Разрешить загрузку SVG с санитизацией (рекомендуется)"
+
+msgid "Block SVG uploads site-wide (including SVG allowed by other plugins)"
+msgstr "Заблокировать загрузку SVG на всём сайте (включая SVG, разрешённые другими плагинами)"
+
+msgid "Do not manage SVG (leave it to other plugins; Plathix will not sanitise)"
+msgstr "Не управлять SVG (оставить это другим плагинам; Plathix не будет очищать файлы)"
+
+msgid "Enable strict safe mode"
+msgstr "Включить строгий безопасный режим"
+
+msgid "More restrictive sanitisation. May affect complex SVG animations."
+msgstr "Более строгая очистка. Может повлиять на сложные SVG-анимации."
+
+msgid "You are not allowed to upload SVG files."
+msgstr "У вас нет прав для загрузки SVG-файлов."
+
+msgid "SVG file exceeds the maximum allowed size."
+msgstr "SVG-файл превышает максимально допустимый размер."
+
+msgid "Unable to process SVG file."
+msgstr "Не удалось обработать SVG-файл."
+
+msgid "System Info"
+msgstr "Системная информация"
+
+msgid "Environment diagnostics and health checks."
+msgstr "Диагностика среды и проверка состояния системы."
+
+msgid "Copy for support"
+msgstr "Скопировать для поддержки"
+
+msgid "Copied!"
+msgstr "Скопировано!"
+
+msgid "Health Checks"
+msgstr "Состояние системы"
+
+msgid "Database Tables"
+msgstr "Таблицы базы данных"
+
+msgid "Server Environment"
+msgstr "Серверная среда"
+
+msgid "WordPress Environment"
+msgstr "Среда WordPress"
+
+msgid "Theme"
+msgstr "Тема"
+
+msgid "Active Plugins"
+msgstr "Активные плагины"
+
+msgid "Exists"
+msgstr "Существует"
+
+msgid "Missing"
+msgstr "Отсутствует"
+
+msgid "not required while SVG is disabled"
+msgstr "не требуется, пока SVG отключён"
+
+msgid "Plugin Version"
+msgstr "Версия плагина"
+
+msgid "Plugin Build"
+msgstr "Сборка плагина"
+
+msgid "Enabled Post Types"
+msgstr "Включённые типы записей"
+
+msgid "SVG Support"
+msgstr "Поддержка SVG"
+
+#. translators: %d: retention period in days.
+msgid "Audit Log Retention"
+msgstr "Срок хранения журнала"
+
+#. translators: %d: retention period in days.
+msgid "Keep forever"
+msgstr "Хранить бессрочно"
+
+#. translators: %d: retention period in days.
+#, php-format
+msgid "%d days"
+msgstr "%d дн."
+
+msgid "Plugin PRO Build"
+msgstr "Сборка PRO"
+
+msgid "Object Cache"
+msgstr "Кэш объектов"
+
+msgid "External (Redis/Memcached)"
+msgstr "Внешний (Redis/Memcached)"
+
+msgid "Transients (DB)"
+msgstr "Транзиенты (БД)"
+
+msgid "MySQL Advisory Locks"
+msgstr "Блокировки MySQL"
+
+msgid "Operating System"
+msgstr "Операционная система"
+
+msgid "Web Server"
+msgstr "Веб-сервер"
+
+msgid "MySQL Version"
+msgstr "Версия MySQL"
+
+msgid "PHP Version"
+msgstr "Версия PHP"
+
+msgid "PHP Memory Limit"
+msgstr "Лимит памяти PHP"
+
+msgid "PHP Max Execution"
+msgstr "Макс. время выполнения PHP"
+
+msgid "PHP Upload Max"
+msgstr "Макс. размер загрузки PHP"
+
+msgid "GD Library"
+msgstr "Библиотека GD"
+
+msgid "Not installed"
+msgstr "Не установлена"
+
+msgid "ZipArchive"
+msgstr "ZipArchive"
+
+msgid "Installed"
+msgstr "Установлена"
+
+msgid "Upload Dir Writable"
+msgstr "Папка загрузок доступна для записи"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "Temp Dir"
+msgstr "Временная папка"
+
+msgid "Not configured"
+msgstr "Не настроено"
+
+msgid "WordPress Version"
+msgstr "Версия WordPress"
+
+msgid "Site URL"
+msgstr "URL сайта"
+
+msgid "Multisite"
+msgstr "Мультисайт"
+
+msgid "Max Upload Size"
+msgstr "Макс. размер загружаемого файла"
+
+msgid "WP Memory Limit"
+msgstr "Лимит памяти WP"
+
+msgid "Permalink Structure"
+msgstr "Структура постоянных ссылок"
+
+msgid "Plain"
+msgstr "Простая"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Timezone"
+msgstr "Часовой пояс"
+
+msgid "Debug Mode"
+msgstr "Режим отладки"
+
+msgid "Inactive"
+msgstr "Неактивен"
+
+msgid "Debug Log"
+msgstr "Журнал отладки"
+
+msgid "Name"
+msgstr "Название"
+
+msgid "Version"
+msgstr "Версия"
+
+msgid "Author"
+msgstr "Автор"
+
+msgid "Child Theme"
+msgstr "Дочерняя тема"
+
+msgid "Parent Theme"
+msgstr "Родительская тема"
+
+msgid "Unavailable — queue deduplication degraded"
+msgstr "Недоступно — дедупликация очереди нарушена"
+
+msgid "Tools"
+msgstr "Инструменты"
+
+msgid "Data operations, migrations and integrations — things you run occasionally, not configure daily."
+msgstr "Операции с данными, миграции и интеграции — то, что запускают изредка, а не настраивают ежедневно."
+
+msgid "Export Structure"
+msgstr "Экспорт структуры"
+
+msgid "Export your entire folder structure as a portable preset ZIP file. The package can be imported on any other site running Plathix."
+msgstr "Экспортируйте всю структуру папок как переносимый ZIP-файл пресета. Пакет можно импортировать на любой другой сайт с установленным Plathix."
+
+msgid "Export to ZIP"
+msgstr "Экспорт в ZIP"
+
+msgid "files selected"
+msgstr "файлов выбрано"
+
+msgid "Files will be moved to trash and can be restored from there."
+msgstr "Файлы будут перемещены в корзину и могут быть восстановлены оттуда."
+
+msgid "1 file moved to trash"
+msgstr "1 файл перемещён в корзину"
+
+msgid "files moved to trash"
+msgstr "файлов перемещено в корзину"
+
+msgid "files could not be moved to trash"
+msgstr "файлов не удалось переместить в корзину"
+
+msgid "Loading…"
+msgstr "Загрузка…"
+
+msgid "Delete this folder permanently? This cannot be undone."
+msgstr "Удалить папку навсегда? Это действие необратимо."
+
+msgid "deleted today"
+msgstr "удалена сегодня"
+
+msgid "deleted yesterday"
+msgstr "удалена вчера"
+
+#. translators: %d — number of days since the folder was moved to Trash.
+#, php-format
+msgid "deleted %d days ago"
+msgstr "удалена %d дн. назад"
+
+msgid "1 file restored"
+msgstr "1 файл восстановлен"
+
+msgid "files restored"
+msgstr "файлов восстановлено"
+
+msgid "files could not be restored"
+msgstr "файлов не удалось восстановить"
+
+msgid "folder could not be restored"
+msgstr "папку не удалось восстановить"
+
+msgid "folder could not be deleted permanently"
+msgstr "папку не удалось удалить навсегда"
+
+#. translators: короткая подпись «файлы» в счётчике корзины «N Ф / N П» (напр. рус. «Ф»).
+msgid "F"
+msgstr "Ф"
+
+#. translators: короткая подпись «папки» в счётчике корзины «N Ф / N П» (напр. рус. «П»).
+msgid "D"
+msgstr "П"
+
+msgid "Trash retention"
+msgstr "Срок хранения корзины"
+
+msgid "How many days files stay in the Trash folder before they are permanently deleted (1–180). Overrides the WordPress default without editing wp-config."
+msgstr "Сколько дней файлы хранятся в корзине до окончательного удаления (1–180). Переопределяет настройку WordPress без редактирования wp-config."
+
+msgid "days"
+msgstr "дней"
+
+msgid "Delete files with folder"
+msgstr "Удалять файлы вместе с папкой"
+
+msgid "When a folder is moved to Trash, also move its attached files to the WordPress Trash. When off, files are unassigned from the folder and appear in Uncategorized — restoring the folder does not bring them back."
+msgstr "Если включено, при перемещении папки в корзину прикреплённые к ней файлы тоже уходят в корзину WordPress. Если выключено, файлы отвязываются от папки и появляются в разделе «Несортированные» — восстановление папки не возвращает их обратно."
+
+msgid "Move attached files to Trash together with the folder"
+msgstr "Перемещать прикреплённые файлы в корзину вместе с папкой"
+
+msgid "Import adapter is not available."
+msgstr "Адаптер импорта недоступен."
+
+msgid "Unable to queue import job."
+msgstr "Не удалось поставить задание импорта в очередь."
+
+msgid "Could not resolve a preview image for the preset. Please add a site logo or icon first."
+msgstr "Не удалось подобрать изображение для превью пресета. Сначала добавьте логотип или значок сайта."
+
+msgid "Sanitize on upload"
+msgstr "Санитизация при загрузке"
+
+msgid "Blocked site-wide"
+msgstr "Заблокировано на всём сайте"
+
+msgid "Not managed by Plathix"
+msgstr "Не управляется Plathix"
+
+msgid "SVG file contains unsafe content and was rejected."
+msgstr "SVG-файл содержит небезопасный контент и был отклонён."
+
+#: resources/js/admin-ui/rail-toggle.js:65
+msgid "Collapse navigation"
+msgstr "Свернуть панель навигации"
+
+msgid "Plathix navigation"
+msgstr "Навигация Plathix"
+
+msgid "System"
+msgstr "Система"
+
+msgid "Docs"
+msgstr "Документация"
+
+msgid "More power in PRO"
+msgstr "Больше возможностей в PRO"
+
+#: resources/js/admin-ui/rail-toggle.js:64
+msgid "Expand navigation"
+msgstr "Развернуть навигацию"
+
+#: src/Modules/Dashboard/assets/dashboard.js:218
+msgid "upload"
+msgid_plural "uploads"
+msgstr[0] "загрузка"
+msgstr[1] "загрузки"
+msgstr[2] "загрузок"
+
+#: src/Modules/Preset/assets/preset.js:131
+msgid "Only .zip files are accepted. Please upload a valid Plathix preset package."
+msgstr "Принимаются только файлы .zip. Загрузите корректный пакет пресета Plathix."
+
+#: src/Modules/Preset/assets/preset.js:139
+msgid "File is too large. Preset files should be under 512 KB."
+msgstr "Файл слишком большой. Файлы пресетов должны быть меньше 512 КБ."
+
+#: src/Modules/Preset/assets/preset.js:170
+msgid "Could not validate the archive."
+msgstr "Не удалось проверить архив."
+
+#. translators: %s = file size in KB
+#: src/Modules/Preset/assets/preset.js:182
+msgid "Preset package"
+msgstr "Пакет пресета"
+
+#: src/Modules/Preset/assets/preset.js:190
+msgid "Could not reach the server to validate the archive."
+msgstr "Не удалось связаться с сервером для проверки архива."
+
+#: src/Modules/Settings/assets/settings.js:65
+msgid "Reveal"
+msgstr "Показать"
+
+#: src/Modules/Settings/assets/settings.js:65
+msgid "Hide"
+msgstr "Скрыть"

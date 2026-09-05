@@ -1,0 +1,9 @@
+{
+    "currency": "€",
+    "refundDays": 30,
+    "plans": [
+        { "key": "starter",   "line": "Pro",    "price": 69,  "sitesCount": 1,  "mostPopular": false },
+        { "key": "agency3",   "line": "Pro",    "price": 99,  "sitesCount": 3,  "mostPopular": true },
+        { "key": "unlimited", "line": "Agency", "price": 190, "sitesCount": 15, "mostPopular": false }
+    ]
+}

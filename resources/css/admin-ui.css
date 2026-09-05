@@ -1,0 +1,1327 @@
+/* ==========================================================================
+   Plathix Admin UI — page-level overrides and WP integration
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   WordPress page background override
+   -------------------------------------------------------------------------- */
+
+body.toplevel_page_plathix,
+body.plathix_page_plathix-settings,
+body.plathix_page_plathix-presets,
+body.plathix_page_plathix-shortcodes,
+body.plathix_page_plathix-audit-log,
+body.plathix_page_plathix-tools,
+body.plathix_page_plathix-system-info,
+body.plathix_page_plathix-docs,
+body.plathix_page_plathix-pro,
+body.admin_page_plathix-audit-log,
+body.admin_page_plathix-system-info,
+body.admin_page_plathix-docs {
+	background: var(--plathix-bg);
+	height: auto;
+	min-height: 100%;
+	overflow-y: auto;
+}
+
+html {
+	height: auto;
+	overflow-y: auto;
+}
+
+body.toplevel_page_plathix #wpbody-content,
+body.plathix_page_plathix-settings #wpbody-content,
+body.plathix_page_plathix-presets #wpbody-content,
+body.plathix_page_plathix-shortcodes #wpbody-content,
+body.plathix_page_plathix-audit-log #wpbody-content,
+body.plathix_page_plathix-tools #wpbody-content,
+body.plathix_page_plathix-system-info #wpbody-content,
+body.plathix_page_plathix-docs #wpbody-content,
+body.plathix_page_plathix-pro #wpbody-content,
+body.admin_page_plathix-audit-log #wpbody-content,
+body.admin_page_plathix-system-info #wpbody-content,
+body.admin_page_plathix-docs #wpbody-content {
+	padding-bottom: 0;
+}
+
+body.toplevel_page_plathix #wpfooter,
+body.plathix_page_plathix-settings #wpfooter,
+body.plathix_page_plathix-presets #wpfooter,
+body.plathix_page_plathix-shortcodes #wpfooter,
+body.plathix_page_plathix-audit-log #wpfooter,
+body.plathix_page_plathix-tools #wpfooter,
+body.plathix_page_plathix-system-info #wpfooter,
+body.plathix_page_plathix-docs #wpfooter,
+body.plathix_page_plathix-pro #wpfooter,
+body.admin_page_plathix-audit-log #wpfooter,
+body.admin_page_plathix-system-info #wpfooter,
+body.admin_page_plathix-docs #wpfooter {
+	display: none;
+}
+
+/* Remove default WP wrap padding so our layout fills edge-to-edge */
+body.toplevel_page_plathix .wrap,
+body.plathix_page_plathix-settings .wrap,
+body.plathix_page_plathix-presets .wrap,
+body.plathix_page_plathix-shortcodes .wrap,
+body.plathix_page_plathix-audit-log .wrap,
+body.plathix_page_plathix-tools .wrap,
+body.plathix_page_plathix-system-info .wrap,
+body.plathix_page_plathix-docs .wrap,
+body.plathix_page_plathix-pro .wrap,
+body.admin_page_plathix-audit-log .wrap,
+body.admin_page_plathix-system-info .wrap,
+body.admin_page_plathix-docs .wrap {
+	margin: 0;
+	padding: 0;
+}
+
+/* Pull layout flush against WP chrome */
+.plathix-layout {
+
+	/* ЛЕВЫЙ отрицательный margin компенсирует нативный
+       `#wpcontent { padding-left: 20px }` и приклеивает сайдбар вплотную к
+       WP-меню (full-bleed слева, [internal]). БЕЗ него между правым краем
+       #adminmenuwrap и .plathix-sidebar зияет дыра 20px (регрессия после
+       [internal], коммит 88c8f71, который убрал боковые margin целиком).
+       ПРАВЫЙ margin НЕ возвращаем: правый -20px уходил в обрезанную зону и
+       резал карточки дашборда справа ([internal]
+       DASHOF-102). Итог: прижим слева, правый край строго в пределах
+       #wpbody-content. */
+	margin: -10px 0 0 -20px;
+	max-width: 100%;
+	box-sizing: border-box;
+	display: flex;
+	height: calc(100vh - 22px);
+	overflow: hidden;
+
+	/* Позиционный контекст для .plathix-rail__toggle (absolute): без него
+       кнопка якорится к body и её left:var(--plathix-sidebar-width)
+       промахивается на margin-left (-20px), уезжая в контент
+       ([internal]). */
+	position: relative;
+}
+
+.plathix-sidebar {
+	flex: 0 0 var(--plathix-sidebar-width);
+	display: flex;
+	flex-direction: column;
+	z-index: 20;
+	height: 100%;
+	overflow-y: auto;
+	scrollbar-width: none;
+}
+
+.plathix-sidebar::-webkit-scrollbar {
+	display: none;
+}
+
+.plathix-sidebar__footer {
+	margin-top: auto;
+	padding-bottom: 20px;
+}
+
+/* Ряды дашборда реагируют на container-ширину `.plathix-main`
+   ([internal] DASHOF-102). Сам `.plathix-main` —
+   платформенный layout-класс (admin-layout, все страницы), поэтому его
+   container-type объявлен здесь; правила `.plathix-home__row*` уехали в
+   dashboard.css ([internal], #113). */
+.plathix-main {
+	flex: 1;
+	min-width: 0;
+	height: 100%;
+	overflow-y: auto;
+	padding: 22px 28px 40px;
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	scrollbar-width: thin;
+	scrollbar-color: var(--plathix-border) transparent;
+	container-type: inline-size;
+	container-name: plathix-main;
+}
+
+@media (max-width: 782px) {
+
+	.plathix-layout {
+		flex-direction: column;
+		height: auto;
+		overflow: visible;
+
+		/* На мобильном layout вертикальный (стек), нативный left-padding
+           #wpcontent на узком экране иной; левый -20px здесь создал бы
+           горизонтальный сдвиг/скролл — обнуляем ([internal]). */
+		margin-left: 0;
+	}
+
+	.plathix-sidebar {
+		flex: none;
+		width: 100%;
+		height: auto;
+		overflow-y: visible;
+		position: static;
+	}
+
+	.plathix-main {
+		height: auto;
+		overflow-y: visible;
+	}
+}
+
+/* --------------------------------------------------------------------------
+   Page content wrapper
+   -------------------------------------------------------------------------- */
+
+.plathix-page {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	width: 100%;
+	max-width: 100%;
+	padding-top: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Badges (shared)
+   -------------------------------------------------------------------------- */
+
+.plathix-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 2px 8px;
+	border-radius: 20px;
+	font-size: 11px;
+	font-weight: 600;
+	white-space: nowrap;
+}
+
+.plathix-badge--neutral {
+	background: var(--plathix-bg-subtle);
+	color: var(--plathix-text-3);
+	border: 1px solid var(--plathix-border);
+}
+
+.plathix-badge--ok {
+	background: var(--plathix-ok-background);
+	color: var(--plathix-ok);
+}
+
+.plathix-badge--warn {
+	background: var(--plathix-warn-background);
+	color: var(--plathix-warn);
+}
+
+.plathix-badge--err {
+	background: var(--plathix-error-background);
+	color: var(--plathix-error);
+}
+
+.plathix-badge--info {
+	background: var(--plathix-info-background);
+	color: var(--plathix-info);
+}
+
+.plathix-badge--dark {
+	background: #292524;
+	color: #d6d3d1;
+}
+
+/* --------------------------------------------------------------------------
+   Card (plathix-card) — canonical card used across all pages
+   -------------------------------------------------------------------------- */
+
+.plathix-card {
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-lg);
+	overflow: hidden;
+	box-shadow: var(--plathix-shadow-xs);
+}
+
+.plathix-card__head {
+	padding: 13px 16px;
+	border-bottom: 1px solid var(--plathix-border);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+}
+
+.plathix-card__title {
+
+	/* Семантический <h2> лейбл карточки (a11y, [internal]/C1): сброс
+       WP-admin h2. */
+	margin: 0;
+	padding: 0;
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+}
+
+.plathix-card__body {
+	padding: 16px;
+}
+
+.plathix-card-footer {
+	padding: 10px 16px;
+	border-top: 1px solid var(--plathix-border);
+	background: var(--plathix-bg-subtle);
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Notice (all-good)
+   -------------------------------------------------------------------------- */
+
+.plathix-notice {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 14px;
+	border-radius: var(--plathix-radius-md);
+	font-size: 13px;
+}
+
+.plathix-notice--ok {
+	background: var(--plathix-ok-background);
+	border: 1px solid var(--plathix-ok-border);
+	color: var(--plathix-ok);
+}
+
+.plathix-notice--warn {
+	background: var(--plathix-warn-background);
+	border: 1px solid var(--plathix-warn-border);
+	color: var(--plathix-warn);
+}
+
+.plathix-notice--err {
+	background: var(--plathix-error-background);
+	border: 1px solid var(--plathix-error-border);
+	color: var(--plathix-error);
+}
+
+/* --------------------------------------------------------------------------
+   Home layout rows
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   Bento card — базовая карточка нового дашборда
+   -------------------------------------------------------------------------- */
+
+.plathix-bento-card {
+	background: var(--plathix-card);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-lg);
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+	box-shadow: var(--plathix-shadow-xs);
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.plathix-bento__label {
+
+	/* Семантический <h2> лейбл виджета (a11y, [internal]/C1): сброс WP-admin h2
+       (margin-top/padding), нижний отступ сохраняем как был. */
+	margin: 0 0 6px 0;
+	padding: 0;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.07em;
+	text-transform: uppercase;
+	color: var(--plathix-text-4);
+}
+
+.plathix-bento__num {
+	font-size: 36px;
+	font-weight: 800;
+	color: var(--plathix-text-1);
+	line-height: 1;
+	letter-spacing: -1.5px;
+	margin-bottom: 4px;
+}
+
+.plathix-bento__sub {
+	font-size: 12px;
+	color: var(--plathix-text-4);
+	margin-bottom: 12px;
+}
+
+.plathix-bento__footer {
+	margin-top: auto;
+	padding-top: 12px;
+}
+
+.plathix-bento__link {
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--plathix-accent);
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.plathix-bento__link:hover {
+	text-decoration: underline;
+}
+
+/* Empty state inside bento */
+.plathix-bento__empty-icon {
+	display: flex;
+	justify-content: center;
+	margin: 18px 0 10px;
+	color: var(--plathix-text-3);
+}
+
+.plathix-bento__empty-title {
+	font-size: 14px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	text-align: center;
+	margin-bottom: 6px;
+}
+
+/* --------------------------------------------------------------------------
+   Badge link variant
+   -------------------------------------------------------------------------- */
+
+.plathix-badge--link {
+	text-decoration: none;
+	cursor: pointer;
+	transition: opacity 0.12s;
+}
+
+.plathix-badge--link:hover {
+	opacity: 0.8;
+}
+
+/* Бейдж папки шорткода (иконка + имя), опционально кликабельный (--link).
+   [internal]. */
+.plathix-badge--folder {
+	gap: 4px;
+}
+
+.plathix-badge--folder .plathix-badge__icon {
+	flex: 0 0 auto;
+}
+
+.plathix-card-footer-links {
+	display: flex;
+	gap: 16px;
+	align-items: center;
+	flex-wrap: wrap;
+}
+
+.plathix-card-footer-links a {
+	font-size: 12px;
+	font-weight: 500;
+	color: var(--plathix-text-3);
+	text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   Support Footer
+   -------------------------------------------------------------------------- */
+
+.plathix-support-footer {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	flex-wrap: wrap;
+	padding-top: 16px;
+	border-top: 1px solid var(--plathix-border);
+	font-size: 12px;
+}
+
+.plathix-support-footer a {
+	color: var(--plathix-text-4);
+	text-decoration: none;
+	font-weight: 500;
+}
+
+.plathix-card-footer-links a:hover {
+	color: var(--plathix-accent);
+}
+
+.plathix-support-footer a:hover {
+	color: var(--plathix-accent);
+}
+
+.plathix-support-footer__pro-teaser {
+	margin-left: auto;
+	font-size: 11px;
+	color: var(--plathix-text-4);
+}
+
+/* --------------------------------------------------------------------------
+   Empty state
+   -------------------------------------------------------------------------- */
+
+.plathix-empty {
+	font-size: 13px;
+	color: var(--plathix-text-4);
+	padding: 8px 0;
+}
+
+/* --------------------------------------------------------------------------
+   Page header (title + description)
+   -------------------------------------------------------------------------- */
+
+.plathix-page__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.plathix-page__title {
+
+	/* Семантический <h1> (a11y: якорь навигации скринридера, [internal]/C1).
+       Сбрасываем дефолтный WP-admin размер/отступы h1, чтобы вид совпал с
+       прежним div-заголовком. */
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	font-weight: 700;
+	color: var(--plathix-text-1);
+	line-height: 1.2;
+	letter-spacing: -0.02em;
+}
+
+.plathix-page__desc {
+	font-size: 13px;
+	color: var(--plathix-text-3);
+	margin-top: 3px;
+}
+
+/* --------------------------------------------------------------------------
+   Tabs bar (inside plathix-card)
+   -------------------------------------------------------------------------- */
+
+.plathix-tabs-bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0;
+	padding: 0 16px;
+	border-bottom: 1px solid var(--plathix-border);
+
+	/* overflow-x:auto УБРАН (DASHOF-109): скролл внутри панели табов
+       запрещён. Не влезают → переносятся на 2-ю строку (flex-wrap), а не
+       скроллят. */
+}
+
+.plathix-tab {
+	display: inline-flex;
+	align-items: center;
+	padding: 12px 14px;
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--plathix-text-3);
+	text-decoration: none;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -1px;
+	white-space: nowrap;
+	transition: color 0.12s, border-color 0.12s;
+}
+
+.plathix-tab:visited {
+	color: var(--plathix-text-3);
+}
+
+.plathix-tab:hover,
+.plathix-tab:focus {
+	color: var(--plathix-text-1);
+	box-shadow: none;
+}
+
+.plathix-tab:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+.plathix-tab:focus-visible {
+
+	/* Клавиатурный фокус (a11y, [internal]/C3): раньше индикатором была лишь
+       border-bottom-color: var(--plathix-border-strong) (#A8A29E, контраст
+       ~2.5:1) — почти невидимо. Даём видимый акцентный ring только при
+       навигации с клавиатуры. */
+	border-bottom-color: var(--plathix-accent);
+	box-shadow: none;
+	color: var(--plathix-text-1);
+	outline: 2px solid var(--plathix-accent);
+	outline-offset: 2px;
+}
+
+.plathix-tab.is-active {
+	color: var(--plathix-text-1);
+	border-bottom-color: var(--plathix-border-strong);
+	font-weight: 600;
+}
+
+.plathix-tab.is-active:visited,
+.plathix-tab.is-active:hover,
+.plathix-tab.is-active:focus,
+.plathix-tab.is-active:focus-visible {
+	color: var(--plathix-text-1);
+	box-shadow: none;
+}
+
+/* --------------------------------------------------------------------------
+   Settings body and fields
+   -------------------------------------------------------------------------- */
+
+.plathix-settings__body {
+	padding-top: 24px;
+}
+
+.plathix-settings__fields {
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	max-width: 680px;
+}
+
+.plathix-field {
+	padding: 18px 0;
+}
+
+.plathix-field__label {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--plathix-text-1);
+	margin-bottom: 4px;
+}
+
+.plathix-field__desc {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	line-height: 1.5;
+	margin-bottom: 0;
+}
+
+.plathix-field__separator {
+	height: 1px;
+	background: var(--plathix-border);
+}
+
+/* --------------------------------------------------------------------------
+   Checkbox rows
+   -------------------------------------------------------------------------- */
+
+.plathix-checkbox-field__group {
+	background: var(--plathix-bg-subtle);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-md);
+	padding: 4px 12px;
+	margin-top: 8px;
+}
+
+.plathix-checkbox-field__row {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+	padding: 9px 0;
+	border-bottom: 1px solid var(--plathix-border);
+}
+
+.plathix-checkbox-field__row:last-child {
+	border-bottom: none;
+}
+
+.plathix-checkbox-field__row input[type="checkbox"] {
+	margin-top: 2px;
+	flex-shrink: 0;
+	accent-color: var(--plathix-accent);
+}
+
+/* Standalone-употребление вне .plathix-checkbox-field__group
+   ([internal]): отступ сверху компенсирует отсутствие
+   обёртки-группы. Общий для Settings (render_infinite_scroll,
+   render_bulk_safe_mode) и Svg (SvgSettings) — оба модуля на
+   странице Settings, платформа по прецеденту [internal]. */
+.plathix-checkbox-field__row--standalone {
+	margin-top: 8px;
+	cursor: pointer;
+}
+
+/* Внутри .plathix-checkbox-field__group (Svg render_roles): курсор без
+   отступа — группа уже задаёт padding/border-bottom между строками. */
+.plathix-checkbox-field__row--clickable {
+	cursor: pointer;
+}
+
+.plathix-checkbox-field__info {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.plathix-checkbox-field__label {
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--plathix-text-1);
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.plathix-checkbox-field__desc {
+	font-size: 12px;
+	color: var(--plathix-text-3);
+	line-height: 1.5;
+}
+
+.plathix-checkbox-field__section-title {
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	color: var(--plathix-text-4);
+	padding: 4px 0 2px;
+}
+
+/* [internal]: .plathix-input/.plathix-select base styles owned by plathix.css
+   (design-system layer) — this file is page-level overrides only, does not
+   duplicate base component properties. */
+
+/* --------------------------------------------------------------------------
+   Table (plathix-table)
+   -------------------------------------------------------------------------- */
+
+.plathix-table-wrap {
+
+	/* overflow-x:auto УБРАН (DASHOF-106): горизонтальный скролл в интерфейсе
+       запрещён. Таблицы с классом .plathix-table--cards расхлопываются в
+       карточки по container-ширине .plathix-main раньше, чем перестают
+       влезать (см. @container ниже); не влезает → карточки, НЕ скролл. */
+	border-radius: var(--plathix-radius-md);
+	border: 1px solid var(--plathix-border);
+}
+
+.plathix-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.plathix-table th {
+	padding: 9px 12px;
+	text-align: left;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--plathix-text-4);
+	background: var(--plathix-bg-subtle);
+	border-bottom: 1px solid var(--plathix-border);
+	white-space: nowrap;
+}
+
+.plathix-table td {
+	padding: 10px 12px;
+	border-bottom: 1px solid var(--plathix-border);
+	color: var(--plathix-text-1);
+	vertical-align: middle;
+}
+
+/* Адаптивные таблицы: opt-in класс .plathix-table--cards. Расхлоп в стопку
+   карточек (label: value из data-label) БЕЗ горизонтального скролла. Порог —
+   по container-ширине `.plathix-main` (доступной области контента), а НЕ
+   вьюпорта: между таблицей и вьюпортом стоит фикс-сайдбар 240px, и
+   @media(782) по вьюпорту оставлял дыру 783-1100px, где таблица не влезала
+   и `.plathix-table-wrap` скроллил (замер: shortcodes scroll472@vp800,
+   audit scroll500). Порог 900 — самая широкая 7-колоночная audit влезает
+   только при main≥~880 (DASHOF-106; было @media 782, пакет 1 [internal]).
+   Матрица .plathix-pro-compare и key/value system-info класс НЕ получают. */
+@container plathix-main (max-width: 900px) {
+
+	.plathix-table--cards thead {
+		display: none;
+	}
+
+	.plathix-table--cards,
+	.plathix-table--cards tbody,
+	.plathix-table--cards tr,
+	.plathix-table--cards td {
+		display: block;
+		width: auto;
+	}
+
+	.plathix-table--cards tr {
+		border: 1px solid var(--plathix-border);
+		border-radius: var(--plathix-radius-sm);
+		margin-bottom: 8px;
+		padding: 2px 0;
+	}
+
+	/* Вертикальный стек: подпись сверху, значение под ней на всю ширину. Это
+       годится и для коротких значений (audit-log: даты/бейджи), и для
+       длинных (docs: описания + <code>) — space-between зажимал бы длинный
+       контент в узкую правую зону и рвал его в лапшу. */
+	.plathix-table--cards td {
+		display: block;
+		border-bottom: 1px solid var(--plathix-border);
+		padding: 6px 12px;
+		text-align: left;
+		overflow-wrap: anywhere;
+	}
+
+	/* Моноширинный/длинный контент внутри ячейки переносится по границам,
+       не по буквам. */
+	.plathix-table--cards td > * {
+		overflow-wrap: anywhere;
+	}
+
+	.plathix-table--cards td::before {
+		content: attr(data-label);
+		display: block;
+		margin-bottom: 2px;
+		font-weight: 600;
+		font-size: 11px;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: var(--plathix-text-4);
+	}
+
+	/* Пустые ячейки (напр. Count без значения) не плодят строки-призраки. */
+	.plathix-table--cards td:empty {
+		display: none;
+	}
+
+	.plathix-table--cards tr td:last-child {
+		border-bottom: none;
+	}
+
+	/* [internal] (adversarial UI review found): .plathix-table--cards tr
+	   {display:block} (0,1,1) перебивал одиночный .is-hidden{display:none}
+	   (0,1,0) на карточной раскладке — .plathix-no-results <tr> оставался
+	   видимым одновременно с непустым списком. tr.is-hidden (0,2,0)
+	   перебивает надёжно. */
+	.plathix-table--cards tr.is-hidden {
+		display: none;
+	}
+}
+
+/* System Info: key/value таблица (без thead, левая ячейка — сама подпись).
+   Карточный паттерн ей не подходит (дал бы дубль «PHP version: PHP
+   version»). Вместо этого — фиксированная раскладка колонок + перенос
+   длинных значений (пути, версии), чтобы они не распирали таблицу на узких
+   экранах ([internal]). */
+
+/* system-info — СКРЫТАЯ submenu-страница (add_submenu_page(null)): WP даёт
+   body-класс `admin_page_plathix-system-info`, НЕ `plathix_page_…`. Нужны
+   ОБА префикса, иначе правила не матчат и таблица остаётся
+   table-layout:auto → длинные версии/пути вылезают за экран. */
+body.plathix_page_plathix-system-info .plathix-table,
+body.admin_page_plathix-system-info .plathix-table {
+	table-layout: fixed;
+	width: 100%;
+}
+
+body.plathix_page_plathix-system-info .plathix-table td,
+body.plathix_page_plathix-system-info .plathix-table td span,
+body.admin_page_plathix-system-info .plathix-table td,
+body.admin_page_plathix-system-info .plathix-table td span {
+
+	/* Длинные технические значения (permalink /%year%/%monthnum%/…, пути,
+       версии) РВУТСЯ по любому символу, иначе распирают таблицу за экран на
+       узких (было +72px на 320). word-break жёстче overflow-wrap — рвёт
+       даже сплошную строку без разделителей (DASHOF-201 доработка). */
+	word-break: break-all;
+	overflow-wrap: anywhere;
+	min-width: 0;
+}
+
+.plathix-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.plathix-table tbody tr:hover td {
+	background: var(--plathix-bg-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Save bar (sticky bottom of form)
+   -------------------------------------------------------------------------- */
+
+.plathix-save__bar {
+	padding-top: 20px;
+	border-top: 1px solid var(--plathix-border);
+	margin-top: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Buttons (plathix-btn)
+   -------------------------------------------------------------------------- */
+
+.plathix-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 14px;
+	border-radius: var(--plathix-radius-md);
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.12s, border-color 0.12s, color 0.12s;
+	text-decoration: none;
+	border: 1px solid var(--plathix-border);
+	background: var(--plathix-card);
+	color: var(--plathix-text-1);
+	box-shadow: var(--plathix-shadow-xs);
+}
+
+.plathix-btn:hover {
+	background: var(--plathix-bg-hover);
+	border-color: var(--plathix-border-hover);
+}
+
+.plathix-btn--sm {
+	padding: 5px 11px;
+	font-size: 12px;
+}
+
+.plathix-btn--primary {
+	background: var(--plathix-accent);
+	border-color: var(--plathix-accent);
+	color: #fff;
+}
+
+.plathix-btn--primary:hover {
+	background: var(--plathix-accent-hover);
+	border-color: var(--plathix-accent-hover);
+	color: #fff;
+}
+
+.plathix-btn--danger {
+	background: var(--plathix-error-background);
+	border-color: var(--plathix-error-border);
+	color: var(--plathix-error);
+}
+
+.plathix-btn--danger:hover {
+	background: var(--plathix-error);
+	border-color: var(--plathix-error);
+	color: #fff;
+}
+
+.plathix-btn--ghost {
+	background: transparent;
+	border-color: transparent;
+	color: var(--plathix-text-2);
+	box-shadow: none;
+}
+
+.plathix-btn--ghost:hover {
+	background: var(--plathix-bg-subtle);
+	color: var(--plathix-text-1);
+}
+
+.plathix-btn--pro {
+	background: var(--plathix-pro);
+	border-color: var(--plathix-pro);
+	color: #fff;
+}
+
+.plathix-btn--pro:hover {
+	background: var(--plathix-pro-hover);
+	border-color: var(--plathix-pro-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Code inline
+   -------------------------------------------------------------------------- */
+
+.plathix-code {
+	font-family: var(--plathix-font-mono);
+	font-size: 11px;
+	background: var(--plathix-bg-subtle);
+	border: 1px solid var(--plathix-border);
+	border-radius: var(--plathix-radius-xs);
+	padding: 1px 6px;
+	color: var(--plathix-text-2);
+
+	/* Длинный inline-код (напр. X-Plathix-Key: YOUR_KEY в tools) переносится,
+       а не распирает абзац/ячейку на узких экранах
+       ([internal]). */
+	overflow-wrap: anywhere;
+}
+
+.plathix-code--key {
+	font-size: 12px;
+	padding: 4px 10px;
+	user-select: all;
+	word-break: break-all;
+}
+
+/* --------------------------------------------------------------------------
+   Notices (inline, used in Settings)
+   -------------------------------------------------------------------------- */
+
+.plathix-notice--info {
+	background: var(--plathix-info-background);
+	border: 1px solid var(--plathix-info-border);
+	color: var(--plathix-info);
+
+	/* info-notice — текстовый (абзац с inline-<code>), не flex-строка.
+       display:flex у базового .plathix-notice ломал длинный текст с
+       <code>-плашками в вертикальную лапшу (каждый кусок — flex-item).
+       block + line-height даёт нормальный перенос по словам (DASHOF-108). */
+	display: block;
+	line-height: 1.6;
+}
+
+/* inline-<code> в info-notice (напр. wp plathix / --taxonomy на docs/CLI)
+   переносится, а не раздвигает строку в лапшу. */
+.plathix-notice--info code,
+.plathix-notice--info .plathix-code {
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
+
+
+/* --------------------------------------------------------------------------
+   Nav label (SYSTEM group separator)
+   -------------------------------------------------------------------------- */
+
+/* Nav overrides with layout context for WP specificity */
+.plathix-layout .plathix-nav__item {
+	display: flex;
+	align-items: center;
+	gap: 9px;
+	padding: 8px 10px;
+	border-radius: var(--plathix-radius-md);
+	font-size: 13px;
+	color: var(--plathix-sidebar-text);
+	text-decoration: none;
+	cursor: pointer;
+	transition: background 0.12s, color 0.12s;
+	white-space: nowrap;
+	position: relative;
+}
+
+.plathix-layout .plathix-nav__item:hover {
+	background: rgba(0, 0, 0, 0.04);
+	color: var(--plathix-sidebar-text-hover);
+}
+
+.plathix-layout .plathix-nav__item.active {
+	background: var(--plathix-sidebar-active-background);
+	color: var(--plathix-sidebar-text-active);
+}
+
+.plathix-layout .plathix-nav__item.active::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 3px;
+	height: 18px;
+	background: var(--plathix-accent);
+	border-radius: 0 3px 3px 0;
+}
+
+.plathix-layout .plathix-nav__item.pro-nav {
+	color: var(--plathix-pro);
+}
+
+.plathix-layout .plathix-nav__item.pro-nav:hover {
+	color: var(--plathix-pro-hover);
+	background: var(--plathix-pro-bg);
+}
+
+.plathix-layout .plathix-nav__item.pro-nav.active {
+	color: var(--plathix-pro-hover);
+	background: var(--plathix-pro-bg);
+}
+
+.plathix-nav__icon {
+	width: 16px;
+	height: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	opacity: 0.75;
+}
+
+.plathix-layout .plathix-nav__item.active .plathix-nav__icon,
+.plathix-layout .plathix-nav__item:hover .plathix-nav__icon {
+	opacity: 1;
+}
+
+.plathix-nav__badge {
+	margin-left: auto;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+	background: var(--plathix-pro-bg);
+	color: var(--plathix-pro);
+	border: 1px solid var(--plathix-pro-border);
+	border-radius: 4px;
+	padding: 1px 5px;
+}
+
+.plathix-nav__label {
+	padding: 6px 8px 3px;
+	font-size: 10px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgba(0, 0, 0, 0.35);
+}
+
+/* --------------------------------------------------------------------------
+   Rail (collapsible sidebar) — [internal]
+   Развёрнутый вид = дефолт (как раньше). Свёрнутый = класс .is-rail на
+   .plathix-layout.
+   -------------------------------------------------------------------------- */
+
+/* Плавная смена ширины сайдбара (flex-basis, т.к. .plathix-sidebar =
+   flex:0 0 var(--plathix-sidebar-width)). */
+
+/* Transition ТОЛЬКО под .plathix-rail-animate (JS ставит его на
+   .plathix-layout ПОСЛЕ первичного apply, в следующем кадре). Иначе при
+   загрузке страницы с сохранённым rail сайдбар стартовал 240px и
+   анимированно сворачивался до 56 — «раскрывается и сворачивается»
+   ([internal]). Первичная установка теперь мгновенна; плавность —
+   только на клике пользователя. */
+.plathix-layout.plathix-rail-animate .plathix-sidebar {
+	transition: flex-basis 0.15s ease, padding 0.15s ease;
+}
+
+/* ── Свёрнутое состояние ── */
+.plathix-layout.is-rail .plathix-sidebar {
+	flex-basis: var(--plathix-rail-w);
+	padding-left: 8px;
+	padding-right: 8px;
+
+	/* НЕ ставим overflow-x:hidden: подписи пунктов в rail и так скрыты
+       (display:none ниже), выпирать при transition нечему; а
+       overflow-x:hidden срезал бы hover-подпись (.plathix-rail__tip),
+       которая обязана выходить ВПРАВО за границу сайдбара ([internal]). */
+}
+
+/* Прячем всё текстовое: подпись пункта, PRO-бейдж, заголовок SYSTEM, текст
+   лого. */
+.plathix-layout.is-rail .plathix-nav__label-txt,
+.plathix-layout.is-rail .plathix-nav__badge,
+.plathix-layout.is-rail .plathix-nav__label,
+.plathix-layout.is-rail .plathix-logo__text {
+	display: none;
+}
+
+/* Иконки/лого центрируем в узкой полосе. */
+.plathix-layout.is-rail .plathix-nav__item {
+	justify-content: center;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.plathix-layout.is-rail .plathix-logo__area {
+	justify-content: center;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+/* active-полоска прижата к самому левому краю rail. */
+.plathix-layout.is-rail .plathix-nav__item.active::before {
+	left: -8px;
+}
+
+/* Подпись пункта в rail — плавающая карточка (JS ставит координаты по
+   центру иконки). position:fixed вырывается из overflow/clip сайдбара и
+   layout, поэтому не режется (CSS-tip внутри сайдбара резался overflow-y;
+   нативный title не центрируется по иконке — [internal],
+   [internal] #4). translateY(-50%) центрирует по вертикали
+   относительно top = центр иконки, который проставляет JS. */
+.plathix-rail__tip-float {
+	position: fixed;
+	transform: translateY(-50%);
+	background: var(--plathix-sidebar-background, #fff);
+	color: var(--plathix-sidebar-text-active, #1c1917);
+	border: 1px solid var(--plathix-sidebar-separator, rgba(0, 0, 0, 0.07));
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+	border-radius: 6px;
+	padding: 6px 11px;
+	font-size: 12px;
+	font-weight: 500;
+	white-space: nowrap;
+	z-index: 100000;           /* поверх admin-контента и WP-хрома */
+	pointer-events: none;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.1s;
+}
+
+.plathix-rail__tip-float.is-visible {
+	opacity: 1;
+	visibility: visible;
+}
+
+/* ── Круглая кнопка-тумблер на границе (ВАРИАНТ C) ── */
+.plathix-rail__toggle {
+	position: absolute;
+
+	/* Вертикально по центру сайдбара ([internal]): было top:26px —
+       «крипово» прилипало к верху. translateX(-13px) держит кнопку центром
+       ровно на границе сайдбара. */
+	top: 50%;
+	left: var(--plathix-sidebar-width);
+	transform: translate(-13px, -50%);
+	width: 26px;
+	height: 26px;
+	border-radius: 50%;
+	background: var(--plathix-sidebar-background, #fff);
+	border: 1px solid var(--plathix-sidebar-separator, rgba(0, 0, 0, 0.07));
+	box-shadow: 0 1px 4px rgba(0, 0, 0, 0.14);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	z-index: 30;
+	color: var(--plathix-sidebar-text, #78716c);
+	padding: 0;
+
+	/* hover-цвета анимируем всегда; left (переезд на границу при
+       сворачивании) — только под геймкипер, иначе кнопка «едет» на
+       первичной загрузке ([internal]). */
+	transition: background 0.12s, border-color 0.12s, color 0.12s;
+}
+
+/* Фирменный зелёный hover ([internal]): фон + рамка + иконка в акцентной
+   тройке Plathix. */
+.plathix-rail__toggle:hover {
+	background: var(--plathix-accent-bg, #f0fdfa);
+	border-color: var(--plathix-accent-border, #99f6e4);
+	color: var(--plathix-accent, #0d9488);
+}
+
+.plathix-layout.plathix-rail-animate .plathix-rail__toggle {
+	transition:
+		left 0.15s ease,
+		background 0.12s,
+		border-color 0.12s,
+		color 0.12s;
+}
+
+.plathix-layout.plathix-rail-animate .plathix-rail__toggle svg {
+	transition: transform 0.15s;
+}
+
+.plathix-layout.is-rail .plathix-rail__toggle {
+	left: var(--plathix-rail-w);
+}
+
+.plathix-layout.is-rail .plathix-rail__toggle svg {
+	transform: rotate(180deg);
+}
+
+/* На мобильном (вертикальный стек) rail не применяется — кнопку прячем. */
+@media (max-width: 782px) {
+
+	.plathix-rail__toggle {
+		display: none;
+	}
+}
+
+.plathix-btn--lg {
+	padding: 10px 24px;
+	font-size: 14px;
+}
+
+/* --------------------------------------------------------------------------
+   Upload Modal
+   -------------------------------------------------------------------------- */
+
+.plathix-modal__backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 1000;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.plathix-modal__box {
+	background: var(--plathix-card);
+	border-radius: var(--plathix-radius-xl);
+	width: 480px;
+	padding: 28px;
+	box-shadow: var(--plathix-shadow-md);
+}
+
+.plathix-modal__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.plathix-modal__close {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 18px;
+	color: var(--plathix-text-4);
+	line-height: 1;
+	padding: 0 2px;
+}
+
+.plathix-modal__close:hover {
+	color: var(--plathix-text-1);
+}
+
+@media (max-width: 640px) {
+
+	.plathix-modal__box {
+		width: min(480px, calc(100vw - 32px));
+		padding: 22px;
+	}
+}
+
+
+/* ── Admin menu: PRO badge ───────────────────────────────────────────────── */
+#adminmenu .plathix-submenu__pro {
+	display: inline-block;
+	background: linear-gradient(90deg, #7c3aed, #a855f7);
+	color: #fff !important;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	padding: 1px 7px;
+	border-radius: 3px;
+	line-height: 1.6;
+}
+
+#adminmenu a:has(.plathix-submenu__pro),
+#adminmenu a:has(.plathix-submenu__pro):hover {
+	background: transparent !important;
+}
+
+/* ── Offscreen copy-helper (clipboard fallback) ──────────────────────────── */
+
+/* Временный textarea для document.execCommand('copy') fallback —
+   [internal], раньше admin-ui/shortcodes-copy.js:30 и
+   admin-ui/copy-utils.js:4-5 писали .style.cssText/.position/.left напрямую
+   (тот же UX-паттерн, два места). */
+.plathix-visually-offscreen {
+	position: absolute;
+	left: -9999px;
+	opacity: 0;
+}
+
+/* ── Generic visibility state ────────────────────────────────────────────── */
+
+/* State-класс (css-naming-standard.md — is- / has- префикс без plathix-,
+   переиспользуется между блоками). [internal], первый потребитель —
+   shortcodes-filter.js (было .style.display напрямую). */
+.is-hidden {
+	display: none;
+}

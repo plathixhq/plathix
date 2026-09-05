@@ -1,0 +1,66 @@
+/*
+ * #toplevel_page_plathix — hook-suffix, который генерирует сам WordPress
+ * (add_menu_page → "{$hook_prefix}_page_{$slug}", см.
+ * src/Modules/Dashboard/HomeDashboardPage.php) с подчёркиванием по стандарту
+ * WP core, не наш выбор написания селектора.
+ */
+/* stylelint-disable selector-id-pattern */
+#toplevel_page_plathix .wp-submenu li.plathix-has-flyout {
+	position: relative;
+}
+
+#toplevel_page_plathix .wp-submenu li.plathix-has-flyout > a::after {
+	content: " ▶";
+	font-size: 9px;
+	opacity: 0.6;
+	margin-left: 4px;
+}
+
+#toplevel_page_plathix .wp-submenu li.plathix-has-flyout .plathix-submenu__flyout {
+	display: none;
+}
+
+@media screen and (min-width: 783px) {
+
+	#toplevel_page_plathix .wp-submenu li.plathix-has-flyout .plathix-submenu__flyout {
+		position: absolute;
+		inset-inline-start: 100%;
+		top: -4px;
+		min-width: 180px;
+		padding: 4px 0;
+		background: #2c3338;
+		border: 1px solid #3c434a;
+		border-radius: 0 4px 4px 0;
+		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+		z-index: 9999;
+		list-style: none;
+		margin: 0;
+	}
+
+	#toplevel_page_plathix .wp-submenu li.plathix-has-flyout.plathix-flyout-open .plathix-submenu__flyout {
+		display: block;
+	}
+
+	#toplevel_page_plathix .wp-submenu li.plathix-has-flyout .plathix-submenu__flyout li {
+		margin: 0;
+		padding: 0;
+	}
+
+	#toplevel_page_plathix .wp-submenu li.plathix-has-flyout .plathix-submenu__flyout a {
+		display: block;
+		padding: 7px 14px;
+		color: #eaeaea;
+		text-decoration: none;
+		font-size: 13px;
+		white-space: nowrap;
+	}
+
+	#toplevel_page_plathix .wp-submenu li.plathix-has-flyout .plathix-submenu__flyout a:hover,
+	#toplevel_page_plathix .wp-submenu li.plathix-has-flyout .plathix-submenu__flyout a:focus-visible,
+	#toplevel_page_plathix .wp-submenu li.plathix-has-flyout .plathix-submenu__flyout a.current {
+		background: #3c434a;
+		color: #fff;
+		outline: none;
+	}
+}
+/* stylelint-enable selector-id-pattern */
