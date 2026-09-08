@@ -1328,6 +1328,16 @@ stage_source_tree
 sync_runtime_vendor
 scope_runtime_vendor
 stage_generated_assets
+
+
+
+
+
+
+
+
+
+strip_internal_comment_refs "$SRC_STAGE_DIR/assets"
 assemble_release_tree
 
 

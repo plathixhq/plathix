@@ -14,7 +14,7 @@ final class RequestContext
 	private static bool $initialized = false;
 
 	public function __construct(Loader $loader) {
-		$loader->addAction( 'currentScreen', $this, 'init', 5 );
+		$loader->addAction( 'current_screen', $this, 'init', 5 );
 	}
 
 	public static function getPostType(): string {
@@ -44,21 +44,21 @@ final class RequestContext
 		self::$post_type = self::resolvePostTypeFromScreen();
 		self::$isActive = self::$post_type !== '';
 
-		global $currentScreen;
-		self::$screen_id = ( $currentScreen instanceof \WP_Screen ) ? (string) $currentScreen->id : '';
+		global $current_screen;
+		self::$screen_id = ( $current_screen instanceof \WP_Screen ) ? (string) $current_screen->id : '';
 	}
 
 	private static function resolvePostTypeFromScreen(): string {
-		global $pagenow, $currentScreen;
+		global $pagenow, $current_screen;
 
-		if ( is_admin() && $currentScreen instanceof \WP_Screen ) {
-			$screen_post_type = (string) $currentScreen->post_type;
+		if ( is_admin() && $current_screen instanceof \WP_Screen ) {
+			$screen_post_type = (string) $current_screen->post_type;
 
 			if ( $screen_post_type !== '' ) {
 				return $screen_post_type;
 			}
 
-			if ( $currentScreen->base === 'upload' ) {
+			if ( $current_screen->base === 'upload' ) {
 				return 'attachment';
 			}
 		}
