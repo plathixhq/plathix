@@ -1,0 +1,2 @@
+# gate: not-applicable reason=public repository — private content is removed upstream,
+# at publish time, and the term list itself is private data that is not published.

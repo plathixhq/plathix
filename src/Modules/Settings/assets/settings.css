@@ -1,0 +1,101 @@
+
+
+
+/* Danger Zone tab (DataWipe\DangerZoneTab). */
+
+.plathix-danger-zone__label {
+	color: #b91c1c;
+}
+
+.plathix-danger-zone__trigger-row {
+	margin-top: 14px;
+}
+
+.plathix-danger-zone__modal-title {
+	font-size: 15px;
+	font-weight: 700;
+	color: #b91c1c;
+}
+
+.plathix-danger-zone__warning {
+	margin-bottom: 12px;
+}
+
+.plathix-danger-zone__list-title {
+	font-weight: 600;
+	margin-bottom: 6px;
+}
+
+.plathix-danger-zone__list {
+	margin: 0 0 14px 18px;
+	list-style: disc;
+}
+
+.plathix-danger-zone__safe-notice {
+	margin-bottom: 14px;
+}
+
+.plathix-danger-zone__confirm-row {
+	margin-bottom: 14px;
+	cursor: pointer;
+}
+
+.plathix-danger-zone__actions {
+	display: flex;
+	gap: 10px;
+}
+
+.plathix-danger-zone__error {
+	margin-top: 12px;
+}
+
+/* General tab (SettingsView). */
+
+.plathix-settings__save-bar {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.plathix-settings__enabled-row {
+	margin-top: 8px;
+}
+
+.plathix-settings__always-enabled-badge {
+	margin-left: 8px;
+}
+
+
+
+.plathix-select.plathix-settings__folder-select {
+	margin-top: 8px;
+	max-width: 340px;
+}
+
+.plathix-settings__folder-broken-notice {
+	margin-top: 6px;
+	padding: 8px 10px;
+	border-left: 3px solid #d63638;
+	background: #fcf0f1;
+	color: #8a2424;
+}
+
+/* SVG tab (Svg\SvgSettings). */
+
+.plathix-svg__multisite-notice {
+	margin-top: 0;
+}
+
+.plathix-svg__policy-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-wrap: wrap;
+	margin-top: 8px;
+}
+
+
+
+.plathix-select.plathix-svg__policy-select {
+	max-width: 340px;
+}

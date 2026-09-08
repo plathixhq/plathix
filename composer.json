@@ -1,0 +1,59 @@
+{
+  "name": "plathixhq/plathix",
+  "description": "Everything in its place.",
+  "homepage": "https://plathix.com",
+  "type": "wordpress-plugin",
+  "license": "GPL-3.0-or-later",
+  "require": {
+    "php": ">=8.1",
+    "enshrined/svg-sanitize": "^0.22",
+    "woocommerce/action-scheduler": "^4.1"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5",
+    "brain/monkey": "^2.6",
+    "phpstan/phpstan": "^1.12",
+    "humbug/php-scoper": "0.18.7",
+    "wp-coding-standards/wpcs": "^3.1",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpcsstandards/phpcsutils": "^1.1",
+    "phpcsstandards/phpcsextra": "^1.2",
+    "szepeviktor/phpstan-wordpress": "^1.3",
+    "php-stubs/wp-cli-stubs": "^2.12",
+    "wp-cli/wp-cli-bundle": "^2.12"
+  },
+  "autoload": {
+    "psr-4": {
+      "Plathix\\Modules\\": "src/Modules/",
+      "Plathix\\": "src/"
+    },
+    "files": [
+      "vendor/woocommerce/action-scheduler/action-scheduler.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Plathix\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test:coverage": "vendor/bin/phpunit --coverage-text",
+    "stan": "vendor/bin/phpstan analyse --debug --configuration=phpstan.neon",
+    "lint:php": "vendor/bin/phpcs",
+    "lint:keys": "bash bin/check-keys.sh"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "autoloader-suffix": "PlathixAutoloader",
+    "platform": {
+      "php": "8.1"
+    },
+"allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "extra": {
+    "phpcodesniffer-search-depth": 5
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "core": "WordPress/WordPress#7.1",
+  "phpVersion": "8.1",
+  "plugins": [
+    "."
+  ],
+  "mappings": {
+    "wp-content/uploads/fixtures": "./tests/fixtures/media"
+  },
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "SCRIPT_DEBUG": true
+  }
+}
