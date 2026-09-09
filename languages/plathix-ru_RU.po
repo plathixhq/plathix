@@ -29,7 +29,6 @@ msgstr ""
 msgid "Plathix"
 msgstr "Plathix"
 
-#. translators: aria-подпись иконки «папки» в счётчике корзины (доступность).
 msgid "Folders"
 msgstr "Папки"
 
@@ -309,7 +308,6 @@ msgstr "Выбрать папку"
 msgid "File"
 msgstr "Файл"
 
-#. translators: aria-подпись иконки «файлы» в счётчике корзины (доступность).
 msgid "Files"
 msgstr "Файлы"
 
@@ -832,7 +830,6 @@ msgstr "Выберите начальную структуру папок или
 msgid "Skip setup"
 msgstr "Пропустить настройку"
 
-#. translators: %d — количество папок, которые создаст этот пресет.
 #, php-format
 msgid "%d folder"
 msgid_plural "%d folders"
@@ -1981,11 +1978,9 @@ msgstr "папку не удалось восстановить"
 msgid "folder could not be deleted permanently"
 msgstr "папку не удалось удалить навсегда"
 
-#. translators: короткая подпись «файлы» в счётчике корзины «N Ф / N П» (напр. рус. «Ф»).
 msgid "F"
 msgstr "Ф"
 
-#. translators: короткая подпись «папки» в счётчике корзины «N Ф / N П» (напр. рус. «П»).
 msgid "D"
 msgstr "П"
 
