@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - name: Composer install
+        run: composer install --no-interaction --prefer-dist
+      - name: PHP lint (syntax check)
+        run: find src includes -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: PHPCS (WordPress coding standards)
+        run: vendor/bin/phpcs
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress
+      - name: PHPUnit
+        run: vendor/bin/phpunit
+
+  js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pnpm
+        run: corepack enable
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: ESLint
+        run: pnpm run lint:js
+      - name: TypeScript typecheck
+        run: pnpm run typecheck:js
+      - name: JS unit tests
+        run: pnpm run test:unit:js
+      - name: CSS lint
+        run: pnpm run lint:css
+      - name: Build assets
+        run: pnpm run build
