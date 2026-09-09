@@ -47,3 +47,53 @@ jobs:
         run: pnpm run lint:css
       - name: Build assets
         run: pnpm run build
+
+  plugin-check:
+    needs: [php, js]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pnpm
+        run: corepack enable
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec wp-env start
+      - run: pnpm exec wp-env run cli wp plugin activate plathix
+      # версия запиннена: обновление инструмента добавляет новые sniffer'ы и может
+      # покраснить нетронутый код — обновление версии делается отдельным шагом
+      - run: pnpm exec wp-env run cli wp plugin install plugin-check --version=2.0.0 --activate
+      - id: plugincheck
+        run: pnpm exec wp-env run cli wp plugin check plathix --ignore-codes=WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters
+      - if: failure()
+        run: pnpm exec wp-env run cli wp plugin check plathix || true
+
+  release-zip:
+    needs: [php, js]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install pnpm
+        run: corepack enable
+      - run: composer install --no-interaction --prefer-dist
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+      - run: pnpm exec wp-env start
+      - name: install release zip fresh into a clean WordPress (no source mount)
+        run: |
+          mkdir -p /tmp/plathix-release-src
+          rsync -a --exclude='.git' --exclude='node_modules' --exclude='vendor/bin' . /tmp/plathix-release-src/plathix
+          cd /tmp/plathix-release-src && zip -qr /tmp/plathix-release.zip plathix
+          pnpm exec wp-env run cli wp plugin install /tmp/plathix-release.zip --activate
+      - name: smoke check — plugin actually active and answering
+        run: |
+          pnpm exec wp-env run cli wp plugin list --status=active --field=name | grep -qx plathix
+          curl -sf -o /dev/null http://localhost:8888/wp-admin/admin-ajax.php
