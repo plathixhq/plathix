@@ -30,7 +30,7 @@ afterEach(() => {
 });
 
 describe('initMigrationBannerDismiss — success', () => {
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: true }) });
         const { banner, button } = buildDom('happyfiles');
         initMigrationBannerDismiss();
@@ -47,7 +47,7 @@ describe('initMigrationBannerDismiss — success', () => {
 });
 
 describe('initMigrationBannerDismiss — failure', () => {
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: false }) });
         const { banner, button } = buildDom();
         initMigrationBannerDismiss();
@@ -59,7 +59,7 @@ describe('initMigrationBannerDismiss — failure', () => {
         expect(button.disabled).toBe(false);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 403, json: () => Promise.resolve({}) });
         const { banner, button } = buildDom();
         initMigrationBannerDismiss();
@@ -71,7 +71,7 @@ describe('initMigrationBannerDismiss — failure', () => {
         expect(button.disabled).toBe(false);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockRejectedValue(new TypeError('Failed to fetch'));
         const { banner, button } = buildDom();
         initMigrationBannerDismiss();

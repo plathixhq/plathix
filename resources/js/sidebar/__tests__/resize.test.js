@@ -4,7 +4,7 @@ import { SidebarResizer } from '../resize.js';
 
 
 
-describe('covers public behavior without internal references', () => {
+describe('coalesces repeated events into a single handled call', () => {
     let resizer;
     let root;
 
@@ -29,7 +29,7 @@ describe('covers public behavior without internal references', () => {
         jest.useRealTimers();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         const rectSpy = jest.spyOn(root, 'getBoundingClientRect');
         rectSpy.mockClear();
 
@@ -45,7 +45,7 @@ describe('covers public behavior without internal references', () => {
         expect(rectSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         const rectSpy = jest.spyOn(root, 'getBoundingClientRect');
         rectSpy.mockClear();
 
@@ -55,7 +55,7 @@ describe('covers public behavior without internal references', () => {
         expect(rectSpy).toHaveBeenCalledTimes(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         const rectSpy = jest.spyOn(root, 'getBoundingClientRect');
         rectSpy.mockClear();
 

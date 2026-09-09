@@ -6,16 +6,16 @@ const TOP_NAV_HTML =
     '<input type="hidden" id="_wpnonce" name="_wpnonce" value="abc123" />' +
     '<input type="hidden" name="_wp_http_referer" value="/wp-admin/upload.php" />' +
     '<div class="tablenav top">' +
-    'Media item' +
-    'Public-facing message unavailable.' +
+    '  <div class="tablenav-pages"><span class="displaying-num">40 элементов</span>' +
+    '  <span class="pagination-links">1 из 2</span></div>' +
     '</div>';
 
 const BOTTOM_NAV_HTML =
     '<div class="tablenav bottom">' +
-    'Public-facing message unavailable.' +
+    '  <div class="tablenav-pages"><span class="pagination-links">1 из 2</span></div>' +
     '</div>';
 
-describe('covers public behavior without internal references', () => {
+describe('keeps store/selection state consistent across UI events', () => {
     it('extracts .tablenav.top even when hidden _wpnonce inputs precede it', () => {
         const el = parseFragmentBySelector(TOP_NAV_HTML, '.tablenav.top');
         expect(el).not.toBeNull();

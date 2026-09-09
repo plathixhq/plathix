@@ -31,7 +31,7 @@ describe('fetchListFragments()', () => {
         delete window.Plathix;
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         getRuntime.mockReturnValue({ ajaxUrl: 'https://example.test/custom-ajax.php', nonce: 'n', listScreenAction: 'plathix_list_screen' });
         window.Plathix = { ajaxUrl: 'https://should-not-be-used.test/admin-ajax.php' };
 
@@ -40,7 +40,7 @@ describe('fetchListFragments()', () => {
         expect(global.fetch).toHaveBeenCalledWith('https://example.test/custom-ajax.php', expect.any(Object));
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         getRuntime.mockReturnValue({ ajaxurl: 'https://example.test/lowercase-ajax.php' });
 
         await fetchListFragments({}, undefined);
@@ -48,7 +48,7 @@ describe('fetchListFragments()', () => {
         expect(global.fetch).toHaveBeenCalledWith('https://example.test/lowercase-ajax.php', expect.any(Object));
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         getRuntime.mockReturnValue({});
         window.ajaxurl = 'https://example.test/wp-core-ajax.php';
 

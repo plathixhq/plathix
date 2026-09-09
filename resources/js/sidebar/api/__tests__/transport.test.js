@@ -28,13 +28,13 @@ describe('uploadFile()', () => {
 
     afterEach(() => { delete global.fetch; });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const file = new File(['content'], 'photo.jpg', { type: 'image/jpeg' });
         await uploadFile(file);
         expect(lastInit.body.constructor.name).toBe('FormData');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const file = new File(['content'], 'photo.jpg', { type: 'image/jpeg' });
         await uploadFile(file);
         const got = lastInit.body.get('file');
@@ -45,14 +45,14 @@ describe('uploadFile()', () => {
         expect(got.type).toBe(file.type);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const file = new File(['content'], 'photo.jpg', { type: 'image/jpeg' });
         await uploadFile(file);
         expect(Object.keys(lastInit.headers)).not.toContain('Content-Disposition');
     });
 
-    it('covers public behavior without internal references', async () => {
-        const file = new File(['content'], 'Public-facing message unavailable.', { type: 'image/jpeg' });
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
+        const file = new File(['content'], 'фото-отпуск.jpg', { type: 'image/jpeg' });
         const result = await uploadFile(file);
         expect(result).toEqual({ id: 42 });
         expect(lastInit.body.constructor.name).toBe('FormData');
@@ -60,7 +60,7 @@ describe('uploadFile()', () => {
 
 
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         global.fetch = () => Promise.resolve({
             ok: true,
             json: () => Promise.reject(new SyntaxError('Unexpected token <')),

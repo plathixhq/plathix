@@ -25,8 +25,6 @@ final class FolderBatchController
 
 	public function batchCreateFolders(\WP_REST_Request $request, ?\Closure $runner_override = null, ?\Closure $audit_runner = null): \WP_REST_Response {
 
-		// single AjaxRouter::create_folder() (RateLimiter::ACTION_LIMITS['create_folder'],
-
 		if ( ! $this->rateLimiter->attempt( 'batch_create_folders', get_current_user_id(), max: 20, window: 60 ) ) {
 			return new \WP_REST_Response( [ 'message' => __( 'Too many requests.', 'plathix' ) ], 429 );
 		}

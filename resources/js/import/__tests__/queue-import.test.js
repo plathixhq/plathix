@@ -37,7 +37,7 @@ describe('covers preset import and export behavior', () => {
         document.body.innerHTML = '';
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({
             ok: true,
             json: () => Promise.reject(new SyntaxError('Unexpected token \'<\', "<!DOCTYPE "... is not valid JSON')),
@@ -52,7 +52,7 @@ describe('covers preset import and export behavior', () => {
         expect(statusNode.innerHTML).not.toContain('SyntaxError');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({
             ok: true,
             json: () => Promise.resolve({ success: true, data: { jobId: 7 } }),

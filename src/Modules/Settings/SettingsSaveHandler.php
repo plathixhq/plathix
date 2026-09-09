@@ -93,10 +93,8 @@ final class SettingsSaveHandler
 
 			$reason = null;
 			try {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
-				//
-
-				// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- nonce and capability are verified above at the single entry point of this handler; the value is deliberately handed over raw because each option owns its sanitizer (sanitizePolicy(), sanitizeDays(), sanitizeBool(), absint()) and applies wp_unslash() itself — unslashing here would double-process values the callbacks already handle
 				$raw = $_POST[ $option_name ] ?? null;
 
 				$succeeded = (bool) $callback( $raw );

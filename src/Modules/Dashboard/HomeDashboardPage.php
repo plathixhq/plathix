@@ -8,6 +8,7 @@ use Plathix\Core\AdminLayout;
 use Plathix\Http\AjaxGuard;
 use Plathix\Infrastructure\DbAdvisoryLock;
 use Plathix\Infrastructure\Keys;
+use Plathix\Infrastructure\Logger;
 use Plathix\Modules\Dashboard\Widgets\UploadsWidget;
 use Plathix\Modules\Dashboard\Widgets\MimeTypesWidget;
 use Plathix\Modules\Dashboard\Widgets\OrphanedFilesWidget;
@@ -16,6 +17,7 @@ use Plathix\Modules\Dashboard\Widgets\MigrationBannerWidget;
 use Plathix\Modules\Dashboard\Widgets\PresetWidget;
 use Plathix\Modules\Dashboard\Widgets\StatusBarWidget;
 use Plathix\User\AccessLevel;
+use Plathix\User\AccessResolver;
 
 class HomeDashboardPage
 {
@@ -74,8 +76,6 @@ class HomeDashboardPage
 	public function handleDismiss(): void {
 		check_ajax_referer( 'plathix_dismiss_onboarding', 'nonce' );
 
-		// access-level override (plathix/user/access_level, PRO RolePolicy) — AjaxGuard::requireCap()
-
 		AjaxGuard::requireCap( AccessLevel::Full, 'manage_options' );
 
 		$card_id = isset( $_POST['card_id'] ) ? sanitize_key( wp_unslash( $_POST['card_id'] ) ) : '';
@@ -95,7 +95,12 @@ class HomeDashboardPage
 
 			if ( ! in_array( $card_id, $dismissed, true ) ) {
 				$dismissed[] = $card_id;
-				update_user_meta( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
+
+				$written = update_user_meta( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
+
+				if ( ! $written ) {
+					Logger::error( 'dashboard_dismiss_write_failed', [ 'user_id' => $user_id, 'meta_key' => $meta_key ] );
+				}
 			}
 		} finally {
 			if ( $acquired ) {
@@ -128,7 +133,12 @@ class HomeDashboardPage
 
 			if ( ! in_array( $source, $dismissed, true ) ) {
 				$dismissed[] = $source;
-				update_user_meta( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
+
+				$written = update_user_meta( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
+
+				if ( ! $written ) {
+					Logger::error( 'dashboard_dismiss_write_failed', [ 'user_id' => $user_id, 'meta_key' => $meta_key ] );
+				}
 			}
 		} finally {
 			if ( $acquired ) {
@@ -192,11 +202,10 @@ class HomeDashboardPage
 
 	public function render(): void {
 		AdminLayout::renderPage( self::PAGE_SLUG, function (): void {
-			if ( ! current_user_can( 'manage_options' ) ) {
+			if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 				wp_die( esc_html__( 'You do not have sufficient permissions.', 'plathix' ) );
 			}
 
-			// PlathixPro\Modules\Gallery\ShortcodeUsageScanner::invalidate_dashboard_stats().)
 			$data = ( new HomeDashboardData() )->collect();
 
 			$dash_asset   = \Plathix\Infrastructure\AssetManifest::read( 'js/admin-ui/dashboard.asset.php' );

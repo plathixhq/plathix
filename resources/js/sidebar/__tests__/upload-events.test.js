@@ -561,12 +561,12 @@ describe('bindUploadCompleteEvents', () => {
         expect(appendSpy).toHaveBeenCalledWith('plathix_folder', '7');
     });
 
-    describe('covers public behavior without internal references', () => {
+    describe('keeps upload links scoped to the active folder', () => {
         afterEach(() => {
             delete window.Plathix;
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps upload links scoped to the active folder', () => {
             window.Plathix = { trashFolderId: 655 };
             store.openId = 655;
             bindUploadCompleteEvents();
@@ -582,7 +582,7 @@ describe('bindUploadCompleteEvents', () => {
             expect(xhr._data).toBeUndefined();
         });
 
-        it('covers public behavior without internal references', () => {
+        it('coalesces repeated events into a single handled call', () => {
             window.Plathix = { trashFolderId: 655 };
             store.openId = 655;
             bindUploadCompleteEvents();
@@ -622,7 +622,7 @@ describe('bindUploadCompleteEvents', () => {
             expect(store.isUploading).toBe(false);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps store/selection state consistent across UI events', () => {
             window.Plathix = { trashFolderId: 655 };
             store.openId = 655;
             bindUploadCompleteEvents();
@@ -653,7 +653,7 @@ describe('bindUploadCompleteEvents', () => {
             expect(appendSpy).toHaveBeenCalledWith('plathix_folder', '7');
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps upload links scoped to the active folder', () => {
             window.Plathix = { trashFolderId: 655 };
             store.openId = 655;
             bindUploadCompleteEvents();

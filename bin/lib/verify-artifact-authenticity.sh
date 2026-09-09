@@ -97,7 +97,16 @@ _build_scoper_reprint_tree() {
   rmdir "$tmp_out"
 
   mkdir -p "${tmp_in}/vendor"
-  cp -a "${repo_root}/vendor/enshrined" "${tmp_in}/vendor/enshrined"
+
+
+
+
+
+
+
+
+
+  cp -aL "${repo_root}/vendor/enshrined" "${tmp_in}/vendor/enshrined"
 
 
 
@@ -163,12 +172,33 @@ _verify_one_artifact_file() {
 
 
 
+#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# fix.
 _normalize_markers() {
   local content="$1" marker_pattern="$2"
   [[ -z "$marker_pattern" ]] && { printf '%s' "$content"; return; }
-  MARKER_PATTERN="$marker_pattern" perl -CSD -0777 -pe '
+  MARKER_PATTERN="$marker_pattern" perl -0777 -pe '
+    use Encode qw(decode FB_CROAK);
     my $mp = $ENV{MARKER_PATTERN};
-    s/($mp)[A-Za-z0-9#_-]*/[internal]/g;
+    my $copy = $_;
+    my $is_valid_utf8 = eval { decode("UTF-8", $copy, FB_CROAK); 1 };
+    if ($is_valid_utf8) {
+      s/($mp)[A-Za-z0-9#_-]*/[internal]/g;
+    }
   ' <<<"$content"
 }
 

@@ -6,10 +6,6 @@ namespace Plathix\Modules\Preset;
 
 use Plathix\Infrastructure\TempDirectory;
 
-/**
- * Receives a .zip upload, validates its contents, and registers the preset in the local catalog.
- * Spec ref: sections 4, 5, 16, 27, 28.1.
- */
 final class PresetUploadPipeline
 {
 	private const MAX_ARCHIVE_BYTES  = 1_048_576;  // 1 MB
@@ -168,9 +164,6 @@ final class PresetUploadPipeline
 				return $this->fail(new PresetError('preset_preview_mismatch', __('The Preview field does not match the preview file in the archive.', 'plathix'), null, 'metadata', true));
 			}
 
-			// passed, but nothing is persisted (no preview copy, no catalog record, no audit
-			// entry). The AJAX validation endpoint uses this to show a real success state
-			// without side effects; the final Upload click still runs the full pipeline.
 			if ( $dry_run ) {
 				return [
 					'success' => true,

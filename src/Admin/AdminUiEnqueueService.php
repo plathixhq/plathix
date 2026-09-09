@@ -41,7 +41,6 @@ final class AdminUiEnqueueService
 
 	public function isPlathixSettingsPage(string $hook): bool {
 
-		// SettingsPage::PAGE_SLUG.
 		$slug = ( new SettingsApi() )->pageSlug();
 		if ( $hook === 'plathix_page_' . $slug ) {
 			return true;

@@ -38,7 +38,7 @@ describe('handles trash workflow consistently', () => {
         delete window.Plathix;
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         window.wp = { media: {} };
 
         bindAttachmentDeleteEvents();
@@ -56,7 +56,7 @@ describe('handles trash workflow consistently', () => {
         expect(mockFrame._plathixDeleteEventsBound).toBe(true);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         window.wp = { media: { frame: mockFrame } };
         mockFrame._plathixDeleteEventsBound = true;
 
@@ -66,7 +66,7 @@ describe('handles trash workflow consistently', () => {
         expect(mockFrame.on).not.toHaveBeenCalled();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         window.wp = { media: {} };
 
         bindAttachmentDeleteEvents();
@@ -84,7 +84,7 @@ describe('handles trash workflow consistently', () => {
 
 
 
-describe('covers public behavior without internal references', () => {
+describe('coalesces repeated events into a single handled call', () => {
     let recountFromUi;
 
     beforeEach(() => {
@@ -103,7 +103,7 @@ describe('covers public behavior without internal references', () => {
         delete window.Plathix;
     });
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         bindSelectedMediaCountEvents();
 
         document.dispatchEvent(new Event('click', { bubbles: true }));
@@ -122,7 +122,7 @@ describe('covers public behavior without internal references', () => {
         expect(recountFromUi).toHaveBeenCalledTimes(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         bindSelectedMediaCountEvents();
 
         document.dispatchEvent(new Event('click', { bubbles: true }));

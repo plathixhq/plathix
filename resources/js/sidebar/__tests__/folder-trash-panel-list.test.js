@@ -100,7 +100,7 @@ describe('folder-trash-panel-list', () => {
         expect(document.getElementById(CONTAINER_ID)).toBeNull();
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         const store = makeStore(77);
         const actions = installHooks();
         initFolderTrashPanelList(store);
@@ -122,7 +122,7 @@ describe('folder-trash-panel-list', () => {
         expect(container.nextElementSibling).toBe(newNav);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
 
         const form = document.querySelector('form#posts-filter');
         form.querySelector('.tablenav.top').remove();
@@ -136,7 +136,7 @@ describe('folder-trash-panel-list', () => {
         expect(container.nextElementSibling.classList.contains('wp-list-table')).toBe(true);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const store = makeStore(77);
         const actions = installHooks();
         initFolderTrashPanelList(store);

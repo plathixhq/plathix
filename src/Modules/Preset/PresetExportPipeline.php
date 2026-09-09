@@ -8,12 +8,6 @@ use Plathix\Infrastructure\TempDirectory;
 use Plathix\Core\FolderRepository;
 use Plathix\Core\Taxonomy;
 
-/**
- * Exports the current media folder hierarchy as a valid Plathix preset package.
- * Spec ref: sections 17, 28.3, 29, 30.
- *
- * @requires extension zip
- */
 final class PresetExportPipeline
 {
 
@@ -115,8 +109,6 @@ final class PresetExportPipeline
 			$terms,
 			static fn (\WP_Term $t): bool => ! in_array($t->slug, $protected_slugs, true)
 		);
-
-		// ── Step 4: build numbering from hierarchy ────────────────────────────
 
 		$favorite_ids = \Plathix\User\Preferences::getFavorites( get_current_user_id(), 'attachment' );
 		$structure = $this->buildStructure($user_terms, $taxonomy, $favorite_ids);

@@ -30,7 +30,7 @@ function makeComponent(storeOverrides = {}) {
 }
 
 describe('preserves folder tree behavior', () => {
-    it('covers public behavior without internal references', () => {
+    it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
 
         const { component, store } = makeComponent({ newFolderParentId: null });
         component.createRootFolder();
@@ -38,7 +38,7 @@ describe('preserves folder tree behavior', () => {
         expect(store.focusNewFolderInput).not.toHaveBeenCalled();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
 
         const { component, store } = makeComponent({ newFolderParentId: 5 });
         component.createRootFolder();

@@ -41,6 +41,8 @@ final class AttachmentVisibility
 	 */
 
 	public static function sqlPredicate(string $posts_alias): string {
+		self::assertValidPostsAlias( $posts_alias );
+
 		$keys = self::excludeMetaKeys();
 		if ( $keys === [] ) {
 			return '1=1';
@@ -141,6 +143,8 @@ final class AttachmentVisibility
 	 */
 
 	public static function statusSqlPredicate(string $posts_alias): string {
+		self::assertValidPostsAlias( $posts_alias );
+
 		$in_list = implode(
 			',',
 			array_map( static fn (string $s): string => "'" . esc_sql( $s ) . "'", self::NON_VISIBLE_STATUSES )
@@ -182,6 +186,8 @@ final class AttachmentVisibility
 	 */
 
 	public static function statusInPredicate(array $statuses, string $posts_alias): string {
+		self::assertValidPostsAlias( $posts_alias );
+
 		$statuses = array_values( array_unique( array_filter(
 			array_map( static fn ($s): string => is_string( $s ) ? $s : '', $statuses ),
 			static fn (string $s): bool => $s !== ''
@@ -196,5 +202,13 @@ final class AttachmentVisibility
 		);
 
 		return "{$posts_alias}.post_status IN ({$in_list})";
+	}
+
+	private static function assertValidPostsAlias(string $posts_alias): void {
+		if ( $posts_alias === '' || ! preg_match( '/^[A-Za-z0-9_.]+$/', $posts_alias ) ) {
+			throw new \InvalidArgumentException(
+				sprintf( 'AttachmentVisibility: invalid posts_alias "%s"', esc_html( $posts_alias ) )
+			);
+		}
 	}
 }

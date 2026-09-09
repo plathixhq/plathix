@@ -56,7 +56,7 @@ final class SystemInfoProvider
 	 */
 
 	public function plathixInfo(): array {
-		$post_types = [ 'attachment' ]; // CTAN-201: attachment-native
+		$post_types = [ 'attachment' ];
 
 		$svg_check        = ( new HealthCheckRegistry() )->svgSanitizer();
 		$svg_sanitizer_ok = 'ignored' === $svg_check['severity'] ? null : $svg_check['ok'];

@@ -22,7 +22,6 @@ final class FolderCountLifecycle
 	public function register(): void
 	{
 
-		// ($object_id, $tt_id, $taxonomy), deleted_term_relationships ($object_id, $tt_ids, $taxonomy).
 		add_action( 'added_term_relationship', [ $this, 'onAddedTermRelationship' ], 10, 3 );
 		add_action( 'deleted_term_relationships', [ $this, 'onDeletedTermRelationships' ], 10, 3 );
 		add_action( 'trashed_post', [ $this, 'onTrashedPost' ], 10, 1 );

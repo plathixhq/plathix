@@ -18,8 +18,8 @@ const FOLDERS = [
 
 
 const FOLDERS_WITH_ROOT = [
-    { id: 0, parentId: 0, name: 'Media item', hasChildren: false },
-    { id: 157, parentId: 0, name: 'Public-facing message unavailable.', hasChildren: false },
+    { id: 0, parentId: 0, name: 'Медиафайлы', hasChildren: false },
+    { id: 157, parentId: 0, name: 'Несортированные', hasChildren: false },
     { id: 4, parentId: 0, name: 'Infographics', hasChildren: true },
 ];
 
@@ -285,7 +285,7 @@ describe('folder switch ui', () => {
 
         expect(document.querySelector('.plathix-folder-switch__field').dataset.currentFolderId).toBe('157');
         const nameEl = document.querySelector('.plathix-folder-switch__name');
-        expect(nameEl.textContent).toBe('Public-facing message unavailable.');
+        expect(nameEl.textContent).toBe('Несортированные');
         expect(notify).toHaveBeenCalledWith('success', expect.any(String));
     });
 });

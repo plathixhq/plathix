@@ -112,7 +112,6 @@ final class ForbiddenCrossModuleInternalsInlineReferenceRule implements Rule
 		if ( $node instanceof FuncCall && $node->name instanceof Name ) {
 			$functionName = $node->name->toString();
 			if ( in_array( $functionName, self::CHECKED_FUNCTIONS, true ) ) {
-				// is_a(object|string $object, string $class, bool $allow_string = false) —
 
 				$argIndex = $functionName === 'is_a' ? 1 : 0;
 				$fqcn = $this->fqcnFromStringArg( $node->args, $argIndex );

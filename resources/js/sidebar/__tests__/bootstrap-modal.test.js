@@ -38,7 +38,7 @@ import { bootstrapModal } from '../bootstrap-modal.js';
 import { onMediaFrameReady } from '../media-frame-watcher.js';
 import { getRuntime } from '../runtime.js';
 
-describe('covers public behavior without internal references', () => {
+describe('mounts or dismisses the UI element under the expected conditions', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         getRuntime.mockReturnValue({});

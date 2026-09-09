@@ -107,8 +107,6 @@ final class PresetValidator
 				return $errors;
 			}
 
-			//
-
 			if (
 				$existing !== null
 				&& trim( (string) ($preset['version'] ?? '')) === trim( (string) ($existing['version'] ?? ''))

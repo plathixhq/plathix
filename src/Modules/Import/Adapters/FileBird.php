@@ -41,7 +41,8 @@ class FileBird implements ImportAdapterInterface
 		$folders_table  = $wpdb->prefix . self::TABLE_FOLDERS;
 		$relation_table = $wpdb->prefix . self::TABLE_RELATION;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery -- reads FileBird's folder table directly; that plugin stores folders in its own schema (fbv), not in a WP taxonomy, so get_terms() cannot reach the data
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
 		$folders = $wpdb->get_results(
 			"SELECT id, name, parent FROM {$folders_table} ORDER BY parent, ord, id", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is $wpdb->prefix + hardcoded const; no user input in query. %i technically available on current min WP 7.0 but adds no security benefit here, left as-is (reviewed for %i applicability).
 			ARRAY_A

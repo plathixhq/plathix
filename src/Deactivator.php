@@ -47,7 +47,6 @@ class Deactivator
 			as_unschedule_all_actions( JobDispatcher::JOB_FOLDER_COUNT_RECONCILE, $recurring_args, $group );
 		}
 
-		// Trash\Module::unscheduleRetentionJob().
 		do_action( 'plathix/jobs/unschedule', $blog_id );
 
 		global $wpdb;

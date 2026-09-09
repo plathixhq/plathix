@@ -30,6 +30,8 @@ mkdir -p assets/css
 
 
 
+
+
 for css_src in resources/css/*.css; do
   css_name="$(basename "$css_src")"
   if [[ ! -f "assets/css/${css_name}" ]]; then

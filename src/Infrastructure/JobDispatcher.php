@@ -41,7 +41,7 @@ final class JobDispatcher
 		$this->status_repository = new JobStatusRepository();
 		$this->import_runner    = new Jobs\ImportJobRunner();
 		$this->reorder_runner   = new Jobs\ReorderJobRunner( $this->lock_service );
-		$this->orphan_runner    = new Jobs\OrphanCleanupJobRunner();
+		$this->orphan_runner    = new Jobs\OrphanCleanupJobRunner( $this->lock_service );
 		$this->cleanup_runner   = new Jobs\CleanupJobRunner();
 		$this->import_checkpoint_cleanup_runner = new Jobs\ImportCheckpointCleanupJobRunner();
 		$this->folder_count_reconcile_runner    = new Jobs\FolderCountReconcileJobRunner( $this->lock_service );
@@ -118,8 +118,6 @@ final class JobDispatcher
 			}
 
 			self::ksortRecursive( $args );
-
-			// args (vendor/woocommerce/action-scheduler/.../ActionScheduler_DBStore.php:
 
 			$action_id = (int) as_schedule_single_action(
 				time() + max( 0, $delay ),

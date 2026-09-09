@@ -86,7 +86,7 @@ describe('refreshes cached state when data changes', () => {
 
 
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
         await store.refreshFolders({ silent: true });
@@ -132,7 +132,7 @@ describe('refreshes cached state when data changes', () => {
 
 
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
         await store.refreshFolders({ silent: true, params: { search: 'foo' } });
@@ -140,7 +140,7 @@ describe('refreshes cached state when data changes', () => {
         expect(store.hasLoadedFullTree).toBe(false);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
         await store.refreshFolders({ silent: true, params: { ids: [1, 2] } });
@@ -148,7 +148,7 @@ describe('refreshes cached state when data changes', () => {
         expect(store.hasLoadedFullTree).toBe(false);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
         await store.refreshFolders({ silent: true, params: { fields: 'id,count' } });
@@ -167,7 +167,7 @@ describe('refreshes cached state when data changes', () => {
 
 
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async() => {
         const store = makeStore();
 
         await store.refreshFolders({
@@ -178,7 +178,7 @@ describe('refreshes cached state when data changes', () => {
         expect(store.hasLoadedFullTree).toBe(true);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('covers the attachment replace flow', async() => {
         const store = makeStore();
 
         await store.refreshFolders({ silent: true, replace: false });
@@ -186,7 +186,7 @@ describe('refreshes cached state when data changes', () => {
         expect(store.hasLoadedFullTree).toBe(false);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
 
         const store = makeStore({ hasLoadedFullTree: true });
 

@@ -13,8 +13,8 @@ final class FolderAssignmentService
 	public function __construct(
 		private readonly FolderRepository $repository,
 		private readonly FolderCountService $countService,
-
 		// @phpstan-ignore property.onlyWritten
+
 		private readonly Cache $cache
 	) {
 	}

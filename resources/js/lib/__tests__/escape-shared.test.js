@@ -21,22 +21,22 @@ const PROBE_STRINGS = [
     "it's a <b>test</b> & \"quote\"",
 ];
 
-describe('covers public behavior without internal references', () => {
+describe('escapes untrusted output for the destination context', () => {
     beforeAll(() => {
         delete window.PlathixEscape;
         require('../escape-shared.js');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('escapes untrusted output for the destination context', () => {
         expect(typeof window.PlathixEscape.escapeHtml).toBe('function');
         expect(typeof window.PlathixEscape.escapeAttr).toBe('function');
     });
 
-    it.each(PROBE_STRINGS)('covers public behavior without internal references', (probe) => {
+    it.each(PROBE_STRINGS)('escapes untrusted output for the destination context', (probe) => {
         expect(window.PlathixEscape.escapeHtml(probe)).toBe(freeEscapeHtml(probe));
     });
 
-    it.each(PROBE_STRINGS)('covers public behavior without internal references', (probe) => {
+    it.each(PROBE_STRINGS)('escapes untrusted output for the destination context', (probe) => {
         expect(window.PlathixEscape.escapeAttr(probe)).toBe(freeEscapeAttr(probe));
     });
 });

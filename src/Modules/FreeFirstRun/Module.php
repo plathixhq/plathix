@@ -6,6 +6,7 @@ namespace Plathix\Modules\FreeFirstRun;
 
 use Plathix\Contracts\ModuleInterface;
 use Plathix\Infrastructure\Keys;
+use Plathix\User\AccessResolver;
 
 final class Module implements ModuleInterface
 {
@@ -42,7 +43,7 @@ final class Module implements ModuleInterface
 			return;
 		}
 
-		if ( wp_doing_ajax() || wp_doing_cron() || is_network_admin() || ! current_user_can( 'manage_options' ) ) {
+		if ( wp_doing_ajax() || wp_doing_cron() || is_network_admin() || ! AccessResolver::currentUserIsFullAdmin() ) {
 			return;
 		}
 

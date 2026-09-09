@@ -84,7 +84,7 @@ describe('refreshes cached state when data changes', () => {
     });
 
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: [TWO_BRANCHES[0]] });
 
@@ -93,7 +93,7 @@ describe('refreshes cached state when data changes', () => {
         expect([...store.loadedParentIds].sort()).toEqual([0, 1, 5]);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: [TWO_BRANCHES[0]] });
 
@@ -116,7 +116,7 @@ describe('refreshes cached state when data changes', () => {
 
 
 
-    it('covers public behavior without internal references', async() => {
+    it('covers the attachment replace flow', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: [TWO_BRANCHES[0]] });
 

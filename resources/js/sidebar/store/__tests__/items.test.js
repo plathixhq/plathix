@@ -382,7 +382,7 @@ describe('itemsModule', () => {
 
 
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 1, failed: [], counts_recomputed: [] });
         const store = makeStore({ openId: 3 });
 
@@ -394,7 +394,7 @@ describe('itemsModule', () => {
 
 
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 1, failed: [] });
         const store = makeStore({ openId: 3 });
 
@@ -416,7 +416,7 @@ describe('itemsModule', () => {
         expect(frame.trigger).toHaveBeenCalledWith('selection:action:done');
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 1, failed: ['2'] });
         const frame = makeGridFrame();
         getMediaFrame.mockReturnValue(frame);

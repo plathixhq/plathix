@@ -84,7 +84,7 @@ class ListScreenFragmentsController
 				&& ! in_array( $safe_key, $blocked_extra_keys, true )
 			) {
 
-				$value = Sanitize::deepText( wp_unslash( $raw ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- nonce+cap verified in authorize(); Sanitize::deepText() applies sanitize_text_field() recursively to every leaf
+				$value = Sanitize::deepText( wp_unslash( $raw ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 				if ( is_array( $value ) ? $value !== [] : $value !== '' ) {
 					$extra_params[ $safe_key ] = $value;

@@ -14,7 +14,7 @@ describe('trash-overlays.js — trashOverlaysHTML()', () => {
         html = trashOverlaysHTML();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
         expect(html).toContain(OVERLAY_MARKER);
     });
 
@@ -36,7 +36,7 @@ describe('trash-overlays.js — trashOverlaysHTML()', () => {
         );
     });
 
-    it('covers public behavior without internal references', () => {
+    it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
         const matches = html.match(/x-teleport="body"/g) || [];
         expect(matches).toHaveLength(3);
     });
@@ -49,7 +49,7 @@ describe('handles trash workflow consistently', () => {
         mockTranslateOverride = null;
     });
 
-    it('covers public behavior without internal references', () => {
+    it('escapes untrusted output for the destination context', () => {
         mockTranslateOverride = (key) => (key === 'files_selected' ? "file's selected" : key);
 
         const container = document.createElement('div');

@@ -73,7 +73,7 @@ describe('toolbar template', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
+    describe('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
         it('renders aria-pressed bound to folderSelectMode on the Select folders button', () => {
             const template = toolbarTemplate();
             expect(template).toContain(':aria-pressed="String($store.plathix.folderSelectMode)"');
@@ -85,7 +85,7 @@ describe('toolbar template', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
+    describe('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
         it('binds :class and :aria-pressed when the descriptor carries an active field', () => {
             window.Plathix.toolbarExtra = [
                 { id: 'folder-info', title: 'Folder info', icon: '<svg/>', active: 'showFolderInfo' },

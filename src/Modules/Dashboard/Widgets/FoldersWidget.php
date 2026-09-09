@@ -126,11 +126,6 @@ class FoldersWidget
 
 				<?php
 
-			// count < 2).
-			//
-
-			//
-
 				if ( $distribution ) :
 					?>
 				<div class="plathix-bento-dist">

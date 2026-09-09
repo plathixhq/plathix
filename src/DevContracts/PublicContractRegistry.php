@@ -41,6 +41,8 @@ final class PublicContractRegistry
 		'Http\\Rest' => [ 'declared_in' => 'src/Http/Rest.php', 'behavior_test' => 'n/a' ],
 		'Http\\Nonce' => [ 'declared_in' => 'src/Http/Nonce.php', 'behavior_test' => 'n/a' ],
 
+		'Http\\AjaxGuard' => [ 'declared_in' => 'src/Http/AjaxGuard.php', 'behavior_test' => 'tests/AjaxGuardTest.php' ],
+
 		'Infrastructure\\JobDispatcher' => [ 'declared_in' => 'src/Infrastructure/JobDispatcher.php', 'behavior_test' => 'n/a' ],
 		'Infrastructure\\Cache' => [ 'declared_in' => 'src/Infrastructure/Cache.php', 'behavior_test' => 'n/a' ],
 		'Infrastructure\\Features' => [ 'declared_in' => 'src/Infrastructure/Features.php', 'behavior_test' => 'n/a' ],

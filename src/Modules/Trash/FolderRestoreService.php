@@ -76,10 +76,6 @@ final class FolderRestoreService
 
 		$this->restoreOriginalName( $id, $target_parent, $taxonomy );
 
-		//
-
-		// FolderCascadeCountLifecycleTest::testRestoreEventsRippleThroughTheNewParentChain
-
 		$this->restoreFolderFiles( $id, $taxonomy );
 
 		$this->countService->invalidate( $taxonomy );
@@ -120,7 +116,10 @@ final class FolderRestoreService
 		}
 
 		if ( $untrashed > 0 ) {
-			Cache::onAttachmentChange( null, $taxonomy );
+			$cache = Cache::make();
+			$cache->bumpVersion( 'folders_tree' );
+			$cache->bumpVersion( 'gallery_items' );
+			$cache->deleteGroup( Cache::DASHBOARD_STATS_GROUP );
 		}
 	}
 

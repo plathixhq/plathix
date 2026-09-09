@@ -50,6 +50,10 @@ export function ensureStaticRoot() {
     if (!wrapper.children.length) {
         wrapper.innerHTML = sidebarMarkup();
         applySkinClasses(wrapper);
+
+
+
+        wrapper.removeAttribute('aria-hidden');
     }
 
     const _saved = SidebarResizer.loadState(getPostType());

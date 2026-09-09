@@ -66,7 +66,7 @@ final class RequestContext
 		return match ( true ) {
 			is_admin() && $pagenow === 'upload.php' => 'attachment',
 			is_admin() && $pagenow === 'post.php' => get_post_type( absint( wp_unslash( $_GET['post'] ?? 0 ) ) ) ?: 'post', // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- fallback for when WP_Screen is unavailable; read-only navigation parameter, no form processing and no DB write
-			is_admin() && $pagenow === 'post-new.php' => sanitize_key( (string) wp_unslash( $_GET['post_type'] ?? 'post' ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- fallback for when WP_Screen is unavailable; read-only navigation parameter, no form processing and no DB write
+			is_admin() && $pagenow === 'post-new.php' => sanitize_key( (string) wp_unslash( $_GET['post_type'] ?? 'post' ) ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 			self::isPageBuilder() => 'attachment',
 			default => '',

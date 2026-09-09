@@ -88,9 +88,6 @@ final class Plugin
 			add_action('switch_blog', [ FolderRepository::class, 'clearRuntimeCache' ]);
 		}
 
-		// Bust dashboard_stats immediately on folder mutations instead of waiting for the
-		// hourly TTL. plathix/audit/record already fires on folder_created/renamed/moved/
-
 		add_action('plathix/audit/record', [ Cache::class, 'onFolderAuditEvent' ], 10, 1);
 
 		$cache = Cache::make();

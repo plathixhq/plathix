@@ -25,7 +25,7 @@ describe('uiStateModule.withLoading', () => {
         return Object.assign(Object.create(uiStateModule), { isLoading: false, error: null });
     }
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
         await expect(store.withLoading(async() => {
@@ -36,7 +36,7 @@ describe('uiStateModule.withLoading', () => {
         expect(store.isLoading).toBe(false);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
         await expect(store.withLoading(async() => {
@@ -47,7 +47,7 @@ describe('uiStateModule.withLoading', () => {
         expect(store.isLoading).toBe(false);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
         const result = await store.withLoading(async() => 'ok');

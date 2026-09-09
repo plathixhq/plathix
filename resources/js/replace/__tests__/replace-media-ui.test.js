@@ -340,7 +340,7 @@ describe('replace media ui', () => {
         expect(button.textContent).toBe('Replacing…');
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('covers the attachment replace flow', async() => {
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
 
         document.body.innerHTML = `

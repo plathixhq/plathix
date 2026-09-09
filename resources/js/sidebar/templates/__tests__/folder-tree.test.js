@@ -23,7 +23,7 @@ describe('preserves folder tree behavior', () => {
         expect((html.match(/plathix-folder-branch/g) || []).length).toBe(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('covers DOM fragment parsing behavior', () => {
         const html = treeLevelMarkup();
 
         expect(html).toContain('x-html="treeLevelHtml()"');
@@ -32,7 +32,7 @@ describe('preserves folder tree behavior', () => {
         expect(html).toContain('x-data="folderTree"');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('covers DOM fragment parsing behavior', () => {
         const html = treeLevelMarkup();
 
 
@@ -57,7 +57,7 @@ describe('preserves folder tree behavior', () => {
         expect((html.match(/plathix-folder-branch/g) || []).length).toBe(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('covers DOM fragment parsing behavior', () => {
 
 
         expect(treeLevel('0')).toContain('plathix-tree-level');

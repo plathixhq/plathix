@@ -49,14 +49,14 @@ describe('keeps upload links scoped to the active folder', () => {
         expect(Alpine.effect).toHaveBeenCalledTimes(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps upload links scoped to the active folder', () => {
         document.body.innerHTML = '<div></div>';
         Alpine.store.mockReturnValue({ openId: 5 });
 
         expect(() => bindUploadLinkFolderContext()).not.toThrow();
     });
 
-    describe('covers public behavior without internal references', () => {
+    describe('keeps upload links scoped to the active folder', () => {
         afterEach(() => {
             delete window.Plathix;
         });
@@ -85,7 +85,7 @@ describe('keeps upload links scoped to the active folder', () => {
             expect(link.getAttribute('aria-disabled')).toBe('false');
         });
 
-        it('covers public behavior without internal references', () => {
+        it('coalesces repeated events into a single handled call', () => {
             window.Plathix = { trashFolderId: 655 };
             setLinkHtml('media-new.php');
             Alpine.store.mockReturnValue({ openId: 655 });
@@ -99,7 +99,7 @@ describe('keeps upload links scoped to the active folder', () => {
             expect(prevented).toBe(true);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps upload links scoped to the active folder', () => {
             window.Plathix = { trashFolderId: 655 };
             setLinkHtml('media-new.php');
             Alpine.store.mockReturnValue({ openId: 42 });

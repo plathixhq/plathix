@@ -23,10 +23,6 @@ define('PLATHIX_TERM_POSITION', 'plathix_position');
 define('PLATHIX_TERM_COLOR', 'plathix_color');
 define('PLATHIX_TEMP_DIR', 'plathix-temp');
 
-//
-
-//
-
 $plathix_vendor_autoload = PLATHIX_PATH . 'vendor/autoload.php';
 
 if ( file_exists($plathix_vendor_autoload) ) {

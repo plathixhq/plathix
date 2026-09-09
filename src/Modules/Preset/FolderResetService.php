@@ -10,10 +10,6 @@ use Plathix\Core\Taxonomy;
 use Plathix\Infrastructure\Cache;
 use Plathix\Infrastructure\JobLockService;
 
-/**
- * Deletes all user-created media folders, preserving system folders.
- * Spec ref: section 21.
- */
 final class FolderResetService
 {
 	public function __construct(

@@ -19,11 +19,6 @@ return [
 
 	'exclude-namespaces' => [ 'Plathix', 'PlathixPro' ],
 
-	//
-
-	// (`EnrichedReflector::isFunctionExcluded()` → `isFunctionInternal()`).
-	//
-
 	'exclude-functions' => [
 		// WP core
 		'add_query_arg',
@@ -55,8 +50,6 @@ return [
 		'pll_languages_list',
 
 	],
-
-	//
 
 	'exclude-classes' => [
 		'/^WP_/',              // WP_Error, WP_Query, WP_REST_*, WP_Term, WP_User, WP_Post…

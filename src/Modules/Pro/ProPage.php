@@ -7,6 +7,7 @@ namespace Plathix\Modules\Pro;
 use Plathix\Core\AdminLayout;
 use Plathix\Admin\ExternalLink;
 use Plathix\Edition;
+use Plathix\User\AccessResolver;
 
 class ProPage
 {
@@ -85,7 +86,7 @@ class ProPage
 
 	public function render(): void {
 		AdminLayout::renderPage( self::PAGE_SLUG, function (): void {
-			if ( ! current_user_can( 'manage_options' ) ) {
+			if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 				wp_die( esc_html__( 'You do not have sufficient permissions.', 'plathix' ) );
 			}
 			?>

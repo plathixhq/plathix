@@ -30,8 +30,6 @@ final class CleanupJobRunner
 			return;
 		}
 
-		//
-
 		$safe_path = static function (string $file) use ($real_dir): array|false {
 			if ( is_link( $file ) ) {
 				return false;
@@ -165,10 +163,6 @@ final class CleanupJobRunner
 
 		$max_age   = (int) apply_filters( 'plathix/infrastructure/job_result_max_age', DAY_IN_SECONDS );
 		$threshold = time() - $max_age;
-
-		//
-
-		//
 
 		$file_backed_threshold = time() - (int) apply_filters(
 			'plathix/infrastructure/job_result_file_backed_max_age',

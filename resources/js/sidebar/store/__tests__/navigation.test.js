@@ -478,7 +478,7 @@ describe('prevents concurrent state changes', () => {
 
     
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
 
         getMediaFrame.mockReturnValue({
             content: { get: () => ({ collection: null }) },

@@ -40,12 +40,6 @@ final class FolderCountCalculator
 	public function totalItemsCount(string $taxonomy): ?int {
 		$post_type = Taxonomy::postTypeForTaxonomy( $taxonomy );
 
-		// "All Files" is a visible counter next to the whole grid, so it must exclude the
-
-		// otherwise "All Files" (324) drifts from the sum of folders (319). wp_count_posts
-		// aggregates by status and cannot carry a per-post predicate, so for attachments we
-		// use a direct COUNT with the AttachmentVisibility predicate. Non-attachment types
-		// have nothing hidden -> keep the cheap wp_count_posts sum.
 		if ( 'attachment' === $post_type ) {
 			global $wpdb;
 			$post_type_esc     = esc_sql( $post_type );
@@ -61,8 +55,6 @@ final class FolderCountCalculator
 				    AND {$visible_predicate}"
 			);
 			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
-
-			// instead of masking it under (int) null === 0, the same distinction
 
 			return SqlSafeCast::nullSafeSqlCount( $count );
 		}
@@ -101,11 +93,6 @@ final class FolderCountCalculator
 			$taxonomy_esc    = esc_sql( $taxonomy );
 			$post_type_esc   = esc_sql( $post_type );
 
-			// Count only attachments the media grid actually shows — single source of that
-
-			// counter matches the grid total instead of drifting (324 vs 319). Stays one
-			// batch COUNT: the exclude rule is a correlated NOT EXISTS in the same WHERE,
-			// NOT a per-folder WP_Query. Empty exclude list -> '1=1' (no-op).
 			$visible_predicate = AttachmentVisibility::sqlPredicate( 'p' );
 
 			$status_predicate  = AttachmentVisibility::statusSqlPredicate( 'p' );
@@ -125,8 +112,6 @@ final class FolderCountCalculator
 			);
 			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
 
-			// $wpdb->get_results() returns null on a genuine SQL error (vs [] for a valid
-
 			if ( null === $rows ) {
 				return null;
 			}
@@ -142,23 +127,56 @@ final class FolderCountCalculator
 		}
 	}
 
+	/**
+	 * @param array<int> $term_ids
+	 * @return array<int, array<int>>|null
+	 */
+
+	public function findOrphanObjectIds(array $term_ids, string $taxonomy): ?array {
+		global $wpdb;
+
+		if ( empty( $term_ids ) ) {
+			return [];
+		}
+
+		try {
+			// Build an integer-safe IN list without relying on prepare() spread.
+			$safe_ids     = array_map( 'intval', $term_ids );
+			$id_list      = implode( ',', $safe_ids );
+			$taxonomy_esc = esc_sql( $taxonomy );
+
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter -- $id_list is intval'd, $taxonomy_esc is esc_sql()'d, $wpdb->* are core table names
+			$rows = $wpdb->get_results(
+				"SELECT tr.object_id, tt.term_id
+                   FROM {$wpdb->term_relationships} tr
+                   JOIN {$wpdb->term_taxonomy} tt ON tt.term_taxonomy_id = tr.term_taxonomy_id
+                   LEFT JOIN {$wpdb->posts} p      ON p.ID = tr.object_id
+                  WHERE tt.term_id IN ({$id_list})
+                    AND tt.taxonomy = '{$taxonomy_esc}'
+                    AND p.ID IS NULL"
+			);
+			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
+
+			if ( null === $rows ) {
+				return null;
+			}
+
+			$candidates = [];
+			foreach ( (array) $rows as $row ) {
+				$term_id   = (int) $row->term_id;
+				$object_id = (int) $row->object_id;
+				$candidates[ $term_id ][] = $object_id;
+			}
+
+			return $candidates;
+		} catch ( \Throwable $e ) {
+			return null;
+		}
+	}
+
 	public function uncategorizedItemsCount(string $taxonomy): ?int {
 		$post_type = Taxonomy::postTypeForTaxonomy( $taxonomy );
 
-		// "Uncategorized" is a real folder with a sidebar counter shown next to its own
-		// grid, so it must obey the same "actually shown in the grid" rule as every other
-
-		// visibility predicate owned by AttachmentVisibility; for non-attachment types
-		// nothing is hidden, so found_posts is enough.
-		//
-
-		// untagged ids into PHP (posts_per_page=-1) and drop hidden ones with filterIds().
-		// On a large library (10k+ uncategorized) that is ~47ms + a multi-MB id array on
-		// every cold tree build. Replaced with one aggregate COUNT that applies the same
-		// visibility rule as a correlated NOT EXISTS in SQL — same shape as get_batch_counts,
-		// no id array in PHP. "Uncategorized" = attachment with no term in this taxonomy →
-		// a NOT EXISTS over term_relationships. post_status IN ('inherit','private') is kept
-		// exactly as before so the number matches the prior implementation 1:1.
 		if ( 'attachment' === $post_type ) {
 			global $wpdb;
 
@@ -181,8 +199,6 @@ final class FolderCountCalculator
 				    AND {$visible_predicate}"
 			);
 			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
-
-			// masking it under (int) null === 0, the same distinction batchCounts() already makes.
 
 			return SqlSafeCast::nullSafeSqlCount( $count );
 		}

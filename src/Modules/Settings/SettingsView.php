@@ -175,8 +175,8 @@ class SettingsView
 
 	private function renderTabForm(string $slug, callable $render): void {
 		$form_url = esc_url( admin_url( 'admin-post.php' ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only UI-visibility toggle, no data modified; real save is separately nonce-protected by admin-post.php before this param exists
 		$just_saved     = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] === 'true';
 		$notice_style   = $just_saved ? '' : ' style="display:none;"';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- same read-only UI-visibility rationale as $just_saved above

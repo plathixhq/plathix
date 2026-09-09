@@ -1,6 +1,6 @@
 import { initShortcodesCopy } from '../shortcodes-copy.js';
 
-describe('covers public behavior without internal references', () => {
+describe('keeps REST transport behavior consistent under retry and error conditions', () => {
     beforeEach(() => {
         document.body.innerHTML = '';
 

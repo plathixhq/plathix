@@ -81,8 +81,6 @@ class MultilingualIntegration
 	 */
 	public function addLangAllAjax(array $args): array {
 
-		// isPolylangActiveWithoutLanguages(): "38 vs 0 results for the same
-
 		if ( isset( $args['tax_query'] ) && $this->hasPlathixTaxQuery( $args['tax_query'] ) ) {
 			return MultilingualCompat::suppressForArgs( $args );
 		}

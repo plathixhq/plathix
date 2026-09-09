@@ -1,7 +1,7 @@
 
 
 /**
- * @typedef {Error & { code?: string | null }} PlathixTransportError
+ * @typedef {Error & { code?: string | null, httpStatus?: number }} PlathixTransportError
  */
 
 window.PlathixTransport = window.PlathixTransport || {};
@@ -140,6 +140,7 @@ export async function restRequest(path, requestOptions = {}) {
             : (json?.message || 'Request failed.');
         const error = /** @type {PlathixTransportError} */ (new Error(message));
         error.code = json?.code || (isBlockedWrite ? 'rest_write_blocked' : null);
+        error.httpStatus = response.status;
         throw error;
     }
 

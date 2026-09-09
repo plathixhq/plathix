@@ -52,7 +52,7 @@ describe('handles trash workflow consistently', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('keeps the favorites list and its notifications consistent', () => {
     beforeEach(() => {
         document.body.innerHTML = '<div data-slot="plathix-favorites"></div>';
         window.Alpine = {
@@ -93,7 +93,7 @@ describe('covers public behavior without internal references', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('validates color input and keeps the color picker in sync with the store', () => {
     beforeEach(() => {
         document.body.innerHTML = '';
         window.Alpine = {

@@ -39,7 +39,7 @@ afterEach(() => {
 });
 
 describe('initOnboardingDismiss — success', () => {
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: true }) });
         const { block, cards, buttons } = buildDom(['card-a', 'card-b']);
         initOnboardingDismiss();
@@ -52,7 +52,7 @@ describe('initOnboardingDismiss — success', () => {
         expect(document.body.contains(block)).toBe(true);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: true }) });
         const { buttons } = buildDom(['card-a']);
         initOnboardingDismiss();
@@ -64,7 +64,7 @@ describe('initOnboardingDismiss — success', () => {
         expect(String(body)).toContain('card_id=card-a');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: true }) });
         const { block, buttons } = buildDom(['card-a']);
         initOnboardingDismiss();
@@ -77,7 +77,7 @@ describe('initOnboardingDismiss — success', () => {
 });
 
 describe('initOnboardingDismiss — failure', () => {
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ success: false }) });
         const { cards, buttons } = buildDom(['card-a']);
         initOnboardingDismiss();
@@ -89,7 +89,7 @@ describe('initOnboardingDismiss — failure', () => {
         expect(buttons[0].disabled).toBe(false);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockResolvedValue({ ok: false, status: 403, json: () => Promise.resolve({}) });
         const { cards, buttons } = buildDom(['card-a']);
         initOnboardingDismiss();
@@ -101,7 +101,7 @@ describe('initOnboardingDismiss — failure', () => {
         expect(buttons[0].disabled).toBe(false);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('mounts or dismisses the UI element under the expected conditions', async () => {
         global.fetch = jest.fn().mockRejectedValue(new TypeError('Failed to fetch'));
         const { cards, buttons } = buildDom(['card-a']);
         initOnboardingDismiss();

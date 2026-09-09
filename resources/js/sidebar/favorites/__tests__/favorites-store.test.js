@@ -65,7 +65,7 @@ describe('favoritesModule — toggleFavorite', () => {
         expect(Api.saveFavorites).toHaveBeenCalledWith(store.favorites);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps the favorites list and its notifications consistent', async () => {
         const { favoritesModule } = await import('../favorites-store.js');
         const { Api } = await import('../../api.js');
         Api.saveFavorites.mockResolvedValue({});
@@ -77,7 +77,7 @@ describe('favoritesModule — toggleFavorite', () => {
         expect(store.notifications).toHaveLength(0);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps the favorites list and its notifications consistent', async () => {
         const { favoritesModule } = await import('../favorites-store.js');
         const { Api } = await import('../../api.js');
         Api.saveFavorites.mockResolvedValue({});
@@ -90,7 +90,7 @@ describe('favoritesModule — toggleFavorite', () => {
         expect(store.notifications).toHaveLength(0);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps the favorites list and its notifications consistent', async () => {
         const { favoritesModule } = await import('../favorites-store.js');
         const { Api } = await import('../../api.js');
         let rejectSave;
@@ -108,7 +108,7 @@ describe('favoritesModule — toggleFavorite', () => {
         expect(store.notifications.filter((n) => n.type === 'error')).toHaveLength(1);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('gates the bulk/drag-and-drop action behind the expected confirmation', async () => {
         const { favoritesModule } = await import('../favorites-store.js');
         const { Api } = await import('../../api.js');
         Api.saveFavorites.mockResolvedValue({});
@@ -126,7 +126,7 @@ describe('favoritesModule — toggleFavorite', () => {
         expect(store.notifications.filter((n) => n.type === 'error')).toHaveLength(1);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const { favoritesModule } = await import('../favorites-store.js');
         const { Api } = await import('../../api.js');
         const abortError = new Error('The operation was aborted.');

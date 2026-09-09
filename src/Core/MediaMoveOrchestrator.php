@@ -13,13 +13,17 @@ final class MediaMoveOrchestrator
 	 */
 	public static function route(array $ids, int $folder_id, string $taxonomy): MediaMoveResult {
 
-		//
-
 		$trash_folder_id = TrashFolder::id( $taxonomy );
 		$trash_ids       = [];
 		$normal_ids      = [];
 		$into_trash_ids  = [];
 		$already_trashed_skipped = 0;
+
+		$primed_ids = array_values( array_filter( array_map( 'intval', $ids ), static fn (int $id): bool => $id > 0 ) );
+		if ( $primed_ids !== [] ) {
+			_prime_post_caches( $primed_ids, false, false );
+		}
+
 		foreach ( $ids as $id ) {
 			$post      = get_post( $id );
 			$is_trash  = $post instanceof \WP_Post && $post->post_status === 'trash';

@@ -27,9 +27,6 @@ final class FolderTrashService
 	{
 		$this->repository = $repository ?? new FolderRepository();
 
-		// tree's own dependency and this class's new recursive-count decrement — avoids
-		// constructing two separate instances (cheap, but pointless duplication) when
-		// $tree is not explicitly injected.
 		$this->countService = $countService ?? new FolderCountService( $this->repository, Cache::make() );
 
 		$this->tree = $tree ?? new FolderTreeService( $this->repository, $this->countService );

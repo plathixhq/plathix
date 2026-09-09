@@ -92,11 +92,11 @@ describe('inline style guard (JS)', () => {
 	it.each([
 		['.style.display = ', "el.style.display = 'none';", 1],
 		['.style.cssText =', 'el.style.cssText = "position:fixed";', 1],
-		['Public-facing message unavailable.', 'el.style.setProperty("--x", 1);', 0],
-		['Public-facing message unavailable.', "el.classList.toggle('is-hidden');", 0],
-		['Public-facing message unavailable.', "el.className = 'is-hidden';", 0],
-		['Public-facing message unavailable.', "el.style.opacity += 1;", 0],
-		['Public-facing message unavailable.', "if (el.style.display == 'none') {}", 0],
+		['setProperty не считается', 'el.style.setProperty("--x", 1);', 0],
+		['classList не считается', "el.classList.toggle('is-hidden');", 0],
+		['className не считается', "el.className = 'is-hidden';", 0],
+		['+= не считается', "el.style.opacity += 1;", 0],
+		['== не считается присваиванием', "if (el.style.display == 'none') {}", 0],
 	])('pattern verdict: %s', (_label, code, expected) => {
 		const propHits = code.match(STYLE_PROP_PATTERN) || [];
 		const cssTextHits = code.match(STYLE_CSSTEXT_PATTERN) || [];

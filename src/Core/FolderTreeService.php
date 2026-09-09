@@ -164,9 +164,6 @@ final class FolderTreeService
 			return new \WP_Error( 'structure_locked', __( 'Folder structure is temporarily locked. Please try again in a moment.', 'plathix' ), [ 'status' => 409 ] );
 		}
 
-		// to decrement its recursive chain below. term is guaranteed to exist here (guards
-		// above already validated $id/$parent); a null read would mean a race with a
-
 		$old_term   = $this->repository->getById( $id, $taxonomy );
 		$old_parent = $old_term instanceof \WP_Term ? (int) $old_term->parent : 0;
 
@@ -183,12 +180,6 @@ final class FolderTreeService
 
 		if ( ! is_wp_error( $result ) ) {
 
-			// subtree) leaves the old parent's chain and enters the new one — same
-			// direct-own-count decrement/increment pattern as FolderTrashService/
-			// FolderRestoreService, but using getRecursiveCount() here (not getCount()):
-			// unlike a single-node trash/restore, a MOVED folder can carry its whole
-			// subtree with it, so the full recursive total must transfer, not just its
-			// own direct files.
 			$moved_count = $this->countService->getRecursiveCount( $id, $taxonomy );
 			if ( $moved_count > 0 ) {
 				if ( $old_parent > 0 ) {
@@ -323,15 +314,6 @@ final class FolderTreeService
 			return false;
 		}
 
-		// UNLESS the folder was already soft-trashed (FolderTrashService::markTrashed()
-		// already decremented it when it entered Trash — the normal retention-cleanup
-		// path calls THIS method on an already-trashed folder). Decrementing again here
-		// unconditionally would double-subtract the same files. A live (never-trashed)
-		// folder reaching this method directly (DataWiper, or a future direct-delete
-		// caller) has NOT been decremented yet, so it must be here. Read parent + trashed
-		// status + own count BEFORE repository->delete() removes the term — wp_delete_term()
-		// clears term_relationships as part of the delete, so getCount() after delete()
-		// would read back 0 regardless of what was actually there.
 		$term_before_delete    = $this->repository->getById( $id, $taxonomy );
 		$parent_before_delete  = $term_before_delete instanceof \WP_Term ? (int) $term_before_delete->parent : 0;
 		$was_already_trashed   = (string) $this->repository->getMeta( $id, FolderTrashService::META_TRASHED ) === '1';
@@ -435,10 +417,6 @@ final class FolderTreeService
 		}
 	}
 
-	// -------------------------------------------------------------------------
-
-	// -------------------------------------------------------------------------
-
 	private function normalizeName(string $name): string {
 		return FolderName::normalize( $name );
 	}
@@ -503,8 +481,6 @@ final class FolderTreeService
 	}
 
 	private function hasTrashedAncestor(int $parent, string $taxonomy): bool {
-
-		//
 
 		$hidden_ids = HiddenFolders::ids( $taxonomy );
 

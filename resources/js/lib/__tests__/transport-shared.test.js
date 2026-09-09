@@ -80,7 +80,7 @@ describe('enforces request authorization', () => {
 });
 
 describe('window.PlathixTransport.restRequest — write-405-fallback', () => {
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             res(false, 405, null),
             res(true, 200, { created: true }),
@@ -106,7 +106,7 @@ describe('window.PlathixTransport.restRequest — write-405-fallback', () => {
 });
 
 describe('window.PlathixTransport.restRequest — read-non-JSON-fallback', () => {
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             res(true, 200, null),
             res(true, 200, { folders: [] }),
@@ -118,7 +118,7 @@ describe('window.PlathixTransport.restRequest — read-non-JSON-fallback', () =>
         expect(calls).toHaveLength(2);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             res(true, 200, null),
             res(true, 200, null),
@@ -127,7 +127,7 @@ describe('window.PlathixTransport.restRequest — read-non-JSON-fallback', () =>
         await expect(restRequest('media', { method: 'GET' })).rejects.toMatchObject({ code: 'rest_read_corrupted' });
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             res(true, 200, null),
         ]);
@@ -137,14 +137,78 @@ describe('window.PlathixTransport.restRequest — read-non-JSON-fallback', () =>
     });
 });
 
+describe('keeps REST transport behavior consistent under retry and error conditions', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
+        mockFetchSequence([
+            res(false, 404, { code: 'not_found', message: 'Job not found.' }),
+        ]);
+
+        await expect(restRequest('jobs/1', { method: 'GET' })).rejects.toMatchObject({
+            code: 'not_found',
+            httpStatus: 404,
+        });
+    });
+
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
+        mockFetchSequence([
+            res(false, 503, null),
+        ]);
+
+        await expect(restRequest('jobs/1', { method: 'GET' })).rejects.toMatchObject({
+            httpStatus: 503,
+        });
+    });
+
+    it('prevents concurrent state changes', async () => {
+        mockFetchSequence([
+            res(false, 405, null),
+            res(false, 405, null),
+        ]);
+
+        await expect(restRequest('zip', { method: 'POST' })).rejects.toMatchObject({
+            code: 'rest_write_blocked',
+            httpStatus: 405,
+        });
+    });
+
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
+        mockFetchSequence([
+            res(true, 200, null),
+            res(true, 200, null),
+        ]);
+
+        expect.assertions(2);
+        try {
+            await restRequest('media', { method: 'GET' });
+        } catch (error) {
+            expect(error.code).toBe('rest_read_corrupted');
+            expect(error.httpStatus).toBeUndefined();
+        }
+    });
+
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
+        mockFetchSequence([
+            res(true, 200, null),
+        ]);
+
+        expect.assertions(2);
+        try {
+            await restRequest('zip', { method: 'POST' });
+        } catch (error) {
+            expect(error.code).toBe('rest_write_indeterminate');
+            expect(error.httpStatus).toBeUndefined();
+        }
+    });
+});
+
 describe('window.PlathixTransport.postType/parseJson/refreshNonce', () => {
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         expect(runtime()).toBe(window.Plathix);
         delete window.Plathix;
         expect(runtime()).toEqual({});
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         expect(postType()).toBe('attachment');
         window.Plathix.postType = 'plathix_document';
         expect(postType()).toBe('plathix_document');
@@ -152,7 +216,7 @@ describe('window.PlathixTransport.postType/parseJson/refreshNonce', () => {
         expect(postType()).toBe('attachment');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const response = { json: () => Promise.reject(new Error('bad json')) };
         await expect(parseJson(response)).resolves.toBeNull();
     });

@@ -9,7 +9,7 @@ use Plathix\Admin\AdminLayoutNav;
 class AdminLayout
 {
 	public static function open(string $current_page): void {
-		$plathix_current_page = $current_page; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- prefixed local handed to the required template partial; the prefix prevents collisions with variables in the including scope
+		$plathix_current_page = $current_page; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 
 		$plathix_nav_sections = AdminLayoutNav::sections(); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase -- prefixed local handed to the required template partial; the prefix prevents collisions with variables in the including scope
 		require PLATHIX_PATH . 'views/admin-layout.php';

@@ -127,7 +127,7 @@ describe('handles trash workflow consistently', () => {
         expect(confirmSpy).toHaveBeenCalledWith('Restore file and move it to folder "Projects"?');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
         const store = makeStore({ openId: 158 });
         Alpine.store('plathix', store);
         confirmSpy.mockReturnValue(false);

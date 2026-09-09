@@ -13,7 +13,6 @@ use Plathix\Modules\Preset\PresetSchema;
 class Activator
 {
 
-	// (wp-admin/includes/plugin.php::activate_plugin(), wp-cli/extension-command).
 	public static function run(bool $network_wide = false): void {
 		if ( is_multisite() && $network_wide ) {
 			$site_ids = get_sites(

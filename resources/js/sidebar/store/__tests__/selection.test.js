@@ -21,8 +21,8 @@ describe('selectionModule — media selection owner', () => {
         getMediaFrame.mockReturnValue(null);
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', () => {
+    describe('keeps store/selection state consistent across UI events', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             document.body.innerHTML = `
                 <div class="attachment selected" data-id="1"></div>
                 <div class="attachment selected" data-id="2"></div>
@@ -36,13 +36,13 @@ describe('selectionModule — media selection owner', () => {
             expect(store.getSelectedItemIds().sort()).toEqual([1, 2, 3, 4]);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps store/selection state consistent across UI events', () => {
             expect(makeStore().getSelectedItemIds()).toEqual([]);
         });
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', () => {
+    describe('keeps store/selection state consistent across UI events', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             document.body.innerHTML = `
                 <div class="attachment selected" data-id="1"></div>
                 <div class="attachment selected" data-id="2"></div>
@@ -56,7 +56,7 @@ describe('selectionModule — media selection owner', () => {
             expect(store.selectedMediaCount).toBe(2);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             document.body.innerHTML = `<div class="attachment selected" data-id="1"></div>`;
             const store = makeStore();
             store.recountFromUi();
@@ -64,14 +64,14 @@ describe('selectionModule — media selection owner', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', () => {
+    describe('keeps store/selection state consistent across UI events', () => {
+        it('keeps store/selection state consistent across UI events', () => {
             const store = makeStore({ selectedMediaCount: 5 });
             store.setFromMutationResult(0);
             expect(store.selectedMediaCount).toBe(0);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps store/selection state consistent across UI events', () => {
             const store = makeStore({ selectedMediaCount: 3 });
             store.setFromMutationResult(1);
             expect(store.selectedMediaCount).toBe(1);
@@ -80,7 +80,7 @@ describe('selectionModule — media selection owner', () => {
 
 
 
-    it('covers public behavior without internal references', () => {
+    it('keeps store/selection state consistent across UI events', () => {
         document.body.innerHTML = '';
         getMediaFrame.mockReturnValue(null);
         const store = makeStore();
@@ -93,7 +93,7 @@ describe('selectionModule — media selection owner', () => {
     });
 
     describe('clearSelectionDom()', () => {
-        it('covers public behavior without internal references', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             document.body.innerHTML = `
                 <div class="attachment selected" data-id="1"></div>
                 <input type="checkbox" name="media[]" value="1" checked>
@@ -111,7 +111,7 @@ describe('selectionModule — media selection owner', () => {
             expect(document.querySelector('#cb-select-all-1').checked).toBe(false);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
             document.body.innerHTML = `
                 <div class="attachment" data-id="7"></div>
                 <tr id="post-7"></tr>

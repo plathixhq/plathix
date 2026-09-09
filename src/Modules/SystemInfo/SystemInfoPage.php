@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plathix\Modules\SystemInfo;
 
 use Plathix\Core\AdminLayout;
+use Plathix\User\AccessResolver;
 
 class SystemInfoPage
 {
@@ -75,7 +76,7 @@ class SystemInfoPage
 
 	public function render(): void {
 		AdminLayout::renderPage( self::PAGE_SLUG, function (): void {
-			if ( ! current_user_can( 'manage_options' ) ) {
+			if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 				wp_die( esc_html__( 'You do not have sufficient permissions.', 'plathix' ) );
 			}
 			?>

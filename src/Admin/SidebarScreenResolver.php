@@ -96,7 +96,8 @@ final class SidebarScreenResolver
 		if (
 			! BuilderDetect::isFrontendBuilderRequest(
 			is_admin(),
-			[ 'attachment' ], // CTAN-201: attachment-native
+			[ 'attachment' ],
+
 			$_GET // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only detection, values never output
 			)
 		) {

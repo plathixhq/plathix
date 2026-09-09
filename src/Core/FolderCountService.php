@@ -12,12 +12,6 @@ final class FolderCountService
 	private const CACHE_TTL = 300;
 	private const ALL_FILES_ID = FolderId::ROOT;
 
-	// including subfolders" — termmeta point-update (+1/-1 on layout-change events),
-	// not native $term->count (already rejected above, misleading on hierarchical
-	// taxonomies) and not per-read recompute (too expensive for the recursive case:
-	// recomputing a subtree sum on every cache-cold read would be O(subtree) per hit).
-	// Direct $wpdb, not FolderRepository::setMeta() — that clears the WHOLE runtime
-	// cache on every call, too heavy for a counter incremented on every layout event.
 	private const RECURSIVE_COUNT_META_KEY = '_plathix_folder_count_recursive';
 	/** @var array<string, bool> */
 	private array $bulk_invalidations = [];
@@ -59,7 +53,6 @@ final class FolderCountService
 			$counts = $this->calculator->batchCounts( [ $folder_id ], $taxonomy );
 			if ( null === $counts ) {
 
-				// know is wrong; the next read gets a fresh chance to succeed.
 				return null;
 			}
 			$count = $counts[ $folder_id ] ?? 0;
@@ -124,7 +117,6 @@ final class FolderCountService
 			$counts = $this->calculator->batchCounts( $normal_ids, $taxonomy );
 			foreach ( $normal_ids as $folder_id ) {
 
-				// 0 for this response without caching it as a fact the next read would trust.
 				if ( null === $counts ) {
 					$result[ $folder_id ] = 0;
 					continue;
@@ -381,28 +373,13 @@ final class FolderCountService
 			}
 		}
 
-		// Count items per folder in a single SQL query instead of relying on
-		// term_taxonomy.count, which WordPress may not keep up-to-date.
-
-		// to an empty map for THIS response (every folder falls back to its own ?? 0
-		// below), but do NOT cache the degraded result below (sql_batch_failed flag) —
-		// caching it would freeze the false "everything is 0" fact for CACHE_TTL, exactly
-		// the class of bug #692 closed for getCount()/getCountsFor() and #798 found
-		// still open here.
 		$raw_batch_counts = $this->calculator->batchCounts( $custom_term_ids, $taxonomy );
 		$batchCounts     = $raw_batch_counts ?? [];
 
-		// totalItemsCount()/uncategorizedItemsCount() — they were computed above,
-		// before this flag existed, and their degradation used to slip past it uncached
-		// only by accident (nothing gated them at all).
 		$sql_batch_failed = null === $raw_batch_counts
 			|| null === $raw_total_items
 			|| ( $uncategorized_id > 0 && null === $raw_uncategorized );
 
-		// tree in one query (WP-native update_termmeta_cache), so the per-folder
-		// getRecursiveCount() calls below hit warm object cache instead of one SQL
-		// SELECT each — the same N+1-avoidance shape as batchCounts() above, applied to
-		// the termmeta-backed recursive counter from MSC-103.
 		update_termmeta_cache( $custom_term_ids );
 
 		foreach ( $all_terms as $term ) {
@@ -498,9 +475,6 @@ final class FolderCountService
 			return [];
 		}
 
-		// to an empty map for THIS response, symmetric to getAllCached() above; do NOT
-		// cache the degraded result (sql_batch_failed flag) — same class as #798 found
-		// still open here.
 		$raw_batch_counts = $this->calculator->batchCounts( $child_ids, $taxonomy );
 		$sql_batch_failed = null === $raw_batch_counts;
 		$batchCounts     = $raw_batch_counts ?? [];
@@ -509,7 +483,6 @@ final class FolderCountService
 		$parents_with_children = $this->repository->getParentIdsThatHaveChildren( $child_ids, $taxonomy );
 		$grandchild_parent_ids = array_fill_keys( $parents_with_children, true );
 
-		// one query — same rationale as getAllCached() above.
 		update_termmeta_cache( $child_ids );
 
 		$items = [];

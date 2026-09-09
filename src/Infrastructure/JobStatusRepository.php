@@ -36,10 +36,6 @@ final class JobStatusRepository
 			return [ 'status' => 'not_found', 'result' => null, 'attempts' => 0 ];
 		}
 
-		//
-
-		//
-
 		if ( ! IdentityKeyResolver::matchesOwner( $payload ) ) {
 			return [ 'status' => 'not_found', 'result' => null, 'attempts' => 0 ];
 		}

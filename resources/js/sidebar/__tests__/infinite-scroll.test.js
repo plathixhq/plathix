@@ -153,7 +153,7 @@ describe('InfiniteScrollManager', () => {
         removeSpy.mockRestore();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
         const root = document.createElement('div');
         document.body.appendChild(root);
         const library = { hasMore: jest.fn(() => true), more: jest.fn() };

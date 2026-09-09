@@ -147,6 +147,12 @@ final class AttachmentReplaceService
 		$collision_backup = null;
 
 		try {
+
+			$recheck_post = get_post( $attachment_id );
+			if ( $recheck_post instanceof \WP_Post && $recheck_post->post_status === 'trash' ) {
+				return new \WP_Error( 'attachment_trashed', __( 'Attachment was moved to trash.', 'plathix' ) );
+			}
+
 			$file_type = ($this->filetype_validator)( (string) $validated_input['tmp_name'], (string) $validated_input['name'] );
 			$new_mime = (string) ( $file_type['type'] ?? '' );
 			$new_ext = (string) ( $file_type['ext'] ?? '' );
@@ -187,24 +193,9 @@ final class AttachmentReplaceService
 				 * @var array<string, mixed> $validated_input
 				 */
 
-				// only assigned after runUploadPipeline() succeeds (below), so if the
-				// pipeline fails, this staged sideload copy would otherwise never be unlinked.
 				$sideload_staged_file = (string) ( $validated_input['tmp_name'] ?? '' );
 			}
 
-			// can make the new physical file path collide with the old one — the old file
-			// is about to be physically overwritten before commit, while
-			// rollbackPreCommit() only knows how to restore metadata, not bytes
-			// (snapshotAttachmentState() never captured a byte-level backup). Whether the
-			// collision actually happens depends on runUploadPipeline()'s result — a
-			// mocked upload_runner() in tests may return a path that never goes through
-			// reuseOldFilename() at all — so the real path is only known AFTER the
-			// pipeline runs, by which point an overwrite would already have happened. Copy
-			// (not move — the old file must stay in place for a pipeline that does not
-			// collide) the old file into the existing TempDirectory-resolved staging area
-			// unconditionally before the pipeline call whenever it exists on disk; the copy
-			// is discarded right below once the real staged path is known, if it turns out
-			// no collision occurred.
 			if ( $old_state['absolute_file'] !== '' && file_exists( $old_state['absolute_file'] ) ) {
 				$collision_backup = $this->backupCollisionTarget( $old_state['absolute_file'] );
 				if ( is_wp_error( $collision_backup ) ) {
@@ -235,8 +226,6 @@ final class AttachmentReplaceService
 				return new \WP_Error( 'upload_failed', __( 'Uploaded file result is incomplete.', 'plathix' ) );
 			}
 
-			// new file elsewhere, or a test double bypassed reuseOldFilename()) — the
-			// backup copy protects nothing and would otherwise leak into temp forever.
 			if (
 				is_string( $collision_backup )
 				&& $collision_backup !== ''
@@ -288,8 +277,6 @@ final class AttachmentReplaceService
 				return $this->rollbackPreCommit( $attachment_id, $old_state, $staged_file, __( 'Failed to update attachment metadata.', 'plathix' ), $collision_backup, $new_metadata );
 			}
 
-			// failed to write one or more thumbnail files during generation above — surface
-			// that honestly instead of reporting a silent full success.
 			if ( $this->isTransformableImageMime( $new_mime ) ) {
 				$missing_sizes = ($this->missing_subsizes_resolver)( $attachment_id );
 				if ( $missing_sizes !== [] ) {
@@ -358,22 +345,6 @@ final class AttachmentReplaceService
 			return $result;
 		} finally {
 
-			// never proven necessary (runUploadPipeline() failed before the collision
-			// check ran, or landed on a different path) — the original was never touched,
-			// just discard the speculative copy; or (b) the collision WAS confirmed
-			// ($staged_file === old path) but a later step failed via an early `return`
-			// that bypassed rollbackPreCommit() (e.g. the 'upload_failed' incomplete-result
-			// guard right after the pipeline call) — the original path now holds the NEW
-			// content and needs the backup restored onto it. rollbackPreCommit(), when it
-			// did run, already consumed the backup — file_exists() guards against a
-			// redundant/no-op second attempt either way.
-
-			// uncommitted-staged-file cleanup below must NEVER touch that path — either
-			// rollbackPreCommit() already restored the original onto it (ran earlier in
-			// this same request, backup file itself no longer exists — file_exists() below
-			// is false), or it is restored right here when rollbackPreCommit() was never
-			// reached. Either way, deleting $staged_file afterwards would delete the
-			// original replace() just spent this whole package restoring.
 			$collision_confirmed = is_string( $staged_file ) && $staged_file !== '' && $staged_file === $old_state['absolute_file'];
 			if (
 				! $committed
@@ -401,8 +372,6 @@ final class AttachmentReplaceService
 				wp_delete_file( $staged_file ); // finally-block rollback deleting the uncommitted staged sideload result (from wp_handle_upload, in the plugin's own temp dir); local path.
 			}
 
-			// $staged_file above is still null and never covers this earlier sideload
-			// staging copy. Guard against double-unlink if both paths happen to match.
 			if (
 				! $committed
 				&& is_string( $sideload_staged_file )
@@ -698,14 +667,6 @@ final class AttachmentReplaceService
 			]
 		);
 
-		// (by comparing $staged_file to the old path after the pipeline ran) that the new
-		// file landed on the same path as the old one — $uploaded_file IS
-		// $old_state['absolute_file'] physically now, holding the NEW content. A plain
-		// unlink would delete the only remaining copy of the original (the pre-pipeline
-		// copy is what backupCollisionTarget() saved). Restore real bytes by moving the
-		// backup onto the corrupted path; if there is no backup (paths never collided, or
-		// it was already discarded once proven unnecessary), the previous
-		// unlink-the-staged-result behaviour is unchanged.
 		if ( is_string( $collision_backup ) && $collision_backup !== '' && file_exists( $collision_backup ) ) {
 			if ( ! @rename( $collision_backup, $old_state['absolute_file'] ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename -- restoring the pre-replace original from the plugin's temp dir back to its attachment path after a failed replace; local paths, not remote.
 				return new \WP_Error(

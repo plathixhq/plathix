@@ -11,6 +11,7 @@ use Plathix\Core\Taxonomy;
 use Plathix\Infrastructure\JobDispatcher;
 use Plathix\Infrastructure\Logger;
 use Plathix\Infrastructure\MediaModalEnqueue;
+use Plathix\PublicApi\ReplaceApi;
 
 final class Module implements ModuleInterface
 {
@@ -209,6 +210,10 @@ final class Module implements ModuleInterface
 
 	public function blockTrashOfAlreadyTrashedPost($check, \WP_Post $post, string $previous_status) {
 		if ( $post->post_status === 'trash' ) {
+			return false;
+		}
+
+		if ( ( new ReplaceApi() )->isReplaceInProgress( $post->ID ) ) {
 			return false;
 		}
 

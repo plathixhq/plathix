@@ -16,12 +16,12 @@ function jsonResponse(body, ok = true, status = ok ? 200 : 500) {
     return { ok, status, json: async () => body };
 }
 
-describe('covers public behavior without internal references', () => {
+describe('keeps REST transport behavior consistent under retry and error conditions', () => {
     afterEach(() => {
         jest.restoreAllMocks();
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('covers preset import and export behavior', async () => {
         const fetchMock = jest.fn().mockResolvedValueOnce(
             jsonResponse({ success: true, data: { status: 'complete', result: { moved: 5 } } })
         );
@@ -36,7 +36,7 @@ describe('covers public behavior without internal references', () => {
         expect(options.method).toBe('POST');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const fetchMock = jest.fn()
             .mockResolvedValueOnce(jsonResponse({ success: true, data: { status: 'running' } }))
             .mockResolvedValueOnce(jsonResponse({ success: true, data: { status: 'running' } }))
@@ -62,7 +62,7 @@ describe('covers public behavior without internal references', () => {
         expect(fetchMock).toHaveBeenCalledTimes(1);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const fetchMock = jest.fn()
             .mockRejectedValueOnce(new Error('network error'))
             .mockResolvedValueOnce(jsonResponse({}, false, 429))
@@ -77,7 +77,7 @@ describe('covers public behavior without internal references', () => {
         expect(fetchMock).toHaveBeenCalledTimes(5);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('covers preset import and export behavior', async () => {
         const fetchMock = jest.fn().mockRejectedValue(new Error('network error'));
         global.fetch = fetchMock;
 
@@ -87,7 +87,7 @@ describe('covers public behavior without internal references', () => {
         expect(fetchMock).toHaveBeenCalledTimes(5);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps store/selection state consistent across UI events', async () => {
         const fetchMock = jest.fn()
             .mockRejectedValueOnce(new Error('network error'))
             .mockRejectedValueOnce(new Error('network error'))
@@ -103,7 +103,7 @@ describe('covers public behavior without internal references', () => {
         expect(fetchMock).toHaveBeenCalledTimes(6);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('covers preset import and export behavior', async () => {
         const fetchMock = jest.fn().mockResolvedValueOnce(
             jsonResponse({ success: true, data: { status: 'failed' } })
         );
@@ -112,7 +112,7 @@ describe('covers public behavior without internal references', () => {
         await expect(pollJob(1, makeSettings(), t, jest.fn())).rejects.toThrow('Import failed.');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('covers preset import and export behavior', async () => {
         const fetchMock = jest.fn().mockResolvedValueOnce(
             jsonResponse({ success: true, data: { status: 'not_found' } })
         );

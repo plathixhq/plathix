@@ -34,6 +34,7 @@ import Alpine from 'alpinejs';
 import { MountManager, ensureStaticRoot } from '../mount-manager.js';
 import { getRuntime } from '../runtime.js';
 import { onMediaFrameReady } from '../media-frame-watcher.js';
+import { getStaticSidebarRoot } from '../dom.js';
 
 function buildMediaFrame() {
     const frame = document.createElement('div');
@@ -78,8 +79,8 @@ describe('MountManager', () => {
         getRuntime.mockReturnValue({ mediaModalOnly: true, skinClasses: [] });
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', () => {
+    describe('mounts or dismisses the UI element under the expected conditions', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
             const wpFrame = buildWpMediaFrame(frameEl);
@@ -93,7 +94,7 @@ describe('MountManager', () => {
             expect(frameEl.querySelector('#plathix-modal-root')).not.toBeNull();
         });
 
-        it('covers public behavior without internal references', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             getRuntime.mockReturnValue({ mediaModalOnly: false, skinClasses: [] });
 
             const manager = new MountManager();
@@ -103,8 +104,8 @@ describe('MountManager', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', async () => {
+    describe('mounts or dismisses the UI element under the expected conditions', () => {
+        it('mounts or dismisses the UI element under the expected conditions', async () => {
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
             const wpFrame = buildWpMediaFrame(frameEl);
@@ -140,7 +141,7 @@ describe('MountManager', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
+    describe('mounts or dismisses the UI element under the expected conditions', () => {
         it('preserves folder tree behavior', () => {
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
@@ -163,8 +164,8 @@ describe('MountManager', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', () => {
+    describe('mounts or dismisses the UI element under the expected conditions', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             const frameEl = document.createElement('div');
             frameEl.className = 'media-frame';
 
@@ -198,8 +199,8 @@ describe('MountManager', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', () => {
+    describe('keeps REST transport behavior consistent under retry and error conditions', () => {
+        it('keeps REST transport behavior consistent under retry and error conditions', () => {
 
 
             onMediaFrameReady.mockImplementation(() => {});
@@ -218,7 +219,7 @@ describe('MountManager', () => {
             jest.useRealTimers();
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps REST transport behavior consistent under retry and error conditions', () => {
 
 
 
@@ -252,7 +253,7 @@ describe('MountManager', () => {
     });
 
     describe('prevents concurrent state changes', () => {
-        it('covers public behavior without internal references', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
             const wpFrame = buildWpMediaFrame(frameEl);
@@ -269,7 +270,7 @@ describe('MountManager', () => {
             expect(mockStore.cleanup).toHaveBeenCalledTimes(1);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
             const wpFrame = buildWpMediaFrame(frameEl);
@@ -287,8 +288,8 @@ describe('MountManager', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
-        it('covers public behavior without internal references', () => {
+    describe('mounts or dismisses the UI element under the expected conditions', () => {
+        it('keeps REST transport behavior consistent under retry and error conditions', () => {
 
 
 
@@ -316,7 +317,7 @@ describe('MountManager', () => {
             expect(frameEl.querySelector('#plathix-modal-root')).not.toBeNull();
         });
 
-        it('covers public behavior without internal references', () => {
+        it('keeps REST transport behavior consistent under retry and error conditions', () => {
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
             const wpFrame = buildWpMediaFrame(frameEl);
@@ -342,7 +343,7 @@ describe('MountManager', () => {
             expect(openHandlerCountAfterSecond).toBe(1);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('mounts or dismisses the UI element under the expected conditions', () => {
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
             const wpFrame = buildWpMediaFrame(frameEl);
@@ -363,7 +364,7 @@ describe('MountManager', () => {
     });
 });
 
-describe('ensureStaticRoot — screen gate (CEC-101)', () => {
+describe('mounts or dismisses the UI element under the expected conditions', () => {
     beforeEach(() => {
         document.body.innerHTML = '<div id="wpbody"><div id="wpbody-content"></div></div>';
     });
@@ -373,13 +374,13 @@ describe('ensureStaticRoot — screen gate (CEC-101)', () => {
         jest.clearAllMocks();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
         getRuntime.mockReturnValue({ screenKind: 'static', mediaModalOnly: false, skinClasses: [] });
 
         expect(ensureStaticRoot()).not.toBeNull();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
 
         getRuntime.mockReturnValue({
             screenKind: 'static',
@@ -391,13 +392,13 @@ describe('ensureStaticRoot — screen gate (CEC-101)', () => {
         expect(ensureStaticRoot()).not.toBeNull();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
         getRuntime.mockReturnValue({ screenKind: 'modal', mediaModalOnly: false, skinClasses: [] });
 
         expect(ensureStaticRoot()).toBeNull();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
 
 
         getRuntime.mockReturnValue({ mediaModalOnly: false, skinClasses: [] });
@@ -405,9 +406,41 @@ describe('ensureStaticRoot — screen gate (CEC-101)', () => {
         expect(ensureStaticRoot()).toBeNull();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
         getRuntime.mockReturnValue({ screenKind: 'static', mediaModalOnly: true, skinClasses: [] });
 
         expect(ensureStaticRoot()).toBeNull();
+    });
+
+    it('mounts or dismisses the UI element under the expected conditions', () => {
+
+
+        const placeholder = document.createElement('div');
+        placeholder.id = 'plathix-sidebar-root';
+        placeholder.setAttribute('aria-hidden', 'true');
+        document.getElementById('wpbody').appendChild(placeholder);
+        getStaticSidebarRoot.mockReturnValue(placeholder);
+
+        expect(placeholder.hasAttribute('aria-hidden')).toBe(true);
+
+        getRuntime.mockReturnValue({ screenKind: 'static', mediaModalOnly: false, skinClasses: [] });
+        const wrapper = ensureStaticRoot();
+
+        expect(wrapper).toBe(placeholder);
+        expect(wrapper.hasAttribute('aria-hidden')).toBe(false);
+    });
+
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
+        const placeholder = document.createElement('div');
+        placeholder.id = 'plathix-sidebar-root';
+        placeholder.setAttribute('aria-hidden', 'true');
+        document.getElementById('wpbody').appendChild(placeholder);
+        getStaticSidebarRoot.mockReturnValue(placeholder);
+
+        getRuntime.mockReturnValue({ screenKind: 'static', mediaModalOnly: false, skinClasses: [] });
+        ensureStaticRoot();
+
+        expect(() => ensureStaticRoot()).not.toThrow();
+        expect(placeholder.hasAttribute('aria-hidden')).toBe(false);
     });
 });

@@ -93,12 +93,10 @@ final class PresetsPage
 	public function render(): void {
 		AdminLayout::renderPage( self::PAGE_SLUG, function (): void {
 
-			// PRO RolePolicy override.
 			if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 				wp_die( esc_html__( 'You do not have sufficient permissions.', 'plathix' ) );
 			}
 
-		// Sync built-in presets on page open (spec §15: "scanned when opening Presets page")
 			$this->discovery->discover();
 
 			$all_presets_full = $this->repository->list( [ 'validation_status' => 'valid' ] );

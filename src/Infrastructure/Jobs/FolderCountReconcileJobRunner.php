@@ -78,8 +78,6 @@ final class FolderCountReconcileJobRunner
 				}
 			}
 
-			//
-
 			if ( $completed ) {
 				$old_run    = get_option( self::LAST_RUN_OPTION, 0 );
 				$now        = time();

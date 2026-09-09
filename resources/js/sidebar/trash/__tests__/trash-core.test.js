@@ -205,22 +205,29 @@ describe('handles trash workflow consistently', () => {
 });
 
 describe('handles trash workflow consistently', () => {
-    it('covers public behavior without internal references', () => {
+    it('escapes untrusted output for the destination context', () => {
         const result = escapeAttr('x" onmouseover="alert(1)');
 
         expect(result).not.toContain('"');
         expect(result).toContain('&quot;');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('escapes untrusted output for the destination context', () => {
         const result = escapeAttr("x' onfocus='alert(1)");
 
         expect(result).not.toContain("'");
         expect(result).toContain('&#39;');
     });
 
-    it('covers public behavior without internal references', () => {
-        const result = escapeAttr('Tom & Jerry "Show"Clients"A&B"Clients"O'Reilly / Design 2026")).toBe('O&#39;Reilly / Design 2026');
+    it('escapes untrusted output for the destination context', () => {
+        const result = escapeAttr('Tom & Jerry "Show"');
+
+        expect(result).toBe('Tom &amp; Jerry &quot;Show&quot;');
+    });
+
+    it('escapes untrusted output for the destination context', () => {
+        expect(escapeAttr('Клиент "A&B" <архив> 📁')).toBe('Клиент &quot;A&amp;B&quot; &lt;архив&gt; 📁');
+        expect(escapeAttr("O'Reilly / Design 2026")).toBe('O&#39;Reilly / Design 2026');
     });
 
     it('keeps upload links scoped to the active folder', () => {

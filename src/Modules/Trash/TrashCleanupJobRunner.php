@@ -7,7 +7,7 @@ namespace Plathix\Modules\Trash;
 use Plathix\Core\FolderCountService;
 use Plathix\Core\FolderRepository;
 use Plathix\Core\FolderTreeService;
-use Plathix\Core\MediaTrashLock;
+use Plathix\Core\MediaDeleteService;
 use Plathix\Core\Taxonomy;
 use Plathix\Infrastructure\Cache;
 
@@ -67,21 +67,12 @@ final class TrashCleanupJobRunner
 				foreach ( (array) $ids as $id ) {
 					$id = (int) $id;
 
-					$lock = ( new MediaTrashLock() )->acquire( $id );
-					if ( is_wp_error( $lock ) ) {
+					$post = get_post( $id );
+					if ( ! $post || 'trash' !== $post->post_status ) {
 						continue;
 					}
 
-					try {
-
-						$post = get_post( $id );
-						if ( ! $post || 'trash' !== $post->post_status ) {
-							continue;
-						}
-						wp_delete_post( $id, true );
-					} finally {
-						( new MediaTrashLock() )->release( $id, $lock['token'] ?? '' );
-					}
+					( new MediaDeleteService() )->permanentDelete( $id );
 				}
 			}
 		);

@@ -58,7 +58,7 @@ final class ForbiddenManualFullAdminGateRule implements Rule
 		$hasCapCheck = false;
 		$hasFullComparison = false;
 		foreach ( $operands as $operand ) {
-			$hasCapCheck = $hasCapCheck || $this->isManageOptionsCapCheck( $operand, $scope );
+			$hasCapCheck = $hasCapCheck || self::isManageOptionsCapCheck( $operand, $scope );
 			$hasFullComparison = $hasFullComparison || $this->isAccessResolverFullComparison( $operand, $scope );
 		}
 
@@ -107,17 +107,14 @@ final class ForbiddenManualFullAdminGateRule implements Rule
 		$hasCapCheck = false;
 		$hasFullComparison = false;
 		foreach ( $operands as $operand ) {
-			$hasCapCheck = $hasCapCheck || $this->isManageOptionsCapCheck( $operand, $scope );
+			$hasCapCheck = $hasCapCheck || self::isManageOptionsCapCheck( $operand, $scope );
 			$hasFullComparison = $hasFullComparison || $this->isAccessResolverFullComparison( $operand, $scope );
 		}
 
 		return $hasCapCheck && $hasFullComparison;
 	}
 
-	/**
-	 * Matches `current_user_can('manage_options')`, optionally wrapped in `!` (De Morgan form).
-	 */
-	private function isManageOptionsCapCheck(Node $node, Scope $scope): bool
+	public static function isManageOptionsCapCheck(Node $node, Scope $scope): bool
 	{
 		if ( $node instanceof BooleanNot ) {
 			$node = $node->expr;

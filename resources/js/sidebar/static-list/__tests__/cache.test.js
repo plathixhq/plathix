@@ -71,7 +71,7 @@ describe('static-list cache', () => {
 
 
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps store/selection state consistent across UI events', async () => {
         const params = { folder_id: 7, screen_base: 'upload' };
         let resolveFetch;
         const pendingFetch = new Promise((resolve) => {
@@ -143,12 +143,12 @@ describe('preserves folder tree behavior', () => {
         expect(getData({ folder_id: 4, screen_base: 'upload' })).toEqual({ s: 'upload-4' });
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps store/selection state consistent across UI events', () => {
         cacheSet({ folder_id: 5, screen_base: 'edit' }, { s: 'edit-5' }, cacheEpoch());
 
         expect(() => handler(undefined)).not.toThrow();
         expect(() => handler({})).not.toThrow();
-        expect(() => handler({ folderIds: 'Public-facing message unavailable.' })).not.toThrow();
+        expect(() => handler({ folderIds: 'нет' })).not.toThrow();
         expect(() => handler({ folderIds: [null, 'abc'] })).not.toThrow();
 
         expect(getData({ folder_id: 5, screen_base: 'edit' })).toEqual({ s: 'edit-5' });

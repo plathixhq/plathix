@@ -4,7 +4,7 @@
 
 
 // replace/replace-media-ui.js.
-describe('covers public behavior without internal references', () => {
+describe('covers the attachment replace flow', () => {
     /** @type {typeof import('../api.js').Api} */
     let Api;
     /** @type {FormData|undefined} */
@@ -36,7 +36,7 @@ describe('covers public behavior without internal references', () => {
         jest.dontMock('../runtime.js');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const file = new File(['data'], 'photo.jpg', { type: 'image/jpeg' });
 
         await Api.replaceAttachment(42, file);

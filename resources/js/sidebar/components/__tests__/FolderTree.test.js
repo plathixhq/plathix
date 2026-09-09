@@ -129,7 +129,7 @@ describe('FolderTree component', () => {
         });
     });
 
-    describe('covers public behavior without internal references', () => {
+    describe('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
 
 
 
@@ -194,7 +194,7 @@ describe('FolderTree component', () => {
             expect(moveItemsBulk).toHaveBeenCalledWith([1], 7);
         });
 
-        it('covers public behavior without internal references', () => {
+        it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
             const moveItemsBulk = jest.fn();
             Alpine.store('plathix', {
                 openId: 158,
@@ -214,7 +214,7 @@ describe('FolderTree component', () => {
             expect(moveItemsBulk).not.toHaveBeenCalled();
         });
 
-        it('covers public behavior without internal references', () => {
+        it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
             const moveItemsBulk = jest.fn();
             Alpine.store('plathix', {
                 openId: 3,

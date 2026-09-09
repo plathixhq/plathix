@@ -54,7 +54,7 @@ final class FolderQuery
 		}
 
 		$post_type = sanitize_key( (string) ( $query_post_type ?: ( $is_media ? 'attachment' : 'post' ) ));
-		$request_status = sanitize_key( self::requestScalar( wp_unslash( $_GET['status'] ?? $_GET['post_status'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only nav filter for query building; sanitized via requestScalar()+sanitize_key(), not written
+		$request_status = sanitize_key( self::requestScalar( wp_unslash( $_GET['status'] ?? $_GET['post_status'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		$attachment_filter = sanitize_key( self::requestScalar( wp_unslash( $_GET['attachment-filter'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only nav filter for query building; sanitized via requestScalar()+sanitize_key(), not written
 		if ( $request_status === 'trash' || $attachment_filter === 'trash' ) {
@@ -112,8 +112,8 @@ final class FolderQuery
 			) )
 		);
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only nav filter for query building; sanitized via requestScalar()+sanitize_key(), not written
 		$attachment_filter = sanitize_key( self::requestScalar( wp_unslash( $_REQUEST['query']['attachment-filter'] ?? '' ) ) );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( $query_status === 'trash' || $attachment_filter === 'trash' ) {

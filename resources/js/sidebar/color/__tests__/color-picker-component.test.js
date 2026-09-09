@@ -12,7 +12,7 @@ function make(storeState = {}) {
     return Object.assign(Object.create(colorPickerComponent()), { $store: { plathix: store } }, { color: '#2271b1' });
 }
 
-describe('covers public behavior without internal references', () => {
+describe('keeps store/selection state consistent across UI events', () => {
     it('keeps upload links scoped to the active folder', () => {
         const c = make({ contextMenuFolderId: 5, folders: [{ id: 5, color: '#ff8800' }] });
         c.syncFromStore();
@@ -37,7 +37,7 @@ describe('covers public behavior without internal references', () => {
         expect(c.$store.plathix.setFolderColor).toHaveBeenCalledWith(7, '#aabbcc');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps store/selection state consistent across UI events', () => {
         const c = make({ contextMenuFolderId: 7, folders: [{ id: 7, color: '' }] });
         c.color = '#111111';
         c.set('12345');

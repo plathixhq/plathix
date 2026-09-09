@@ -202,12 +202,6 @@ class SvgSupport
 			return false;
 		}
 
-		// Individual override from profile with full/upload levels.
-
-		//
-
-		//
-
 		return (bool) apply_filters( 'plathix/svg/user_override_allows_upload', false, get_current_user_id() );
 	}
 
@@ -238,7 +232,7 @@ class SvgSupport
 
 	private function logSanitizeFailure(string $filename, int $size, string $reason): void {
 		$user_id   = get_current_user_id();
-		$ip_hash   = md5( (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- REMOTE_ADDR is a server variable; md5() output is used only as a cache key
+		$ip_hash   = md5( (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		$rate_key  = Keys::transient( 'svg_log_' . $ip_hash . '_' . $user_id );
 		$log_count = (int) get_transient( $rate_key );

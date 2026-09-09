@@ -186,7 +186,7 @@ describe('plathixInit grid bootstrap order', () => {
 
     
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const store = { openId: 7, applyFolderFilter: jest.fn(), refreshFolders: jest.fn(() => Promise.resolve()) };
 
         jest.doMock('alpinejs', () => ({ store: jest.fn(() => store), data: jest.fn(), start: jest.fn() }));
@@ -352,7 +352,7 @@ describe('bindBeforeUnloadPersistence', () => {
         return store;
     }
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         buildMocks({ openId: 5 });
         await jest.isolateModulesAsync(async () => {
             await import('../index.js');
@@ -399,7 +399,7 @@ describe('bindBeforeUnloadPersistence', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('keeps REST transport behavior consistent under retry and error conditions', () => {
     beforeEach(() => {
         jest.resetModules();
         document.body.innerHTML = '';
@@ -437,7 +437,7 @@ describe('covers public behavior without internal references', () => {
         jest.doMock('../state.js', () => ({ hasStateFlag: jest.fn(() => false), setStateFlag: jest.fn() }));
     }
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const store = { openId: 5, applyFolderFilter: jest.fn(), refreshFolders: jest.fn(() => Promise.resolve({})) };
         const bootstrapStaticList = jest.fn();
         const bootstrapStaticGrid = jest.fn();
@@ -458,7 +458,7 @@ describe('covers public behavior without internal references', () => {
         expect(doActionMock).toHaveBeenCalledWith('plathix.sidebarBootstrapFallback', { filterStrategy: 'url', screenKind: 'static' });
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const store = { openId: 5, applyFolderFilter: jest.fn(), refreshFolders: jest.fn(() => Promise.resolve({})) };
         const doActionMock = jest.fn();
 
@@ -484,7 +484,7 @@ describe('covers public behavior without internal references', () => {
         warnSpy.mockRestore();
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         window.Plathix.debug = true;
         const store = { openId: 5, applyFolderFilter: jest.fn(), refreshFolders: jest.fn(() => Promise.resolve({})) };
         const doActionMock = jest.fn();

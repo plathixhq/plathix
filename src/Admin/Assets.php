@@ -156,8 +156,6 @@ final class Assets
 
 		if ( $screen_kind === 'modal' ) {
 
-			//
-
 			if ( function_exists( 'wp_enqueue_media' ) ) {
 				wp_enqueue_media();
 			}

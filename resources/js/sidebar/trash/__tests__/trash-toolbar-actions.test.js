@@ -11,7 +11,7 @@ describe('trash-toolbar-actions.js — trashActionsHTML()', () => {
         html = trashActionsHTML();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
         expect(html).toContain(ACTION_MARKER);
     });
 
@@ -27,7 +27,7 @@ describe('trash-toolbar-actions.js — trashActionsHTML()', () => {
         expect(html).toContain("Number($store.plathix.openId) === Number(window.Plathix?.trashFolderId || 0) || $store.plathix.isCurrentFolderTrashed()");
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps store/selection state consistent across UI events', () => {
         expect(html).toContain('x-cloak');
         expect(html).toContain('$store.plathix.canAssign');
         expect(html).toContain('$store.plathix.selectedMediaCount > 0');

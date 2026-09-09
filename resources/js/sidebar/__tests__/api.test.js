@@ -36,7 +36,7 @@ describe('prevents concurrent state changes', () => {
         jest.dontMock('../runtime.js');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         const first = Api.savePreference('open_folder_id', 1);
 
 
@@ -53,7 +53,7 @@ describe('prevents concurrent state changes', () => {
         expect(pendingFetches[1].signal.aborted).toBe(false);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const promise = Api.savePreference('open_folder_id', 5);
         expect(pendingFetches).toHaveLength(1);
         expect(pendingFetches[0].signal.aborted).toBe(false);
@@ -62,7 +62,7 @@ describe('prevents concurrent state changes', () => {
         await expect(promise).resolves.toEqual({ success: true });
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         Api.savePreference('open_folder_id', 1).catch(() => {});
         Api.savePreference('some_other_pref', 'x').catch(() => {});
 
@@ -108,7 +108,7 @@ describe('prevents concurrent state changes', () => {
         jest.dontMock('../runtime.js');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         const first = Api.saveFavorites([1]);
 
 
@@ -125,7 +125,7 @@ describe('prevents concurrent state changes', () => {
         expect(pendingFetches[1].signal.aborted).toBe(false);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const promise = Api.saveFavorites([5]);
         expect(pendingFetches).toHaveLength(1);
         expect(pendingFetches[0].signal.aborted).toBe(false);
@@ -134,7 +134,7 @@ describe('prevents concurrent state changes', () => {
         await expect(promise).resolves.toEqual({ success: true });
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const first = Api.saveFavorites([1]);
         first.catch(() => {});
         const second = Api.saveFavorites([1, 2]);

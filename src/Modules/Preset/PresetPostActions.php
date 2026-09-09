@@ -80,7 +80,6 @@ final class PresetPostActions
 			return;
 		}
 
-		// Built-in presets cannot be deleted via UI (spec §26.4)
 		if ( (string) ( $preset['source_type'] ?? '' ) === PresetSourceType::BUILTIN ) {
 			$this->redirectWithNotice( 'error', __( 'Built-in presets cannot be deleted.', 'plathix' ) );
 			return;

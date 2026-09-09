@@ -34,7 +34,14 @@ class Preferences
 
 		$key = $post_type ? self::OPEN_FOLDER_META . '_' . sanitize_key($post_type) : self::OPEN_FOLDER_META;
 		$key .= self::blogSuffix();
-		update_user_meta($user_id, $key, absint($folder_id));
+
+		$old_id  = (int) get_user_meta($user_id, $key, true);
+		$new_id  = absint($folder_id);
+		$written = update_user_meta($user_id, $key, $new_id);
+
+		if ( ! $written && $old_id !== $new_id ) {
+			Logger::error('open_folder_write_failed', [ 'user_id' => $user_id ]);
+		}
 	}
 
 	/** @return array<int, int> */
@@ -102,7 +109,12 @@ class Preferences
 
 			$key = $post_type ? self::FAVORITES_META . '_' . sanitize_key($post_type) : self::FAVORITES_META;
 			$key .= self::blogSuffix();
-			update_user_meta($user_id, $key, $merged);
+
+			$written = update_user_meta($user_id, $key, $merged);
+
+			if ( ! $written && $existing !== $merged ) {
+				Logger::error('favorites_merge_write_failed', [ 'user_id' => $user_id ]);
+			}
 		} finally {
 			if ( $acquired ) {
 				DbAdvisoryLock::release($lock_name);

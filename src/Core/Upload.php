@@ -20,13 +20,8 @@ class Upload
 			return;
 		}
 
-		//
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
 
-		//
-
-		//
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- WP core verifies the upload nonce in async-upload.php/media-new.php before firing add_attachment
 		$folder_id = absint( wp_unslash( $_POST['plathix_folder'] ?? $_REQUEST['plathix_folder'] ?? get_option( 'plathix_default_folder_id', FolderId::ROOT ) ) );
 		if ( $folder_id <= 0 ) {
 			return;

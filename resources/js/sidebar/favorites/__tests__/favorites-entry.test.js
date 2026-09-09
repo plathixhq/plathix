@@ -16,8 +16,8 @@ function evaluateXText(xText, isFavorite) {
     return evaluate(store);
 }
 
-describe('covers public behavior without internal references', () => {
-    it('covers public behavior without internal references', () => {
+describe('escapes untrusted output for the destination context', () => {
+    it('escapes untrusted output for the destination context', () => {
         const html = favCtxItemHTML('Add to favorites', 'Remove from favorites');
         const xText = extractXText(html);
 
@@ -25,7 +25,7 @@ describe('covers public behavior without internal references', () => {
         expect(evaluateXText(xText, true)).toBe('Remove from favorites');
     });
 
-    it('covers public behavior without internal references', () => {
+    it('escapes untrusted output for the destination context', () => {
         const addLabel = "Aggiungi ai preferiti (cartella dell'utente)";
         const removeLabel = "Rimuovi dai preferiti (cartella dell'utente)";
         const html = favCtxItemHTML(addLabel, removeLabel);
@@ -39,7 +39,7 @@ describe('covers public behavior without internal references', () => {
         expect(evaluateXText(xText, true)).toBe(removeLabel);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('escapes untrusted output for the destination context', () => {
         const addLabel = 'Add "favorite" <folder>';
         const removeLabel = 'Remove "favorite" <folder>';
         const html = favCtxItemHTML(addLabel, removeLabel);

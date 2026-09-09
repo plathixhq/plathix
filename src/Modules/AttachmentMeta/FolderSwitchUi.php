@@ -30,7 +30,6 @@ final class FolderSwitchUi
 		wp_localize_script( 'plathix-folder-switch', 'PlathixFolderSwitch', [
 			'restUrl'             => rest_url( 'plathix/v1/' ),
 
-			// RestController::restRouteFallbackBase().
 			'restUrlFallback'     => RestController::restRouteFallbackBase(),
 			'restNonce'           => wp_create_nonce( 'wp_rest' ),
 			'taxonomy'            => $taxonomy,

@@ -6,6 +6,7 @@ namespace Plathix\Modules\FreeFirstRun;
 
 use Plathix\Core\PresetPageContract;
 use Plathix\PublicApi\PresetOnboardingApi;
+use Plathix\User\AccessResolver;
 
 final class WizardController
 {
@@ -21,7 +22,7 @@ final class WizardController
 	}
 
 	public function handleSkip(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ), 403 );
 		}
 
@@ -34,7 +35,7 @@ final class WizardController
 	}
 
 	public function handleResetWizard(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ), 403 );
 		}
 

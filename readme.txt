@@ -189,6 +189,13 @@ No artificial folder or file limits, and no trial period.
 11. Replace the file behind an existing attachment.
 12. SVG upload policy, strict mode, and role settings.
 
+== Source Code ==
+
+The human-readable source code and build configuration for Plathix are publicly available at:
+https://github.com/plathixhq/plathix
+
+The repository includes the Composer and JavaScript dependency manifests, lockfiles, and build configuration used to produce the distributed plugin.
+
 == Third-Party Libraries ==
 
 Plathix bundles the following open-source libraries. Each is distributed under its own

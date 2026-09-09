@@ -41,13 +41,13 @@ describe('handles trash workflow consistently', () => {
         expect(deleteSelectedButton.$el.hide).toHaveBeenCalledTimes(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
         document.body.innerHTML = '';
 
         expect(() => syncMediaToolbarTrashClass({ openId: 5 })).not.toThrow();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
         window.wp.media.frame.content.get = jest.fn(() => undefined);
 
         expect(() => syncMediaToolbarTrashClass({ openId: 5 })).not.toThrow();
@@ -59,7 +59,7 @@ describe('handles trash workflow consistently', () => {
         expect(() => syncMediaToolbarTrashClass({ openId: 5 })).not.toThrow();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', () => {
         syncMediaToolbarTrashClass({ openId: 99 });
         syncMediaToolbarTrashClass({ openId: 99 });
 

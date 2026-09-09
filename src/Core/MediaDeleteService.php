@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plathix\Core;
 
 use Plathix\Infrastructure\Cache;
+use Plathix\PublicApi\ReplaceApi;
 
 final class MediaDeleteService
 {
@@ -24,6 +25,11 @@ final class MediaDeleteService
 		$trashed = [];
 		$failed  = [];
 		$skipped = [];
+
+		$primed_ids = array_values( array_filter( array_map( 'intval', $ids ), static fn (int $id): bool => $id > 0 ) );
+		if ( $primed_ids !== [] ) {
+			_prime_post_caches( $primed_ids, false, false );
+		}
 
 		foreach ( $ids as $raw_id ) {
 			$id = (int) $raw_id;
@@ -218,5 +224,35 @@ final class MediaDeleteService
 
 		}
 		return true;
+	}
+
+	public function permanentDelete(int $id): bool {
+		$post = get_post( $id );
+		if ( ! $post instanceof \WP_Post || $post->post_type !== 'attachment' || $post->post_status !== 'trash' ) {
+			return false;
+		}
+
+		$lock = ( new MediaTrashLock() )->acquire( $id );
+		if ( is_wp_error( $lock ) ) {
+			return false;
+		}
+
+		try {
+
+			$post = get_post( $id );
+			if ( ! $post instanceof \WP_Post || $post->post_status !== 'trash' ) {
+				return false;
+			}
+
+			if ( ( new ReplaceApi() )->isReplaceInProgress( $id ) ) {
+				return false;
+			}
+
+			wp_delete_post( $id, true );
+
+			return true;
+		} finally {
+			( new MediaTrashLock() )->release( $id, $lock['token'] ?? '' );
+		}
 	}
 }

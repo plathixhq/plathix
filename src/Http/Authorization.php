@@ -53,7 +53,6 @@ final class Authorization
 			default => '_cpt',
 		};
 
-		// $user_level !== AccessLevel::None).
 		if ( ! isset( self::$cap_map[ $map_key ][ $operation ] ) ) {
 			return [ 'do_not_allow', AccessLevel::None ];
 		}

@@ -378,7 +378,7 @@ describe('init — folder column links', () => {
 
     // discarded the already-computed targetUrl (dead href-based computation in the common
     // case). Mocking buildUrl to return a DIFFERENT value than href makes the regression
-    // observable: before the fix, navigate() received the buildUrl-mocked value instead of
+
     // href.
     it('uses link.href directly without calling buildUrl again when href is present', () => {
         uploadInst.canHandle.mockReturnValue(true);
@@ -436,7 +436,7 @@ describe('init — folder column links', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('coalesces repeated events into a single handled call', () => {
     it.each([
         ['ctrlKey', { ctrlKey: true }],
         ['metaKey', { metaKey: true }],
@@ -611,7 +611,7 @@ describe('keeps upload links scoped to the active folder', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('keeps store/selection state consistent across UI events', () => {
 
 
 
@@ -638,7 +638,7 @@ describe('covers public behavior without internal references', () => {
         jest.clearAllMocks();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps store/selection state consistent across UI events', () => {
 
         uploadInst.canHandle.mockReturnValue(false);
 
@@ -672,7 +672,7 @@ describe('covers public behavior without internal references', () => {
         expect(mgr.getAdapter()).toBe(uploadInst);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('exposes the documented runtime feature/mode contract', () => {
         uploadInst.canHandle.mockReturnValue(true);
 
 

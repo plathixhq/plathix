@@ -37,7 +37,7 @@ describe('handles trash workflow consistently', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('exposes the documented runtime feature/mode contract', () => {
     afterEach(() => {
         window.Plathix = {};
         document.body.className = '';
@@ -92,7 +92,7 @@ describe('covers public behavior without internal references', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('exposes the documented runtime feature/mode contract', () => {
     afterEach(() => {
         window.Plathix = {};
         document.body.className = '';
@@ -125,7 +125,7 @@ describe('covers public behavior without internal references', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('mounts or dismisses the UI element under the expected conditions', () => {
     afterEach(() => {
         delete window.wp;
     });
@@ -165,7 +165,7 @@ describe('covers public behavior without internal references', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('mounts or dismisses the UI element under the expected conditions', () => {
     afterEach(() => {
         delete window.wp;
         delete window.Plathix;
@@ -194,7 +194,7 @@ describe('covers public behavior without internal references', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('exposes the documented runtime feature/mode contract', () => {
     afterEach(() => {
         window.Plathix = {};
     });

@@ -12,10 +12,6 @@ use Plathix\Infrastructure\Cache;
 use Plathix\Infrastructure\JobLockService;
 use Plathix\Infrastructure\Logger;
 
-/**
- * Applies a registered preset to the Media Library.
- * Spec ref: sections 18, 19, 20.
- */
 final class PresetApplyPipeline
 {
 	public function __construct(
@@ -128,10 +124,6 @@ final class PresetApplyPipeline
 			if ( ! empty($entry['favorite']) ) {
 				$favorite_term_ids[] = (int) $term_id;
 			}
-
-			// Step 7: assign color meta
-
-			//
 
 			if ( $color !== 'default' && $color !== '' ) {
 				$sanitized_color = sanitize_hex_color($color);

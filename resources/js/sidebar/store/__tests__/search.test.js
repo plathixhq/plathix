@@ -205,7 +205,7 @@ describe('preserves folder tree behavior', () => {
         store.isSearching = false;
         store.shouldUseDeferredTree = () => false;
         store.hasLoadedFullTree = true;
-        // threshold defaults to 500 via mocked getRuntime — not reachable with 2 folders,
+
         // this test only asserts the cache re-evaluates (same boolean, re-read after version bump).
         const r1 = store.isSearchOnlyMode;
         store.patchFolder(1, { isProtected: true });
@@ -273,11 +273,11 @@ describe('favoriteMatchesSearch / hasVisibleFavorites / visibleFavoritesCount', 
     }
 
     const favFolders = [
-        f(10, 0, 'Media item'),
-        f(12, 0, 'Media item'),
-        f(14, 0, 'Media item'),
-        f(17, 0, 'Media item'),
-        f(20, 0, 'Media item'),
+        f(10, 0, 'Вложение 10'),
+        f(12, 0, 'Вложения 20 на 2012'),
+        f(14, 0, 'Вложения 20 на 2014'),
+        f(17, 0, 'Вложения 20 на 2017'),
+        f(20, 0, 'Вложения 20 на 2020'),
     ];
     const allFavs = [10, 12, 14, 17, 20];
 
@@ -288,8 +288,8 @@ describe('favoriteMatchesSearch / hasVisibleFavorites / visibleFavoritesCount', 
 
     it('favoriteMatchesSearch: matches only folders containing the query (case-insensitive)', () => {
         const store = makeFavStore(favFolders, allFavs, '2014');
-        expect(store.favoriteMatchesSearch(f(14, 0, 'Media item'))).toBe(true);
-        expect(store.favoriteMatchesSearch(f(12, 0, 'Media item'))).toBe(false);
+        expect(store.favoriteMatchesSearch(f(14, 0, 'Вложения 20 на 2014'))).toBe(true);
+        expect(store.favoriteMatchesSearch(f(12, 0, 'Вложения 20 на 2012'))).toBe(false);
     });
 
     it('favoriteMatchesSearch: null folder returns false', () => {
@@ -414,8 +414,8 @@ describe('setSearchQuery — path reveal for matches', () => {
     }
 
     const nested = [
-        f(1, 0, 'Media item'),
-        f(2, 1, 'Media item'),
+        f(1, 0, 'Вложения 20 на 20'),
+        f(2, 1, 'Вложения 20 на 2014'),
         f(3, 0, 'Other'),
     ];
 
@@ -442,8 +442,8 @@ describe('setSearchQuery — path reveal for matches', () => {
     it('handles multiple matches (expands each)', async() => {
         const expandAncestors = jest.fn(() => Promise.resolve());
         const store = makeSearchStore([
-            f(1, 0, 'Clients'),
-            f(2, 0, 'Public-facing message unavailable.'),
+            f(1, 0, 'Клиенты 2014'),
+            f(2, 0, 'Архив 2014'),
             f(3, 0, 'Nope'),
         ], { expandAncestors });
 
@@ -493,7 +493,7 @@ describe('_childrenByParent — cycle-guard', () => {
         expect(map.get(2).map((x) => x.id)).toEqual([3]);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps store/selection state consistent across UI events', () => {
 
         const store = makeStore([f(1, 2), f(2, 1)]);
 
@@ -504,7 +504,7 @@ describe('_childrenByParent — cycle-guard', () => {
         expect((map.get(0) || []).map((x) => x.id).sort()).toEqual([1, 2]);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps store/selection state consistent across UI events', () => {
 
         const store = makeStore([f(10, 0), f(11, 10), f(12, 11)]);
         const map = store._childrenByParent;

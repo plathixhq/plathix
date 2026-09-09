@@ -56,20 +56,6 @@ class MultilingualCompat
 		return defined( 'ICL_LANGUAGE_CODE' );
 	}
 
-	/**
-	 * Returns true when Polylang is active but has zero configured languages.
-	 *
-	 * Polylang's own SQL builder treats 'lang' => 'all' as "compare against the set of
-	 * configured languages" — when that set is empty, it injects an always-false `0 = 1`
-	 * clause instead of skipping the language filter, silently emptying every query that
-	 * asks for 'all'. This is a genuine Polylang edge case (site has the plugin active
-	 * but nobody finished the language setup wizard yet), confirmed on a live stand:
-	 * identical WP_Query with/without 'lang' => 'all' returned 38 vs 0 results for the
-	 * same tax_query. Skipping the 'lang' assignment entirely in this state makes the
-	 * query behave as if Polylang were inactive for it, which is the only safe fallback.
-	 *
-	 * Protected so test subclasses can override without a real Polylang install.
-	 */
 	protected static function isPolylangActiveWithoutLanguages(): bool {
 		if ( ! function_exists( 'pll_languages_list' ) ) {
 			return false;

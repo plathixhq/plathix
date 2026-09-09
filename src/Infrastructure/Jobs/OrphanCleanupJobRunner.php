@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Plathix\Infrastructure\Jobs;
 
+use Plathix\Core\FolderCountCalculator;
 use Plathix\Core\FolderCountLifecycle;
 use Plathix\Core\TaxonomyResolver;
+use Plathix\Infrastructure\JobLockService;
 use Plathix\Infrastructure\Logger;
 
 /**
@@ -13,6 +15,12 @@ use Plathix\Infrastructure\Logger;
  */
 final class OrphanCleanupJobRunner
 {
+	private JobLockService $lock_service;
+
+	public function __construct(JobLockService $lock_service) {
+		$this->lock_service = $lock_service;
+	}
+
 	/** @param array<string, mixed> $args */
 	public function run(array $args, callable $runInBlogContext): void {
 		$blog_id = (int) ( $args['blog_id'] ?? get_current_blog_id() );
@@ -47,19 +55,22 @@ final class OrphanCleanupJobRunner
 						continue;
 					}
 
-					foreach ( $terms as $term_id ) {
-						$object_ids = get_objects_in_term( (int) $term_id, $taxonomy );
-						if ( is_wp_error( $object_ids ) ) {
+					foreach ( array_chunk( $terms, FolderCountReconcileJobRunner::CHUNK_SIZE ) as $chunk ) {
+						$candidates = ( new FolderCountCalculator() )->findOrphanObjectIds( array_map( 'intval', $chunk ), $taxonomy );
+
+						if ( null === $candidates ) {
 							continue;
 						}
 
-						foreach ( $object_ids as $object_id ) {
-							$post = get_post( (int) $object_id );
+						foreach ( $candidates as $term_id => $object_ids ) {
+							foreach ( $object_ids as $object_id ) {
+								$post = get_post( $object_id );
 
-							if ( ! $post ) {
-								FolderCountLifecycle::suppress(
-									static fn () => wp_remove_object_terms( (int) $object_id, (int) $term_id, $taxonomy )
-								);
+								if ( ! $post ) {
+									FolderCountLifecycle::suppress(
+										static fn () => wp_remove_object_terms( $object_id, $term_id, $taxonomy )
+									);
+								}
 							}
 						}
 					}
@@ -83,7 +94,13 @@ final class OrphanCleanupJobRunner
 					}
 
 					foreach ( $this->buildMissingPositionBackfill( (array) $missing_position_terms, $taxonomy ) as $term_id => $position ) {
-						update_term_meta( (int) $term_id, PLATHIX_TERM_POSITION, $position );
+						$term_id      = (int) $term_id;
+						$old_position = get_term_meta( $term_id, PLATHIX_TERM_POSITION, true );
+						$written      = update_term_meta( $term_id, PLATHIX_TERM_POSITION, $position );
+
+						if ( ! $written && (int) $old_position !== $position ) {
+							Logger::error( 'orphan_cleanup_position_backfill_write_failed', [ 'term_id' => $term_id, 'taxonomy' => $taxonomy ] );
+						}
 					}
 				}
 
@@ -117,41 +134,53 @@ final class OrphanCleanupJobRunner
 		$result = [];
 
 		foreach ( $grouped as $parent_id => $children ) {
-			$max_position = 0;
-			$raw_sibling_ids = get_terms(
-				[
-					'taxonomy'   => $taxonomy,
-					'hide_empty' => false,
-					'parent'     => (int) $parent_id,
-					'fields'     => 'ids',
-				]
-			);
 
-			if ( is_wp_error( $raw_sibling_ids ) ) {
-				Logger::warning( 'orphan_cleanup_job_runner_sibling_terms_failed', [ 'taxonomy' => $taxonomy, 'parent_id' => (int) $parent_id ] );
-			}
-			$sibling_ids = is_wp_error( $raw_sibling_ids ) || ! is_array( $raw_sibling_ids ) ? [] : $raw_sibling_ids;
+			$lock_name = $this->lock_service->orderLockName( $taxonomy, (int) $parent_id );
+			$lock      = $this->lock_service->acquireOrder( $lock_name );
 
-			// Batch-prime term meta cache (fields=ids skips automatic priming).
-			if ( ! empty( $sibling_ids ) ) {
-				update_termmeta_cache( $sibling_ids );
+			if ( $lock['mode'] === 'none' ) {
+				continue;
 			}
 
-			foreach ( $sibling_ids as $sibling_id ) {
-				$position = (int) get_term_meta( (int) $sibling_id, PLATHIX_TERM_POSITION, true );
-				if ( $position > $max_position ) {
-					$max_position = $position;
+			try {
+				$max_position = 0;
+				$raw_sibling_ids = get_terms(
+					[
+						'taxonomy'   => $taxonomy,
+						'hide_empty' => false,
+						'parent'     => (int) $parent_id,
+						'fields'     => 'ids',
+					]
+				);
+
+				if ( is_wp_error( $raw_sibling_ids ) ) {
+					Logger::warning( 'orphan_cleanup_job_runner_sibling_terms_failed', [ 'taxonomy' => $taxonomy, 'parent_id' => (int) $parent_id ] );
 				}
-			}
+				$sibling_ids = is_wp_error( $raw_sibling_ids ) || ! is_array( $raw_sibling_ids ) ? [] : $raw_sibling_ids;
 
-			usort(
-				$children,
-				static fn(\WP_Term $left, \WP_Term $right): int => strcasecmp( $left->name, $right->name )
-			);
+				// Batch-prime term meta cache (fields=ids skips automatic priming).
+				if ( ! empty( $sibling_ids ) ) {
+					update_termmeta_cache( $sibling_ids );
+				}
 
-			foreach ( $children as $term ) {
-				$max_position = $max_position > 0 ? $max_position + 1000 : 1000;
-				$result[ (int) $term->term_id ] = $max_position;
+				foreach ( $sibling_ids as $sibling_id ) {
+					$position = (int) get_term_meta( (int) $sibling_id, PLATHIX_TERM_POSITION, true );
+					if ( $position > $max_position ) {
+						$max_position = $position;
+					}
+				}
+
+				usort(
+					$children,
+					static fn(\WP_Term $left, \WP_Term $right): int => strcasecmp( $left->name, $right->name )
+				);
+
+				foreach ( $children as $term ) {
+					$max_position = $max_position > 0 ? $max_position + 1000 : 1000;
+					$result[ (int) $term->term_id ] = $max_position;
+				}
+			} finally {
+				$this->lock_service->releaseOrder( $lock_name, $lock );
 			}
 		}
 

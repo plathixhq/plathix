@@ -1,17 +1,17 @@
 import { safeHexColor, colorShowImpl } from '../color-show.js';
 
-describe('covers public behavior without internal references', () => {
-    test('covers public behavior without internal references', () => {
+describe('validates color input and keeps the color picker in sync with the store', () => {
+    test('validates color input and keeps the color picker in sync with the store', () => {
         expect(safeHexColor('#2271b1')).toBe('#2271b1');
         expect(safeHexColor('#FFFFFF')).toBe('#FFFFFF');
     });
 
-    test('covers public behavior without internal references', () => {
+    test('validates color input and keeps the color picker in sync with the store', () => {
         expect(safeHexColor('#fff')).toBe('#fff');
         expect(safeHexColor('#ABC')).toBe('#ABC');
     });
 
-    test('covers public behavior without internal references', () => {
+    test('validates color input and keeps the color picker in sync with the store', () => {
         expect(safeHexColor('2271b1')).toBeNull();
         expect(safeHexColor('')).toBeNull();
         expect(safeHexColor('expression(alert(1))')).toBeNull();
@@ -21,7 +21,7 @@ describe('covers public behavior without internal references', () => {
     });
 });
 
-describe('covers public behavior without internal references', () => {
+describe('keeps store/selection state consistent across UI events', () => {
     test('preserves folder tree behavior', () => {
         expect(colorShowImpl.folderColorStyle({ color: '#ff8800' })).toBe('color:#ff8800');
         expect(colorShowImpl.folderColorStyle({ color: '' })).toBe('');

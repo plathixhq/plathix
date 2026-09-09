@@ -6,6 +6,9 @@ namespace Plathix\Modules\Pro;
 
 use Plathix\Edition;
 use Plathix\Infrastructure\Keys;
+use Plathix\Infrastructure\Logger;
+use Plathix\Infrastructure\OptionWrite;
+use Plathix\User\AccessResolver;
 
 final class ProLicenseActions
 {
@@ -16,7 +19,7 @@ final class ProLicenseActions
 	}
 
 	public function handleActivate(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ) );
 		}
 
@@ -58,7 +61,7 @@ final class ProLicenseActions
 	}
 
 	public function handleDeactivate(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ) );
 		}
 
@@ -73,7 +76,16 @@ final class ProLicenseActions
 		do_action( 'plathix/license/deactivate', $key );
 
 		delete_option( Edition::KEY_OPTION );
-		delete_option( Edition::STATUS_OPTION );
+
+		$statusDeleted = OptionWrite::deleted( Edition::STATUS_OPTION );
+
+		if ( ! $statusDeleted ) {
+			Logger::error(
+				'License deactivate: status option delete failed',
+				[ 'option' => Edition::STATUS_OPTION ]
+			);
+		}
+
 		delete_option( Edition::EXPIRES_OPTION );
 		delete_transient( Keys::licenseError() );
 

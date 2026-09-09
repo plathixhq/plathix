@@ -113,14 +113,14 @@ describe('foldersCrudModule — createFolder', () => {
 
         Api.createFolder.mockResolvedValue({ id: 312 });
         Api.getFolder.mockResolvedValue({
-            folder: { id: 312, name: 'Public-facing message unavailable.', parentId: 7, count: 5, color: '#ff0000', hasChildren: true },
+            folder: { id: 312, name: 'Фото Альбом', parentId: 7, count: 5, color: '#ff0000', hasChildren: true },
             taxonomy: 'plathix_folder',
         });
         const store = makeStore({
             refreshFolders: jest.fn().mockResolvedValue({}),
             mergeFolders: jest.fn(),
         });
-        await store.createFolder('Public-facing message unavailable.', 7);
+        await store.createFolder('Фото  Альбом', 7);
         expect(Api.getFolder).toHaveBeenCalledWith(312);
 
         expect(store.mergeFolders).toHaveBeenCalledTimes(2);
@@ -310,14 +310,14 @@ describe('preserves folder tree behavior', () => {
     const clickListeners = (spy) =>
         spy.mock.calls.filter((c) => c[0] === 'click' && c[2] === true);
 
-    it('covers public behavior without internal references', async() => {
+    it('coalesces repeated events into a single handled call', async() => {
         const store = makeStore();
         await store.showNewFolderForm(0);
         jest.runOnlyPendingTimers();
         expect(clickListeners(addSpy)).toHaveLength(1);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async() => {
         const store = makeStore();
         await store.showNewFolderForm(0);
         jest.runOnlyPendingTimers();
@@ -328,7 +328,7 @@ describe('preserves folder tree behavior', () => {
         expect(clickListeners(removeSpy).length).toBeGreaterThanOrEqual(1);
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('coalesces repeated events into a single handled call', async() => {
         const store = makeStore();
         await store.showNewFolderForm(0);
         jest.runOnlyPendingTimers();
@@ -339,7 +339,7 @@ describe('preserves folder tree behavior', () => {
         expect(store._newFolderOutsideClickHandler).toBeNull();
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('coalesces repeated events into a single handled call', async() => {
         const store = makeStore();
         await store.showNewFolderForm(0);
         store.hideNewFolderForm();
@@ -369,7 +369,7 @@ describe('preserves folder tree behavior', () => {
     const clickListeners = (spy) =>
         spy.mock.calls.filter((c) => c[0] === 'click' && c[2] === true);
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         const store = makeStore();
         store.showRenameForm({ id: 1, name: 'A' });
         jest.runOnlyPendingTimers();
@@ -386,7 +386,7 @@ describe('preserves folder tree behavior', () => {
         expect(clickListeners(removeSpy).length).toBeGreaterThanOrEqual(1);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         const store = makeStore();
         store.showRenameForm({ id: 1, name: 'A' });
         jest.runOnlyPendingTimers();
@@ -397,7 +397,7 @@ describe('preserves folder tree behavior', () => {
         expect(store._renameOutsideClickHandler).toBeNull();
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('coalesces repeated events into a single handled call', async() => {
         const store = makeStore({ renameFolder: jest.fn().mockResolvedValue(undefined) });
         store.showRenameForm({ id: 1, name: 'A' });
         jest.runOnlyPendingTimers();
@@ -407,7 +407,7 @@ describe('preserves folder tree behavior', () => {
         expect(store._renameOutsideClickHandler).toBeNull();
     });
 
-    it('covers public behavior without internal references', () => {
+    it('coalesces repeated events into a single handled call', () => {
         const store = makeStore();
         store.showRenameForm({ id: 1, name: 'A' });
         store.hideRenameForm();

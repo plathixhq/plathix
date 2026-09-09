@@ -43,11 +43,6 @@ final class ReplaceRestController
 			return new \WP_REST_Response( [ 'message' => __( 'Replacement file is required.', 'plathix' ), 'code' => 'invalid_upload' ], 400 );
 		}
 
-		// wp_handle_sideload() and wp_generate_attachment_metadata() live in
-		// wp-admin/includes/{file,image}.php, which WordPress does not load on
-		// REST requests. Load them on demand (core does the same in AJAX actions).
-		// Guarded by function_exists so the load is skipped when the functions are
-		// already available (normal WP runtime) or stubbed (tests).
 		if ( ! function_exists( 'wp_handle_sideload' ) ) {
 			require_once \ABSPATH . 'wp-admin/includes/file.php';
 		}

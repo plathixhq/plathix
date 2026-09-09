@@ -1,7 +1,7 @@
 import { onMediaFrameReady } from '../media-frame-watcher.js';
 import { getStateValue } from '../state.js';
 
-describe('covers public behavior without internal references', () => {
+describe('mounts or dismisses the UI element under the expected conditions', () => {
     afterEach(() => {
         document.body.innerHTML = '';
         delete window.wp;
@@ -80,7 +80,7 @@ describe('covers public behavior without internal references', () => {
         expect(cb).toHaveBeenLastCalledWith(frameB);
     });
 
-    it('covers public behavior without internal references', () => {
+    it('mounts or dismisses the UI element under the expected conditions', () => {
         const frame = { id: 'et_file_frame', on: jest.fn() };
         window.wp = { media: { frames: { et_file_frame: frame } } };
 
@@ -99,7 +99,7 @@ describe('covers public behavior without internal references', () => {
         expect(cb).not.toHaveBeenCalled();
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         jest.resetModules();
         const { onMediaFrameReady: freshOnMediaFrameReady } = await import('../media-frame-watcher.js');
         const { getStateValue: freshGetStateValue } = await import('../state.js');

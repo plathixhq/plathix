@@ -27,7 +27,7 @@ describe('enforces request authorization', () => {
         document.body.innerHTML = '';
     });
 
-    it('covers public behavior without internal references', () => {
+    it('keeps the favorites list and its notifications consistent', () => {
         const html = favoritesTemplate();
         expect(html).not.toMatch(/@contextmenu/);
     });

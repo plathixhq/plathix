@@ -101,8 +101,8 @@ final class FolderRepository
 		$must_lookup = ! $lock;
 
 		if ( $must_lookup ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- dedup lookup inside MySQL advisory lock; must see exact DB state, not cacheable by design
 			$existing_id = $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT tt.term_id FROM {$wpdb->term_taxonomy} tt
@@ -285,6 +285,10 @@ final class FolderRepository
 		clean_term_cache([ $id ], $taxonomy);
 		unset(self::$runtime_cache[ $taxonomy ]);
 	}
+
+	/**
+	 * @internal
+	 */
 
 	public function bulkUpdateParent(int $old_parent, int $new_parent, string $taxonomy): int|\WP_Error {
 		global $wpdb;

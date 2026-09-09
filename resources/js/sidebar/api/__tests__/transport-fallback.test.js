@@ -68,7 +68,7 @@ describe('restRequest() nginx-405 fallback', () => {
         expect(calls[1].body).toBe(JSON.stringify({ ids: [1, 2] }));
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([res(false, 405, null)]);
 
         await expect(
@@ -79,7 +79,7 @@ describe('restRequest() nginx-405 fallback', () => {
         expect(calls).toHaveLength(2);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([res(false, 405, { message: 'nope' })]);
 
         await expect(restRequest('folders', { method: 'GET' })).rejects.toBeTruthy();
@@ -89,7 +89,7 @@ describe('restRequest() nginx-405 fallback', () => {
         expect(calls[0].url).toContain('/wp-json/');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([res(true, 200, { ok: 1 })]);
 
         const out = await restRequest('media/bulk-trash', { method: 'POST', data: {} });
@@ -121,7 +121,7 @@ describe('restRequest() nginx-405 fallback', () => {
 
     const resNull = (ok, status) => ({ ok, status, json: () => Promise.reject(new Error('invalid json')) });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             resNull(true, 200),
             res(true, 200, { folders: [{ id: 1 }] }),
@@ -145,7 +145,7 @@ describe('restRequest() nginx-405 fallback', () => {
         expect(calls).toHaveLength(1);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([resNull(true, 200)]);
 
 
@@ -157,7 +157,7 @@ describe('restRequest() nginx-405 fallback', () => {
         expect(calls).toHaveLength(1);
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([resNull(true, 200)]);
 
         await expect(
@@ -170,7 +170,7 @@ describe('restRequest() nginx-405 fallback', () => {
 
 
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([resNull(true, 200)]);
 
         await expect(
@@ -216,7 +216,7 @@ describe('uploadMultipart() 405-fallback', () => {
 
     afterEach(() => { delete global.fetch; });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([res(true, 200, { id: 42 })]);
 
         const file = new File(['data'], 'test.zip', { type: 'application/zip' });
@@ -227,7 +227,7 @@ describe('uploadMultipart() 405-fallback', () => {
         expect(calls[0].url).toContain('/wp-json/plathix/v1/folders/upload');
     });
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             res(false, 405, null),
             res(true, 200, { id: 7 }),
@@ -261,7 +261,7 @@ describe('uploadMultipart() 405-fallback', () => {
 
 
 
-    it('covers public behavior without internal references', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const resNull = (ok, status) => ({ ok, status, json: () => Promise.reject(new Error('invalid json')) });
         mockFetchSequence([resNull(true, 200)]);
 

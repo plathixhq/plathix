@@ -18,7 +18,8 @@ class UserFavoritesService
 			return $cached;
 		}
 
-		$post_types = [ 'attachment' ]; // CTAN-201: attachment-native
+		$post_types = [ 'attachment' ];
+
 
 		$all_ids = $this->collectFavoriteIds( $post_types );
 

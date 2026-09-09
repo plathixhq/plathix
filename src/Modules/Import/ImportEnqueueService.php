@@ -18,8 +18,8 @@ final class ImportEnqueueService
 
 	public function enqueue(): void
 	{
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only routing check
 		if ( sanitize_key( (string) ( $_GET['page'] ?? '' ) ) !== ( new ToolsApi() )->pageSlug() ) {
 			return;
 		}

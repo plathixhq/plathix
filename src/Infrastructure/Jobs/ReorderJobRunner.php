@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plathix\Infrastructure\Jobs;
 
 use Plathix\Infrastructure\JobLockService;
+use Plathix\Infrastructure\Logger;
 
 /**
  * Handles the plathix_job_reorder Action Scheduler job.
@@ -31,8 +32,6 @@ final class ReorderJobRunner
 						return;
 					}
 
-					// Acquire the same per-branch lock used by setOrder() so a concurrent
-					// DnD save cannot be overwritten by a stale reorder job (spec §setOrder-vs-JOB_REORDER).
 					$lock_name = $this->lock_service->orderLockName( $taxonomy, $parent_id );
 
 					$lock = $this->lock_service->acquireOrder( $lock_name );
@@ -59,7 +58,14 @@ final class ReorderJobRunner
 
 						$position = 1000;
 						foreach ( $terms as $term_id ) {
-							update_term_meta( (int) $term_id, PLATHIX_TERM_POSITION, $position );
+							$term_id      = (int) $term_id;
+							$old_position = get_term_meta( $term_id, PLATHIX_TERM_POSITION, true );
+							$written      = update_term_meta( $term_id, PLATHIX_TERM_POSITION, $position );
+
+							if ( ! $written && (int) $old_position !== $position ) {
+								Logger::error( 'reorder_job_position_meta_write_failed', [ 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'parent_id' => $parent_id ] );
+							}
+
 							$position += 1000;
 						}
 					} finally {

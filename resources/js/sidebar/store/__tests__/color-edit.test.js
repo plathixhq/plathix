@@ -57,7 +57,7 @@ describe('colorEditModule — setFolderColor', () => {
         await pending;
     });
 
-    it('covers public behavior without internal references', async() => {
+    it('keeps store/selection state consistent across UI events', async() => {
         Api.setFolderColor.mockRejectedValue(new Error('rest fail'));
         const store = makeStore({
             folders: [{ id: 4, color: '#000000' }],
