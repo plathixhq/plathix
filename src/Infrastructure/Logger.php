@@ -117,7 +117,6 @@ final class Logger
 	/**
 	 * @param array<string, mixed> $context
 	 */
-
 	private static function write(string $level, string $message, array $context = []): void {
 		self::emit(
 			sprintf(

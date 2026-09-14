@@ -7,7 +7,6 @@ namespace Plathix\Infrastructure;
 final class AllowedMimeTypes
 {
 	private const TYPES = [
-
 		'ai'     => 'application/postscript',
 		'eps'    => 'application/postscript',
 		'sketch' => 'application/octet-stream',
@@ -15,17 +14,14 @@ final class AllowedMimeTypes
 		'cdr'    => 'application/cdr',
 		'indd'   => 'application/x-indesign',
 		'xd'     => 'application/octet-stream',
-
 		'md'     => 'text/markdown',
 		'epub'   => 'application/epub+zip',
 		'djvu'   => 'image/vnd.djvu',
 		'tex'    => 'application/x-tex',
 		'log'    => 'text/plain',
-
 		'json'   => 'application/json',
 		'yml'    => 'text/yaml',
 		'xml'    => 'application/xml',
-
 		'woff'   => 'font/woff',
 		'woff2'  => 'font/woff2',
 		'ttf'    => 'font/ttf',

@@ -131,7 +131,6 @@ final class PresetValidator
 	 * @param array<int, array<string, mixed>> $a
 	 * @param array<int, array<string, mixed>> $b
 	 */
-
 	private function structuresEqual(array $a, array $b): bool {
 		return $this->structuresMatch($a, $b);
 	}
@@ -140,7 +139,6 @@ final class PresetValidator
 	 * @param array<int, array<string, mixed>> $a
 	 * @param array<int, array<string, mixed>> $b
 	 */
-
 	public function structuresMatch(array $a, array $b): bool {
 		return $this->normalizeStructure($a) === $this->normalizeStructure($b);
 	}
@@ -188,7 +186,6 @@ final class PresetValidator
 			if ( $name === '' ) {
 				$errors[] = (new PresetError('preset_invalid_folder_name', __('Folder name cannot be empty.', 'plathix'), $line, 'structure'))->toArray();
 			}
-
 			foreach ( FolderName::validate( $name, 150 ) as $code ) {
 				$message = match ( $code ) {
 					FolderName::ERROR_LINE_BREAK => __('Folder name contains forbidden characters.', 'plathix'),

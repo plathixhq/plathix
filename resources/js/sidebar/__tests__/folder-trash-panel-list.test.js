@@ -66,7 +66,7 @@ describe('folder-trash-panel-list', () => {
         expect(container).not.toBeNull();
         const form = document.querySelector('form#posts-filter');
         expect(container.parentElement).toBe(form);
-
+        
         expect(container.nextElementSibling.classList.contains('tablenav')).toBe(true);
     });
 
@@ -81,7 +81,7 @@ describe('folder-trash-panel-list', () => {
     });
 
     it('handles trash workflow consistently', async () => {
-        initFolderTrashPanelList(makeStore(5));
+        initFolderTrashPanelList(makeStore(5)); 
         await flush();
         expect(document.getElementById(CONTAINER_ID)).toBeNull();
     });
@@ -93,7 +93,7 @@ describe('folder-trash-panel-list', () => {
         await flush();
         expect(document.getElementById(CONTAINER_ID)).not.toBeNull();
 
-
+        
         store.openId = 5;
         actions['plathix.navigationComplete'].forEach((cb) => cb({ folderId: 5 }));
         await flush();
@@ -106,14 +106,14 @@ describe('folder-trash-panel-list', () => {
         initFolderTrashPanelList(store);
         await flush();
 
-
+        
         const form = document.querySelector('form#posts-filter');
         const oldNav = form.querySelector('.tablenav.top');
         const newNav = document.createElement('div');
         newNav.className = 'tablenav top';
         form.replaceChild(newNav, oldNav);
 
-
+        
         actions['plathix.navigationComplete'].forEach((cb) => cb({ folderId: 77 }));
         await flush();
 
@@ -123,16 +123,16 @@ describe('folder-trash-panel-list', () => {
     });
 
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
-
+        
         const form = document.querySelector('form#posts-filter');
-        form.querySelector('.tablenav.top').remove();
+        form.querySelector('.tablenav.top').remove(); 
         initFolderTrashPanelList(makeStore(77));
         await flush();
 
         const container = document.getElementById(CONTAINER_ID);
         expect(container).not.toBeNull();
         expect(container.closest('form#posts-filter')).toBe(form);
-
+        
         expect(container.nextElementSibling.classList.contains('wp-list-table')).toBe(true);
     });
 

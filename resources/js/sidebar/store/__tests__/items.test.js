@@ -64,9 +64,9 @@ function deferred() {
 describe('itemsModule', () => {
     beforeEach(() => {
         jest.clearAllMocks();
-
-
-
+        
+        
+        
         getMediaFrame.mockReturnValue(null);
         getScreenKind.mockReturnValue('static');
         shouldUseStaticListFiltering.mockReturnValue(false);
@@ -114,7 +114,7 @@ describe('itemsModule', () => {
         const current = store.folders.find((f) => Number(f.id) === 3);
         expect(target.count).toBe(5);
         expect(current.count).toBe(1);
-
+        
         expect(target.name).toBe('Target');
         expect(target.color).toBe('#def');
         expect(target.parentId).toBe(0);
@@ -212,9 +212,9 @@ describe('itemsModule', () => {
         expect(store.error).toBeNull();
     });
 
-
-
-
+    
+    
+    
     it('reconciles via silent refreshFolders on rest_write_indeterminate instead of trusting the optimistic rollback alone', async() => {
         Api.moveItemsBulk.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
         const store = makeStore();
@@ -321,11 +321,11 @@ describe('itemsModule', () => {
         expect(store.selected).toEqual([]);
     });
 
-
+    
     it('resets pagination via applyFolderFilter when page becomes empty in static-list mode', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 2, failed: [] });
         shouldUseStaticListFiltering.mockReturnValue(true);
-
+        
         document.body.innerHTML = '<table id="the-list"><tbody></tbody></table>';
         const store = makeStore({ openId: 3 });
 
@@ -337,7 +337,7 @@ describe('itemsModule', () => {
     it('does not reset pagination when rows remain after bulk-move in static-list mode', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 1, failed: [] });
         shouldUseStaticListFiltering.mockReturnValue(true);
-
+        
         document.body.innerHTML = `
             <table id="the-list"><tbody>
                 <tr id="post-99"></tr>
@@ -350,8 +350,8 @@ describe('itemsModule', () => {
         expect(store.applyFolderFilter).not.toHaveBeenCalledWith(3, { resetPage: true });
     });
 
-
-
+    
+    
     function makeGridFrame() {
         const selection = { reset: jest.fn() };
         return {
@@ -362,14 +362,14 @@ describe('itemsModule', () => {
         };
     }
 
-
-
-
+    
+    
+    
     //
-
-
+    
+    
     it('keeps upload links scoped to the active folder', async() => {
-
+        
         Api.moveItemsBulk.mockResolvedValue({ moved: 1, failed: [], counts_recomputed: [7, 9] });
         const store = makeStore({ openId: 3 });
 
@@ -379,9 +379,9 @@ describe('itemsModule', () => {
         expect(memInvalidateFolder).toHaveBeenCalledWith(9);
     });
 
-
-
-
+    
+    
+    
     it('keeps store/selection state consistent across UI events', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 1, failed: [], counts_recomputed: [] });
         const store = makeStore({ openId: 3 });
@@ -392,8 +392,8 @@ describe('itemsModule', () => {
         expect(cacheInvalidateFolder).toHaveBeenCalledWith(3);
     });
 
-
-
+    
+    
     it('keeps store/selection state consistent across UI events', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 1, failed: [] });
         const store = makeStore({ openId: 3 });
@@ -408,8 +408,8 @@ describe('itemsModule', () => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 2, failed: [] });
         const frame = makeGridFrame();
         getMediaFrame.mockReturnValue(frame);
-        getScreenKind.mockReturnValue('static');
-        const store = makeStore({ openId: 7 });
+        getScreenKind.mockReturnValue('static'); 
+        const store = makeStore({ openId: 7 }); 
 
         await store.moveItemsBulk([1, 2], 7);
 
@@ -432,7 +432,7 @@ describe('itemsModule', () => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 2, failed: [] });
         const frame = makeGridFrame();
         getMediaFrame.mockReturnValue(frame);
-        getScreenKind.mockReturnValue('modal');
+        getScreenKind.mockReturnValue('modal'); 
         const store = makeStore({ openId: 7 });
 
         await store.moveItemsBulk([1, 2], 7);
@@ -442,7 +442,7 @@ describe('itemsModule', () => {
 
     it('does not throw when no media frame (list-view / static-list, getMediaFrame() === null)', async() => {
         Api.moveItemsBulk.mockResolvedValue({ moved: 2, failed: [] });
-        getMediaFrame.mockReturnValue(null);
+        getMediaFrame.mockReturnValue(null); 
         getScreenKind.mockReturnValue('static');
         const store = makeStore({ openId: 7 });
 
@@ -451,12 +451,12 @@ describe('itemsModule', () => {
     });
 
     describe('preserves folder tree behavior', () => {
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
 
         it('applies the success-diff count correction to the right folder after folders was reordered during await', async() => {
             const move = deferred();

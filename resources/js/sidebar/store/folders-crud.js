@@ -5,6 +5,7 @@ import { getRuntime } from '../runtime.js';
 import { isInDeletedSubtree, findReattachTarget } from './folder-tree-utils.js';
 import { cacheInvalidateFolder } from '../static-list/cache.js';
 import { memClear } from '../media-grid-cache.js';
+import { captureActiveElement, restoreFocus } from '../focus-trap.js';
 
 export const foldersCrudModule = {
     newFolderParentId: null,
@@ -12,14 +13,17 @@ export const foldersCrudModule = {
     renamingFolderId: null,
     renamingFolderName: '',
     deletingFolder: null,
-
-
-
-
-
+    
+    
+    _deleteConfirmOpener: null,
+    
+    
+    
+    
+    
     _newFolderOutsideClickHandler: null,
-
-
+    
+    
     _renameOutsideClickHandler: null,
 
     async showNewFolderForm(parentId = 0) {
@@ -27,18 +31,18 @@ export const foldersCrudModule = {
         this.newFolderName = '';
         this.folderDragMode = false;
         if (parentId > 0) {
-
-
-
+            
+            
+            
             await this.expandAncestors(Number(parentId));
             delete this.collapsedIds[parentId];
         }
-
-
+        
+        
         this._removeNewFolderOutsideClick();
-
+        
         setTimeout(() => {
-
+            
             if (this.newFolderParentId === null) return;
             const handler = (e) => {
                 if (!e.target.closest('.plathix-new-folder__form:not(.plathix-rename__form)')) {
@@ -75,8 +79,8 @@ export const foldersCrudModule = {
                 '.plathix-new-folder__form:not(.plathix-rename__form)'
             );
             for (const form of forms) {
-
-
+                
+                
                 if (form instanceof HTMLElement && form.offsetParent !== null) {
                     const input = form.querySelector('input');
                     return input instanceof HTMLElement ? input : null;
@@ -89,7 +93,7 @@ export const foldersCrudModule = {
             if (!input) return;
             input.focus();
             if (document.activeElement === input) return;
-
+            
             window.requestAnimationFrame(() => {
                 const retryInput = findInput();
                 retryInput?.focus();
@@ -119,7 +123,7 @@ export const foldersCrudModule = {
             input.focus();
             input.select();
             if (document.activeElement === input) return;
-
+            
             window.requestAnimationFrame(() => {
                 const retryInput = findInput();
                 retryInput?.focus();
@@ -139,13 +143,13 @@ export const foldersCrudModule = {
     showRenameForm(folder) {
         this.renamingFolderId = Number(folder.id);
         this.renamingFolderName = folder.name || '';
-
-
-
+        
+        
+        
         this._removeRenameOutsideClick();
-
+        
         setTimeout(() => {
-
+            
             if (this.renamingFolderId === null) return;
             const handler = (e) => {
                 if (!e.target.closest('.plathix-rename__form')) {
@@ -183,11 +187,14 @@ export const foldersCrudModule = {
     },
 
     showDeleteConfirm(folder) {
+        this._deleteConfirmOpener = captureActiveElement();
         this.deletingFolder = folder;
     },
 
     hideDeleteConfirm() {
         this.deletingFolder = null;
+        restoreFocus(this._deleteConfirmOpener);
+        this._deleteConfirmOpener = null;
     },
 
     hasSiblingNamed(name, parentId, excludeId = null) {
@@ -200,16 +207,30 @@ export const foldersCrudModule = {
 
     async createFolder(name, parentId = 0) {
         if (this.hasSiblingNamed(name, parentId)) {
-            this.alertMessage = t('folder_name_exists', 'A folder with this name already exists here.');
+            this.showAlert(t('folder_name_exists', 'A folder with this name already exists here.'));
             return;
         }
         await this.withLoading(async () => {
-            const res = await Api.createFolder(name, parentId);
+            let res;
+            try {
+                res = await Api.createFolder(name, parentId);
+            } catch (error) {
+                
+                
+                
+                if (error?.code === 'rest_write_indeterminate') {
+                    this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
+                    this.refreshFolders({ silent: true }).catch(() => {});
+                    this.notify('info', this.error);
+                    return;
+                }
+                throw error;
+            }
             const newId = Number(res?.id || 0);
             if (newId > 0) {
                 // Optimistic insert: \u043f\u0430\u043f\u043a\u0430 \u043f\u043e\u044f\u0432\u043b\u044f\u0435\u0442\u0441\u044f \u043c\u0433\u043d\u043e\u0432\u0435\u043d\u043d\u043e \u043f\u043e\u0441\u043b\u0435 \u043f\u0435\u0440\u0432\u043e\u0433\u043e \u043e\u0442\u0432\u0435\u0442\u0430,
                 // \u0434\u043e \u0432\u0442\u043e\u0440\u043e\u0433\u043e fetch. Alpine \u0432\u0438\u0434\u0438\u0442 \u0442\u043e\u0442 \u0436\u0435 :key (newId) \u2192 \u043f\u0430\u0442\u0447\u0438\u0442 \u0430\u0442\u0440\u0438\u0431\u0443\u0442\u044b
-
+                
                 this.mergeFolders([{
                     id: newId,
                     name,
@@ -228,7 +249,7 @@ export const foldersCrudModule = {
                     // 404/\u0433\u043e\u043d\u043a\u0430 \u043a\u044d\u0448\u0430: \u043f\u0430\u043f\u043a\u0430 \u0443\u0436\u0435 \u0432 \u0434\u0435\u0440\u0435\u0432\u0435 (optimistic insert), \u0442\u0438\u0445\u0438\u0439 refresh.
                     cacheInvalidateFolder(newId);
                     cacheInvalidateFolder(parentId);
-
+                    
                     // try/catch \u043d\u0435 \u0434\u0430\u0451\u0442 \u0435\u0451 \u0441\u0431\u043e\u044e \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c independent side-effects \u043d\u0438\u0436\u0435
                     // (dispatch/notify), \u043a\u043e\u0442\u043e\u0440\u044b\u0435 \u043e\u0442 \u043d\u0435\u0451 \u043d\u0435 \u0437\u0430\u0432\u0438\u0441\u044f\u0442.
                     try {
@@ -250,13 +271,26 @@ export const foldersCrudModule = {
     async renameFolder(id, name) {
         const folder = this.folders.find((f) => Number(f.id) === Number(id));
         if (folder && this.hasSiblingNamed(name, folder.parentId, id)) {
-            this.alertMessage = t('folder_name_exists', 'A folder with this name already exists here.');
+            this.showAlert(t('folder_name_exists', 'A folder with this name already exists here.'));
             return;
         }
         await this.withLoading(async () => {
-            await Api.renameFolder(id, name);
+            try {
+                await Api.renameFolder(id, name);
+            } catch (error) {
+                
+                // \u043d\u0435\u0447\u0438\u0442\u0430\u0435\u043c\u044b\u0439 \u043e\u0442\u0432\u0435\u0442 \u2014 silent refresh \u043f\u043e\u0434\u0442\u044f\u0433\u0438\u0432\u0430\u0435\u0442 \u043d\u0430\u0441\u0442\u043e\u044f\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435
+                
+                if (error?.code === 'rest_write_indeterminate') {
+                    this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
+                    this.refreshFolders({ silent: true }).catch(() => {});
+                    this.notify('info', this.error);
+                    return;
+                }
+                throw error;
+            }
             cacheInvalidateFolder(id);
-
+            
             // \u0434\u0430\u0451\u0442 \u0435\u0451 \u0441\u0431\u043e\u044e \u043e\u0442\u043c\u0435\u043d\u0438\u0442\u044c independent side-effects \u043d\u0438\u0436\u0435 (dispatch/notify).
             try {
                 await this.refreshFolders({ silent: true, skipCacheClear: true });
@@ -275,7 +309,7 @@ export const foldersCrudModule = {
         const deletedName = this.folders.find((f) => Number(f.id) === deletedFolderId)?.name || '';
         const trashFolderId = Number(getRuntime().trashFolderId || 0);
 
-
+        
         const pred = isInDeletedSubtree(this.folders, new Set([deletedFolderId]));
         const shouldLeaveCurrentView = pred(Number(this.openId) || 0);
 
@@ -286,8 +320,10 @@ export const foldersCrudModule = {
         this.folders = this.folders.filter((f) => !pred(Number(f.id)));
 
         this.deletingFolder = null;
+        restoreFocus(this._deleteConfirmOpener);
+        this._deleteConfirmOpener = null;
         // withLoading(fn) \u043d\u0430 \u044d\u0442\u043e\u0439 \u0432\u0435\u0442\u043a\u0435 \u0433\u043b\u043e\u0442\u0430\u0435\u0442 \u043e\u0448\u0438\u0431\u043a\u0443 \u0431\u0435\u0437\u0443\u0441\u043b\u043e\u0432\u043d\u043e (\u0431\u0435\u0437 opt-in rethrow \u2014
-
+        
         // withLoading, \u043a\u0430\u043a \u0443\u0436\u0435 \u0434\u0435\u043b\u0430\u0435\u0442 navigation.js:62,120 \u2014 \u044d\u0442\u043e \u043d\u0435 \u043d\u043e\u0432\u044b\u0439 \u043f\u0440\u0438\u043c\u0438\u0442\u0438\u0432, \u0430
         // \u0441\u0443\u0449\u0435\u0441\u0442\u0432\u0443\u044e\u0449\u0438\u0439 \u0432 store \u043f\u0430\u0442\u0442\u0435\u0440\u043d \u0440\u0443\u0447\u043d\u043e\u0433\u043e \u0443\u043f\u0440\u0430\u0432\u043b\u0435\u043d\u0438\u044f isLoading.
         this.isLoading = true;
@@ -297,10 +333,10 @@ export const foldersCrudModule = {
             if (trashFolderId > 0) {
                 cacheInvalidateFolder(trashFolderId);
             }
-
-
-
-
+            
+            
+            
+            
             try {
                 await this.refreshFolders({ silent: true, skipCacheClear: true });
             } catch (error) {
@@ -318,6 +354,15 @@ export const foldersCrudModule = {
             }
             this.notify('success', t('folder_deleted_notif', 'Moved to Trash') + (deletedName ? ': \u00ab' + deletedName + '\u00bb' : ''));
         } catch (error) {
+            
+            // \u043e\u0442\u0432\u0435\u0442 \u2014 silent refresh \u043f\u043e\u0434\u0442\u044f\u0433\u0438\u0432\u0430\u0435\u0442 \u043d\u0430\u0441\u0442\u043e\u044f\u0449\u0435\u0435 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435 \u0434\u0435\u0440\u0435\u0432\u0430 \u0432\u043c\u0435\u0441\u0442\u043e
+            
+            if (error?.code === 'rest_write_indeterminate') {
+                this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
+                this.refreshFolders({ silent: true }).catch(() => {});
+                this.notify('info', this.error);
+                return;
+            }
             // \u041e\u0442\u043a\u0430\u0442 optimistic removal: \u0441\u0435\u0440\u0432\u0435\u0440 \u043d\u0435 \u043f\u043e\u0434\u0442\u0432\u0435\u0440\u0434\u0438\u043b \u0443\u0434\u0430\u043b\u0435\u043d\u0438\u0435, \u0432\u0435\u0440\u043d\u0443\u0442\u044c \u043f\u0430\u043f\u043a\u0438 \u0432 \u0434\u0435\u0440\u0435\u0432\u043e.
             // \u041d\u0435 \u043f\u0440\u043e\u0431\u0440\u0430\u0441\u044b\u0432\u0430\u0435\u043c \u043e\u0448\u0438\u0431\u043a\u0443 \u0434\u0430\u043b\u044c\u0448\u0435 \u2014 \u0435\u0434\u0438\u043d\u0441\u0442\u0432\u0435\u043d\u043d\u044b\u0439 \u0432\u044b\u0437\u044b\u0432\u0430\u044e\u0449\u0438\u0439 (overlays.js @click) \u043d\u0435
             // \u0436\u0434\u0451\u0442 \u044d\u0442\u043e\u0442 \u043f\u0440\u043e\u043c\u0438\u0441 \u0438 \u043d\u0435 \u0438\u043c\u0435\u0435\u0442 .catch().
@@ -329,7 +374,7 @@ export const foldersCrudModule = {
         }
     },
 
-
-
-
+    
+    
+    
 };

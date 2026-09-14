@@ -60,7 +60,6 @@ final class Plugin
 		new FolderQuery($this->loader);
 		new MediaTrashPolicy($this->loader);
 
-
 		add_action('add_attachment', [ Cache::class, 'onAttachmentAdded' ], 10, 1);
 		add_action('delete_attachment', [ Cache::class, 'onAttachmentChange' ], 10, 1);
 
@@ -109,11 +108,9 @@ final class Plugin
 			$folders->adjustForPost( (int) $post_id, +1);
 		}, 10, 1);
 
-
 		$tree        = new FolderTreeService( $repository, $folders );
 		$assignment  = new FolderAssignmentService( $repository, $folders, $cache );
 		new AjaxRouter( $repository, $folders, $tree, $assignment, $this->loader, $rateLimiter );
-
 
 		$this->assertPhase(4, 'jobs');
 		$jobs->registerHandlers();
@@ -125,8 +122,15 @@ final class Plugin
 		$this->loader->run();
 	}
 
+	public const RECURRING_JOBS_CHECKED_OPTION = 'plathix_recurring_jobs_last_checked';
+
 	public static function ensureRecurringJobsScheduled(): void {
 		if ( ! is_admin() ) {
+			return;
+		}
+
+		$last_checked = (int) get_option( self::RECURRING_JOBS_CHECKED_OPTION, 0 );
+		if ( time() - $last_checked < DAY_IN_SECONDS ) {
 			return;
 		}
 
@@ -136,6 +140,9 @@ final class Plugin
 		$jobs->dispatchRecurring( JobDispatcher::JOB_IMPORT_CHECKPOINT_CLEANUP, DAY_IN_SECONDS );
 
 		$jobs->dispatchRecurring( JobDispatcher::JOB_FOLDER_COUNT_RECONCILE, JobDispatcher::JOB_FOLDER_COUNT_RECONCILE_INTERVAL );
+
+		// @phpstan-ignore plathix.discardedWriteReturn
+		update_option( self::RECURRING_JOBS_CHECKED_OPTION, time(), false );
 	}
 
 	private function assertPhase(int $phase, string $context): void {

@@ -11,23 +11,33 @@ use Plathix\PublicApi\PresetsApi;
 
 final class SettingsSaveHandler
 {
+	private const MAX_IMPORT_BYTES = 16_777_216;
+
 	/** @var callable(): bool */
 	private $can_manage;
 
 	/** @var callable(): string */
 	private $settingsUrl;
 
+	/**
+	 * @var array<string, callable(mixed=): bool>
+	 */
 	private array $save_callbacks = [];
 
+	/**
+	 * @var array<string, array<int, string>>
+	 */
 	private array $tab_options = [];
 
+	/**
+	 * @var array<string, string>
+	 */
 	private array $option_owner = [];
 
 	/**
 	 * @param callable(): bool   $can_manage
 	 * @param callable(): string $settingsUrl
 	 */
-
 	public function __construct(callable $can_manage, callable $settingsUrl) {
 		$this->can_manage   = $can_manage;
 		$this->settingsUrl = $settingsUrl;
@@ -37,7 +47,6 @@ final class SettingsSaveHandler
 	 * @param string          $option_name
 	 * @param callable(mixed=): bool $save_callback
 	 */
-
 	public function registerSaveHandler(string $option_name, callable $save_callback): void {
 		$this->save_callbacks[ $option_name ] = $save_callback;
 	}
@@ -46,13 +55,11 @@ final class SettingsSaveHandler
 	 * @param string             $tab_slug
 	 * @param array<int, string> $option_names
 	 */
-
 	public function registerTabHandler(string $tab_slug, array $option_names): void {
 		$owned_option_names = [];
 		foreach ( $option_names as $option_name ) {
 			$existing_tab = $this->option_owner[ $option_name ] ?? null;
 			if ( $existing_tab !== null && $existing_tab !== $tab_slug ) {
-
 				do_action( 'plathix/settings/tab_option_conflict', $option_name, $existing_tab, $tab_slug );
 
 				Logger::error( __METHOD__ . ': option already owned by another tab.', [
@@ -74,7 +81,7 @@ final class SettingsSaveHandler
 
 	public function handleTabSave(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- read-only action-name resolution, real auth check is check_admin_referer() below
-		$action   = sanitize_key( (string) ( $_REQUEST['action'] ?? '' ) );
+		$action   = sanitize_key( (string) wp_unslash( $_REQUEST['action'] ?? '' ) );
 		$tab_slug = str_starts_with( $action, 'plathix_save_' ) ? substr( $action, strlen( 'plathix_save_' ) ) : '';
 		$option_names = $this->tab_options[ $tab_slug ] ?? [];
 
@@ -94,7 +101,6 @@ final class SettingsSaveHandler
 			$reason = null;
 			try {
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
-
 				$raw = $_POST[ $option_name ] ?? null;
 
 				$succeeded = (bool) $callback( $raw );
@@ -131,7 +137,7 @@ final class SettingsSaveHandler
 		check_admin_referer( 'plathix_export', 'plathix_export_nonce' );
 
 		$selected = isset( $_POST['plathix_export_taxonomies'] ) && is_array( $_POST['plathix_export_taxonomies'] )
-			? array_map( 'sanitize_key', $_POST['plathix_export_taxonomies'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- capability checked at the top of this method and check_admin_referer( 'plathix_export', 'plathix_export_nonce' ) runs before this read; each element is sanitize_key()'d here
+			? array_map( 'sanitize_key', wp_unslash( (array) $_POST['plathix_export_taxonomies'] ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing -- capability checked at the top of this method and check_admin_referer( 'plathix_export', 'plathix_export_nonce' ) runs before this read; each element is sanitize_key()'d here
 			: null;
 
 		$json = wp_json_encode(
@@ -208,6 +214,12 @@ final class SettingsSaveHandler
 			exit;
 		}
 
+		$size = @filesize( $file['tmp_name'] ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- filesize() emits a warning on an unreadable path; is_uploaded_file() above already confirmed the path, this only guards a theoretical race and reports it as too_large via the false branch below
+		if ( false === $size || $size > self::MAX_IMPORT_BYTES ) {
+			wp_safe_redirect( add_query_arg( 'plathix_import', 'too_large', ( $this->settingsUrl )() ) );
+			exit;
+		}
+
 		$raw = file_get_contents( $file['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- reads the uploaded file from PHP's own tmp_name after is_uploaded_file(); WP_Filesystem does not apply to the upload staging path
 		if ( ! is_string( $raw ) ) {
 			wp_safe_redirect( add_query_arg( 'plathix_import', 'read_error', ( $this->settingsUrl )() ) );
@@ -221,7 +233,7 @@ final class SettingsSaveHandler
 		}
 
 		$selected = isset( $_POST['plathix_import_taxonomies'] ) && is_array( $_POST['plathix_import_taxonomies'] )
-			? array_map( 'sanitize_key', $_POST['plathix_import_taxonomies'] )
+			? array_map( 'sanitize_key', wp_unslash( (array) $_POST['plathix_import_taxonomies'] ) )
 			: null;
 
 		$stats = ( new ImportExportApi() )->importStructure( $payload, $selected );

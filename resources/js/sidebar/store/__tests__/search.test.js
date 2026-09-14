@@ -205,7 +205,7 @@ describe('preserves folder tree behavior', () => {
         store.isSearching = false;
         store.shouldUseDeferredTree = () => false;
         store.hasLoadedFullTree = true;
-
+        
         // this test only asserts the cache re-evaluates (same boolean, re-read after version bump).
         const r1 = store.isSearchOnlyMode;
         store.patchFolder(1, { isProtected: true });
@@ -297,8 +297,8 @@ describe('favoriteMatchesSearch / hasVisibleFavorites / visibleFavoritesCount', 
         expect(store.favoriteMatchesSearch(null)).toBe(false);
     });
 
-
-
+    
+    
     it('hasVisibleFavorites + visibleFavoritesCount: only matches count under active search', () => {
         const store = makeFavStore(favFolders, allFavs, '2014');
         expect(store.visibleFavoritesCount).toBe(1);
@@ -321,14 +321,14 @@ describe('favoriteMatchesSearch / hasVisibleFavorites / visibleFavoritesCount', 
         const store = mergeStore(searchModule);
         store.folders = favFolders;
         store.searchQuery = '2014';
-
+        
         expect(store.hasVisibleFavorites).toBe(false);
         expect(store.visibleFavoritesCount).toBe(0);
     });
 
     it('orphan favorite id (folder not in folders) is excluded', () => {
         const store = makeFavStore(favFolders, [10, 999], '');
-
+        
         expect(store.visibleFavoritesCount).toBe(1);
     });
 });
@@ -355,9 +355,9 @@ describe('systemRootFolders', () => {
         expect(store.systemRootFolders.map((folder) => folder.id)).toEqual([]);
     });
 
-
-
-
+    
+    
+    
     describe('Trash visibility by count + foldersCount', () => {
         const TRASH_ID = 7;
         beforeEach(() => { window.Plathix = { trashFolderId: TRASH_ID }; });
@@ -414,8 +414,8 @@ describe('setSearchQuery — path reveal for matches', () => {
     }
 
     const nested = [
-        f(1, 0, 'Вложения 20 на 20'),
-        f(2, 1, 'Вложения 20 на 2014'),
+        f(1, 0, 'Вложения 20 на 20'),   
+        f(2, 1, 'Вложения 20 на 2014'), 
         f(3, 0, 'Other'),
     ];
 
@@ -425,7 +425,7 @@ describe('setSearchQuery — path reveal for matches', () => {
 
         await store.setSearchQuery('2014');
 
-
+        
         expect(expandAncestors.mock.calls.map((c) => c[0])).toEqual([2]);
         expect(store.searchQuery).toBe('2014');
     });
@@ -453,7 +453,7 @@ describe('setSearchQuery — path reveal for matches', () => {
     });
 
     it('is safe when expandAncestors is not available (favorites/tree module absent)', async() => {
-        const store = makeSearchStore(nested);
+        const store = makeSearchStore(nested); 
         await expect(store.setSearchQuery('2014')).resolves.toBeUndefined();
         expect(store.searchQuery).toBe('2014');
     });
@@ -485,7 +485,7 @@ describe('setSortBy', () => {
 
 describe('_childrenByParent — cycle-guard', () => {
     it('preserves folder tree behavior', () => {
-
+        
         const store = makeStore([f(1, 0), f(2, 1), f(3, 2)]);
         const map = store._childrenByParent;
         expect(map.get(0).map((x) => x.id)).toEqual([1]);
@@ -494,18 +494,18 @@ describe('_childrenByParent — cycle-guard', () => {
     });
 
     it('keeps store/selection state consistent across UI events', () => {
-
+        
         const store = makeStore([f(1, 2), f(2, 1)]);
-
+        
         const map = store._childrenByParent;
-
+        
         expect(map.get(1)).toBeUndefined();
         expect(map.get(2)).toBeUndefined();
         expect((map.get(0) || []).map((x) => x.id).sort()).toEqual([1, 2]);
     });
 
     it('keeps store/selection state consistent across UI events', () => {
-
+        
         const store = makeStore([f(10, 0), f(11, 10), f(12, 11)]);
         const map = store._childrenByParent;
         expect(map.get(0).map((x) => x.id)).toEqual([10]);
@@ -544,7 +544,7 @@ describe('setSortBy persistence', () => {
     it('does not throw when localStorage is unavailable', () => {
         const store = makeStore();
         const original = global.localStorage;
-
+        
         Object.defineProperty(global, 'localStorage', {
             value: { setItem() { throw new Error('blocked'); } },
             configurable: true,

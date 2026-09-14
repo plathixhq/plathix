@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 if ( ! function_exists('__') ) {
@@ -28,7 +27,6 @@ const LEGACY_LINE = '/^\s*([0-9]+(?:\.[0-9]+)*)\s*:\s*Folder\(([^)]*)\)\s*:\s*Co
 /**
  * @return array{markdown: string, converted: bool}
  */
-
 function convert_markdown(string $source): array {
 	$lines       = preg_split("/\r\n|\n|\r/", $source) ?: [];
 	$out         = [];
@@ -50,7 +48,6 @@ function convert_markdown(string $source): array {
 		}
 
 		if ( preg_match(LEGACY_LINE, $line, $m) !== 1 ) {
-
 			$out[] = $line;
 			continue;
 		}
@@ -136,7 +133,6 @@ foreach ( $paths as $path ) {
 	if ( is_dir($path) ) {
 		$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS));
 		foreach ( $it as $file ) {
-
 			if ( $file->isFile() && in_array($file->getFilename(), [ 'preset.md', PresetFormat::FILENAME ], true) ) {
 				$targets[] = $file->getPathname();
 			}
@@ -165,5 +161,5 @@ foreach ( $targets as $target ) {
 	}
 }
 
-fwrite(STDOUT, sprintf("Static analysis rule failed for a public contract violation.", count($targets), $failed));
+fwrite(STDOUT, sprintf("Public-facing message unavailable.", count($targets), $failed));
 exit($failed > 0 ? 1 : 0);

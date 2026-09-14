@@ -59,11 +59,11 @@ export const foldersTreeModule = {
             localStorage.setItem(getCollapsedStorageKey(), JSON.stringify(this.collapsedIds));
         } catch {}
 
-
+        
         if (this.shouldUseDeferredTree()) {
             for (const ancestorId of ancestors) {
                 if (!this.hasLoadedChildren(ancestorId)) {
-
+                    
                     // eslint-disable-next-line no-await-in-loop
                     await this.loadFolderChildren(ancestorId, { silent: true });
                 }

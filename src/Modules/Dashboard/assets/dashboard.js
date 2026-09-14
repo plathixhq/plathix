@@ -114,7 +114,7 @@ export function initMigrationBannerDismiss() {
                 banner.remove();
             })
             .catch(() => {
-
+                
             });
     });
 }
@@ -142,11 +142,11 @@ function initUploadsWidget() {
         tab.addEventListener('click', () => applyPeriod(tab.dataset.period));
     });
 
-
+    
     const activeTab = widget.querySelector('.plathix-uploads-tab--active');
     if (activeTab) applyPeriod(activeTab.dataset.period);
 
-
+    
     const tooltip = document.createElement('div');
     tooltip.className = 'plathix-spark-tooltip';
     tooltip.innerHTML =
@@ -167,20 +167,20 @@ function initUploadsWidget() {
         try { points = JSON.parse(wrap.dataset.points || '[]'); } catch (e) { return; }
         if (!points.length) return;
 
-
-
+        
+        
         const nonZero = points
             .map((pt, i) => ({ i, count: pt.count }))
             .filter(p => p.count > 0)
             .map(p => p.i);
-        if (!nonZero.length) return;
+        if (!nonZero.length) return; 
 
         const maxCount = points.reduce((m, p) => Math.max(m, p.count), 0) || 1;
         const n = points.length;
 
-
-
-
+        
+        
+        
         const guide  = document.createElement('div');
         guide.className = 'plathix-spark-guide';
         const marker = document.createElement('div');
@@ -199,7 +199,7 @@ function initUploadsWidget() {
             const rect = svg.getBoundingClientRect();
             const ratio = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
             const rawIdx = ratio * (n - 1);
-
+            
             let idx = nonZero[0];
             let best = Math.abs(rawIdx - idx);
             for (const ni of nonZero) {
@@ -209,7 +209,7 @@ function initUploadsWidget() {
             const pt = points[idx];
             if (!pt) return;
 
-
+            
             const px = (n > 1 ? idx / (n - 1) : 0) * rect.width;
             const py = rect.height - (pt.count / maxCount) * (rect.height - 4) - 2;
 
@@ -221,7 +221,7 @@ function initUploadsWidget() {
             guide.style.top  = py + 'px';
             guide.style.height = (rect.height - py) + 'px';
 
-
+            
             const d = new Date(pt.date + 'T00:00:00');
             if (!isNaN(d.getTime())) {
                 tipDate.textContent = d.toLocaleDateString(undefined,
@@ -246,10 +246,10 @@ function initUploadsWidget() {
 }
 
 function initWizardOverlay() {
-
-
-
-
+    
+    
+    
+    
     const overlay = document.getElementById('plathix-wizard-overlay');
     if (!overlay) {
         return;
@@ -260,7 +260,7 @@ function initWizardOverlay() {
         return;
     }
 
-
+    
     overlay.addEventListener('click', event => {
         if (event.target === overlay) {
             window.location.href = skipUrl;

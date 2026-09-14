@@ -8,7 +8,6 @@ use Plathix\Modules\Settings\SettingsPage;
 
 final class SettingsApi
 {
-
 	public function pageUrl(?string $tab = null): string
 	{
 		$url = admin_url( 'admin.php?page=' . SettingsPage::PAGE_SLUG );

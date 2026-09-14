@@ -17,7 +17,6 @@ final class CronStatusResolver
 		}
 
 		if ( ! function_exists( 'as_get_scheduled_actions' ) || ! class_exists( '\\ActionScheduler_Store' ) ) {
-
 			return [ 'disabled' => true, 'idle' => false, 'stalled' => true ];
 		}
 
@@ -43,14 +42,12 @@ final class CronStatusResolver
 	/**
 	 * @return array{idle: bool, stalled: bool}
 	 */
-
 	private static function decide(bool $has_recent_complete, bool $has_pending): array {
 		if ( $has_recent_complete ) {
 			return [ 'idle' => false, 'stalled' => false ];
 		}
 
 		if ( ! $has_pending ) {
-
 			return [ 'idle' => true, 'stalled' => false ];
 		}
 

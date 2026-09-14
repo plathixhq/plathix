@@ -28,7 +28,7 @@ describe('buildRequestUrl()', () => {
         expect(url).toBe(
             'https://site.tld/index.php?rest_route=/plathix/v1/folders&post_type=attachment',
         );
-
+        
         expect((url.match(/\?/g) || []).length).toBe(1);
     });
 

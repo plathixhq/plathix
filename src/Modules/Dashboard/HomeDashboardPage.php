@@ -29,6 +29,9 @@ class HomeDashboardPage
 		return $base . Keys::blogSuffix();
 	}
 
+	/**
+	 * @var list<string>
+	 */
 	private const MIGRATION_SOURCES = [ 'filebird', 'wpmediafolder', 'realmedialib', 'happyfiles', 'wickedfolders' ];
 
 	public function register(): void {
@@ -95,12 +98,7 @@ class HomeDashboardPage
 
 			if ( ! in_array( $card_id, $dismissed, true ) ) {
 				$dismissed[] = $card_id;
-
-				$written = update_user_meta( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
-
-				if ( ! $written ) {
-					Logger::error( 'dashboard_dismiss_write_failed', [ 'user_id' => $user_id, 'meta_key' => $meta_key ] );
-				}
+				self::writeDismissHonest( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
 			}
 		} finally {
 			if ( $acquired ) {
@@ -133,12 +131,7 @@ class HomeDashboardPage
 
 			if ( ! in_array( $source, $dismissed, true ) ) {
 				$dismissed[] = $source;
-
-				$written = update_user_meta( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
-
-				if ( ! $written ) {
-					Logger::error( 'dashboard_dismiss_write_failed', [ 'user_id' => $user_id, 'meta_key' => $meta_key ] );
-				}
+				self::writeDismissHonest( $user_id, $meta_key, array_values( array_unique( $dismissed ) ) );
 			}
 		} finally {
 			if ( $acquired ) {
@@ -152,7 +145,6 @@ class HomeDashboardPage
 	/**
 	 * @return array<int, array{slug:string,zone:string,order:int,render:callable}>
 	 */
-
 	private function widgets(): array {
 		$host = [
 			[ 'slug' => 'status-bar',       'zone' => 'pre-grid',          'order' => 10, 'render' => static function (array $data): void {
@@ -176,13 +168,11 @@ class HomeDashboardPage
 			[ 'slug' => 'preset',           'zone' => 'row-top',           'order' => 20, 'render' => static function (array $data): void {
 				( new PresetWidget() )->render( $data );
 			} ],
-
 		];
 
 		/**
 		 * @param array<int, array{slug:string,zone:string,order:int,render:callable}> $widgets
 		 */
-
 		$widgets = apply_filters( 'plathix/dashboard/widgets', $host );
 
 		return is_array( $widgets ) ? array_values( $widgets ) : $host;
@@ -191,7 +181,6 @@ class HomeDashboardPage
 	/**
 	 * @return array<string, array<int, string>>
 	 */
-
 	public function widgetZones(): array {
 		$out = [];
 		foreach ( $this->widgetsByZone() as $zone => $list ) {
@@ -240,11 +229,9 @@ class HomeDashboardPage
 			?>
 		<div class="plathix-page">
 			<?php
-
 			?>
 			<h1 class="screen-reader-text"><?php esc_html_e( 'Plathix Dashboard', 'plathix' ); ?></h1>
 			<?php
-
 			$this->renderZone( $zones, 'pre-grid', $data );
 
 			do_action( 'plathix/dashboard/renderOnboarding', $data );
@@ -258,9 +245,21 @@ class HomeDashboardPage
 	}
 
 	/**
+	 * @param array<int, string> $new
+	 */
+	private static function writeDismissHonest(int $user_id, string $meta_key, array $new): void {
+		$old     = get_user_meta( $user_id, $meta_key, true );
+		$old     = is_array( $old ) ? array_values( $old ) : [];
+		$written = update_user_meta( $user_id, $meta_key, $new );
+
+		if ( ! $written && $old !== $new ) {
+			Logger::error( 'dashboard_dismiss_write_failed', [ 'user_id' => $user_id, 'meta_key' => $meta_key ] );
+		}
+	}
+
+	/**
 	 * @return array<string, array<int, array{slug:string,zone:string,order:int,render:callable}>>
 	 */
-
 	private function widgetsByZone(): array {
 		$zones = [];
 		foreach ( $this->widgets() as $widget ) {
@@ -278,7 +277,6 @@ class HomeDashboardPage
 	 * @param array<string, array<int, array{render:callable}>> $zones
 	 * @param array<string, mixed> $data
 	 */
-
 	private function renderZone(array $zones, string $zone, array $data): void {
 		foreach ( $zones[ $zone ] ?? [] as $widget ) {
 			( $widget['render'] )( $data );
@@ -289,7 +287,6 @@ class HomeDashboardPage
 	 * @param array<string, array<int, array{render:callable}>> $zones
 	 * @param array<string, mixed> $data
 	 */
-
 	private function renderRow(array $zones, string $zone, string $suffix, array $data): void {
 		if ( empty( $zones[ $zone ] ) ) {
 			return;
@@ -316,7 +313,6 @@ class HomeDashboardPage
 				$this->renderZone( $zones, $zone, $data );
 			}
 		}
-
 		$docs_url = (string) apply_filters( 'plathix/docs/page_url', '' );
 		if ( $docs_url !== '' ) :
 			?>

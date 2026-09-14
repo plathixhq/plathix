@@ -31,6 +31,7 @@ msgstr ""
 msgid "Plathix"
 msgstr ""
 
+#. translators: aria-подпись иконки «папки» в счётчике корзины (доступность).
 msgid "Folders"
 msgstr ""
 
@@ -117,9 +118,6 @@ msgstr ""
 msgid "Folder moved to Trash. You can restore it from there."
 msgstr ""
 
-msgid "Gallery shortcode"
-msgstr ""
-
 msgid "Documents"
 msgstr ""
 
@@ -177,6 +175,9 @@ msgid "Uploads are still in progress. Leaving now may interrupt them."
 msgstr ""
 
 msgid "Error"
+msgstr ""
+
+msgid "Close notification"
 msgstr ""
 
 msgid "File replaced successfully."
@@ -310,6 +311,7 @@ msgstr ""
 msgid "File"
 msgstr ""
 
+#. translators: aria-подпись иконки «файлы» в счётчике корзины (доступность).
 msgid "Files"
 msgstr ""
 
@@ -828,6 +830,7 @@ msgstr ""
 msgid "Skip setup"
 msgstr ""
 
+#. translators: %d — количество папок, которые создаст этот пресет.
 #, php-format
 msgid "%d folder"
 msgid_plural "%d folders"
@@ -1170,6 +1173,9 @@ msgstr ""
 msgid "Archive exceeds the 1 MB size limit."
 msgstr ""
 
+msgid "ZIP support is not available on this server."
+msgstr ""
+
 msgid "Could not open the zip archive."
 msgstr ""
 
@@ -1288,6 +1294,35 @@ msgid "Secure checkout"
 msgstr ""
 
 msgid "Annual subscription — cancel anytime"
+msgstr ""
+
+msgid "Can I upgrade from Free to PRO at any time?"
+msgstr ""
+
+msgid "Yes, upgrade is instant. Your existing folders and settings are preserved."
+msgstr ""
+
+msgid "What happens to my folders if I cancel?"
+msgstr ""
+
+msgid "Your folders remain in the database. PRO-only features (access control, gallery, audit log, WP-CLI, etc.) are deactivated but your structure stays intact."
+msgstr ""
+
+msgid "Is it a one-time payment or subscription?"
+msgstr ""
+
+msgid "Annual subscription. You can cancel anytime — no long-term commitment."
+msgstr ""
+
+msgid "Do you offer refunds?"
+msgstr ""
+
+#. translators: 1: refund window in days, 2: same value repeated.
+#, php-format
+msgid "%1$d-day money-back guarantee, no questions asked. Contact support within %2$d days of purchase."
+msgstr ""
+
+msgid "FAQ"
 msgstr ""
 
 msgid "Your media library,"
@@ -1412,112 +1447,6 @@ msgstr ""
 #. translators: %d — refund window in days.
 #, php-format
 msgid "%d-day money-back guarantee. All plans include all PRO features."
-msgstr ""
-
-msgid "Plathix PRO — active"
-msgstr ""
-
-msgid "You're on PRO. Everything is unlocked."
-msgstr ""
-
-msgid "Manage your license below. Need help? Our docs and support are a click away."
-msgstr ""
-
-msgid "Documentation"
-msgstr ""
-
-msgid "Priority support"
-msgstr ""
-
-#. translators: %s — subscription expiry date.
-#, php-format
-msgid "Subscription active until %s."
-msgstr ""
-
-#. translators: 1: days left, 2: renew link (opening <a>), 3: closing </a>.
-#, php-format
-msgid "Subscription expires in %1$d days. %2$sRenew%3$s to keep PRO active."
-msgstr ""
-
-#. translators: 1: expiry date, 2: renew link (opening <a>), 3: closing </a>.
-#, php-format
-msgid "Subscription expired on %1$s. %2$sRenew%3$s to restore PRO."
-msgstr ""
-
-msgid "What you unlocked with PRO"
-msgstr ""
-
-msgid "Can I upgrade from Free to PRO at any time?"
-msgstr ""
-
-msgid "Yes, upgrade is instant. Your existing folders and settings are preserved."
-msgstr ""
-
-msgid "What happens to my folders if I cancel?"
-msgstr ""
-
-msgid "Your folders remain in the database. PRO-only features (access control, gallery, audit log, WP-CLI, etc.) are deactivated but your structure stays intact."
-msgstr ""
-
-msgid "Is it a one-time payment or subscription?"
-msgstr ""
-
-msgid "Annual subscription. You can cancel anytime — no long-term commitment."
-msgstr ""
-
-msgid "Do you offer refunds?"
-msgstr ""
-
-#. translators: 1: refund window in days, 2: same value repeated.
-#, php-format
-msgid "%1$d-day money-back guarantee, no questions asked. Contact support within %2$d days of purchase."
-msgstr ""
-
-msgid "FAQ"
-msgstr ""
-
-msgid "License Key"
-msgstr ""
-
-msgid "Active"
-msgstr ""
-
-msgid "Awaiting re-check"
-msgstr ""
-
-msgid "Invalid"
-msgstr ""
-
-msgid "License activated successfully. Enjoy Plathix PRO!"
-msgstr ""
-
-msgid "License deactivated."
-msgstr ""
-
-msgid "License key not found or could not be verified. Please check and try again."
-msgstr ""
-
-msgid "Enter your license key to activate PRO features on this site."
-msgstr ""
-
-msgid "Reactivate"
-msgstr ""
-
-msgid "Activate"
-msgstr ""
-
-msgid "Deactivate"
-msgstr ""
-
-#. translators: %s: human-readable time difference, e.g. "2 days".
-#, php-format
-msgid "Last confirmed by the license server: %s ago."
-msgstr ""
-
-msgid "Your key is in the purchase confirmation email you received after buying Plathix PRO. It looks like <code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code>."
-msgstr ""
-
-msgid "License checks run over a standard HTTPS connection to our license server; the response is not cryptographically signed, so this check protects against typos and expired keys, not against a compromised network path."
 msgstr ""
 
 msgid "A replace operation is already in progress for this attachment."
@@ -1870,6 +1799,9 @@ msgstr ""
 msgid "Debug Mode"
 msgstr ""
 
+msgid "Active"
+msgstr ""
+
 msgid "Inactive"
 msgstr ""
 
@@ -1973,9 +1905,11 @@ msgstr ""
 msgid "folder could not be deleted permanently"
 msgstr ""
 
+#. translators: короткая подпись «файлы» в счётчике корзины «N Ф / N П» (напр. рус. «Ф»).
 msgid "F"
 msgstr ""
 
+#. translators: короткая подпись «папки» в счётчике корзины «N Ф / N П» (напр. рус. «П»).
 msgid "D"
 msgstr ""
 

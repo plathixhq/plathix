@@ -47,7 +47,6 @@ final class AssignmentsApi
 	 * @param array<int, int> $ids
 	 * @return array<string, mixed>
 	 */
-
 	public function assignItems(array $ids, int $folderId, string $taxonomy): array
 	{
 		return ($this->items_assigner)($ids, $folderId, $taxonomy);
@@ -66,7 +65,6 @@ final class AssignmentsApi
 	 * @param array<int, int> $ids
 	 * @return array<string, mixed>
 	 */
-
 	public function unassignItems(array $ids, string $taxonomy): array
 	{
 		return ($this->items_unassigner)($ids, $taxonomy);
@@ -103,7 +101,6 @@ final class AssignmentsApi
 	 * @param array<int, int> $ids
 	 * @return array<string, mixed>
 	 */
-
 	private function defaultItemsMover(array $ids, int $folderId, string $taxonomy): array
 	{
 		return MediaMoveOrchestrator::route($ids, $folderId, $taxonomy)->toArray();
@@ -141,7 +138,6 @@ final class AssignmentsApi
 	 * @param array<int, string> $fields
 	 * @return array<string, mixed>
 	 */
-
 	private function defaultItemsLoader(int $folderId, string $postType, string $taxonomy, int $page, int $perPage, array $fields): array
 	{
 		return ( new \Plathix\Core\FolderItemsLoader() )->load( $folderId, $postType, $taxonomy, $page, $perPage, $fields );
@@ -151,7 +147,6 @@ final class AssignmentsApi
 	 * @param array<int, int> $ids
 	 * @return array<string, mixed>
 	 */
-
 	private function defaultMediaTrash(array $ids, string $taxonomy): array
 	{
 		/** @var callable(array<int,int>, string): array<string,mixed> $runner */
@@ -164,7 +159,6 @@ final class AssignmentsApi
 	 * @param array<int, int> $ids
 	 * @return array<string, mixed>
 	 */
-
 	private function defaultMediaRestore(array $ids, int $targetFolderId, string $taxonomy): array
 	{
 		/** @var callable(array<int,int>, int, string): array<string,mixed> $runner */

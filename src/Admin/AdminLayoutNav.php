@@ -9,7 +9,6 @@ final class AdminLayoutNav
 	/**
 	 * @return array{main: array<int, array<string, mixed>>, footer: array<int, array<string, mixed>>}
 	 */
-
 	public static function sections(): array
 	{
 		/** @var array<int, array<string, mixed>> $pages */
@@ -24,7 +23,6 @@ final class AdminLayoutNav
 			$section = (string) ( $page['section'] ?? '' );
 			if ( ! isset( $grouped[ $section ] ) ) {
 				continue;
-
 			}
 			$grouped[ $section ][] = $page;
 		}

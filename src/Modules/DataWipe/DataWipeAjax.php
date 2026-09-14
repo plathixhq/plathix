@@ -9,9 +9,7 @@ use Plathix\User\AccessLevel;
 
 class DataWipeAjax
 {
-
 	public function handle(): void {
-
 		$this->assertAuthorized();
 
 		$blog_id = get_current_blog_id();

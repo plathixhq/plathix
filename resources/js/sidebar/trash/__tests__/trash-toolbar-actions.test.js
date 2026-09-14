@@ -33,3 +33,21 @@ describe('trash-toolbar-actions.js — trashActionsHTML()', () => {
         expect(html).toContain('$store.plathix.selectedMediaCount > 0');
     });
 });
+
+describe('handles trash workflow consistently', () => {
+    it('handles trash workflow consistently', () => {
+        jest.resetModules();
+        jest.doMock('../../i18n.js', () => ({
+            t: (key) => (key === 'move_to_trash' ? '<img src=x onerror=alert(1)>' : key),
+        }));
+        // eslint-disable-next-line global-require
+        const { trashActionsHTML: freshTrashActionsHTML } = require('../trash-toolbar-actions.js');
+
+        const html = freshTrashActionsHTML();
+
+        expect(html).not.toContain('<img src=x onerror=alert(1)>');
+        expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+
+        jest.dontMock('../../i18n.js');
+    });
+});

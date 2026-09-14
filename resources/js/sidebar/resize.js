@@ -50,10 +50,10 @@ export class SidebarResizer {
         window.addEventListener('scroll', this._scrollHandler, { passive: true });
     }
 
-
-
-
-
+    
+    
+    
+    
     _scheduleUpdatePositions() {
         if (this._updateRafId !== null) return;
         this._updateRafId = requestAnimationFrame(() => {
@@ -71,17 +71,17 @@ export class SidebarResizer {
         if (!root) return;
 
         if (this._collapsed) {
-
-
-
-
-
+            
+            
+            
+            
+            
             root.classList.add('is-collapsed');
             root.style.width = '';
             root.style.marginRight = '';
         } else {
             root.classList.remove('is-collapsed');
-
+            
             root.style.width = this._width + 'px';
             root.style.marginRight = '';
         }
@@ -102,9 +102,9 @@ export class SidebarResizer {
 
         if (this._handle) {
             this._handle.style.left = (edge - 3) + 'px';
-
-
-
+            
+            
+            
             this._handle.classList.toggle('is-collapse-hidden', this._collapsed);
         }
 
@@ -139,7 +139,7 @@ export class SidebarResizer {
             if (!root) return;
 
             root.classList.add('is-resizing');
-
+            
             document.body.classList.add('plathix-resizing');
 
             const startX = e.clientX;

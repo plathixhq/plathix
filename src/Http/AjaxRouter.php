@@ -22,13 +22,10 @@ class AjaxRouter
 	public function __construct(
 		private readonly FolderRepository $repository,
 		// @phpstan-ignore property.onlyWritten
-
 		private readonly FolderCountService $folders,
 		// @phpstan-ignore property.onlyWritten
-
 		private readonly FolderTreeService $tree,
 		// @phpstan-ignore property.onlyWritten
-
 		private readonly FolderAssignmentService $assignment,
 		private readonly ?Loader $loader = null,
 		private readonly ?RateLimiter $rateLimiter = null
@@ -69,9 +66,7 @@ class AjaxRouter
 	 */
 	private function actionsMap(): array {
 		return [
-
 			'plathix_move_items' => 'moveItems',
-
 			'plathix_refresh_nonce' => 'refreshNonce',
 		];
 	}

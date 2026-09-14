@@ -16,7 +16,6 @@ final class FavoritesController
 
 	public function updateFavorites(\WP_REST_Request $request): \WP_REST_Response|\WP_Error
 	{
-
 		if ( (bool) apply_filters( 'plathix/infrastructure/service_token_active', false ) ) {
 			return new \WP_Error(
 				'plathix_service_token_forbidden',

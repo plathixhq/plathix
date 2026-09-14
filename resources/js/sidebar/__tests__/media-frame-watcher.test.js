@@ -5,9 +5,9 @@ describe('mounts or dismisses the UI element under the expected conditions', () 
     afterEach(() => {
         document.body.innerHTML = '';
         delete window.wp;
-
-
-
+        
+        
+        
     });
 
     it('calls the callback synchronously when a frame already exists', () => {

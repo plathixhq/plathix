@@ -39,7 +39,6 @@ final class FolderMaintenanceApi
 	/**
 	 * @return array<int, \WP_Term>
 	 */
-
 	public function getRawFolders(string $taxonomy): array
 	{
 		return ($this->raw_folders_loader)($taxonomy);

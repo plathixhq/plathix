@@ -30,7 +30,6 @@ final class Module implements ModuleInterface
 	 * @param array<int, array{slug:string,label:string,render:callable}> $tabs
 	 * @return array<int, array{slug:string,label:string,render:callable}>
 	 */
-
 	public function addTab(array $tabs): array {
 		$tabs[] = [
 			'slug'   => DangerZoneTab::TAB,

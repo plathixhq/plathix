@@ -289,8 +289,8 @@ describe('mediaDeleteModule', () => {
         expect(store.mediaTrashPending).toBe(false);
     });
 
-
-
+    
+    
     it('reconciles via silent refreshFolders on rest_write_indeterminate during trash confirm', async () => {
         Api.trashMedia.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
         getMediaFrame.mockReturnValue(null);
@@ -323,9 +323,9 @@ describe('mediaDeleteModule', () => {
         expect(store.mediaRestorePending).toBe(false);
     });
 
-
-
-
+    
+    
+    
     it('resets selectedMediaCount to 0 after full trash success (kills ghost button)', async () => {
         Api.trashMedia.mockResolvedValue({ trashed: [1, 2], failed: [] });
         getMediaFrame.mockReturnValue(null);

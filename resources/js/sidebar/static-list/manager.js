@@ -24,9 +24,9 @@ import { isTrashViewActive } from '../runtime.js';
 function getAdapters() {
     const defaultAdapters = [new UploadListAdapter()];
     const filtered = applyFilters('plathix.staticList.adapters', defaultAdapters, { BaseAdapter });
-
-
-
+    
+    
+    
     return Array.isArray(filtered) ? filtered : defaultAdapters;
 }
 

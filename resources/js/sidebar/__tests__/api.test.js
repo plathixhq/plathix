@@ -5,11 +5,11 @@ describe('prevents concurrent state changes', () => {
     let Api;
 
     beforeEach(() => {
-
-
-
-
-
+        
+        
+        
+        
+        
         jest.resetModules();
         jest.doMock('../runtime.js', () => ({
             getRuntime: jest.fn(() => ({ restUrl: 'https://example.test/wp-json/plathix/v1/', nonce: 'n' })),
@@ -38,8 +38,8 @@ describe('prevents concurrent state changes', () => {
 
     it('keeps REST transport behavior consistent under retry and error conditions', () => {
         const first = Api.savePreference('open_folder_id', 1);
-
-
+        
+        
         first.catch(() => {});
 
         expect(pendingFetches).toHaveLength(1);
@@ -79,9 +79,9 @@ describe('prevents concurrent state changes', () => {
     let Api;
 
     beforeEach(() => {
-
-
-
+        
+        
+        
         jest.resetModules();
         jest.doMock('../runtime.js', () => ({
             getRuntime: jest.fn(() => ({ restUrl: 'https://example.test/wp-json/plathix/v1/', nonce: 'n' })),
@@ -110,8 +110,8 @@ describe('prevents concurrent state changes', () => {
 
     it('keeps REST transport behavior consistent under retry and error conditions', () => {
         const first = Api.saveFavorites([1]);
-
-
+        
+        
         first.catch(() => {});
 
         expect(pendingFetches).toHaveLength(1);
@@ -140,12 +140,12 @@ describe('prevents concurrent state changes', () => {
         const second = Api.saveFavorites([1, 2]);
         second.catch(() => {});
 
-
+        
         await Promise.resolve();
         await Promise.resolve();
         await Promise.resolve();
 
-
+        
         Api.saveFavorites([1, 2, 3]).catch(() => {});
         expect(pendingFetches[1].signal.aborted).toBe(true);
         expect(pendingFetches[2].signal.aborted).toBe(false);

@@ -7,8 +7,8 @@ export async function fetchListFragments(params, signal) {
     const nonce = runtime.nonce || '';
 
     const body = new FormData();
-
-
+    
+    
     body.append('action', String(runtime.listScreenAction || 'plathix_list_screen'));
     body.append('nonce', nonce);
 

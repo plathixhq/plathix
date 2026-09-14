@@ -30,10 +30,10 @@ export function initRailToggle() {
     const toggle = layout.querySelector('.plathix-rail__toggle');
     const navItems = layout.querySelectorAll('.plathix-nav__item[data-plathix-label]');
 
-
-
-
-
+    
+    
+    
+    
     const tip = document.createElement('div');
     tip.className = 'plathix-rail__tip-float';
     document.body.appendChild(tip);
@@ -44,8 +44,8 @@ export function initRailToggle() {
         const iconRect = icon.getBoundingClientRect();
         const itemRect = item.getBoundingClientRect();
         tip.textContent = item.dataset.plathixLabel || '';
-        tip.style.top = (iconRect.top + iconRect.height / 2) + 'px';
-        tip.style.left = (itemRect.right + 12) + 'px';
+        tip.style.top = (iconRect.top + iconRect.height / 2) + 'px'; 
+        tip.style.left = (itemRect.right + 12) + 'px';               
         tip.classList.add('is-visible');
     };
     const hideTip = () => tip.classList.remove('is-visible');
@@ -68,10 +68,10 @@ export function initRailToggle() {
         }
     };
 
-
-
-
-
+    
+    
+    
+    
     apply(readRailCollapsed());
     requestAnimationFrame(() => layout.classList.add('plathix-rail-animate'));
 

@@ -1,5 +1,5 @@
 import { t } from '../i18n.js';
-import { escapeAttr } from '../utils/escape.js';
+import { escapeHtml, escapeAttr } from '../utils/escape.js';
 import { Events } from '../events.js';
 
 const toolbarExtraButtons = () => {
@@ -20,7 +20,7 @@ const toolbarExtraButtons = () => {
 export const toolbarTemplate = () => `
     <div class="plathix-system__block">
         <div class="plathix-actions">
-            <span class="plathix-section__title">${window.Plathix?.postTypeLabel || ''}</span>
+            <span class="plathix-section__title">${escapeHtml(window.Plathix?.postTypeLabel || '')}</span>
             <div class="plathix-toolbar" x-show="$store.plathix.canManage">
                 <button type="button"
                         class="plathix-tool__btn"
@@ -51,8 +51,14 @@ export const toolbarTemplate = () => `
                         @click="$store.plathix.toggleFolderDragMode()">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
                 </button>
-                
-
+                <!-- Все опциональные кнопки (Shortcode builder, Folder sizes, Upload folder)
+                     монтируются через ЕДИНЫЙ нейтральный слот toolbarExtra: каждый
+                     модуль-владелец кладёт дескриптор с числовым order через фильтр
+                     plathix/sidebar_toolbar_extra, Free сортирует по order и рендерит их в
+                     toolbarExtraButtons() ниже; клик шлёт generic TOOLBAR_ACTION с id, бандл
+                     фичи (PRO builder+folder-upload+folder-info) его ловит.
+                     Порядок детерминирован: builder(10) → sizes(20) → upload(30). Free-шаблон
+                     про конкретные фичи не знает. -->
                 ${toolbarExtraButtons()}
             </div>
         </div>
@@ -71,8 +77,9 @@ export const toolbarTemplate = () => `
                 </div>
             </template>
 
-            
-
+            <!-- Кнопки корзины (Move to Trash / Restore) уехали в trash-entry.js:
+                 trash-entry самомонтирует их через этот слот.
+                 Без trash-entry — слот пустой, без фатала. -->
             <div data-slot="plathix-trash-actions"></div>
         </div>
     </div>
@@ -95,8 +102,9 @@ const systemFolderItem = () => `
             <svg class="plathix-folder__icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
         </template>
         <span class="plathix-folder__name" x-text="folder.name"></span>
-        
-
+        <!-- Trash-узел (foldersCount != null): ЧЁТКО файлы и папки раздельно — иконка файла +
+             число / иконка папки + число (заменяет буквы Ф/П). Иконки с
+             aria-label (доступность). Прочие системные папки — обычный .count. -->
         <span class="plathix-trash-counts" x-show="folder.foldersCount !== null && folder.foldersCount !== undefined">
             <svg class="plathix-trash-counts__icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="${t('trash_files_label', 'Files')}"><title>${t('trash_files_label', 'Files')}</title><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
             <span x-text="folder.count || 0"></span>

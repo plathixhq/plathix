@@ -29,7 +29,6 @@ class FileBird implements ImportAdapterInterface
 	}
 
 	public function exportTree(): array {
-
 		$this->last_export_query_failed = false;
 
 		if ( ! $this->isAvailable() ) {
@@ -42,7 +41,6 @@ class FileBird implements ImportAdapterInterface
 		$relation_table = $wpdb->prefix . self::TABLE_RELATION;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery
-
 		$folders = $wpdb->get_results(
 			"SELECT id, name, parent FROM {$folders_table} ORDER BY parent, ord, id", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name is $wpdb->prefix + hardcoded const; no user input in query. %i technically available on current min WP 7.0 but adds no security benefit here, left as-is (reviewed for %i applicability).
 			ARRAY_A

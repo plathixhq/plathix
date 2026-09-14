@@ -9,8 +9,8 @@ final class DbAdvisoryLock
 	/**
 	 * @param string $name
 	 * @param int    $timeout
+	 * @return bool
 	 */
-
 	public static function acquire(string $name, int $timeout = 0): bool
 	{
 		global $wpdb;

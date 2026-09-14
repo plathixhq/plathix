@@ -8,7 +8,6 @@ use Plathix\Infrastructure\Logger;
 
 final class FolderSizeBatchCalculator
 {
-
 	private const PAGE_SIZE = 500;
 
 	public function batchBytesRecursive(int $folder_id, string $taxonomy): int {
@@ -42,7 +41,6 @@ final class FolderSizeBatchCalculator
 	 * @param array<int> $term_ids
 	 * @return array<int, int>|null
 	 */
-
 	public function batchBytes(array $term_ids, string $taxonomy): ?array {
 		global $wpdb;
 

@@ -38,13 +38,13 @@ export function initShortcodesFilter(doc = document) {
     const folderEl = doc.getElementById('plathix-filter-folder');
     const searchEl = doc.getElementById('plathix-filter-search');
 
-
+    
     const rows = Array.from(doc.querySelectorAll('tr[data-folders]'));
     if (!rows.length) {
         return;
     }
 
-
+    
     const noResults = doc.querySelector('#plathix-shortcodes-table .plathix-no-results');
 
     const apply = () => {
@@ -75,7 +75,7 @@ export function initShortcodesFilter(doc = document) {
                 filters
             );
 
-
+            
             // .is-hidden (resources/css/admin-ui.css).
             row.classList.toggle('is-hidden', !match);
             if (match) {

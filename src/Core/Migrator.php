@@ -27,6 +27,7 @@ class Migrator
 		try {
 			// Placeholder for forward migrations.
 
+			// @phpstan-ignore plathix.discardedWriteReturn
 			update_option('plathix_db_version', $current_version);
 		} finally {
 			$lock_service->releaseExecution('migrator');

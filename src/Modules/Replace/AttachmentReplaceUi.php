@@ -30,7 +30,6 @@ final class AttachmentReplaceUi
 		wp_enqueue_script( 'plathix-replace-media', PLATHIX_ASSETS_URL . 'js/replace-media.js', $deps, $version, true );
 		wp_localize_script( 'plathix-replace-media', 'PlathixReplace', [
 			'restUrl'   => rest_url( 'plathix/v1/' ),
-
 			'restUrlFallback' => RestController::restRouteFallbackBase(),
 			'restNonce' => wp_create_nonce( 'wp_rest' ),
 		] );
@@ -45,7 +44,6 @@ final class AttachmentReplaceUi
 	 * @return array<string,mixed>
 	 */
 	public function addReplaceField(array $form_fields, \WP_Post $post): array {
-
 		if ( ( new AttachmentMetaApi() )->isAttachmentEditPage() ) {
 			return $form_fields;
 		}
@@ -81,7 +79,6 @@ final class AttachmentReplaceUi
 	}
 
 	private function replaceTriggerMarkup(int $attachment_id, bool $details_view): string {
-
 		$button_class = $details_view ? 'button plathix-replace__file-button' : 'plathix-replace-file-link';
 		$note         = $details_view
 			? ''

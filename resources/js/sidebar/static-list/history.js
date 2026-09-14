@@ -26,7 +26,7 @@ export function guardTrashUrl(isTrashActive) {
                 nativeReplaceState(state, title, current.toString());
             }
         } catch {
-
+            
         }
     };
 }
@@ -57,7 +57,7 @@ export function bindViewSwitchTrashHrefGuard(isTrashActive) {
             url.searchParams.set('attachment-filter', 'trash');
             linkEl.href = url.toString();
         } catch {
-
+            
         }
     }, true);
 }

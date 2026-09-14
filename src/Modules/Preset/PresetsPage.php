@@ -92,7 +92,6 @@ final class PresetsPage
 
 	public function render(): void {
 		AdminLayout::renderPage( self::PAGE_SLUG, function (): void {
-
 			if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 				wp_die( esc_html__( 'You do not have sufficient permissions.', 'plathix' ) );
 			}
@@ -102,7 +101,7 @@ final class PresetsPage
 			$all_presets_full = $this->repository->list( [ 'validation_status' => 'valid' ] );
 			$all_presets      = $all_presets_full;
 
-			$tag_filter = $this->normalizeTag( (string) ( $_GET['plathix_tag'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Recommended -- read-only display filter for page render; value normalized/whitelisted in normalizeTag(); no form processing, no DB write
+			$tag_filter = $this->normalizeTag( (string) wp_unslash( $_GET['plathix_tag'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Recommended -- read-only display filter for page render; value normalized/whitelisted in normalizeTag(); no form processing, no DB write
 
 			if ( $tag_filter !== '' ) {
 				$all_presets = array_filter(
@@ -137,9 +136,6 @@ final class PresetsPage
 			$upload_nonce  = wp_create_nonce( self::UPLOAD_ACTION );
 			?>
 		<div class="plathix-page plathix-page--presets">
-
-			<?php
-?>
 			<?php if ( $notice ) : ?>
 			<div class="plathix-notice plathix-notice--<?php echo esc_attr( $notice['css_class'] ); ?> plathix-presets__notice">
 				<?php echo esc_html( $notice['message'] ); ?>
@@ -157,7 +153,6 @@ final class PresetsPage
 					</button>
 					<?php $this->renderScratchButton(); ?>
 				<?php
-
 				do_action( 'plathix/preset/reset_wizard_button' );
 				?>
 				</div>
@@ -264,7 +259,7 @@ final class PresetsPage
 		);
 
 		$page_url    = admin_url( 'admin.php?page=' . self::PAGE_SLUG );
-		$tag_search  = $this->normalizeTag( (string) ( $_GET['plathix_tag'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only display filter; value normalized/whitelisted in normalizeTag()
+		$tag_search  = $this->normalizeTag( (string) wp_unslash( $_GET['plathix_tag'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Recommended -- read-only display filter; value normalized/whitelisted in normalizeTag()
 		?>
 		<div class="plathix-preset-card"
 			 data-preset-id="<?php echo esc_attr( (string) $id ); ?>"
@@ -347,14 +342,14 @@ final class PresetsPage
 
 				<a href="<?php echo esc_url( $apply_url ); ?>"
 				   class="plathix-btn plathix-btn--primary plathix-preset-card__cta"
-				   onclick="return confirm('<?php echo esc_js( __( 'Apply this preset? It adds a ready-made folder structure to your media library. Your existing folders and media are not deleted; folders with matching names are created with an "— imported" suffix.', 'plathix' ) ); ?>')">
+				   data-confirm="<?php echo esc_attr( __( 'Apply this preset? It adds a ready-made folder structure to your media library. Your existing folders and media are not deleted; folders with matching names are created with an "— imported" suffix.', 'plathix' ) ); ?>">
 					<?php esc_html_e( 'Apply Preset ›', 'plathix' ); ?>
 				</a>
 
 				<?php if ( ! $is_builtin ) : ?>
 					<a href="<?php echo esc_url( $delete_url ); ?>"
 					   class="plathix-btn plathix-btn--danger plathix-btn--sm plathix-preset-card__delete"
-					   onclick="return confirm('<?php echo esc_js( __( 'Delete this preset record? This cannot be undone.', 'plathix' ) ); ?>')">
+					   data-confirm="<?php echo esc_attr( __( 'Delete this preset record? This cannot be undone.', 'plathix' ) ); ?>">
 						<?php esc_html_e( 'Delete', 'plathix' ); ?>
 					</a>
 				<?php endif; ?>
@@ -441,7 +436,7 @@ final class PresetsPage
 		<a href="<?php echo esc_url( admin_url( 'admin-post.php?action=' . self::SCRATCH_ACTION . '&_wpnonce=' . $nonce ) ); ?>"
 		   class="plathix-btn plathix-btn--danger"
 		   <?php if ( $user_folder_count > 0 ) : ?>
-		   onclick="return confirm('<?php echo esc_js( sprintf(
+		   data-confirm="<?php echo esc_attr( sprintf(
 				/* translators: %d: number of Plathix folders that will be deleted */
 				_n(
 					'This will delete %d Plathix folder. Media files will not be deleted. Continue?',
@@ -450,15 +445,12 @@ final class PresetsPage
 					'plathix'
 				),
 				$user_folder_count
-		   ) ); ?>')">
-		   <?php else : ?>
-		   >
+		   ) ); ?>">
 		   <?php endif; ?>
 			<?php esc_html_e( 'Start from scratch', 'plathix' ); ?>
 		</a>
 		<?php
 	}
-
 
 	// ── Helpers ────────────────────────────────────────────────────────────────
 
@@ -492,13 +484,13 @@ final class PresetsPage
 		return $tag;
 	}
 
-
 	/**
 	 * @return array{type: string, css_class: string, message: string}|null
 	 */
 	private function getNotice(): ?array {
-		$message = sanitize_text_field( (string) wp_unslash( $_GET['plathix_notice'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin-notice text from post-redirect-get URL for page render; sanitized (sanitize_text_field), no form processing, no DB write
-		$type    = sanitize_key( (string) ( $_GET['plathix_ntype'] ?? 'info' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only notice type from post-redirect-get URL, whitelisted below; no form processing, no DB write
+		$message = rawurldecode( (string) wp_unslash( $_GET['plathix_notice'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- read-only admin-notice text from post-redirect-get URL for page render; sanitized (sanitize_text_field) on the next line after decode, no form processing, no DB write
+		$message = sanitize_text_field( $message );
+		$type    = sanitize_key( (string) wp_unslash( $_GET['plathix_ntype'] ?? 'info' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only notice type from post-redirect-get URL, whitelisted below; no form processing, no DB write
 
 		if ( $message === '' ) {
 			return null;
@@ -512,7 +504,7 @@ final class PresetsPage
 		return [
 			'type'      => $type,
 			'css_class' => self::NOTICE_TYPE_TO_CSS_CLASS[ $type ],
-			'message'   => rawurldecode( $message ),
+			'message'   => $message,
 		];
 	}
 }

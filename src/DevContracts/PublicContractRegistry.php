@@ -23,7 +23,6 @@ final class PublicContractRegistry
 		'Core\\TrashFolder' => [ 'declared_in' => 'src/Core/TrashFolder.php', 'behavior_test' => 'n/a' ],
 		'Core\\AttachmentVisibility' => [ 'declared_in' => 'src/Core/AttachmentVisibility.php', 'behavior_test' => 'n/a' ],
 		'Core\\GalleryItemDTO' => [ 'declared_in' => 'src/Core/GalleryItemDTO.php', 'behavior_test' => 'n/a' ],
-
 		'Core\\ImportJobDTO' => [ 'declared_in' => 'src/Core/ImportJobDTO.php', 'behavior_test' => 'tests/ImportManagerStartImportTest.php' ],
 		'Core\\FolderCountService' => [ 'declared_in' => 'src/Core/FolderCountService.php', 'behavior_test' => 'n/a' ],
 
@@ -31,6 +30,8 @@ final class PublicContractRegistry
 		'Modules\\ListScreen\\FolderColumn' => [ 'declared_in' => 'src/Modules/ListScreen/FolderColumn.php', 'behavior_test' => 'tests/FolderColumnTest.php' ],
 		'Modules\\ListScreen\\ListScreenQueryContext' => [ 'declared_in' => 'src/Modules/ListScreen/ListScreenQueryContext.php', 'behavior_test' => 'n/a' ],
 		'Admin\\Assets' => [ 'declared_in' => 'src/Admin/Assets.php', 'behavior_test' => 'n/a' ],
+		'Admin\\ExternalLink' => [ 'declared_in' => 'src/Admin/ExternalLink.php', 'behavior_test' => 'n/a' ],
+		'Modules\\Pro\\ProPage' => [ 'declared_in' => 'src/Modules/Pro/ProPage.php', 'behavior_test' => 'n/a' ],
 		'Http\\Authorization' => [ 'declared_in' => 'src/Http/Authorization.php', 'behavior_test' => 'tests/AuthorizationTest.php' ],
 		'Http\\RestRouteRegistry' => [ 'declared_in' => 'src/Http/RestRouteRegistry.php', 'behavior_test' => 'tests/RestRouteRegistryTest.php' ],
 		'Http\\RestRoutePermissions' => [ 'declared_in' => 'src/Http/RestRoutePermissions.php', 'behavior_test' => 'n/a' ],
@@ -40,7 +41,6 @@ final class PublicContractRegistry
 		'Http\\RestController' => [ 'declared_in' => 'src/Http/RestController.php', 'behavior_test' => 'n/a' ],
 		'Http\\Rest' => [ 'declared_in' => 'src/Http/Rest.php', 'behavior_test' => 'n/a' ],
 		'Http\\Nonce' => [ 'declared_in' => 'src/Http/Nonce.php', 'behavior_test' => 'n/a' ],
-
 		'Http\\AjaxGuard' => [ 'declared_in' => 'src/Http/AjaxGuard.php', 'behavior_test' => 'tests/AjaxGuardTest.php' ],
 
 		'Infrastructure\\JobDispatcher' => [ 'declared_in' => 'src/Infrastructure/JobDispatcher.php', 'behavior_test' => 'n/a' ],
@@ -52,7 +52,6 @@ final class PublicContractRegistry
 		'Infrastructure\\Logger' => [ 'declared_in' => 'src/Infrastructure/Logger.php', 'behavior_test' => 'n/a' ],
 
 		'Loader' => [ 'declared_in' => 'src/Loader.php', 'behavior_test' => 'n/a' ],
-
 		'Edition' => [ 'declared_in' => 'src/Edition.php', 'behavior_test' => 'tests/EditionTest.php' ],
 
 		'Modules\\Preset\\PresetOnboarding' => [ 'declared_in' => 'src/Modules/Preset/PresetOnboarding.php', 'behavior_test' => 'n/a' ],
@@ -61,7 +60,6 @@ final class PublicContractRegistry
 		'PublicApi\\SettingsApi' => [ 'declared_in' => 'src/PublicApi/SettingsApi.php', 'behavior_test' => 'n/a' ],
 		'PublicApi\\ToolsApi' => [ 'declared_in' => 'src/PublicApi/ToolsApi.php', 'behavior_test' => 'n/a' ],
 		'PublicApi\\SystemInfoApi' => [ 'declared_in' => 'src/PublicApi/SystemInfoApi.php', 'behavior_test' => 'n/a' ],
-
 		'PublicApi\\AdminPageGuard' => [ 'declared_in' => 'src/PublicApi/AdminPageGuard.php', 'behavior_test' => 'tests/AdminPageGuardTest.php' ],
 	];
 }

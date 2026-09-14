@@ -30,11 +30,11 @@ describe('public api facade', () => {
         delete window.__PlathixApiReady;
     });
 
-
-
-
-
-
+    
+    
+    
+    
+    
     it('does not forward params to the store — only the silent flag', async () => {
         const store = { refreshFolders: jest.fn() };
         Alpine.store.mockReturnValue(store);
@@ -59,9 +59,9 @@ describe('public api facade', () => {
         Api.savePreference.mockResolvedValue({ ok: true });
         createFolderSelector.mockResolvedValue({ getValue: () => 7 });
 
-
-
-
+        
+        
+        
         const facade = createPublicApi();
         await facade.savePreference('view_mode', 'grid');
         await facade.refreshFolders({ silent: true });

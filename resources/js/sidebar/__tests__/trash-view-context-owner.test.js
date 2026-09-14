@@ -55,9 +55,9 @@ describe('handles trash workflow consistently', () => {
         setLocation('http://localhost/wp-admin/upload.php?attachment-filter=trash&mode=grid');
         jest.isolateModules(() => {
             const { isTrashViewActive } = require('../runtime.js');
-
-
-
+            
+            
+            
             setLocation('http://localhost/wp-admin/upload.php');
             expect(isTrashViewActive()).toBe(true);
         });

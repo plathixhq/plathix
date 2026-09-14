@@ -121,8 +121,8 @@ function handlePresetFile(file) {
 
     if (!file) return;
 
-
-
+    
+    
     if (!file.name.endsWith('.zip')) {
         idle.style.display   = 'none';
         parsing.style.display = 'none';
@@ -205,11 +205,11 @@ function initPresetsSearch() {
         const cards = Array.from(catalog.querySelectorAll('.plathix-preset-card'));
         const sections = Array.from(catalog.querySelectorAll('.plathix-presets-section'));
 
-
-
-
-
-
+        
+        
+        
+        
+        
         const sourceFilter = (sort === 'builtin' || sort === 'custom') ? sort : null;
 
         let visible = 0;
@@ -228,9 +228,9 @@ function initPresetsSearch() {
             if (match) visible++;
         });
 
-
-
-
+        
+        
+        
         sections.forEach(section => {
             const visibleInSection = section.querySelector('.plathix-preset-card:not([style*="display: none"])');
             section.style.display = visibleInSection ? '' : 'none';
@@ -266,15 +266,32 @@ function highlightNewPreset() {
         window.setTimeout(() => card.classList.remove('plathix-preset-card--highlight'), 1800);
     }
 
-
+    
     params.delete('plathix_new_preset');
     const url = new URL(window.location.href);
     url.search = params.toString();
     window.history.replaceState({}, '', url);
 }
 
+
+
+
+
+function initConfirmLinks() {
+    document.addEventListener('click', e => {
+        const link = e.target.closest('[data-confirm]');
+        if (!link) {
+            return;
+        }
+        if (!window.confirm(link.dataset.confirm)) {
+            e.preventDefault();
+        }
+    });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initUploadModal();
     initPresetsSearch();
     highlightNewPreset();
+    initConfirmLinks();
 });

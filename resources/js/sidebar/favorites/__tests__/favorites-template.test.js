@@ -79,3 +79,21 @@ describe('enforces request authorization', () => {
         expect(store.openFolder).toHaveBeenCalledWith(5);
     });
 });
+
+describe('escapes untrusted output for the destination context', () => {
+    it('escapes untrusted output for the destination context', () => {
+        jest.resetModules();
+        jest.doMock('../../i18n.js', () => ({
+            t: (key, fallback) => (key === 'favorites' ? '<img src=x onerror=alert(1)>' : fallback),
+        }));
+        // eslint-disable-next-line global-require
+        const { favoritesTemplate: freshFavoritesTemplate } = require('../favorites-template.js');
+
+        const html = freshFavoritesTemplate();
+
+        expect(html).not.toContain('<img src=x onerror=alert(1)>');
+        expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+
+        jest.dontMock('../../i18n.js');
+    });
+});

@@ -12,7 +12,6 @@ final class MediaModalEnqueue
 	 * @param int $media_priority
 	 * @param bool $guard_admin_hook
 	 */
-
 	public static function register(
 		callable $callback,
 		?int $admin_priority = 10,

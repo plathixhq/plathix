@@ -19,11 +19,9 @@ final class ImportJobRunner
 			$runInBlogContext(
 				$blog_id,
 				static function () use ($args): void {
-
 					$user_id = (int) ( $args['user_id'] ?? 0 );
 					$user    = $user_id > 0 ? get_userdata( $user_id ) : false;
 					if ( ! $user instanceof \WP_User ) {
-
 						Logger::error( 'job_import_actor_missing', [
 							'user_id' => $user_id,
 							'adapter' => (string) ( $args['adapter'] ?? '' ),

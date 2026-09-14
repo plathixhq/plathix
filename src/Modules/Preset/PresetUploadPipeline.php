@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Plathix\Modules\Preset;
 
+use Plathix\Infrastructure\DirectoryGuard;
 use Plathix\Infrastructure\TempDirectory;
 
 final class PresetUploadPipeline
@@ -11,15 +12,16 @@ final class PresetUploadPipeline
 	private const MAX_ARCHIVE_BYTES  = 1_048_576;  // 1 MB
 	private const MAX_PREVIEW_BYTES  = 307_200;    // 300 KB
 	private const MAX_PRESET_BYTES   = 2_097_152;
-
 	private const ALLOWED_EXTENSIONS = [ 'webp', 'png', 'jpg', 'jpeg' ];
 
+	/**
+	 * @var \Closure(): string
+	 */
 	private \Closure $temp_dir_resolver;
 
 	/**
 	 * @param ?callable $temp_dir_resolver
 	 */
-
 	public function __construct(
 		private readonly PresetValidator $validator = new PresetValidator(),
 		private readonly PresetRepository $repository = new PresetRepository(),
@@ -36,7 +38,6 @@ final class PresetUploadPipeline
 	 * @param bool   $dry_run
 	 * @return array{success: true, preset: array<string, mixed>}|array{success: false, error: array<string, mixed>}
 	 */
-
 	public function run(array $file, string $source_type = PresetSourceType::CUSTOM, bool $dry_run = false): array {
 		// Step 1: basic file presence
 		$tmp = (string) ($file['tmp_name'] ?? '');
@@ -57,6 +58,10 @@ final class PresetUploadPipeline
 		}
 
 		// Step 4–6: open zip and validate entries
+		if ( ! \class_exists(\ZipArchive::class) ) {
+			return $this->fail(new PresetError('preset_zip_unavailable', __('ZIP support is not available on this server.', 'plathix'), null, null, true));
+		}
+
 		$zip = new \ZipArchive();
 		if ( $zip->open($tmp) !== true ) {
 			return $this->fail(new PresetError('preset_zip_unreadable', __('Could not open the zip archive.', 'plathix'), null, null, true));
@@ -208,7 +213,6 @@ final class PresetUploadPipeline
 			];
 
 			if ( $is_update ) {
-
 				$record['last_applied_at'] = null;
 				$id = $this->repository->upsertBySlug($record);
 			} else {
@@ -219,7 +223,6 @@ final class PresetUploadPipeline
 				/**
 				 * @var \WP_Error $id
 				 */
-
 				$this->removeOrphanedPreview($preview_ref);
 				return $this->fail(new PresetError(
 					(string) $id->get_error_code(),
@@ -230,8 +233,6 @@ final class PresetUploadPipeline
 			/**
 			 * @var int $id
 			 */
-
-
 			$stored = $this->repository->find($id);
 
 			do_action( 'plathix/audit/record', $is_update ? 'preset_updated' : 'preset_uploaded', [
@@ -243,7 +244,6 @@ final class PresetUploadPipeline
 
 			return [
 				'success' => true,
-
 				'updated' => $is_update,
 				'preset'  => [
 					'id'                => $id,
@@ -301,7 +301,7 @@ final class PresetUploadPipeline
 			return null;
 		}
 
-		$this->writeDirGuard($presets);
+		DirectoryGuard::ensure($presets);
 
 		$dest = $base . '/' . $filename;
 		if ( ! @copy($src_path, $dest) ) {
@@ -311,20 +311,7 @@ final class PresetUploadPipeline
 		return 'plathix/presets/' . sanitize_key($slug) . '/' . $filename;
 	}
 
-	private function writeDirGuard(string $dir): void {
-		$index = trailingslashit($dir) . 'index.php';
-		if ( ! file_exists($index) ) {
-			file_put_contents( $index, "<?php\n// Silence is golden.\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- writes a directory-index guard into the plugin's own just-created plathix/presets dir (under uploads); WP_Filesystem credentials-flow may be unavailable and this runs on a local upload path.
-		}
-
-		$htaccess = trailingslashit($dir) . '.htaccess';
-		if ( ! file_exists($htaccess) ) {
-			file_put_contents( $htaccess, "Deny from all\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- writes an Apache deny-all guard into the plugin's own just-created plathix/presets dir (under uploads); WP_Filesystem credentials-flow may be unavailable and this runs on a local upload path.
-		}
-	}
-
 	private function makeTempDir(): ?string {
-
 		$base = ($this->temp_dir_resolver)();
 		$dir  = $base . 'plathix_preset_' . wp_generate_password(12, false);
 		if ( ! wp_mkdir_p($dir) ) {

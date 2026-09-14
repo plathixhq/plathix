@@ -13,8 +13,8 @@ describe('handles trash workflow consistently', () => {
         expect(isTrashViewFromUrl('::not a url::')).toBe(false);
     });
 
-
-
+    
+    
     it('returns true when status=trash is present without attachment-filter', () => {
         expect(isTrashViewFromUrl('http://localhost/wp-admin/upload.php?status=trash')).toBe(true);
     });
@@ -83,8 +83,8 @@ describe('exposes the documented runtime feature/mode contract', () => {
     });
 
     it('ignores document.body.classList even when it contradicts URL/runtime (regression)', () => {
-
-
+        
+        
         window.Plathix = { mediaMode: 'list' };
         document.body.classList.add('mode-grid');
 
@@ -104,9 +104,9 @@ describe('exposes the documented runtime feature/mode contract', () => {
     });
 
     it('stays consistent with PHP-provided filterStrategy when no URL override and DOM disagrees', () => {
-
-
-
+        
+        
+        
         window.Plathix = { screenBase: 'upload', screenKind: 'static', mediaMode: 'list', filterStrategy: 'static-list' };
         document.body.classList.add('mode-grid');
 

@@ -28,7 +28,6 @@ final class FolderRestoreService
 	/**
 	 * @return array{restored:bool, fallbackRoot:bool, parent:int}
 	 */
-
 	public function restore(int $id, string $taxonomy): array
 	{
 		$result = [ 'restored' => false, 'fallbackRoot' => false, 'parent' => 0 ];
@@ -55,7 +54,6 @@ final class FolderRestoreService
 	 */
 	private function restoreLocked(int $id, string $taxonomy, array $result): array
 	{
-
 		if ( (string) $this->repository->getMeta( $id, FolderTrashService::META_TRASHED ) !== '1' ) {
 			return $result;
 		}
@@ -67,7 +65,7 @@ final class FolderRestoreService
 		$fallback_root = ( $saved_parent > 0 && $target_parent === 0 );
 
 		$this->repository->updateParent( $id, $target_parent, $taxonomy );
-		$this->repository->setMeta( $id, PLATHIX_TERM_POSITION, $saved_position );
+		$this->repository->setPosition( $id, $saved_position );
 
 		$this->repository->deleteMeta( $id, FolderTrashService::META_TRASHED );
 		$this->repository->deleteMeta( $id, FolderTrashService::META_TIME );
@@ -170,12 +168,10 @@ final class FolderRestoreService
 		$parent_term = $this->repository->getById( $saved_parent, $taxonomy );
 		if ( ! $parent_term instanceof \WP_Term ) {
 			return 0;
-
 		}
 
 		if ( (string) $this->repository->getMeta( $saved_parent, FolderTrashService::META_TRASHED ) === '1' ) {
 			return 0;
-
 		}
 
 		return $saved_parent;

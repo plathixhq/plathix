@@ -108,12 +108,12 @@ describe('handles trash workflow consistently', () => {
 
 
 describe('handles trash workflow consistently', () => {
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     let bindViewSwitchTrashHrefGuard;
     let isTrashActiveRef;
 
@@ -170,10 +170,10 @@ describe('handles trash workflow consistently', () => {
     it('registers the click listener only once across repeated calls (idempotent)', () => {
         isTrashActiveRef.current = true;
         const spy = jest.fn(() => isTrashActiveRef.current);
-
-
-
-
+        
+        
+        
+        
         bindViewSwitchTrashHrefGuard(spy);
         const link = makeViewSwitchLink('http://localhost/wp-admin/upload.php?mode=grid');
 

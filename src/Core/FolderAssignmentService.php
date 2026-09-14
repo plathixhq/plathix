@@ -14,7 +14,6 @@ final class FolderAssignmentService
 		private readonly FolderRepository $repository,
 		private readonly FolderCountService $countService,
 		// @phpstan-ignore property.onlyWritten
-
 		private readonly Cache $cache
 	) {
 	}
@@ -29,6 +28,17 @@ final class FolderAssignmentService
 		$failed = [];
 		$affected_folder_ids = [ $folder_id ];
 		$use_folder = $folder_id > 0 && ! $this->repository->isUncategorizedFolder($folder_id, $taxonomy);
+
+		if ( $folder_id > 0 && in_array($folder_id, HiddenFolders::ids($taxonomy), true) ) {
+			return [
+				'assigned' => 0,
+				'skipped' => 0,
+				'failed' => array_map('intval', $item_ids),
+				'folder_id' => $folder_id,
+				'taxonomy' => $taxonomy,
+				'counts_recomputed' => [],
+			];
+		}
 
 		foreach ( $item_ids as $item_id ) {
 			$item_id = (int) $item_id;
@@ -97,13 +107,26 @@ final class FolderAssignmentService
 		$failed = [];
 		$affected_folder_ids = [ $folder_id ];
 
+		if ( $folder_id > 0 && in_array($folder_id, HiddenFolders::ids($taxonomy), true) ) {
+			return [
+				'moved' => 0,
+				'skipped' => 0,
+				'failed' => array_map('intval', $item_ids),
+				'folder_id' => $folder_id,
+				'taxonomy' => $taxonomy,
+				'counts_recomputed' => [],
+				'counts' => [],
+			];
+		}
+
 		$use_folder = $folder_id > 0 && ! $this->repository->isUncategorizedFolder($folder_id, $taxonomy);
 		$this->countService->beginBulkWrite($taxonomy);
+
+		Cache::beginBulkInvalidation($taxonomy);
 		wp_defer_term_counting(true);
 
 		try {
 			foreach ( array_chunk($item_ids, self::CHUNK_SIZE) as $chunk ) {
-
 				$primed_ids = array_values( array_filter( array_map( 'intval', $chunk ), static fn (int $id): bool => $id > 0 ) );
 				if ( $primed_ids !== [] ) {
 					_prime_post_caches( $primed_ids, false, false );
@@ -153,6 +176,7 @@ final class FolderAssignmentService
 		} finally {
 			wp_defer_term_counting(false);
 			$this->countService->endBulkWrite($taxonomy);
+			Cache::endBulkInvalidation($taxonomy);
 		}
 
 		$counts_recomputed = [];
@@ -180,7 +204,6 @@ final class FolderAssignmentService
 	 * @param array<int|string> $item_ids
 	 * @return array{unassigned: int, failed: array<int>}
 	 */
-
 	public function unassignItems(array $item_ids, string $taxonomy): array {
 		$ids = array_values( array_filter( array_map( 'intval', $item_ids ), static fn (int $id): bool => $id > 0 ) );
 		$failed = array_values( array_diff( array_map( 'intval', $item_ids ), $ids ) );

@@ -39,14 +39,11 @@ final class FolderMutationController
 			/**
 			 * @var \WP_Error $id
 			 */
-
 			return $this->errorResponse( $id, 422 );
 		}
 		/**
 		 * @var int $id
 		 */
-
-
 		do_action( 'plathix/audit/record',
 			'folder_created',
 			[
@@ -67,7 +64,6 @@ final class FolderMutationController
 	}
 
 	public function updateFolder(\WP_REST_Request $request): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attemptAction( 'update_folder', get_current_user_id() ) ) {
 			return new \WP_REST_Response(
 				[
@@ -163,7 +159,6 @@ final class FolderMutationController
 	}
 
 	public function deleteFolder(\WP_REST_Request $request): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attemptAction( 'deleteFolder', get_current_user_id() ) ) {
 			return new \WP_REST_Response(
 				[

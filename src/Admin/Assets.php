@@ -127,7 +127,6 @@ final class Assets
 			return;
 		}
 
-
 		$ctx = [
 			'screen_context'  => 'upload',
 			'screen_kind'     => 'modal',
@@ -144,7 +143,6 @@ final class Assets
 	/**
 	 * @param array{screen_context:string,screen_kind:string,media_mode:string,filter_strategy:string} $ctx
 	 */
-
 	public function enqueueSidebarAssets(array $ctx, string $post_type): void {
 		$screen_kind = $ctx['screen_kind'];
 
@@ -155,7 +153,6 @@ final class Assets
 		$deps       = array_values( array_unique( (array) ( $asset['dependencies'] ?? [] ) ) );
 
 		if ( $screen_kind === 'modal' ) {
-
 			if ( function_exists( 'wp_enqueue_media' ) ) {
 				wp_enqueue_media();
 			}

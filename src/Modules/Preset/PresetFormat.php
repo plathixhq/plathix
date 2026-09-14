@@ -6,7 +6,6 @@ namespace Plathix\Modules\Preset;
 
 final class PresetFormat
 {
-
 	public const FILENAME = 'preset.plx.md';
 
 	public const FORMAT_VERSION = 2;
@@ -23,7 +22,6 @@ final class PresetFormat
 	/**
 	 * @param string $raw
 	 */
-
 	public static function unescapeName(string $raw): ?string {
 		$length = strlen($raw);
 		if ( $length < 2 || $raw[0] !== '"' || $raw[ $length - 1 ] !== '"' ) {
@@ -39,7 +37,6 @@ final class PresetFormat
 			$char = $inner[ $i ];
 
 			if ( $char !== '\\' ) {
-
 				if ( $char === '"' ) {
 					return null;
 				}

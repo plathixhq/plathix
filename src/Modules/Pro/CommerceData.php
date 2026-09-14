@@ -1,13 +1,11 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace Plathix\Modules\Pro;
 
 final class CommerceData
 {
-
 	private const DEFAULTS = [
 		'currency'   => '€',
 		'refundDays' => 30,
@@ -36,6 +34,9 @@ final class CommerceData
 		],
 	];
 
+	/**
+	 * @var array<string, array{currency:string,refundDays:int,plans:array<int,array{key:string,line:string,price:int,sitesCount:int,mostPopular:bool}>}>
+	 */
 	private static array $memo = [];
 
 	private string $file;
@@ -43,7 +44,6 @@ final class CommerceData
 	/**
 	 * @param string|null $file
 	 */
-
 	public function __construct(?string $file = null) {
 		$this->file = $file ?? __DIR__ . '/commerce.json';
 	}
@@ -51,7 +51,6 @@ final class CommerceData
 	/**
 	 * @return array<int, array{key:string,line:string,price:int,sitesCount:int,mostPopular:bool}>
 	 */
-
 	public function plans(): array {
 		return $this->data()['plans'];
 	}
@@ -71,7 +70,6 @@ final class CommerceData
 	/**
 	 * @return array{currency:string,refundDays:int,plans:array<int,array{key:string,line:string,price:int,sitesCount:int,mostPopular:bool}>}
 	 */
-
 	private function data(): array {
 		if ( ! isset( self::$memo[ $this->file ] ) ) {
 			self::$memo[ $this->file ] = $this->load();
@@ -83,7 +81,6 @@ final class CommerceData
 	/**
 	 * @return array{currency:string,refundDays:int,plans:array<int,array{key:string,line:string,price:int,sitesCount:int,mostPopular:bool}>}
 	 */
-
 	private function load(): array {
 		$decoded = wp_json_file_decode( $this->file, [ 'associative' => true ] );
 
@@ -98,7 +95,6 @@ final class CommerceData
 	/**
 	 * @param array<mixed> $data
 	 */
-
 	private function isValidSchema(array $data): bool {
 		if (
 			! isset( $data['currency'], $data['refundDays'], $data['plans'] )

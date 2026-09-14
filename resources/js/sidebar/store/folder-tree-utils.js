@@ -35,7 +35,7 @@ export function collectAncestorIds(folders, folderId) {
         ancestors.push(cur);
         cur = Number(byId.get(cur)?.parentId || 0);
     }
-
+    
     return ancestors.reverse();
 }
 

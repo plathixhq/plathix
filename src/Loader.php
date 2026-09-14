@@ -45,7 +45,6 @@ final class Loader
 	/**
 	 * @return callable
 	 */
-
 	private static function wrap(string $hook, object $component, string $callback, bool $is_filter): callable {
 		return static function (...$args) use ($hook, $component, $callback, $is_filter) {
 			try {

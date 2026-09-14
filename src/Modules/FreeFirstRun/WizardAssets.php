@@ -7,6 +7,7 @@ namespace Plathix\Modules\FreeFirstRun;
 final class WizardAssets
 {
 	public const STYLE_HANDLE = 'plathix-free-wizard';
+	public const SCRIPT_HANDLE = 'plathix-free-wizard';
 
 	public function register(): void {
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
@@ -15,19 +16,26 @@ final class WizardAssets
 	/**
 	 * @param string $hook
 	 */
-
 	public function enqueue(string $hook = ''): void {
 		if ( ! $this->isPlathixPage( $hook ) ) {
 			return;
 		}
 
-		$asset = \Plathix\Infrastructure\AssetManifest::read( 'js/free-wizard.asset.php', with_dependencies: false );
+		$asset = \Plathix\Infrastructure\AssetManifest::read( 'js/free-wizard.asset.php' );
 
 		wp_enqueue_style(
 			self::STYLE_HANDLE,
 			defined( 'PLATHIX_ASSETS_URL' ) ? PLATHIX_ASSETS_URL . 'css/free-wizard.css' : '',
 			[],
 			$asset['version'] ?? '1'
+		);
+
+		wp_enqueue_script(
+			self::SCRIPT_HANDLE,
+			defined( 'PLATHIX_ASSETS_URL' ) ? PLATHIX_ASSETS_URL . 'js/free-wizard.js' : '',
+			$asset['dependencies'] ?? [],
+			$asset['version'] ?? '1',
+			true
 		);
 	}
 

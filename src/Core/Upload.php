@@ -8,7 +8,6 @@ use Plathix\Loader;
 
 class Upload
 {
-
 	public function __construct(
 		private readonly Loader $loader
 	) {
@@ -21,7 +20,6 @@ class Upload
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
-
 		$folder_id = absint( wp_unslash( $_POST['plathix_folder'] ?? $_REQUEST['plathix_folder'] ?? get_option( 'plathix_default_folder_id', FolderId::ROOT ) ) );
 		if ( $folder_id <= 0 ) {
 			return;

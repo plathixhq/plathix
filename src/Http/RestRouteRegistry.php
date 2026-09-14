@@ -12,7 +12,6 @@ class RestRouteRegistry
 	 * @param non-falsy-string $namespace
 	 * @param RestRoutePermissions|null $permissions
 	 */
-
 	public function register(string $namespace, RestRouteHandlers $handlers, ?RestRoutePermissions $permissions = null): void {
 		foreach ( $this->routeDefinitions( $handlers, $permissions ) as $route ) {
 			register_rest_route( $namespace, $route['path'], $route['definition'] );
@@ -298,7 +297,6 @@ class RestRouteRegistry
 			],
 		];
 	}
-
 
 	/** @return array{path: string, definition: non-empty-list<array<string, mixed>>} */
 	private function routePreferences(RestRouteHandlers $handlers, RestRoutePermissions $permissions): array {

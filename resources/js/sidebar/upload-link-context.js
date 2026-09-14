@@ -29,10 +29,10 @@ export function bindUploadLinkFolderContext() {
         );
 
         if (isTrashTarget) {
-
-
-
-
+            
+            
+            
+            
             const originalPath = link.getAttribute('href').split('?')[0];
             link.setAttribute('href', originalPath);
             return;
@@ -46,16 +46,16 @@ export function bindUploadLinkFolderContext() {
             url.searchParams.delete('plathix_folder');
         }
 
-
-
-
+        
+        
+        
         const originalPath = link.getAttribute('href').split('?')[0];
         link.setAttribute('href', url.search ? `${originalPath}${url.search}` : originalPath);
     };
 
-
-
-
+    
+    
+    
     document.addEventListener('click', (event) => {
         const link = event.target?.closest?.('a.page-title-action[href*="media-new.php"]');
         if (link?.getAttribute('aria-disabled') === 'true') {

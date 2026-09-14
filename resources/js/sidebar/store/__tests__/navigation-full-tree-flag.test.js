@@ -60,8 +60,8 @@ function makeStore(extraState = {})
         error: null,
         applyFolderFilter: jest.fn(),
         notify: jest.fn(),
-
-
+        
+        
         hasLoadedFullTree: false,
         loadedParentIds: new Set([0]),
         ...extraState,
@@ -84,8 +84,8 @@ describe('refreshes cached state when data changes', () => {
         Api.getFolders.mockResolvedValue({ folders: FULL_TREE });
     });
 
-
-
+    
+    
     it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
 
@@ -95,9 +95,9 @@ describe('refreshes cached state when data changes', () => {
         expect(store.hasLoadedFullTree).toBe(true);
     });
 
-
-
-
+    
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore();
 
@@ -109,7 +109,7 @@ describe('refreshes cached state when data changes', () => {
         expect(Api.getFolders).not.toHaveBeenCalled();
     });
 
-
+    
 
     it('preserves folder tree behavior', async() => {
         const store = makeStore();
@@ -127,10 +127,10 @@ describe('refreshes cached state when data changes', () => {
         expect(store.hasLoadedFullTree).toBe(false);
     });
 
-
-
-
-
+    
+    
+    
+    
 
     it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
@@ -164,9 +164,9 @@ describe('refreshes cached state when data changes', () => {
         expect(store.hasLoadedFullTree).toBe(false);
     });
 
-
-
-
+    
+    
+    
     it('keeps REST transport behavior consistent under retry and error conditions', async() => {
         const store = makeStore();
 
@@ -187,7 +187,7 @@ describe('refreshes cached state when data changes', () => {
     });
 
     it('keeps store/selection state consistent across UI events', async() => {
-
+        
         const store = makeStore({ hasLoadedFullTree: true });
 
         await store.refreshFolders({ silent: true });
@@ -200,27 +200,27 @@ describe('refreshes cached state when data changes', () => {
 
         await store.refreshFolders({ silent: true });
 
-
+        
         expect([...store.loadedParentIds].sort()).toEqual([0, 1]);
     });
 
-
-
-
-
+    
+    
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore({ loadedParentIds: new Set([0, 1, 999]) });
 
         await store.refreshFolders({ silent: true });
 
-
+        
         expect([...store.loadedParentIds].sort()).toEqual([0, 1]);
     });
 
-
-
-
-
+    
+    
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore();
         const slowFull = deferred();

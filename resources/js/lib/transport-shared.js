@@ -90,15 +90,15 @@ export async function restRequest(path, requestOptions = {}) {
     const response = await fetch(buildRequestUrl(base, path, useFallbackBase), options);
     const json = await parseJson(response);
 
-
-
+    
+    
     if (!response.ok && response.status === 403 && json?.code === 'rest_cookie_invalid_nonce' && retry) {
         await refreshNonce();
         return restRequest(path, { method, data, retry: false, signal, useFallbackBase });
     }
 
-
-
+    
+    
     if (
         !response.ok
         && response.status === 405
@@ -109,8 +109,8 @@ export async function restRequest(path, requestOptions = {}) {
         return restRequest(path, { method, data, retry, signal, useFallbackBase: true });
     }
 
-
-
+    
+    
     if (
         response.ok
         && json === null

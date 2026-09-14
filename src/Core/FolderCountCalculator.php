@@ -6,7 +6,6 @@ namespace Plathix\Core;
 
 final class FolderCountCalculator
 {
-
 	public function countUserFolders(string $taxonomy): int {
 		global $wpdb;
 		$taxonomy_esc = esc_sql( $taxonomy );
@@ -28,7 +27,6 @@ final class FolderCountCalculator
 			   AND t.slug NOT IN ({$system_slugs_sql}){$trashed_term_id_sql}"
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery, PluginCheck.Security.DirectDB.UnescapedDBParameter
-
 		return SqlSafeCast::nullSafeSqlCount( $count ) ?? 0;
 	}
 
@@ -76,7 +74,6 @@ final class FolderCountCalculator
 	 * @param array<int> $term_ids
 	 * @return array<int, int>|null
 	 */
-
 	public function batchCounts(array $term_ids, string $taxonomy): ?array {
 		global $wpdb;
 
@@ -131,7 +128,6 @@ final class FolderCountCalculator
 	 * @param array<int> $term_ids
 	 * @return array<int, array<int>>|null
 	 */
-
 	public function findOrphanObjectIds(array $term_ids, string $taxonomy): ?array {
 		global $wpdb;
 

@@ -29,7 +29,6 @@ class RealMediaLib implements ImportAdapterInterface
 	}
 
 	public function exportTree(): array {
-
 		$this->last_export_query_failed = false;
 
 		if ( ! $this->isAvailable() ) {

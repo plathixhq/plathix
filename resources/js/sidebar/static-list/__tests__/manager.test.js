@@ -342,7 +342,7 @@ describe('init — popstate', () => {
         expect(store.openId).toBe(5);
     });
 
-
+    
     // trashFolderIdFromUrl() — this exercises that helper via the initial-resolution path
     // (no folderId/state.plathixFolderId given, falls through to URL parsing), covering the
     // status/post_status fallback that resolveNativeViewFolderId() already had coverage for.
@@ -375,10 +375,10 @@ describe('init — folder column links', () => {
         expect(mgr.navigate).toHaveBeenCalledWith('http://localhost/wp-admin/upload.php?mode=list', { folderId: 9 });
     });
 
-
+    
     // discarded the already-computed targetUrl (dead href-based computation in the common
     // case). Mocking buildUrl to return a DIFFERENT value than href makes the regression
-
+    
     // href.
     it('uses link.href directly without calling buildUrl again when href is present', () => {
         uploadInst.canHandle.mockReturnValue(true);
@@ -417,7 +417,7 @@ describe('init — folder column links', () => {
         const store = makeStore({ openId: 9 });
         Alpine.store.mockReturnValue(store);
         fetchListFragments.mockResolvedValue(MOCK_DATA);
-
+        
         uploadInst.canHandle.mockImplementation((url) => url.includes('/upload.php'));
         uploadInst.buildParams.mockReturnValue({ screen_base: 'upload', folder_id: 77 });
         uploadInst.applyFragments.mockReturnValue(true);
@@ -505,11 +505,11 @@ describe('coalesces repeated events into a single handled call', () => {
 
 describe('keeps upload links scoped to the active folder', () => {
     it('intercepts a click on .view-switch and navigates with the CURRENT store folderId when NOT in Trash', () => {
-
-
-
-
-
+        
+        
+        
+        
+        
         const store = makeStore({ openId: 5 });
         Alpine.store.mockReturnValue(store);
         uploadInst.canHandle.mockReturnValue(true);
@@ -526,19 +526,19 @@ describe('keeps upload links scoped to the active folder', () => {
     });
 
     it('handles trash workflow consistently', () => {
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
         //
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
         isTrashViewActive.mockReturnValue(true);
         const store = makeStore({ openId: 5 });
         Alpine.store.mockReturnValue(store);
@@ -572,11 +572,11 @@ describe('keeps upload links scoped to the active folder', () => {
     });
 
     it('keeps upload links scoped to the active folder', () => {
-
-
-
-
-
+        
+        
+        
+        
+        
         const store = makeStore({ openId: 5 });
         Alpine.store.mockReturnValue(store);
         uploadInst.canHandle.mockReturnValue(true);
@@ -612,11 +612,11 @@ describe('keeps upload links scoped to the active folder', () => {
 });
 
 describe('keeps store/selection state consistent across UI events', () => {
-
-
-
-
-
+    
+    
+    
+    
+    
     let registered;
 
     beforeEach(() => {
@@ -639,7 +639,7 @@ describe('keeps store/selection state consistent across UI events', () => {
     });
 
     it('keeps store/selection state consistent across UI events', () => {
-
+        
         uploadInst.canHandle.mockReturnValue(false);
 
         const lateAdapter = {
@@ -647,7 +647,7 @@ describe('keeps store/selection state consistent across UI events', () => {
             buildParams: jest.fn(() => ({ screen_base: 'edit', folder_id: 5 })),
             applyFragments: jest.fn(() => true),
         };
-
+        
         window.wp.hooks.addFilter('plathix.staticList.adapters', 'test/late', (adapters) => [
             ...adapters,
             lateAdapter,
@@ -675,10 +675,10 @@ describe('keeps store/selection state consistent across UI events', () => {
     it('exposes the documented runtime feature/mode contract', () => {
         uploadInst.canHandle.mockReturnValue(true);
 
-
-
+        
+        
         window.wp.hooks.addFilter('plathix.staticList.adapters', 'test/broken', () => {
-
+            
         });
 
         const mgr = new StaticListNavigationManager();
@@ -702,7 +702,7 @@ describe('prevents concurrent state changes', () => {
         const mgr = new StaticListNavigationManager();
         const prefetchPromise = mgr.prefetch(UPLOAD_URL, { folderId: 5 });
 
-
+        
         cacheInvalidateFolder(5);
 
         resolve(MOCK_DATA);
@@ -720,7 +720,7 @@ describe('prevents concurrent state changes', () => {
         const mgr = new StaticListNavigationManager();
         const navigatePromise = mgr.navigate(UPLOAD_URL, { folderId: 5 });
 
-
+        
         cacheInvalidateFolder(5);
 
         resolveFirst(MOCK_DATA);
@@ -729,8 +729,8 @@ describe('prevents concurrent state changes', () => {
         const params = uploadInst.buildParams.mock.results[0].value;
         expect(cacheGet(params)).toBeNull();
 
-
-
+        
+        
         fetchListFragments.mockResolvedValueOnce(MOCK_DATA);
         await mgr.navigate(UPLOAD_URL, { folderId: 5 });
 

@@ -29,6 +29,7 @@ msgstr ""
 msgid "Plathix"
 msgstr "Plathix"
 
+#. translators: aria-подпись иконки «папки» в счётчике корзины (доступность).
 msgid "Folders"
 msgstr "Папки"
 
@@ -115,9 +116,6 @@ msgstr "Папки в корзину"
 msgid "Folder moved to Trash. You can restore it from there."
 msgstr "Папка перемещена в корзину. Её можно восстановить оттуда."
 
-msgid "Gallery shortcode"
-msgstr "Галерея шорткод"
-
 msgid "Documents"
 msgstr "Документы"
 
@@ -176,6 +174,9 @@ msgstr "Загрузка ещё идёт. Уход со страницы мож�
 
 msgid "Error"
 msgstr "Ошибка"
+
+msgid "Close notification"
+msgstr "Закрыть уведомление"
 
 msgid "File replaced successfully."
 msgstr "Файл успешно заменён."
@@ -308,6 +309,7 @@ msgstr "Выбрать папку"
 msgid "File"
 msgstr "Файл"
 
+#. translators: aria-подпись иконки «файлы» в счётчике корзины (доступность).
 msgid "Files"
 msgstr "Файлы"
 
@@ -830,6 +832,7 @@ msgstr "Выберите начальную структуру папок или
 msgid "Skip setup"
 msgstr "Пропустить настройку"
 
+#. translators: %d — количество папок, которые создаст этот пресет.
 #, php-format
 msgid "%d folder"
 msgid_plural "%d folders"
@@ -1174,6 +1177,9 @@ msgstr "Загрузка должна быть .zip-файлом."
 msgid "Archive exceeds the 1 MB size limit."
 msgstr "Архив превышает лимит 1 МБ."
 
+msgid "ZIP support is not available on this server."
+msgstr "Поддержка ZIP недоступна на этом сервере."
+
 msgid "Could not open the zip archive."
 msgstr "Не удалось открыть ZIP-архив."
 
@@ -1294,6 +1300,35 @@ msgstr "Безопасная оплата"
 
 msgid "Annual subscription — cancel anytime"
 msgstr "Годовая подписка — отмена в любой момент"
+
+msgid "Can I upgrade from Free to PRO at any time?"
+msgstr "Можно ли перейти с бесплатной версии на PRO в любое время?"
+
+msgid "Yes, upgrade is instant. Your existing folders and settings are preserved."
+msgstr "Да, переход мгновенный. Ваши папки и настройки сохраняются."
+
+msgid "What happens to my folders if I cancel?"
+msgstr "Что будет с папками при отмене подписки?"
+
+msgid "Your folders remain in the database. PRO-only features (access control, gallery, audit log, WP-CLI, etc.) are deactivated but your structure stays intact."
+msgstr ""
+
+msgid "Is it a one-time payment or subscription?"
+msgstr "Это разовый платёж или подписка?"
+
+msgid "Annual subscription. You can cancel anytime — no long-term commitment."
+msgstr "Годовая подписка. Отменить можно в любое время без обязательств."
+
+msgid "Do you offer refunds?"
+msgstr "Есть ли возврат средств?"
+
+#. translators: 1: refund window in days, 2: same value repeated.
+#, php-format
+msgid "%1$d-day money-back guarantee, no questions asked. Contact support within %2$d days of purchase."
+msgstr "Возврат средств в течение %1$d дней без лишних вопросов. Обратитесь в поддержку в течение %2$d дней после покупки."
+
+msgid "FAQ"
+msgstr "Вопросы и ответы"
 
 msgid "Your media library,"
 msgstr "Ваша медиабиблиотека,"
@@ -1418,112 +1453,6 @@ msgstr "Начать"
 #, php-format
 msgid "%d-day money-back guarantee. All plans include all PRO features."
 msgstr "Гарантия возврата денег в течение %d дней. Все тарифы включают все возможности PRO."
-
-msgid "Plathix PRO — active"
-msgstr "Plathix PRO — активна"
-
-msgid "You're on PRO. Everything is unlocked."
-msgstr "У вас PRO. Все возможности разблокированы."
-
-msgid "Manage your license below. Need help? Our docs and support are a click away."
-msgstr "Управляйте лицензией ниже. Нужна помощь? Документация и поддержка в один клик."
-
-msgid "Documentation"
-msgstr "Документация"
-
-msgid "Priority support"
-msgstr "Приоритетная поддержка"
-
-#. translators: %s — subscription expiry date.
-#, php-format
-msgid "Subscription active until %s."
-msgstr "Подписка активна до %s."
-
-#. translators: 1: days left, 2: renew link (opening <a>), 3: closing </a>.
-#, php-format
-msgid "Subscription expires in %1$d days. %2$sRenew%3$s to keep PRO active."
-msgstr "Подписка истекает через %1$d дн. %2$sПродлите%3$s, чтобы сохранить PRO активным."
-
-#. translators: 1: expiry date, 2: renew link (opening <a>), 3: closing </a>.
-#, php-format
-msgid "Subscription expired on %1$s. %2$sRenew%3$s to restore PRO."
-msgstr "Подписка истекла %1$s. %2$sПродлите%3$s, чтобы восстановить PRO."
-
-msgid "What you unlocked with PRO"
-msgstr "Что вы разблокировали с PRO"
-
-msgid "Can I upgrade from Free to PRO at any time?"
-msgstr "Можно ли перейти с бесплатной версии на PRO в любое время?"
-
-msgid "Yes, upgrade is instant. Your existing folders and settings are preserved."
-msgstr "Да, переход мгновенный. Ваши папки и настройки сохраняются."
-
-msgid "What happens to my folders if I cancel?"
-msgstr "Что будет с папками при отмене подписки?"
-
-msgid "Your folders remain in the database. PRO-only features (access control, gallery, audit log, WP-CLI, etc.) are deactivated but your structure stays intact."
-msgstr ""
-
-msgid "Is it a one-time payment or subscription?"
-msgstr "Это разовый платёж или подписка?"
-
-msgid "Annual subscription. You can cancel anytime — no long-term commitment."
-msgstr "Годовая подписка. Отменить можно в любое время без обязательств."
-
-msgid "Do you offer refunds?"
-msgstr "Есть ли возврат средств?"
-
-#. translators: 1: refund window in days, 2: same value repeated.
-#, php-format
-msgid "%1$d-day money-back guarantee, no questions asked. Contact support within %2$d days of purchase."
-msgstr "Возврат средств в течение %1$d дней без лишних вопросов. Обратитесь в поддержку в течение %2$d дней после покупки."
-
-msgid "FAQ"
-msgstr "Вопросы и ответы"
-
-msgid "License Key"
-msgstr "Лицензионный ключ"
-
-msgid "Active"
-msgstr "Активен"
-
-msgid "Awaiting re-check"
-msgstr "Ожидает перепроверки"
-
-msgid "Invalid"
-msgstr "Недействителен"
-
-msgid "License activated successfully. Enjoy Plathix PRO!"
-msgstr "Лицензия успешно активирована. Приятной работы с Plathix PRO!"
-
-msgid "License deactivated."
-msgstr "Лицензия деактивирована."
-
-msgid "License key not found or could not be verified. Please check and try again."
-msgstr "Лицензионный ключ не найден или не прошёл проверку. Проверьте ключ и повторите попытку."
-
-msgid "Enter your license key to activate PRO features on this site."
-msgstr "Введите лицензионный ключ для активации функций PRO на этом сайте."
-
-msgid "Reactivate"
-msgstr "Активировать повторно"
-
-msgid "Activate"
-msgstr "Активировать"
-
-msgid "Deactivate"
-msgstr "Деактивировать"
-
-#. translators: %s: human-readable time difference, e.g. "2 days".
-#, php-format
-msgid "Last confirmed by the license server: %s ago."
-msgstr "Последнее подтверждение сервером лицензий: %s назад."
-
-msgid "Your key is in the purchase confirmation email you received after buying Plathix PRO. It looks like <code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code>."
-msgstr "Ключ — в письме о подтверждении покупки Plathix PRO. Он выглядит как <code>xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code>."
-
-msgid "License checks run over a standard HTTPS connection to our license server; the response is not cryptographically signed, so this check protects against typos and expired keys, not against a compromised network path."
-msgstr "Проверка лицензии выполняется по обычному HTTPS-соединению с нашим сервером лицензий; ответ не подписан криптографически, поэтому эта проверка защищает от опечаток и просроченных ключей, но не от скомпрометированного сетевого пути."
 
 msgid "A replace operation is already in progress for this attachment."
 msgstr "Для этого вложения уже выполняется операция замены."
@@ -1875,6 +1804,9 @@ msgstr "Часовой пояс"
 msgid "Debug Mode"
 msgstr "Режим отладки"
 
+msgid "Active"
+msgstr "Активен"
+
 msgid "Inactive"
 msgstr "Неактивен"
 
@@ -1978,9 +1910,11 @@ msgstr "папку не удалось восстановить"
 msgid "folder could not be deleted permanently"
 msgstr "папку не удалось удалить навсегда"
 
+#. translators: короткая подпись «файлы» в счётчике корзины «N Ф / N П» (напр. рус. «Ф»).
 msgid "F"
 msgstr "Ф"
 
+#. translators: короткая подпись «папки» в счётчике корзины «N Ф / N П» (напр. рус. «П»).
 msgid "D"
 msgstr "П"
 

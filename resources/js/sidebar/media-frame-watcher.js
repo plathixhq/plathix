@@ -38,10 +38,10 @@ function watchBody() {
         }
     });
     bodyObserver.observe(document.body, { childList: true, subtree: true });
-
-
-
-
+    
+    
+    
+    
     setStateValue('mediaFrameBodyObserver', bodyObserver);
 }
 

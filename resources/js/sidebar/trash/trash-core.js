@@ -39,8 +39,8 @@ export async function refreshTrashedFolderIds() {
         trashedFolderIds = new Set(folders.map((f) => Number(f.id)).filter((id) => id > 0));
         notifyCacheListeners();
     } catch (e) {
-
-
+        
+        
     }
     return trashedFolderIds;
 }
@@ -48,18 +48,18 @@ export async function refreshTrashedFolderIds() {
 
 
 export async function fetchAndRenderTiles(container, store) {
-    container.innerHTML = `<div class="plathix-folder-trash-panel__loading">${t('loading', 'Loading…')}</div>`;
+    container.innerHTML = `<div class="plathix-folder-trash-panel__loading">${escapeHtml(t('loading', 'Loading…'))}</div>`;
 
     let folders = [];
     try {
         const data = await Api.getTrashedFolders();
         folders = Array.isArray(data?.folders) ? data.folders : [];
-
-
+        
+        
         trashedFolderIds = new Set(folders.map((f) => Number(f.id)).filter((id) => id > 0));
         notifyCacheListeners();
     } catch (e) {
-        container.innerHTML = `<div class="plathix-folder-trash-panel__error">${t('files_restore_failed_notif', 'Could not load trashed folders')}</div>`;
+        container.innerHTML = `<div class="plathix-folder-trash-panel__error">${escapeHtml(t('files_restore_failed_notif', 'Could not load trashed folders'))}</div>`;
         return;
     }
 
@@ -72,8 +72,8 @@ export function renderTiles(container, folders, store) {
         return;
     }
 
-    const heading = t('trashed_folders_heading', 'Folders in Trash');
-    const sectionLabel = t('folders_section', 'Folders');
+    const heading = escapeHtml(t('trashed_folders_heading', 'Folders in Trash'));
+    const sectionLabel = escapeHtml(t('folders_section', 'Folders'));
 
     const tiles = folders.map((f) => tileHtml(f)).join('');
 
@@ -100,8 +100,8 @@ export function tileHtml(f) {
     const color = typeof f.color === 'string' && f.color !== '' ? f.color : '';
     const kids = Number(f.kids || 0);
     const ago = relativeTime(Number(f.deletedAt || 0));
-    const restoreLabel = t('restore_label', 'Restore');
-    const purgeLabel = t('purge_label', 'Delete permanently');
+    const restoreLabel = escapeAttr(t('restore_label', 'Restore'));
+    const purgeLabel = escapeAttr(t('purge_label', 'Delete permanently'));
 
     return `<div class="plathix-folder-trash-panel__tile" data-id="${id}">
         ${kids > 0 ? `<span class="plathix-folder-trash-panel__badge">${kids}</span>` : ''}
@@ -168,10 +168,10 @@ export async function onPurgeClick(btn, store, container) {
     btn.disabled = true;
     try {
         await Api.purgeFolder(id);
-
-
-
-
+        
+        
+        
+        
         cacheInvalidateFolder(id);
         await store?.refreshFolders?.({ silent: true, skipCacheClear: true });
         await fetchAndRenderTiles(container, store);

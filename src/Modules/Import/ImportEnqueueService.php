@@ -19,8 +19,7 @@ final class ImportEnqueueService
 	public function enqueue(): void
 	{
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		if ( sanitize_key( (string) ( $_GET['page'] ?? '' ) ) !== ( new ToolsApi() )->pageSlug() ) {
+		if ( sanitize_key( (string) wp_unslash( $_GET['page'] ?? '' ) ) !== ( new ToolsApi() )->pageSlug() ) {
 			return;
 		}
 
@@ -70,7 +69,6 @@ final class ImportEnqueueService
 			'import_completed' => __( 'Import completed. Moved items: %d', 'plathix' ),
 			'import_failed'    => __( 'Import failed.', 'plathix' ),
 			'import_timeout'   => __( 'Import is still pending. Action Scheduler runner may be unavailable.', 'plathix' ),
-
 			'import_status_unstable' => __( 'Could not check import status — connection is unstable. Please wait or try again later.', 'plathix' ),
 			'request_failed'   => __( 'Request failed.', 'plathix' ),
 		];

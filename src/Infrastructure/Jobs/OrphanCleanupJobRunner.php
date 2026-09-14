@@ -6,6 +6,7 @@ namespace Plathix\Infrastructure\Jobs;
 
 use Plathix\Core\FolderCountCalculator;
 use Plathix\Core\FolderCountLifecycle;
+use Plathix\Core\FolderRepository;
 use Plathix\Core\TaxonomyResolver;
 use Plathix\Infrastructure\JobLockService;
 use Plathix\Infrastructure\Logger;
@@ -16,9 +17,11 @@ use Plathix\Infrastructure\Logger;
 final class OrphanCleanupJobRunner
 {
 	private JobLockService $lock_service;
+	private FolderRepository $repository;
 
-	public function __construct(JobLockService $lock_service) {
+	public function __construct(JobLockService $lock_service, FolderRepository $repository) {
 		$this->lock_service = $lock_service;
+		$this->repository   = $repository;
 	}
 
 	/** @param array<string, mixed> $args */
@@ -94,16 +97,9 @@ final class OrphanCleanupJobRunner
 					}
 
 					foreach ( $this->buildMissingPositionBackfill( (array) $missing_position_terms, $taxonomy ) as $term_id => $position ) {
-						$term_id      = (int) $term_id;
-						$old_position = get_term_meta( $term_id, PLATHIX_TERM_POSITION, true );
-						$written      = update_term_meta( $term_id, PLATHIX_TERM_POSITION, $position );
-
-						if ( ! $written && (int) $old_position !== $position ) {
-							Logger::error( 'orphan_cleanup_position_backfill_write_failed', [ 'term_id' => $term_id, 'taxonomy' => $taxonomy ] );
-						}
+						$this->repository->setPosition( (int) $term_id, $position );
 					}
 				}
-
 			}
 		);
 	}
@@ -134,7 +130,6 @@ final class OrphanCleanupJobRunner
 		$result = [];
 
 		foreach ( $grouped as $parent_id => $children ) {
-
 			$lock_name = $this->lock_service->orderLockName( $taxonomy, (int) $parent_id );
 			$lock      = $this->lock_service->acquireOrder( $lock_name );
 

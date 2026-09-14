@@ -85,7 +85,7 @@ describe('keeps upload links scoped to the active folder', () => {
             expect(link.getAttribute('aria-disabled')).toBe('false');
         });
 
-        it('coalesces repeated events into a single handled call', () => {
+        it('keeps upload links scoped to the active folder', () => {
             window.Plathix = { trashFolderId: 655 };
             setLinkHtml('media-new.php');
             Alpine.store.mockReturnValue({ openId: 655 });

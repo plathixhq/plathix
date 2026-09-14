@@ -23,10 +23,8 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<Node>
  */
-
 final class ForbiddenCrossModuleInternalsInlineReferenceRule implements Rule
 {
-
 	private const CHECKED_FUNCTIONS = [
 		'class_exists',
 		'call_user_func',
@@ -67,17 +65,13 @@ final class ForbiddenCrossModuleInternalsInlineReferenceRule implements Rule
 			return null;
 		}
 
-
 		$targetModule = $this->moduleOf( $fqcn );
 		if ( $targetModule === null || $targetModule === $currentModule ) {
 			return null;
 		}
 
 		return RuleErrorBuilder::message( sprintf(
-			'Module "%s" must not reference internal class %s of module "%s" via inline FQCN or a ' .
-			'string-literal dynamic call — depend on a stable contract instead (Plathix\PublicApi\*, ' .
-			'or Plathix\Core\*/Infrastructure\*/User\*/Contracts\*, or a plathix/* WP hook). ' .
-			'Static analysis rule failed for a public contract violation.',
+			'Module "%s" must not reference internal class %s of module "%s" via inline FQCN or a ' . 'string-literal dynamic call — depend on a stable contract instead (Plathix\PublicApi\*, ' . 'or Plathix\Core\*/Infrastructure\*/User\*/Contracts\*, or a plathix/* WP hook). ',
 			$currentModule,
 			$fqcn,
 			$targetModule
@@ -87,7 +81,6 @@ final class ForbiddenCrossModuleInternalsInlineReferenceRule implements Rule
 	/**
 	 * @return list<string>
 	 */
-
 	private function extractTargetFqcns(Node $node): array
 	{
 		if ( $node instanceof StaticCall || $node instanceof ClassConstFetch || $node instanceof StaticPropertyFetch ) {
@@ -112,7 +105,6 @@ final class ForbiddenCrossModuleInternalsInlineReferenceRule implements Rule
 		if ( $node instanceof FuncCall && $node->name instanceof Name ) {
 			$functionName = $node->name->toString();
 			if ( in_array( $functionName, self::CHECKED_FUNCTIONS, true ) ) {
-
 				$argIndex = $functionName === 'is_a' ? 1 : 0;
 				$fqcn = $this->fqcnFromStringArg( $node->args, $argIndex );
 				return $fqcn !== null ? [ $fqcn ] : [];
@@ -214,7 +206,6 @@ final class ForbiddenCrossModuleInternalsInlineReferenceRule implements Rule
 	/**
 	 * @return list<string>
 	 */
-
 	private function fqcnsFromTypeNode(?Node $typeNode): array
 	{
 		if ( $typeNode === null ) {
@@ -246,7 +237,6 @@ final class ForbiddenCrossModuleInternalsInlineReferenceRule implements Rule
 	{
 		$arg = $args[ $index ] ?? null;
 		if ( ! $arg instanceof Arg || ! $arg->value instanceof String_ ) {
-
 			return null;
 		}
 

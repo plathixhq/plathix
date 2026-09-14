@@ -27,7 +27,7 @@ function refreshMediaGrid() {
         target.props.set?.({ plathix_folder: currentFolder });
         target.fetch({ reset: true });
     } catch (error) {
-
+        
     }
 }
 
@@ -37,7 +37,7 @@ function refreshFolderCounts() {
     try {
         window.Alpine?.store?.('plathix')?.refreshFolders?.({ silent: true })?.catch?.(() => {});
     } catch (error) {
-
+        
     }
 }
 
@@ -76,10 +76,10 @@ async function fetchFolders() {
         return cachedFoldersPromise;
     }
 
-
-
-
-
+    
+    
+    
+    
     cachedFoldersPromise = (async () => {
         const json = await restRequest('folders', {
             method: 'GET',
@@ -107,8 +107,8 @@ function renderTreeRow(folder, depth, currentFolderId, byParent, onSelect) {
     row.dataset.folderId = String(folder.id);
 
     row.addEventListener('click', (event) => {
-
-
+        
+        
         onSelect(folder);
     });
 
@@ -131,10 +131,10 @@ function renderTreeRow(folder, depth, currentFolderId, byParent, onSelect) {
         });
         wrapper.appendChild(childrenContainer);
 
-
-
+        
+        
         // .is-expanded + .plathix-folder-switch__tree-children (attachment-fields.css),
-
+        
         row.querySelector('.plathix-folder-switch__tree-toggle').addEventListener('click', (event) => {
             event.stopPropagation();
             row.classList.toggle('is-expanded');
@@ -185,8 +185,8 @@ function updateGotoZone(field, folder, folders) {
         return;
     }
 
-
-
+    
+    
     const goto = document.createElement('a');
     goto.className = 'plathix-folder-switch__goto';
     goto.target = '_top';
@@ -210,11 +210,11 @@ async function selectFolder(field, folder, folders) {
         return;
     }
 
-
-
-
-    // (MediaController::unassign_items → FolderAssignmentService::unassign_items,
-
+    
+    
+    
+    // (MediaController::unassignItems → FolderAssignmentService::unassignItems,
+    
     const isRoot = Number(folder.id) === 0;
     const path = isRoot ? 'items' : `folders/${folder.id}/items`;
     const method = isRoot ? 'DELETE' : 'PUT';
@@ -223,23 +223,23 @@ async function selectFolder(field, folder, folders) {
         : { ids: [attachmentId], post_type: 'attachment' };
 
     try {
-
-
-
-
-
+        
+        
+        
+        
+        
         await restRequest(path, {
             method,
             data,
             runtimeOverride: { restUrl: cfg.restUrl || '', restUrlFallback: cfg.restUrlFallback, restNonce: cfg.restNonce },
         });
 
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
         const uncategorizedTermId = Number(window.PlathixFolderSwitch?.uncategorizedTermId || 0);
         const resolvedFolderId = isRoot ? uncategorizedTermId : Number(folder.id);
         const resolvedFolder = isRoot
@@ -288,10 +288,10 @@ function positionPopover(field, popover) {
         ? Math.max(rect.top - 16, 120)
         : Math.max(window.innerHeight - rect.bottom - 16, 120);
 
-
-
-
-
+    
+    
+    
+    
     popover.style.left = `${rect.left}px`;
     if (showAbove) {
         popover.style.bottom = `${window.innerHeight - rect.top + 6}px`;
@@ -322,8 +322,8 @@ async function openPopover(field, trigger) {
     field.classList.add('is-open');
     trigger.setAttribute('aria-expanded', 'true');
 
-
-
+    
+    
     requestAnimationFrame(() => {
         popover.classList.add('is-visible');
     });

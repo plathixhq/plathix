@@ -7,7 +7,7 @@ import { memInvalidateFolder } from '../media-grid-cache.js';
 let _moveItemsSeq = 0;
 
 export const itemsModule = {
-
+    
 
 
     async moveItemsBulk(itemIds, folderId) {
@@ -39,9 +39,9 @@ export const itemsModule = {
                 ? result.failed.map((id) => Number(id)).filter((id) => id > 0)
                 : [];
             const moved = Number(result?.moved || result?.assigned || 0);
-
-
-
+            
+            
+            
             const restoredCount = Array.isArray(result?.restored) ? result.restored.length : 0;
 
             if (targetIdx !== -1) {
@@ -55,16 +55,16 @@ export const itemsModule = {
             }
 
             const currentOpenId = Number(this.openId);
-
-
-
-
-
+            
+            
+            
+            
+            
             //
-
-
-
-
+            
+            
+            
+            
             const affectedFolderIds = Array.isArray(result?.counts_recomputed)
                 ? result.counts_recomputed.map((id) => Number(id)).filter((id) => id >= 0)
                 : [];
@@ -72,8 +72,8 @@ export const itemsModule = {
                 ? [...new Set(affectedFolderIds)]
                 : [...new Set([targetFolderId, currentOpenId])];
 
-
-
+            
+            
             foldersToInvalidate.forEach((id) => {
                 cacheInvalidateFolder(id);
                 memInvalidateFolder(id);
@@ -83,17 +83,17 @@ export const itemsModule = {
                 ? itemIds.filter((id) => !failedIds.includes(id))
                 : itemIds;
 
-
-
-
-
-
+            
+            
+            
+            
+            
             if (didDomRemove) {
                 successIds.forEach((id) => {
                     document.querySelector(`.attachment[data-id="${id}"]`)?.remove();
                     document.querySelector(`tr#post-${id}`)?.remove();
                 });
-
+                
                 // reset to page 1 so the user doesn't see a blank list table.
                 if (
                     shouldUseStaticListFiltering() &&
@@ -111,18 +111,18 @@ export const itemsModule = {
                 wpSelection.reset();
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             const frame = getMediaFrame();
             if (frame && getScreenKind() !== 'modal' && !failedIds.length) {
                 frame.trigger('selection:action:done');
@@ -141,19 +141,19 @@ export const itemsModule = {
                 });
             }
 
-
+            
             this.setFromMutationResult(failedIds.length);
 
-
-
-
-
-
+            
+            
+            
+            
+            
             //
-
-
-
-
+            
+            
+            
+            
             const countsMap = result?.counts && typeof result.counts === 'object' ? result.counts : {};
             const countsEntries = Object.entries(countsMap);
             if (countsEntries.length) {
@@ -174,7 +174,7 @@ export const itemsModule = {
 
             if (moved > 0) {
                 const suffix = targetFolderName ? ' \u2192 ' + targetFolderName : '';
-
+                
                 // \u0432\u043e\u0441\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d\u044b \u0438\u0437 \u043a\u043e\u0440\u0437\u0438\u043d\u044b \u2014 \u0447\u0435\u0441\u0442\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442, \u043d\u0435 \u043e\u0431\u0449\u0438\u0439 "\u043f\u0435\u0440\u0435\u043c\u0435\u0449\u0435\u043d\u043e".
                 const msg = restoredCount > 0
                     ? (restoredCount === 1
@@ -204,10 +204,10 @@ export const itemsModule = {
                 this.patchFolder(targetFolderId, { count: prevCount });
             }
             this.selected = snapshot;
-
-
-
-
+            
+            
+            
+            
             if (error?.code === 'rest_write_indeterminate') {
                 this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
                 this.refreshFolders({ silent: true }).catch(() => {});

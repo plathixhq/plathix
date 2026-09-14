@@ -1,3 +1,5 @@
+import { captureActiveElement, restoreFocus } from '../focus-trap.js';
+
 export function contextMenuComponent() {
     return {
         isOpen: false,
@@ -5,6 +7,9 @@ export function contextMenuComponent() {
         folder: null,
         x: 0,
         y: 0,
+        
+        
+        _opener: null,
 
         init() {
             // Close only on LEFT click outside the menu.
@@ -16,7 +21,7 @@ export function contextMenuComponent() {
                 this.close();
             };
             document.addEventListener('mousedown', this._outsideHandler);
-
+            
             this._ctxCloseHandler = () => this.close();
             window.addEventListener('plathix:ctx-close', this._ctxCloseHandler);
         },
@@ -28,6 +33,7 @@ export function contextMenuComponent() {
 
         open(payload) {
             if (payload.folder?.isProtected) return;
+            this._opener = captureActiveElement();
             this.folder = payload.folder;
             this.$store.plathix.contextMenuFolderId = Number(payload.folder?.id || 0);
 
@@ -54,7 +60,7 @@ export function contextMenuComponent() {
                 if (rect.bottom > vh - 8) {
                     this.y = Math.max(8, this.y - rect.height - (folderEl ? folderEl.getBoundingClientRect().height + 10 : 0));
                 }
-
+                
                 this.x = Math.max(8, (folderEl ? folderEl.getBoundingClientRect().right : this.x) - rect.width);
                 this.isPositioned = true;
             });
@@ -64,6 +70,8 @@ export function contextMenuComponent() {
             this.isOpen = false;
             this.isPositioned = false;
             this.$store.plathix.contextMenuFolderId = 0;
+            restoreFocus(this._opener);
+            this._opener = null;
         },
 
         createSubfolder() {
@@ -84,16 +92,16 @@ export function contextMenuComponent() {
             this.close();
         },
 
+        
+        
+        
 
+        
+        
+        
 
-
-
-
-
-
-
-
-
-
+        
+        
+        
     };
 }

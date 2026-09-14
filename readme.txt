@@ -202,7 +202,13 @@ Plathix bundles the following open-source libraries. Each is distributed under i
 license; the full required notices are reproduced in THIRD-PARTY-NOTICES.txt.
 
 * Alpine.js 3.16.1 - MIT License - Copyright (c) Caleb Porzio - https://alpinejs.dev
+* Vue.js Reactivity (@vue/reactivity, @vue/shared), bundled indirectly as a dependency of
+  Alpine.js - MIT License - full notice in THIRD-PARTY-NOTICES.txt
 * Feather Icons - MIT License - Copyright (c) 2013-2023 Cole Bemis - https://feathericons.com
+* SVG Sanitizer (enshrined/svg-sanitize) - GPL-2.0-or-later - license file:
+  vendor/enshrined/svg-sanitize/LICENSE
+* Action Scheduler (woocommerce/action-scheduler) - GPL-3.0-or-later - license file:
+  vendor/woocommerce/action-scheduler/license.txt
 
 == Changelog ==
 

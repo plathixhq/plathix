@@ -11,7 +11,6 @@ final class AdminPageGuard
 	 * @param string[] $hooks
 	 * @param string[] $pages
 	 */
-
 	public static function matches(string $hook, array $hooks, array $pages): bool {
 		if ( in_array( $hook, $hooks, true ) ) {
 			return true;

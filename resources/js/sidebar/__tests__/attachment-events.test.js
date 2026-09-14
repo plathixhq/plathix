@@ -13,8 +13,8 @@ describe('handles trash workflow consistently', () => {
         jest.useFakeTimers();
         Object.keys(getInternalState()).forEach((key) => delete getInternalState()[key]);
         delete window.wp;
-
-
+        
+        
         window.Plathix = { screenKind: 'modal' };
 
         const listeners = {};
@@ -43,12 +43,12 @@ describe('handles trash workflow consistently', () => {
 
         bindAttachmentDeleteEvents();
 
-
+        
         jest.advanceTimersByTime(300);
         expect(mockFrame.on).not.toHaveBeenCalled();
 
-
-
+        
+        
         window.wp.media.frame = mockFrame;
         jest.advanceTimersByTime(150);
 
@@ -71,7 +71,7 @@ describe('handles trash workflow consistently', () => {
 
         bindAttachmentDeleteEvents();
 
-
+        
         jest.advanceTimersByTime(3000);
         const timerCountAfterExhaustion = jest.getTimerCount();
 
@@ -114,7 +114,7 @@ describe('coalesces repeated events into a single handled call', () => {
         jest.advanceTimersByTime(10);
         document.dispatchEvent(new Event('keyup', { bubbles: true }));
 
-
+        
         expect(recountFromUi).not.toHaveBeenCalled();
 
         jest.advanceTimersByTime(50);

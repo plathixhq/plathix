@@ -31,7 +31,6 @@ final class SidebarBootstrapAssembler
 	 * @param  int[]   &$loaded_parents
 	 * @return array<int, array<string, mixed>>
 	 */
-
 	public function build(string $taxonomy, int $open_id, array &$loaded_parents): array
 	{
 		// 1. Root system folders (All Files, Uncategorized, Trash).

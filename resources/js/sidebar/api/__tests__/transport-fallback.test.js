@@ -59,23 +59,23 @@ describe('restRequest() nginx-405 fallback', () => {
 
         expect(out).toEqual({ trashed: [1, 2] });
         expect(calls).toHaveLength(2);
-
+        
         expect(calls[0].url).toContain('/wp-json/plathix/v1/media/bulk-trash');
         expect(calls[1].url).toContain('index.php?rest_route=/plathix/v1/media/bulk-trash');
-
+        
         expect(calls[1].method).toBe('POST');
         expect(calls[1].nonce).toBe('rn');
         expect(calls[1].body).toBe(JSON.stringify({ ids: [1, 2] }));
     });
 
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
-        mockFetchSequence([res(false, 405, null)]);
+        mockFetchSequence([res(false, 405, null)]); 
 
         await expect(
             restRequest('media/bulk-trash', { method: 'POST', data: { ids: [1] } }),
         ).rejects.toMatchObject({ code: 'rest_write_blocked' });
 
-
+        
         expect(calls).toHaveLength(2);
     });
 
@@ -84,7 +84,7 @@ describe('restRequest() nginx-405 fallback', () => {
 
         await expect(restRequest('folders', { method: 'GET' })).rejects.toBeTruthy();
 
-
+        
         expect(calls).toHaveLength(1);
         expect(calls[0].url).toContain('/wp-json/');
     });
@@ -111,20 +111,20 @@ describe('restRequest() nginx-405 fallback', () => {
         expect(out).toEqual({ purged: 1 });
         expect(calls).toHaveLength(3);
         expect(calls[2].url).toContain('index.php?rest_route=');
-        expect(calls[2].override).toBe('DELETE');
-        expect(calls[2].method).toBe('POST');
+        expect(calls[2].override).toBe('DELETE'); 
+        expect(calls[2].method).toBe('POST');     
     });
 
-
-
-
-
+    
+    
+    
+    
     const resNull = (ok, status) => ({ ok, status, json: () => Promise.reject(new Error('invalid json')) });
 
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
-            resNull(true, 200),
-            res(true, 200, { folders: [{ id: 1 }] }),
+            resNull(true, 200),                    
+            res(true, 200, { folders: [{ id: 1 }] }), 
         ]);
 
         const out = await restRequest('folders?post_type=attachment', { method: 'GET' });
@@ -142,14 +142,14 @@ describe('restRequest() nginx-405 fallback', () => {
         const out = await restRequest('folders?post_type=attachment', { method: 'GET' });
 
         expect(out).toEqual({ folders: [] });
-        expect(calls).toHaveLength(1);
+        expect(calls).toHaveLength(1); 
     });
 
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([resNull(true, 200)]);
 
-
-
+        
+        
         await expect(
             restRequest('media/bulk-trash', { method: 'POST', data: { ids: [1] } }),
         ).rejects.toMatchObject({ code: 'rest_write_indeterminate' });
@@ -158,18 +158,18 @@ describe('restRequest() nginx-405 fallback', () => {
     });
 
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
-        mockFetchSequence([resNull(true, 200)]);
+        mockFetchSequence([resNull(true, 200)]); 
 
         await expect(
             restRequest('folders', { method: 'GET' }),
         ).rejects.toMatchObject({ code: 'rest_read_corrupted' });
 
-        expect(calls).toHaveLength(2);
+        expect(calls).toHaveLength(2); 
     });
 
-
-
-
+    
+    
+    
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([resNull(true, 200)]);
 
@@ -240,14 +240,14 @@ describe('uploadMultipart() 405-fallback', () => {
         expect(calls).toHaveLength(2);
         expect(calls[0].url).toContain('/wp-json/plathix/v1/folders/upload');
         expect(calls[1].url).toContain('index.php?rest_route=/plathix/v1/folders/upload');
-
+        
         expect(calls[0].body).toBeInstanceOf(FormData);
         expect(calls[1].body).toBeInstanceOf(FormData);
         expect(calls[0].body).not.toBe(calls[1].body);
     });
 
-    it('prevents concurrent state changes', async () => {
-        mockFetchSequence([res(false, 405, null)]);
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
+        mockFetchSequence([res(false, 405, null)]); 
 
         const file = new File(['data'], 'test.zip', { type: 'application/zip' });
 
@@ -255,12 +255,12 @@ describe('uploadMultipart() 405-fallback', () => {
             uploadMultipart('folders/upload', file),
         ).rejects.toMatchObject({ code: 'rest_write_blocked' });
 
-        expect(calls).toHaveLength(2);
+        expect(calls).toHaveLength(2); 
     });
 
-
-
-
+    
+    
+    
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const resNull = (ok, status) => ({ ok, status, json: () => Promise.reject(new Error('invalid json')) });
         mockFetchSequence([resNull(true, 200)]);

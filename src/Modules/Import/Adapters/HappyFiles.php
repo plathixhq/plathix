@@ -16,7 +16,6 @@ final class HappyFiles extends AbstractTaxonomyImportAdapter
 	 * @param list<array{id: int, name: string, parent: int, items: list<int>}> $tree
 	 * @return list<array{id: int, name: string, parent: int, items: list<int>}>
 	 */
-
 	protected function sortTree(array $tree): array {
 		usort(
 			$tree,

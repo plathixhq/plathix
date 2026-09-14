@@ -14,15 +14,12 @@ final class Features
 			$default = match ( $feature ) {
 				'gallery'      => true,
 				'import'       => true,
-
 				'svg'          => false,
 				'lazy_tree'    => (bool) get_option('plathix_lazy_tree', false),
 				'folder_icons' => false,
 				'share_links'  => false,
-
 				'dnd'          => true,
 				'upload_sync'  => true,
-
 				default        => false,
 			};
 

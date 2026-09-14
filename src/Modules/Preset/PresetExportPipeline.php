@@ -8,9 +8,14 @@ use Plathix\Infrastructure\TempDirectory;
 use Plathix\Core\FolderRepository;
 use Plathix\Core\Taxonomy;
 
+/**
+ * @requires extension zip
+ */
 final class PresetExportPipeline
 {
-
+	/**
+	 * @var \Closure(): string
+	 */
 	private \Closure $temp_dir_resolver;
 	private readonly PresetValidator $validator;
 
@@ -18,7 +23,6 @@ final class PresetExportPipeline
 	 * @param ?callable $temp_dir_resolver
 	 * @param ?PresetValidator $validator
 	 */
-
 	public function __construct(?callable $temp_dir_resolver = null, ?PresetValidator $validator = null) {
 		$this->temp_dir_resolver = \Closure::fromCallable(
 			$temp_dir_resolver ?? static fn (): string => ( new \Plathix\Infrastructure\TempDirectory() )->path()
@@ -193,7 +197,6 @@ final class PresetExportPipeline
 	 * @param  array<int, int>    $favorite_ids
 	 * @return array<int, array{depth: int, name: string, color: string, favorite: bool}>
 	 */
-
 	private function buildStructure(iterable $terms, string $taxonomy, array $favorite_ids = []): array
 	{
 		$favorite_lookup = array_fill_keys(array_map('intval', $favorite_ids), true);
@@ -276,7 +279,6 @@ final class PresetExportPipeline
 		$lines[] = '';
 
 		foreach ( $structure as $entry ) {
-
 			$line = str_repeat('  ', (int) $entry['depth'])
 				. '- ' . PresetFormat::escapeName($entry['name']);
 

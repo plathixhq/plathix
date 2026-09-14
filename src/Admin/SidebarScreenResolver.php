@@ -72,7 +72,6 @@ final class SidebarScreenResolver
 	}
 
 	private function resolveSidebarContext(string $hook): ?string {
-
 		if ( ! $this->hasMediaModal( $hook ) ) {
 			return null;
 		}
@@ -97,7 +96,6 @@ final class SidebarScreenResolver
 			! BuilderDetect::isFrontendBuilderRequest(
 			is_admin(),
 			[ 'attachment' ],
-
 			$_GET // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only detection, values never output
 			)
 		) {

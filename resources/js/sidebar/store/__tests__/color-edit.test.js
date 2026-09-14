@@ -1,4 +1,5 @@
 import { colorEditModule } from '../color-edit.js';
+import { notificationsModule } from '../notifications.js';
 import { makeBaseStore } from '../test-base.js';
 import { mergeStore } from '../utils.js';
 
@@ -6,6 +7,10 @@ jest.mock('../../api.js', () => ({
     Api: {
         setFolderColor: jest.fn(),
     },
+}));
+
+jest.mock('../../i18n.js', () => ({
+    t: (_key, fallback) => fallback,
 }));
 
 jest.mock('../../static-list/cache.js', () => ({
@@ -16,8 +21,10 @@ import { Api } from '../../api.js';
 import { cacheInvalidateFolder } from '../../static-list/cache.js';
 
 function makeStore(extraState = {}) {
-    const base = mergeStore(makeBaseStore(), colorEditModule);
+    const base = mergeStore(makeBaseStore(), notificationsModule, colorEditModule);
     return Object.assign(Object.create(null), base, {
+        notifications: [],
+        _notifId: 0,
         folders: [],
         isLoading: false,
         error: null,
@@ -51,7 +58,7 @@ describe('colorEditModule — setFolderColor', () => {
         });
 
         const pending = store.setFolderColor(4, '#ff0000');
-
+        
         expect(store.folders[0].color).toBe('#ff0000');
         resolveApi({});
         await pending;
@@ -65,13 +72,13 @@ describe('colorEditModule — setFolderColor', () => {
         });
 
         await expect(store.setFolderColor(4, '#ff0000')).rejects.toThrow('rest fail');
-        expect(store.folders[0].color).toBe('#000000');
+        expect(store.folders[0].color).toBe('#000000'); 
     });
 
     it('refreshes cached state when data changes', async() => {
-
-
-
+        
+        
+        
         Api.setFolderColor.mockResolvedValue({});
         const store = makeStore({
             folders: [{ id: 4, color: '#000000' }],
@@ -81,5 +88,21 @@ describe('colorEditModule — setFolderColor', () => {
         await store.setFolderColor(4, '#ff0000');
 
         expect(store.folders[0].color).toBe('#ff0000');
+    });
+
+    it('refreshes cached state when data changes', async() => {
+        Api.setFolderColor.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
+        const store = makeStore({
+            folders: [{ id: 4, color: '#000000' }],
+            refreshFolders: jest.fn().mockResolvedValue({}),
+        });
+
+        await store.setFolderColor(4, '#ff0000');
+
+        
+        expect(store.folders[0].color).toBe('#ff0000');
+        expect(store.refreshFolders).toHaveBeenCalledWith({ silent: true, skipCacheClear: true });
+        expect(store.notifications[0].type).toBe('info');
+        expect(store.notifications[0].message).toContain('Refreshing to confirm the result');
     });
 });

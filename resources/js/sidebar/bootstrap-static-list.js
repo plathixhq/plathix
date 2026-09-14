@@ -12,7 +12,7 @@ export function bootstrapStaticList() {
     bootstrapStaticSidebar();
     initStaticListNavigation();
 
-
+    
 
     const features = getFeatures();
     const canAssign = !!window.Plathix?.caps?.canAssign;
@@ -20,8 +20,8 @@ export function bootstrapStaticList() {
 
     if (features.dnd && (canAssign || canManage)) {
         enableAttachmentDnD();
-
-
+        
+        
     }
 
     bindSelectedMediaCountEvents();

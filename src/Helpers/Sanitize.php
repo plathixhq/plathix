@@ -20,7 +20,6 @@ class Sanitize
 	/**
 	 * @return list<int>
 	 */
-
 	public static function idsFromCsvOrArray(mixed $value): array {
 		if ( is_string($value) ) {
 			$value = preg_split('/\s*,\s*/', $value) ?: [];
@@ -33,7 +32,6 @@ class Sanitize
 	 * @param mixed $value
 	 * @return mixed
 	 */
-
 	public static function deepText(mixed $value, int $maxDepth = 2): mixed {
 		if ( ! is_array($value) || $maxDepth <= 0 ) {
 			return sanitize_text_field(is_array($value) ? '' : (string) $value);
@@ -50,7 +48,6 @@ class Sanitize
 	/**
 	 * @return array<string, array<string, bool>>
 	 */
-
 	public static function iconAllowedHtml(): array {
 		static $allowed = null;
 		if ( $allowed === null ) {
@@ -76,7 +73,6 @@ class Sanitize
 	/**
 	 * @param mixed $value
 	 */
-
 	public static function toScalarString(mixed $value): string {
 		return is_scalar($value) ? (string) $value : '';
 	}

@@ -20,16 +20,13 @@ final class TrashSettings
 	/**
 	 * @param string $option_group
 	 */
-
 	public function registerOptions(string $option_group): void
 	{
 		do_action( 'plathix/settings/save', self::OPTION, function (mixed $raw = null): bool {
-
 			$raw = wp_unslash( $raw );
 			if ( $raw === null || $raw === '' ) {
 				return true;
 			}
-
 			return \Plathix\Infrastructure\OptionWrite::ifChanged( self::OPTION, $this->sanitizeDays( $raw ) );
 		} );
 

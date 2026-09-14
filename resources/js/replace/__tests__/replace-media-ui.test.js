@@ -12,11 +12,11 @@ describe('replace media ui', () => {
         jest.clearAllMocks();
         document.body.innerHTML = '';
         window.Alpine = { store: mockAlpineStore };
-
-
-
-
-
+        
+        
+        
+        
+        
         bindReplaceMediaUi();
     });
 
@@ -73,8 +73,8 @@ describe('replace media ui', () => {
         );
         expect(document.querySelector('.attachment img').getAttribute('src')).toContain('new.jpg');
         expect(document.querySelector('.attachment img').getAttribute('src')).toContain('v=777');
-
-
+        
+        
         expect(notify).toHaveBeenCalledWith(
             'warning',
             expect.stringContaining('cleanup failed'),
@@ -82,7 +82,7 @@ describe('replace media ui', () => {
         );
     });
 
-
+    
     it('updates the large attachment-details preview in the open modal', async() => {
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
 
@@ -114,16 +114,16 @@ describe('replace media ui', () => {
         await flushAsyncUi();
 
         const preview = document.querySelector('.media-modal img.details-image');
-
+        
         expect(preview.getAttribute('src')).toContain('new.jpg');
         expect(preview.getAttribute('src')).toContain('v=777');
-
+        
         expect(preview.hasAttribute('srcset')).toBe(false);
     });
 
-
-
-
+    
+    
+    
     it('updates the fullpage edit-attachment preview (img.thumbnail in #media-head-{id})', async() => {
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
 
@@ -190,8 +190,8 @@ describe('replace media ui', () => {
         expect(preview.getAttribute('src')).toContain('v=888');
     });
 
-
-
+    
+    
     it('patches attachment-info metadata panel (filename, type, size, dimensions) after replace', async() => {
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
 
@@ -235,7 +235,7 @@ describe('replace media ui', () => {
         expect(panel.querySelector('.file-type').textContent).toContain('image/jpeg');
         expect(panel.querySelector('.file-size').textContent).toContain('9 KB');
         expect(panel.querySelector('.dimensions').textContent).toContain('640 by 480 pixels');
-
+        
         expect(panel.querySelector('.filename strong').textContent).toBe('File name:');
     });
 
@@ -266,7 +266,7 @@ describe('replace media ui', () => {
         expect(document.querySelector('.attachment-info')).toBeNull();
     });
 
-
+    
     it('shows overlay and "Replacing…" button text during replace, restores both after', async() => {
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
 
@@ -293,12 +293,12 @@ describe('replace media ui', () => {
         input.dispatchEvent(new Event('change', { bubbles: true }));
         await flushAsyncUi();
 
-
+        
         expect(document.querySelector('.plathix-replace__overlay')).not.toBeNull();
         expect(button.textContent).toBe('Replacing…');
 
-
-
+        
+        
         const container = document.querySelector('.media-modal img.details-image').parentNode;
         expect(container.classList.contains('plathix-replace__anchor')).toBe(true);
 
@@ -307,16 +307,16 @@ describe('replace media ui', () => {
         await flushAsyncUi();
         await flushAsyncUi();
 
-
+        
         expect(document.querySelector('.plathix-replace__overlay')).toBeNull();
         expect(button.textContent).toBe('Replace file');
-
+        
         expect(container.classList.contains('plathix-replace__anchor')).toBe(false);
     });
 
     it('falls back to the default button text when the translated string is an empty string', async() => {
-
-
+        
+        
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
         window.Plathix = { ...window.Plathix, i18n: { replace_in_progress: '' } };
 
@@ -368,8 +368,8 @@ describe('replace media ui', () => {
         input.dispatchEvent(new Event('change', { bubbles: true }));
         await flushAsyncUi();
 
-
-
+        
+        
         expect(container.classList.contains('plathix-replace__anchor')).toBe(false);
         expect(container.style.position).toBe('absolute');
 
@@ -378,7 +378,7 @@ describe('replace media ui', () => {
         await flushAsyncUi();
         await flushAsyncUi();
 
-
+        
         expect(container.style.position).toBe('absolute');
         expect(container.classList.contains('plathix-replace__anchor')).toBe(false);
     });
@@ -408,7 +408,7 @@ describe('replace media ui', () => {
         input.dispatchEvent(new Event('change', { bubbles: true }));
         await flushAsyncUi();
 
-
+        
         document.querySelector('.media-modal').remove();
 
         resolveUpload({ attachmentId: 8, url: 'http://example.test/new.jpg', version: 1, newFile: 'new.jpg', newMime: 'image/jpeg' });
@@ -416,10 +416,10 @@ describe('replace media ui', () => {
         await expect(flushAsyncUi().then(flushAsyncUi)).resolves.toBeUndefined();
     });
 
-
-
-
-
+    
+    
+    
+    
     it('patches sizes into the wp.media Backbone attachment model after replace', async() => {
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
 
@@ -463,8 +463,8 @@ describe('replace media ui', () => {
         delete window.wp;
     });
 
-
-
+    
+    
     it('patches empty sizes object when replace result has no sizes field', async() => {
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
 
@@ -521,9 +521,9 @@ describe('replace media ui', () => {
         expect(notify).toHaveBeenCalledWith('error', 'Locked');
     });
 
-
-
-
+    
+    
+    
     it('shows a distinct warning notice for rest_write_indeterminate instead of the generic replace_failed error', async() => {
         const notify = jest.fn();
         mockAlpineStore.mockReturnValue({ notify });
@@ -549,8 +549,8 @@ describe('replace media ui', () => {
         expect(notify).not.toHaveBeenCalledWith('error', expect.anything());
     });
 
-
-
+    
+    
     it('shows preview-refresh-failed warning when modal is open but details-image is missing', async() => {
         const notify = jest.fn();
         mockAlpineStore.mockReturnValue({ notify });

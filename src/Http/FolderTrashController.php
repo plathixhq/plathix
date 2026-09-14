@@ -29,10 +29,12 @@ final class FolderTrashController
 		}
 		$kids_count = array_count_values( array_values( $saved_parent ) );
 
+		$terms = $this->repository->getManyByIds( $ids, $taxonomy );
+
 		$folders = [];
 		foreach ( $ids as $id ) {
 			$id   = (int) $id;
-			$term = $this->repository->getById( $id, $taxonomy );
+			$term = $terms[ $id ] ?? null;
 			if ( ! $term instanceof \WP_Term ) {
 				continue;
 			}

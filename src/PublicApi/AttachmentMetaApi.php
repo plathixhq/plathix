@@ -8,7 +8,6 @@ use Plathix\Modules\AttachmentMeta\AttachmentEditContext;
 
 final class AttachmentMetaApi
 {
-
 	public function isAttachmentEditPage(): bool
 	{
 		return AttachmentEditContext::isAttachmentEditPage();

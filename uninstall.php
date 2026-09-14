@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
@@ -32,7 +31,6 @@ function plathix_uninstall_cleanup_site(int $blog_id): void {
 		( new \Plathix\Modules\DataWipe\DataWiper() )->wipe( $blog_id );
 	} else {
 		error_log( 'Plathix uninstall: vendor/autoload.php is unavailable; data for blog ' . $blog_id . ' was not cleaned automatically.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-
 	}
 
 	if ( is_multisite() ) {

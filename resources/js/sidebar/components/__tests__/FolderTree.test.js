@@ -103,9 +103,9 @@ describe('FolderTree component', () => {
     });
 
     describe('folderClasses has-context-menu sentinel', () => {
-
-
-
+        
+        
+        
 
         it('does NOT mark system folder id=0 when context menu is closed (sentinel 0)', () => {
             const component = makeComponent({ contextMenuFolderId: 0, openId: 5 });
@@ -124,15 +124,15 @@ describe('FolderTree component', () => {
             const component = makeComponent({ contextMenuFolderId: 0, openId: 0 });
             const classes = component.folderClasses({ id: 0 });
 
-            expect(classes['is-open']).toBe(true);
-            expect(classes['has-context-menu']).toBe(false);
+            expect(classes['is-open']).toBe(true);            
+            expect(classes['has-context-menu']).toBe(false); 
         });
     });
 
     describe('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
-
-
-
+        
+        
+        
         let confirmSpy;
 
         beforeEach(() => {

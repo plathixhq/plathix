@@ -21,7 +21,6 @@ final class FolderCountService
 		private readonly FolderRepository $repository,
 		private readonly Cache $cache
 	) {
-
 		$this->calculator = new FolderCountCalculator();
 	}
 
@@ -52,7 +51,6 @@ final class FolderCountService
 			// children, which gives misleading numbers.
 			$counts = $this->calculator->batchCounts( [ $folder_id ], $taxonomy );
 			if ( null === $counts ) {
-
 				return null;
 			}
 			$count = $counts[ $folder_id ] ?? 0;
@@ -67,7 +65,6 @@ final class FolderCountService
 	/**
 	 * @return 'trash'|'uncategorized'|'normal'
 	 */
-
 	private function classifyFolder(int $folder_id, string $taxonomy): string {
 		if ( $folder_id > 0 && $folder_id === TrashFolder::id( $taxonomy ) ) {
 			return 'trash';
@@ -84,7 +81,6 @@ final class FolderCountService
 	 * @param int[] $folder_ids
 	 * @return array<int,int>
 	 */
-
 	public function getCountsFor(array $folder_ids, string $taxonomy): array {
 		$hidden = array_flip( HiddenFolders::ids( $taxonomy ) );
 		$result = [];
@@ -100,7 +96,6 @@ final class FolderCountService
 			if ( 'trash' === $class ) {
 				$result[ $folder_id ] = $this->calculator->trashItemsCount();
 			} elseif ( 'uncategorized' === $class ) {
-
 				$result[ $folder_id ] = $this->calculator->uncategorizedItemsCount( $taxonomy ) ?? 0;
 			} else {
 				$normal_ids[] = $folder_id;
@@ -108,7 +103,6 @@ final class FolderCountService
 		}
 
 		if ( $normal_ids !== [] ) {
-
 			$keys_before_sql = [];
 			foreach ( $normal_ids as $folder_id ) {
 				$keys_before_sql[ $folder_id ] = $this->cache->versionedKey( 'folders_' . $taxonomy, 'count_' . $folder_id );
@@ -116,7 +110,6 @@ final class FolderCountService
 
 			$counts = $this->calculator->batchCounts( $normal_ids, $taxonomy );
 			foreach ( $normal_ids as $folder_id ) {
-
 				if ( null === $counts ) {
 					$result[ $folder_id ] = 0;
 					continue;
@@ -134,7 +127,6 @@ final class FolderCountService
 
 	public function getRecursiveCount(int $folder_id, string $taxonomy): int {
 		if ( $folder_id <= 0 || $folder_id === TrashFolder::id( $taxonomy ) || $this->repository->isUncategorizedFolder( $folder_id, $taxonomy ) ) {
-
 			return $this->getCount( $folder_id, $taxonomy ) ?? 0;
 		}
 
@@ -192,7 +184,6 @@ final class FolderCountService
 	/**
 	 * @param int $folder_id
 	 */
-
 	public function incrementRecursiveChain(int $folder_id, string $taxonomy, int $delta): void {
 		if ( $folder_id <= 0 || 0 === $delta || $folder_id === TrashFolder::id( $taxonomy ) || $this->repository->isUncategorizedFolder( $folder_id, $taxonomy ) ) {
 			return;
@@ -229,7 +220,6 @@ final class FolderCountService
 		$meta_key = self::RECURSIVE_COUNT_META_KEY;
 
 		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
-
 		$wpdb->query(
 			$wpdb->prepare(
 				"UPDATE {$wpdb->termmeta}
@@ -257,7 +247,6 @@ final class FolderCountService
 		$meta_key = self::RECURSIVE_COUNT_META_KEY;
 
 		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
-
 		$wpdb->query(
 			$wpdb->prepare(
 				"INSERT INTO {$wpdb->termmeta} (term_id, meta_key, meta_value)
@@ -279,7 +268,6 @@ final class FolderCountService
 
 		if ( null === $this->readWarmRecursiveCount( $folder_id ) ) {
 			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
-
 			$wpdb->query(
 				$wpdb->prepare(
 					"INSERT INTO {$wpdb->termmeta} (term_id, meta_key, meta_value)
@@ -292,7 +280,6 @@ final class FolderCountService
 			// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
 		} else {
 			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery
-
 			$wpdb->query(
 				$wpdb->prepare(
 					"UPDATE {$wpdb->termmeta} SET meta_value = %d WHERE term_id = %d AND meta_key = %s",
@@ -352,7 +339,6 @@ final class FolderCountService
 
 		$post_type = Taxonomy::postTypeForTaxonomy( $taxonomy );
 		if ( $post_type === 'attachment' && $trash_id > 0 ) {
-
 			$items[] = new FolderDTO( $trash_id, __( 'Trash', 'plathix' ), FolderId::ROOT, -80, '', '', $this->calculator->trashItemsCount(), $taxonomy, true, false, count( $trashed_ids ) );
 		}
 
@@ -433,7 +419,6 @@ final class FolderCountService
 	/**
 	 * @return FolderDTO[]
 	 */
-
 	public function getChildren(int $parent_id, string $taxonomy): array {
 		$cache_key = $this->cache->versionedKey( 'folders_' . $taxonomy, 'children_' . $parent_id );
 		$cached    = $this->cache->get( $cache_key );
@@ -470,7 +455,6 @@ final class FolderCountService
 		}
 
 		if ( empty( $child_ids ) ) {
-
 			$this->cache->set( $cache_key, [], self::CACHE_TTL );
 			return [];
 		}
@@ -479,9 +463,10 @@ final class FolderCountService
 		$sql_batch_failed = null === $raw_batch_counts;
 		$batchCounts     = $raw_batch_counts ?? [];
 
-		// Determine which children have their own children — one SQL query via repository.
-		$parents_with_children = $this->repository->getParentIdsThatHaveChildren( $child_ids, $taxonomy );
-		$grandchild_parent_ids = array_fill_keys( $parents_with_children, true );
+		$raw_parents_with_children = $this->repository->getParentIdsThatHaveChildren( $child_ids, $taxonomy );
+		$sql_parent_ids_failed     = null === $raw_parents_with_children;
+		$parents_with_children     = $raw_parents_with_children ?? [];
+		$grandchild_parent_ids     = array_fill_keys( $parents_with_children, true );
 
 		update_termmeta_cache( $child_ids );
 
@@ -515,7 +500,7 @@ final class FolderCountService
 			static fn (FolderDTO $a, FolderDTO $b): int => $a->position <=> $b->position ?: strcasecmp( $a->name, $b->name )
 		);
 
-		if ( ! $sql_batch_failed ) {
+		if ( ! $sql_batch_failed && ! $sql_parent_ids_failed ) {
 			$this->cache->set( $cache_key, $items, self::CACHE_TTL );
 		}
 
@@ -526,7 +511,6 @@ final class FolderCountService
 	 * @param int $post_id
 	 * @param int $delta
 	 */
-
 	public function adjustForPost(int $post_id, int $delta): void {
 		if ( $post_id <= 0 || 0 === $delta ) {
 			return;
@@ -565,7 +549,6 @@ final class FolderCountService
 
 		$this->invalidate( $taxonomy );
 	}
-
 
 	public function invalidate(string $taxonomy): void {
 		if ( isset( $this->bulk_invalidations[ $taxonomy ] ) ) {

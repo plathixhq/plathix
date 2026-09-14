@@ -6,7 +6,6 @@ namespace Plathix\Modules\Svg;
 
 final class SvgSettings
 {
-
 	public const POLICY_SANITIZE = 'sanitize';
 
 	public const POLICY_BLOCK = 'block';
@@ -43,7 +42,6 @@ final class SvgSettings
 	/**
 	 * @param string $option_group
 	 */
-
 	public function registerOptions(string $option_group): void
 	{
 		do_action( 'plathix/settings/save', 'plathix_svg_policy', function (mixed $raw = null): bool {
@@ -66,7 +64,10 @@ final class SvgSettings
 
 		do_action( 'plathix/settings/save', 'plathix_svg_safe_mode', function (mixed $raw = null): bool {
 			$old_value = self::isSafeMode();
-			$new_value = (bool) wp_unslash( $raw ?? false );
+
+			$unslashed = wp_unslash( $raw ?? false );
+			// @phpstan-ignore argument.templateType
+			$new_value = rest_sanitize_boolean( $unslashed );
 			$succeeded = \Plathix\Infrastructure\OptionWrite::ifChanged( 'plathix_svg_safe_mode', $new_value );
 			if ( $old_value !== $new_value ) {
 				do_action( 'plathix/audit/record', 'svg_safe_mode_updated', [
@@ -112,7 +113,6 @@ final class SvgSettings
 	 * @param array<int, array{slug:string,label:string,render:callable}> $tabs
 	 * @return array<int, array{slug:string,label:string,render:callable}>
 	 */
-
 	public function addTab(array $tabs): array
 	{
 		$tabs[] = [
@@ -127,7 +127,6 @@ final class SvgSettings
 	/**
 	 * @return array<int, string>
 	 */
-
 	public function sanitizeSupportRoles(mixed $value): array
 	{
 		/** @var object{roles:array<string,mixed>} $wp_roles_obj -- wp_roles() returns WP_Roles; phpstan infers generic object */
@@ -148,7 +147,6 @@ final class SvgSettings
 		</div>
 
 		<?php
-
 		$dependent_style = self::currentPolicy() === self::POLICY_SANITIZE ? '' : ' style="display:none;"';
 		?>
 		<div id="plathix-svg-dependent"<?php echo $dependent_style; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- value is one of two literal strings assigned above ('' or a fixed style attribute), no dynamic data ?>>

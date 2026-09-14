@@ -42,7 +42,6 @@ final class ImportToolsCard
 	 * @param array<string, bool> $imported
 	 * @param array<string, bool> $pending_checkpoints
 	 */
-
 	private function renderCard(array $adapters, array $imported, array $pending_checkpoints = []): void
 	{
 		$labels = [
@@ -64,8 +63,7 @@ final class ImportToolsCard
 				<p class="plathix-field__desc plathix-import__desc">
 					<?php esc_html_e( 'Migrate your folder structure from another plugin. Plathix will attempt to recreate the hierarchy and reassign all media attachments. This is non-destructive — original plugin data is preserved.', 'plathix' ); ?>
 				</p>
-				<?php
- ?>
+				<?php ?>
 				<div id="plathix-import-status" class="plathix-notice plathix-import__status is-hidden"></div>
 				<div class="plathix-import-grid">
 					<?php foreach ( $adapters as $key => $available ) :

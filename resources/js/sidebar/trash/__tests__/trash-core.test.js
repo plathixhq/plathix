@@ -132,7 +132,7 @@ describe('handles trash workflow consistently', () => {
     beforeEach(async () => {
         jest.clearAllMocks();
         Api.getTrashedFolders.mockResolvedValue({ folders: [] });
-
+        
         await refreshTrashedFolderIds();
     });
 
@@ -167,9 +167,9 @@ describe('handles trash workflow consistently', () => {
     });
 
     it('handles trash workflow consistently', async () => {
-
-
-
+        
+        
+        
         const listener = jest.fn();
         const unsubscribe = onTrashedFolderIdsChange(listener);
 
@@ -237,7 +237,7 @@ describe('handles trash workflow consistently', () => {
 
         const tname = container.querySelector('.plathix-folder-trash-panel__tname');
         expect(tname.getAttribute('title')).toBe('x" onmouseover="alert(1)');
-        expect(tname.getAttribute('onmouseover')).toBeNull();
+        expect(tname.getAttribute('onmouseover')).toBeNull(); 
     });
 
     it('keeps upload links scoped to the active folder', () => {
@@ -247,6 +247,65 @@ describe('handles trash workflow consistently', () => {
 
         const tname = container.querySelector('.plathix-folder-trash-panel__tname');
         expect(tname.getAttribute('title')).toBe("x' onfocus='alert(1)");
-        expect(tname.getAttribute('onfocus')).toBeNull();
+        expect(tname.getAttribute('onfocus')).toBeNull(); 
+    });
+});
+
+describe('handles trash workflow consistently', () => {
+    it('handles trash workflow consistently', () => {
+        jest.resetModules();
+        jest.doMock('../../i18n.js', () => ({
+            t: (key) => (key === 'restore_label' ? 'x" onmouseover="alert(1)' : key),
+        }));
+        // eslint-disable-next-line global-require
+        const { tileHtml: freshTileHtml } = require('../trash-core.js');
+
+        const html = freshTileHtml({ id: 3, name: 'Ordinary', color: '', kids: 0, deletedAt: 0 });
+        const container = document.createElement('div');
+        container.innerHTML = html;
+        const restoreBtn = container.querySelector('.plathix-folder-trash-panel__restore');
+
+        expect(restoreBtn.getAttribute('title')).toBe('x" onmouseover="alert(1)');
+        expect(restoreBtn.getAttribute('onmouseover')).toBeNull();
+
+        jest.dontMock('../../i18n.js');
+    });
+
+    it('escapes untrusted output for the destination context', () => {
+        jest.resetModules();
+        jest.doMock('../../i18n.js', () => ({
+            t: (key) => (key === 'trashed_folders_heading' ? '<img src=x onerror=alert(1)>' : key),
+        }));
+        // eslint-disable-next-line global-require
+        const { renderTiles: freshRenderTiles } = require('../trash-core.js');
+
+        const container = document.createElement('div');
+        freshRenderTiles(container, [{ id: 1, name: 'F', color: '', kids: 0, deletedAt: 0 }], {});
+
+        expect(container.innerHTML).not.toContain('<img src=x onerror=alert(1)>');
+        expect(container.innerHTML).toContain('&lt;img src=x onerror=alert(1)&gt;');
+
+        jest.dontMock('../../i18n.js');
+    });
+
+    it('escapes untrusted output for the destination context', async () => {
+        jest.resetModules();
+        jest.doMock('../../i18n.js', () => ({
+            t: (key) => (key === 'loading' ? '<b>Loading</b>' : key),
+        }));
+        jest.doMock('../../api.js', () => ({
+            Api: { getTrashedFolders: jest.fn(() => new Promise(() => {})) },
+        }));
+        // eslint-disable-next-line global-require
+        const { fetchAndRenderTiles: freshFetch } = require('../trash-core.js');
+
+        const container = document.createElement('div');
+        freshFetch(container, {});
+
+        expect(container.innerHTML).not.toContain('<b>Loading</b>');
+        expect(container.innerHTML).toContain('&lt;b&gt;Loading&lt;/b&gt;');
+
+        jest.dontMock('../../i18n.js');
+        jest.dontMock('../../api.js');
     });
 });

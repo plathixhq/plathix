@@ -17,9 +17,9 @@ describe('coalesces repeated events into a single handled call', () => {
         document.body.appendChild(root);
 
         resizer = new SidebarResizer('attachment');
-
-
-
+        
+        
+        
         jest.advanceTimersByTime(20);
     });
 
@@ -31,13 +31,13 @@ describe('coalesces repeated events into a single handled call', () => {
 
     it('coalesces repeated events into a single handled call', () => {
         const rectSpy = jest.spyOn(root, 'getBoundingClientRect');
-        rectSpy.mockClear();
+        rectSpy.mockClear(); 
 
         window.dispatchEvent(new Event('resize'));
         window.dispatchEvent(new Event('scroll'));
         window.dispatchEvent(new Event('resize'));
 
-
+        
         expect(rectSpy).not.toHaveBeenCalled();
 
         jest.advanceTimersByTime(20);

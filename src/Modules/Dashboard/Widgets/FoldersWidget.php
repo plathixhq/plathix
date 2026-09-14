@@ -125,7 +125,6 @@ class FoldersWidget
 			</div>
 
 				<?php
-
 				if ( $distribution ) :
 					?>
 				<div class="plathix-bento-dist">

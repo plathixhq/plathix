@@ -77,7 +77,7 @@ function collectFromImportGraph() {
         for (const request of extractImports(fs.readFileSync(currentFile, 'utf8'))) {
             if (request.endsWith('.css')) {
                 if (!request.startsWith('.')) {
-                    continue;
+                    continue; 
                 }
                 const stylePath = path.resolve(path.dirname(currentFile), request);
                 if (fs.existsSync(stylePath)) {
@@ -118,9 +118,9 @@ function listPhpFiles(dirPath) {
 
 function collectFromPhpEnqueue() {
     const styles = new Set();
-
-
-
+    
+    
+    
     const pattern = /(?:wp_enqueue_style|wp_register_style)\s*\([^)]*?['"](?:assets\/)?css\/([a-z0-9-]+\.css)['"]/gs;
 
     for (const phpFile of listPhpFiles(path.join(ROOT_DIR, 'src'))) {
@@ -149,7 +149,7 @@ function listAllSourceStyles() {
             const fullPath = path.join(dirPath, entry.name);
             if (entry.isDirectory()) {
                 if (entry.name === 'node_modules' || entry.name === 'SRC') {
-                    continue;
+                    continue; 
                 }
                 walk(fullPath);
             } else if (entry.isFile() && fullPath.endsWith('.css')) {

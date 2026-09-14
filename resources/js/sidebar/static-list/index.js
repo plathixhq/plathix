@@ -12,9 +12,9 @@ export function getStaticListManager() {
 export function initStaticListNavigation() {
     if (hasStateFlag('staticListNavInit')) return;
 
-
-
-
+    
+    
+    
     bindFolderMutationSlot();
 
     _manager = new StaticListNavigationManager();

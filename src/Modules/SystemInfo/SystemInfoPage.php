@@ -63,7 +63,6 @@ class SystemInfoPage
 	}
 
 	public function addPage(): void {
-
 		add_submenu_page(
 			null,
 			__( 'System Info', 'plathix' ),
@@ -118,7 +117,6 @@ class SystemInfoPage
 	/**
 	 * @param array<int, array{label:string, value:string, ok?:bool|null}> $rows
 	 */
-
 	private function renderSection(string $title, array $rows): void {
 		if ( empty( $rows ) ) {
 			return;

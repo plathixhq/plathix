@@ -18,12 +18,14 @@ final class TrashCleanupJobRunner
 
 	private const MAX_ITEMS_PER_RUN = 100;
 
+	/**
+	 * @var (callable(int): void)
+	 */
 	private $folder_cleanup;
 
 	/**
 	 * @param (callable(int): void)|null $folder_cleanup
 	 */
-
 	public function __construct(?callable $folder_cleanup = null)
 	{
 		$this->folder_cleanup = $folder_cleanup ?? [ $this, 'cleanupFolders' ];
@@ -33,7 +35,6 @@ final class TrashCleanupJobRunner
 	 * @param array<string, mixed> $args
 	 * @param callable(int, callable): mixed $runInBlogContext
 	 */
-
 	public function run(array $args, callable $runInBlogContext): void
 	{
 		$blog_id = (int) ( $args['blog_id'] ?? get_current_blog_id() );
@@ -90,10 +91,8 @@ final class TrashCleanupJobRunner
 			}
 
 			try {
-
 				$ids = array_slice( $repository->getTrashedIds( $taxonomy, FolderTrashService::META_TIME ), 0, self::MAX_ITEMS_PER_RUN );
 				foreach ( $ids as $id ) {
-
 					$trashed_at = (int) $repository->getMeta( $id, FolderTrashService::META_TIME );
 					if ( $trashed_at <= 0 || $trashed_at >= $cutoff ) {
 						continue;

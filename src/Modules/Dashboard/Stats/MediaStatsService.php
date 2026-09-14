@@ -9,7 +9,6 @@ use Plathix\Infrastructure\Cache;
 
 class MediaStatsService
 {
-
 	private const TTL = HOUR_IN_SECONDS;
 
 	/** @return array<int, array{mime: string, label: string, count: int, pct: float}> */
@@ -107,7 +106,6 @@ class MediaStatsService
 	 * @param array<int, array{mime: string, label: string, count: int}> $items
 	 * @return array<int, array{mime: string, label: string, count: int, pct: float}>
 	 */
-
 	private function distributePercentages(array $items, int $total): array {
 		$remainders = [];
 		$sum_floor  = 0;

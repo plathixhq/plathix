@@ -6,7 +6,6 @@ namespace Plathix\Modules\Preset;
 
 final class PresetParser
 {
-
 	private const INDENT_WIDTH = 2;
 
 	private const MAX_ERRORS_PER_SECTION = 5;
@@ -42,7 +41,9 @@ final class PresetParser
 		];
 		$errors = [];
 		$inStructure = false;
-
+		/**
+		 * @var array<string, true>
+		 */
 		$seenFields = [];
 
 		$previousDepth = -1;
@@ -84,7 +85,6 @@ final class PresetParser
 				$value = $matches[2];
 
 				if ( ! in_array($key, self::METADATA_ORDER, true) ) {
-
 					$caseMismatch = false;
 					foreach ( self::METADATA_ORDER as $known ) {
 						if ( strcasecmp($known, $key) === 0 ) {
@@ -123,7 +123,6 @@ final class PresetParser
 
 				switch ( $key ) {
 					case 'FormatVersion':
-
 						if ( preg_match('/^[0-9]+$/', trim($value)) !== 1 ) {
 							$errors[] = (new PresetError(
 								'preset_invalid_format_version',
@@ -315,7 +314,6 @@ final class PresetParser
 	/**
 	 * @return array{color: string, favorite: bool}|null
 	 */
-
 	private function parseAttributes(string $raw): ?array {
 		$result = [
 			'color' => 'default',
@@ -334,7 +332,6 @@ final class PresetParser
 			$part = trim($part);
 
 			if ( $part === 'favorite' ) {
-
 				if ( $favoriteSeen ) {
 					return null;
 				}

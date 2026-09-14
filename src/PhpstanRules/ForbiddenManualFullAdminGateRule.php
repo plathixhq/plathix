@@ -22,7 +22,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<BinaryOp>
  */
-
 final class ForbiddenManualFullAdminGateRule implements Rule
 {
 	private const TARGET_ACCESS_LEVEL_CLASS = 'Plathix\\User\\AccessLevel';
@@ -68,12 +67,7 @@ final class ForbiddenManualFullAdminGateRule implements Rule
 
 		return [
 			RuleErrorBuilder::message( sprintf(
-				'Manual full-admin gate (current_user_can(\'manage_options\') combined with ' .
-				'AccessResolver::forCurrentUser() === AccessLevel::Full in one %s expression) — ' .
-				'use AccessResolver::currentUserIsFullAdmin() instead of comparing by hand. See ' .
-				'Static analysis rule failed for a public contract violation.' .
-				'independent manual copies were found across Free and PRO). If this is a genuine ' .
-				'unrelated check, add @phpstan-ignore with a one-line justification.',
+				'Manual full-admin gate (current_user_can(\'manage_options\') combined with ' . 'AccessResolver::forCurrentUser() === AccessLevel::Full in one %s expression) — ' . 'use AccessResolver::currentUserIsFullAdmin() instead of comparing by hand. ' . 'If this is a genuine ' . 'unrelated check, add @phpstan-ignore with a one-line justification',
 				$node instanceof BooleanOr ? '||' : '&&'
 			) )->identifier( 'plathix.manualFullAdminGate' )->build(),
 		];
@@ -83,7 +77,6 @@ final class ForbiddenManualFullAdminGateRule implements Rule
 	 * @param class-string<BooleanAnd|BooleanOr> $rootClass
 	 * @return list<Node>
 	 */
-
 	private function flattenChain(Node $node, string $rootClass): array
 	{
 		if ( ( $node instanceof BooleanAnd || $node instanceof BooleanOr ) && $node::class === $rootClass ) {

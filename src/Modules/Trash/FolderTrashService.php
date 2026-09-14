@@ -35,7 +35,6 @@ final class FolderTrashService
 	/**
 	 * @return bool
 	 */
-
 	public function trash(int $id, string $taxonomy, string $on_children = FolderTreeService::DEFAULT_ON_CHILDREN): bool
 	{
 		$lock = $this->tree->acquireStructureLock( $taxonomy );
@@ -57,7 +56,6 @@ final class FolderTrashService
 		}
 
 		if ( 'delete' === $on_children ) {
-
 			foreach ( $this->repository->getChildrenIds( $id, $taxonomy ) as $child_id ) {
 				if ( ! $this->trashBody( $child_id, $taxonomy, 'delete' ) ) {
 					Logger::warning(
@@ -71,7 +69,6 @@ final class FolderTrashService
 			$new_parent = $term instanceof \WP_Term ? (int) $term->parent : 0;
 			$reparented = $this->repository->bulkUpdateParent( $id, $new_parent, $taxonomy );
 			if ( $reparented instanceof \WP_Error ) {
-
 				Logger::warning(
 					'Folder trash: reattach-on-trash failed',
 					[
@@ -90,7 +87,6 @@ final class FolderTrashService
 
 	private function markTrashed(int $id, string $taxonomy): bool
 	{
-
 		if ( (string) $this->repository->getMeta( $id, self::META_TRASHED ) === '1' ) {
 			return true;
 		}
@@ -107,12 +103,39 @@ final class FolderTrashService
 		$parent   = (int) $term->parent;
 		$position = (int) $this->repository->getMeta( $id, PLATHIX_TERM_POSITION );
 
-		$this->repository->setMeta( $id, self::META_PARENT, $parent );
-		$this->repository->setMeta( $id, self::META_POSITION, $position );
-		$this->repository->setMeta( $id, self::META_TIME, time() );
-		$this->repository->setMeta( $id, self::META_TRASHED, '1' );
+		$parent_written   = $this->setMetaHonest( $id, self::META_PARENT, $parent );
+		$position_written = $this->setMetaHonest( $id, self::META_POSITION, $position );
+
+		if ( ! $parent_written || ! $position_written ) {
+			$this->repository->deleteMeta( $id, self::META_PARENT );
+			$this->repository->deleteMeta( $id, self::META_POSITION );
+			Logger::error(
+				'folder_trash_aborted_critical_meta_write_failed',
+				[ 'folder_id' => $id, 'taxonomy' => $taxonomy ]
+			);
+
+			return false;
+		}
+
+		$this->setMetaHonest( $id, self::META_TIME, time() );
+		$this->setMetaHonest( $id, self::META_TRASHED, '1' );
 
 		$this->maybeTrashFiles( $id, $taxonomy );
+
+		return true;
+	}
+
+	private function setMetaHonest(int $id, string $key, int|string $value): bool
+	{
+		$old     = $this->repository->getMeta( $id, $key );
+		$written = update_term_meta( $id, $key, $value );
+		FolderRepository::clearRuntimeCache();
+
+		if ( ! $written && (string) $old !== (string) $value ) {
+			Logger::error( 'folder_trash_meta_write_failed', [ 'folder_id' => $id, 'meta_key' => $key ] );
+
+			return false;
+		}
 
 		return true;
 	}
@@ -125,7 +148,6 @@ final class FolderTrashService
 		}
 
 		if ( get_option( TrashSettings::OPTION_DELETE_FILES, '' ) === '1' ) {
-
 			foreach ( (array) $object_ids as $object_id ) {
 				$object_id = (int) $object_id;
 				$lock      = ( new MediaTrashLock() )->acquire( $object_id );

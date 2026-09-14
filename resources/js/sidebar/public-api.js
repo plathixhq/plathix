@@ -98,17 +98,17 @@ export function createPublicApi() {
             return Api.savePreference(key, value);
         },
 
+        
+        
 
+        
+        
+        
+        
 
-
-
-
-
-
-
-
-
-
+        
+        
+        
 
         createFolderSelector(target, options = {}) {
             return createFolderSelector(target, options);

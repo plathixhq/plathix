@@ -8,7 +8,6 @@ use Plathix\Infrastructure\JobDispatcher;
 
 class Deactivator
 {
-
 	public static function run(bool $network_wide = false): void {
 		if ( is_multisite() && $network_wide ) {
 			$site_ids = get_sites(
@@ -31,11 +30,9 @@ class Deactivator
 	}
 
 	private static function runForSite(int $blog_id): void {
-
 		$group = JobDispatcher::groupForBlog( $blog_id );
 
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
-
 			$recurring_args = JobDispatcher::recurringUnscheduleArgs( $blog_id );
 			as_unschedule_all_actions( JobDispatcher::JOB_CLEANUP_TEMP, $recurring_args, $group );
 			as_unschedule_all_actions( JobDispatcher::JOB_ORPHAN_CLEANUP, $recurring_args, $group );

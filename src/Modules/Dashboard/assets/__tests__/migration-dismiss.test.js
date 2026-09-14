@@ -39,7 +39,7 @@ describe('initMigrationBannerDismiss — success', () => {
         await new Promise((r) => setTimeout(r, 0));
 
         expect(document.body.contains(banner)).toBe(false);
-
+        
         const body = global.fetch.mock.calls[0][1].body;
         expect(body).toContain('source=happyfiles');
         expect(body).toContain('action=plathix_dismiss_migration');

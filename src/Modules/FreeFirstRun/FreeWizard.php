@@ -12,7 +12,6 @@ use Plathix\PublicApi\PresetsApi;
 
 final class FreeWizard
 {
-
 	public const HOOK_PRIORITY = 20;
 
 	public static function renderHook(): void
@@ -57,8 +56,6 @@ final class FreeWizard
 						<div class="plathix-wizard__title"><?php esc_html_e( 'Set up your media library', 'plathix' ); ?></div>
 						<div class="plathix-wizard__sub"><?php esc_html_e( 'Pick a starting folder structure or start from scratch. You can always change this later.', 'plathix' ); ?></div>
 					</div>
-					<?php
-?>
 					<a href="<?php echo esc_url( $skip_url ); ?>" class="plathix-wizard__close" aria-label="<?php esc_attr_e( 'Skip setup', 'plathix' ); ?>" title="<?php esc_attr_e( 'Skip setup', 'plathix' ); ?>">&times;</a>
 				</div>
 				<div class="plathix-wizard__body">
@@ -83,14 +80,13 @@ final class FreeWizard
 								<div class="plathix-wizard__preset-card-meta">
 									<?php
 									/* translators: Placeholder values are inserted at runtime. */
-
 									echo esc_html( sprintf( _n( '%d folder', '%d folders', $folder_cnt, 'plathix' ), $folder_cnt ) );
 									?>
 								</div>
 							<?php endif; ?>
 							<a href="<?php echo esc_url( $apply_url ); ?>"
 							   class="plathix-btn plathix-btn--primary plathix-btn--sm"
-							   onclick="return confirm('<?php echo esc_js( __( 'Apply this preset? It adds a ready-made folder structure to your media library. Your existing folders and media are not deleted; folders with matching names are created with an "— imported" suffix.', 'plathix' ) ); ?>')">
+							   data-confirm="<?php echo esc_attr( __( 'Apply this preset? It adds a ready-made folder structure to your media library. Your existing folders and media are not deleted; folders with matching names are created with an "— imported" suffix.', 'plathix' ) ); ?>">
 								<?php esc_html_e( 'Apply', 'plathix' ); ?>
 							</a>
 						</div>
@@ -107,7 +103,7 @@ final class FreeWizard
 						<a href="<?php echo esc_url( $scratch_url ); ?>"
 						   class="plathix-btn"
 						   <?php if ( $user_folder_count > 0 ) : ?>
-						   onclick="return confirm('<?php echo esc_js( sprintf(
+						   data-confirm="<?php echo esc_attr( sprintf(
 								/* translators: %d: number of Plathix folders that will be deleted */
 								_n(
 									'This will delete %d Plathix folder. Media files will not be deleted. Continue?',
@@ -116,9 +112,7 @@ final class FreeWizard
 									'plathix'
 								),
 								$user_folder_count
-						   ) ); ?>')">
-						   <?php else : ?>
-						   >
+						   ) ); ?>">
 						   <?php endif; ?>
 							<?php esc_html_e( 'Start from scratch →', 'plathix' ); ?>
 						</a>

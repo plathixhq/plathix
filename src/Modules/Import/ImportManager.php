@@ -17,6 +17,7 @@ use Plathix\Infrastructure\ImportCheckpointStore;
 use Plathix\Infrastructure\JobDispatcher;
 use Plathix\Infrastructure\JobLockService;
 use Plathix\Infrastructure\Logger;
+use Plathix\Infrastructure\OptionWrite;
 use Plathix\Loader;
 
 final class ImportManager
@@ -24,17 +25,25 @@ final class ImportManager
 	/** @var ImportAdapterInterface[] */
 	private array $adapters = [];
 
+	/**
+	 * @var \Closure(string, int, string): (int|\WP_Error)
+	 */
 	private \Closure $folder_creator;
 
+	/**
+	 * @var \Closure(int[], int, string): array<string,mixed>
+	 */
 	private \Closure $items_mover;
 
+	/**
+	 * @var array{tree:FolderTreeService,assignment:FolderAssignmentService}|null
+	 */
 	private ?array $defaultServices = null;
 
 	/**
 	 * @param ?\Closure $folder_creator
 	 * @param ?\Closure $items_mover
 	 */
-
 	public function __construct(
 		private readonly ?Loader $loader = null,
 		?\Closure $folder_creator = null,
@@ -61,7 +70,6 @@ final class ImportManager
 	/**
 	 * @return array{tree:FolderTreeService,assignment:FolderAssignmentService}
 	 */
-
 	private function defaultServices(): array {
 		if ( null === $this->defaultServices ) {
 			$cache         = Cache::make();
@@ -97,7 +105,6 @@ final class ImportManager
 	/**
 	 * @return array<string,bool>
 	 */
-
 	public function imported(): array {
 		$result = [];
 		foreach ( $this->adapters as $adapter ) {
@@ -133,7 +140,6 @@ final class ImportManager
 		$lock = $lock_service->acquireOrder( $lock_name );
 
 		if ( 'none' === $lock['mode'] ) {
-
 			return [
 				'moved'  => 0,
 				'errors' => [ [ 'code' => 'importLocked', 'message' => __( 'Import is already running for this adapter.', 'plathix' ) ] ],
@@ -159,7 +165,6 @@ final class ImportManager
 		$created_ids = [];
 
 		if ( null !== $checkpoint && ! $checkpoint_store->isExpired( $checkpoint ) ) {
-
 			foreach ( $checkpoint['map'] as $old_id => $new_id ) {
 				if ( 0 === $new_id || term_exists( $new_id, $taxonomy ) ) {
 					$map[ $old_id ] = $new_id;
@@ -194,14 +199,12 @@ final class ImportManager
 				}
 
 				if ( $old_id > 0 && isset( $map[ $old_id ] ) ) {
-
 					continue;
 				}
 
 				$parent_new = $map[ $parent_old ] ?? 0;
 				$created = ( $this->folder_creator )( (string) ( $node['name'] ?? 'Imported' ), $parent_new, $taxonomy );
 				if ( is_wp_error( $created ) ) {
-
 					$errors[] = [
 						'code'    => (string) $created->get_error_code(),
 						'message' => (string) $created->get_error_message(),
@@ -211,13 +214,10 @@ final class ImportManager
 				/**
 				 * @var array{id: int, created: bool} $created
 				 */
-
-
 				$new_id = (int) $created['id'];
 				if ( $old_id > 0 ) {
 					$map[ $old_id ] = $new_id;
 				}
-
 				if ( $created['created'] ) {
 					$created_ids[] = $new_id;
 				}
@@ -264,7 +264,6 @@ final class ImportManager
 	/**
 	 * @return string
 	 */
-
 	public function rollbackPartial(string $adapter_key): string {
 		$checkpoint_store = new ImportCheckpointStore();
 
@@ -287,21 +286,24 @@ final class ImportManager
 			}
 
 			try {
-
 				$checkpoint = ( new ImportCheckpointStore() )->get( $adapter_key );
 				if ( null === $checkpoint ) {
-
 					return 'noop';
 				}
 
-				foreach ( array_reverse( $checkpoint['created'] ?? [] ) as $new_id ) {
-					if ( $new_id > 0 ) {
-						$deleted = wp_delete_term( (int) $new_id, PLATHIX_TAXONOMY );
+				Cache::beginBulkInvalidation( PLATHIX_TAXONOMY );
+				try {
+					foreach ( array_reverse( $checkpoint['created'] ?? [] ) as $new_id ) {
+						if ( $new_id > 0 ) {
+							$deleted = wp_delete_term( (int) $new_id, PLATHIX_TAXONOMY );
 
-						if ( is_wp_error( $deleted ) || false === $deleted ) {
-							Logger::warning( 'import_manager_rollback_delete_term_failed', [ 'term_id' => (int) $new_id ] );
+							if ( is_wp_error( $deleted ) || false === $deleted ) {
+								Logger::warning( 'import_manager_rollback_delete_term_failed', [ 'term_id' => (int) $new_id ] );
+							}
 						}
 					}
+				} finally {
+					Cache::endBulkInvalidation( PLATHIX_TAXONOMY );
 				}
 
 				$checkpoint_store->delete( $adapter_key );
@@ -326,7 +328,6 @@ final class ImportManager
 		);
 
 		if ( $job_id > 0 ) {
-
 			do_action(
 				'plathix/audit/record',
 				'import_job_queued',
@@ -377,14 +378,15 @@ final class ImportManager
 		}
 
 		if ( $moved > 0 || ( ! $had_source_data && ! $source_query_failed ) ) {
-			update_option( self::importedOptionKey( $adapter ), true, false );
+			if ( ! OptionWrite::ifChanged( self::importedOptionKey( $adapter ), true ) ) {
+				Logger::error( 'import_marked_done_write_failed', [ 'adapter' => $adapter ] );
+			}
 		}
 
 		$jobs = new JobDispatcher();
 		$action_id = $jobs->getActionId( JobDispatcher::JOB_IMPORT, $args );
 
 		if ( $action_id > 0 ) {
-
 			$jobs->storeResultForAction(
 				$action_id,
 				[

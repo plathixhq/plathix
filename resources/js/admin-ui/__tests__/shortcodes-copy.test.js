@@ -3,7 +3,7 @@ import { initShortcodesCopy } from '../shortcodes-copy.js';
 describe('keeps REST transport behavior consistent under retry and error conditions', () => {
     beforeEach(() => {
         document.body.innerHTML = '';
-
+        
         Object.defineProperty(navigator, 'clipboard', { value: undefined, configurable: true });
         document.execCommand = jest.fn(() => true);
     });
@@ -18,10 +18,10 @@ describe('keeps REST transport behavior consistent under retry and error conditi
         const input = document.querySelector('.plathix-shortcode-copy');
         input.dispatchEvent(new Event('click', { bubbles: true }));
 
-
-
-
-
+        
+        
+        
+        
         expect(document.execCommand).toHaveBeenCalledWith('copy');
     });
 

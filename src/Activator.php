@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plathix;
 
 use Plathix\Core\Taxonomy;
+use Plathix\Infrastructure\DirectoryGuard;
 use Plathix\Infrastructure\JobDispatcher;
 use Plathix\Infrastructure\Keys;
 use Plathix\Infrastructure\Logger;
@@ -12,7 +13,6 @@ use Plathix\Modules\Preset\PresetSchema;
 
 class Activator
 {
-
 	public static function run(bool $network_wide = false): void {
 		if ( is_multisite() && $network_wide ) {
 			$site_ids = get_sites(
@@ -42,6 +42,7 @@ class Activator
 		Taxonomy::registerAll();
 
 		$existing_taxonomies = (array) get_option( 'plathix_taxonomies', [] );
+		// @phpstan-ignore plathix.discardedWriteReturn
 		update_option(
 			'plathix_taxonomies',
 			array_values( array_unique( array_merge( $existing_taxonomies, self::collectRegisteredTaxonomies() ) ) )
@@ -50,6 +51,7 @@ class Activator
 		flush_rewrite_rules();
 
 		if ( ! get_option( 'plathix_db_version' ) ) {
+			// @phpstan-ignore plathix.discardedWriteReturn
 			update_option( 'plathix_db_version', PLATHIX_VERSION );
 		}
 
@@ -84,13 +86,14 @@ class Activator
 		add_option( 'plathix_bulk_safe_mode', true );
 
 		if ( is_bool( $legacy_svg_support ) ) {
-
+			// @phpstan-ignore plathix.discardedWriteReturn
 			update_option(
 				'plathix_svg_policy',
 				$legacy_svg_support
 					? \Plathix\Modules\Svg\SvgSettings::POLICY_SANITIZE
 					: \Plathix\Modules\Svg\SvgSettings::POLICY_BLOCK
 			);
+			// @phpstan-ignore plathix.discardedWriteReturn
 			update_option(
 				'plathix_svg_support',
 				is_array( $legacy_svg_roles ) && ! empty( $legacy_svg_roles )
@@ -100,10 +103,12 @@ class Activator
 		}
 
 		if ( is_array( $legacy_svg_support ) ) {
+			// @phpstan-ignore plathix.discardedWriteReturn
 			update_option( 'plathix_svg_support', array_values( array_map( 'sanitize_key', $legacy_svg_support ) ) );
 		}
 
 		if ( false !== get_option( 'plathix_svg_allowed_roles', false ) ) {
+			// @phpstan-ignore plathix.discardedWriteReturn
 			delete_option( 'plathix_svg_allowed_roles' );
 		}
 	}
@@ -112,7 +117,6 @@ class Activator
 	 * @return list<string>
 	 */
 	private static function collectRegisteredTaxonomies(): array {
-
 		return [ PLATHIX_TAXONOMY ];
 	}
 
@@ -150,7 +154,9 @@ class Activator
 			}
 		}
 
+		// @phpstan-ignore plathix.discardedWriteReturn
 		update_option( 'plathix_terms_storage_atomic', $all_innodb, false );
+		// @phpstan-ignore plathix.discardedWriteReturn
 		update_option( 'plathix_db_engine_map', $engine_map, false );
 	}
 

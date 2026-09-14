@@ -12,6 +12,5 @@ class Module implements ModuleInterface
 	public function register(): void
 	{
 		( new AdminMenuManager() )->register();
-
 	}
 }

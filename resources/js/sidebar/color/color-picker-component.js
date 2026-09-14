@@ -5,12 +5,12 @@ const HEX6 = /^[0-9a-f]{6}$/;
 
 export function colorPickerComponent() {
     return {
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
         color: DEFAULT_COLOR,
 
         get _folderId() {
@@ -22,7 +22,7 @@ export function colorPickerComponent() {
             return id > 0 ? this.$store.plathix.folders.find((f) => Number(f.id) === id) : null;
         },
 
-        
+        /** Есть ли у текущей папки заданный цвет (для placeholder-«+» vs swatch). */
         get hasColor() {
             return !!this._folder?.color;
         },
@@ -30,10 +30,10 @@ export function colorPickerComponent() {
         
 
         syncFromStore() {
-
-
-
-
+            
+            
+            
+            
             if (this._folderId === 0) {
                 return;
             }

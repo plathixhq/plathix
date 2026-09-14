@@ -8,7 +8,6 @@ use Plathix\Modules\Tools\ToolsPage;
 
 final class ToolsApi
 {
-
 	public function pageUrl(): string
 	{
 		return admin_url( 'admin.php?page=' . ToolsPage::PAGE_SLUG );

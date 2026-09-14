@@ -9,18 +9,18 @@ export function folderTree() {
         isDragging: false,
         dragOverId: null,
 
-
-
-
-
-
+        
+        
+        
+        
+        
         treeLevelHtml() {
             return treeLevelMarkup();
         },
 
-
-
-
+        
+        
+        
         folderColorStyle(folder) {
             return this.$store.plathix.folderColorStyle(folder);
         },
@@ -58,9 +58,9 @@ export function folderTree() {
                 'is-open': Number(s.openId) === Number(folder.id),
                 'is-drag-over': this.dragOverId === folder.id,
                 'is-selected': s.folderSelectMode && s.isFolderSelected(folder.id),
-
-
-
+                
+                
+                
                 'has-context-menu': Number(s.contextMenuFolderId) > 0 && Number(s.contextMenuFolderId) === Number(folder.id),
             };
         },
@@ -160,9 +160,9 @@ export function folderTree() {
                 return;
             }
 
-
-
-
+            
+            
+            
             confirmAndMoveItems(itemIds, targetFolderId, event.currentTarget);
             this.isDragging = false;
             this.dragOverId = null;

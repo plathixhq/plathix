@@ -35,13 +35,9 @@ class Preferences
 		$key = $post_type ? self::OPEN_FOLDER_META . '_' . sanitize_key($post_type) : self::OPEN_FOLDER_META;
 		$key .= self::blogSuffix();
 
-		$old_id  = (int) get_user_meta($user_id, $key, true);
-		$new_id  = absint($folder_id);
-		$written = update_user_meta($user_id, $key, $new_id);
-
-		if ( ! $written && $old_id !== $new_id ) {
-			Logger::error('open_folder_write_failed', [ 'user_id' => $user_id ]);
-		}
+		$old_id = (int) get_user_meta($user_id, $key, true);
+		$new_id = absint($folder_id);
+		self::writeMetaHonest($user_id, $key, $old_id, $new_id, 'open_folder_write_failed');
 	}
 
 	/** @return array<int, int> */
@@ -74,11 +70,7 @@ class Preferences
 
 			$old_raw = get_user_meta($user_id, $key, true);
 			$old_ids = is_array($old_raw) ? array_values(array_map('intval', $old_raw)) : [];
-			$written = update_user_meta($user_id, $key, $new_ids);
-
-			if ( ! $written && $old_ids !== $new_ids ) {
-				Logger::error('favorites_meta_write_failed', [ 'user_id' => $user_id ]);
-			}
+			self::writeMetaHonest($user_id, $key, $old_ids, $new_ids, 'favorites_meta_write_failed');
 		} finally {
 			if ( $acquired ) {
 				DbAdvisoryLock::release($lock_name);
@@ -91,7 +83,6 @@ class Preferences
 	/**
 	 * @param array<array-key, mixed> $to_add
 	 */
-
 	public static function mergeFavorites(int $user_id, array $to_add, string $post_type = ''): void {
 		if ( $user_id <= 0 ) {
 			return;
@@ -110,11 +101,7 @@ class Preferences
 			$key = $post_type ? self::FAVORITES_META . '_' . sanitize_key($post_type) : self::FAVORITES_META;
 			$key .= self::blogSuffix();
 
-			$written = update_user_meta($user_id, $key, $merged);
-
-			if ( ! $written && $existing !== $merged ) {
-				Logger::error('favorites_merge_write_failed', [ 'user_id' => $user_id ]);
-			}
+			self::writeMetaHonest($user_id, $key, $existing, $merged, 'favorites_merge_write_failed');
 		} finally {
 			if ( $acquired ) {
 				DbAdvisoryLock::release($lock_name);
@@ -126,5 +113,17 @@ class Preferences
 
 	private static function favoritesLockName(int $user_id, string $post_type): string {
 		return Keys::lock('favorites_' . $user_id . '_' . ($post_type ?: 'default'));
+	}
+
+	/**
+	 * @param mixed $old
+	 * @param mixed $new
+	 */
+	private static function writeMetaHonest(int $user_id, string $key, mixed $old, mixed $new, string $logKey): void {
+		$written = update_user_meta($user_id, $key, $new);
+
+		if ( ! $written && $old !== $new ) {
+			Logger::error($logKey, [ 'user_id' => $user_id ]);
+		}
 	}
 }

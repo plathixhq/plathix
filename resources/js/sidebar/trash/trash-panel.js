@@ -22,7 +22,7 @@ export function initFolderTrashPanel(store) {
         return;
     }
 
-
+    
     const refresh = () => {
         if (isTrashOpen(store)) {
             renderPanel(store);
@@ -32,18 +32,18 @@ export function initFolderTrashPanel(store) {
     };
 
     window.wp?.hooks?.addAction?.('plathix.folderOpened', 'plathix/folder-trash-panel', refresh);
-
+    
     window.addEventListener(Events.FOLDER_DELETED, refresh);
 
-
-
+    
+    
     ensureObserver();
 
-
-
-
-
-
+    
+    
+    
+    
+    
     scheduleInitialMount(store, refresh);
 }
 
@@ -52,14 +52,14 @@ export function initFolderTrashPanel(store) {
 function scheduleInitialMount(store, refresh) {
     let retries = 0;
     const tryMount = () => {
-
-
-
-
+        
+        
+        
+        
         if (isTrashOpen(store)) {
             refresh();
-
-
+            
+            
             const container = document.getElementById(CONTAINER_ID);
             const wrapper = browserEl()?.querySelector(`:scope > ${WRAPPER_SEL}`) || document.querySelector(WRAPPER_SEL);
             const mounted = !!container && container.parentElement === browserEl() && container.nextElementSibling === wrapper;
@@ -86,7 +86,7 @@ function positionContainer(container) {
     if (!browser || !wrapper) {
         return false;
     }
-
+    
     if (container.parentElement === browser && container.nextElementSibling === wrapper) {
         return true;
     }
@@ -100,7 +100,7 @@ function ensureObserver() {
     }
     mountObserver = new MutationObserver(() => {
         const container = document.getElementById(CONTAINER_ID);
-
+        
         if (container) {
             positionContainer(container);
         }
@@ -108,8 +108,8 @@ function ensureObserver() {
     const browser = browserEl();
     if (browser) {
         mountObserver.observe(browser, { childList: true });
-
-
+        
+        
         setStateValue('trashPanelMountObserver', mountObserver);
     }
 }
@@ -128,7 +128,7 @@ async function renderPanel(store) {
         container.className = 'plathix-folder-trash-panel';
     }
     if (!positionContainer(container)) {
-        return;
+        return; 
     }
     ensureObserver();
 

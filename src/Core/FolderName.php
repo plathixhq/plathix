@@ -13,13 +13,12 @@ final class FolderName
 	public const ERROR_TOO_LONG_BYTES = 'too_long_bytes';
 
 	public static function normalize(string $name): string {
-		return mb_substr( trim( preg_replace( '/\s+/', ' ', $name ) ?? '' ), 0, 200 );
+		return MbCompat::substr( trim( preg_replace( '/\s+/', ' ', $name ) ?? '' ), 0, 200 );
 	}
 
 	/**
 	 * @return list<string>
 	 */
-
 	public static function validate(string $normalized, ?int $mbLimit = null): array {
 		$errors = [];
 
@@ -35,7 +34,7 @@ final class FolderName
 			$errors[] = self::ERROR_DANGEROUS_CHARS;
 		}
 
-		if ( null !== $mbLimit && mb_strlen( $normalized ) > $mbLimit ) {
+		if ( null !== $mbLimit && MbCompat::strlen( $normalized ) > $mbLimit ) {
 			$errors[] = self::ERROR_TOO_LONG_CHARS;
 		}
 

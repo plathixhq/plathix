@@ -47,16 +47,6 @@ require_wp_cli() {
   fi
 }
 
-
-
-
-
-
-
-
-
-
-
 require_modern_i18n_command() {
   require_rg
   local help_output
@@ -83,16 +73,11 @@ require_gettext() {
     echo "Install gettext: 'apt-get install gettext' or 'brew install gettext'." >&2
     exit 1
   fi
-
-
-
   echo "DEBUG: $(msgmerge --version | head -1)" >&2
   echo "DEBUG: PHP $("$WP_CLI_BIN" cli version --allow-root 2>&1 | head -1)" >&2
 }
 
 build_pot() {
-
-
   "$WP_CLI_BIN" i18n make-pot . "$POT_FILE" \
     --slug="$TEXT_DOMAIN" \
     --domain="$TEXT_DOMAIN" \
@@ -100,54 +85,21 @@ build_pot() {
     --exclude="$EXCLUDE_PATHS"
 }
 
-
-
-
-
-
-
-
 build_mo() {
   "$WP_CLI_BIN" i18n make-mo "$LANG_DIR/"
 }
 
 update_po() {
-
   local po
   for po in "$LANG_DIR"/*.po; do
     [[ -f "$po" ]] || continue
-
-
-
-
-
-
-
-
-
-
-
-
-
     msgmerge --update --backup=off --no-fuzzy-matching --quiet --no-wrap "$po" "$POT_FILE"
   done
 }
 
 build_json() {
   find "$LANG_DIR" -maxdepth 1 -type f -name 'plathix-*.json' -delete
-
-
-
-
-
   #
-
-
-
-
-
-
-
   local snapshot_dir po live mutated=0
   snapshot_dir="$(mktemp -d)"
   trap 'rm -rf "$snapshot_dir"' EXIT
@@ -172,15 +124,6 @@ build_json() {
   fi
 }
 
-
-
-
-
-
-
-
-
-
 merge_bundle_json() {
   python3 - "$LANG_DIR" "$TEXT_DOMAIN" <<'PY'
 import glob
@@ -191,11 +134,6 @@ import re
 import sys
 
 lang_dir, domain = sys.argv[1], sys.argv[2]
-
-
-
-
-
 
 BUNDLE_MAP = {
     'assets/js/admin-ui.js': ('resources/js/admin-ui/', 'resources/js/admin-ui.js'),
@@ -231,8 +169,6 @@ for locale in locales:
                 header = msgs['']
             merged.update({k: v for k, v in msgs.items() if k})
         if header is None:
-
-
             print(
                 f'merge_bundle_json: no bundle source matched {bundle_rel} ({locale}) '
                 'Build failed.',
@@ -271,37 +207,13 @@ sys.exit(1 if failed else 0)
 PY
 }
 
-
 #
-
-
-
-
-
 #
-
-
-
-
-
-
-
-
-
-
-
 #
-
-
-
-
-
 strip_volatile_metadata() {
   local tmp po
   if [[ -f "$POT_FILE" ]]; then
     tmp="${POT_FILE}.strip.tmp"
-
-
     msgattrib --no-wrap --no-location "$POT_FILE" -o "$tmp"
     mv "$tmp" "$POT_FILE"
     sed -i 's/^"POT-Creation-Date:[^\\]*\\n"$/"POT-Creation-Date: \\n"/' "$POT_FILE"
@@ -312,46 +224,20 @@ strip_volatile_metadata() {
   done
 }
 
-
-
-
-
-
-
-
-
 purge_obsolete() {
   local po tmp
   for po in "$LANG_DIR"/*.po; do
     [[ -f "$po" ]] || continue
     tmp="${po}.purge.tmp"
-
-
     msgattrib --no-wrap --no-obsolete "$po" -o "$tmp"
     mv "$tmp" "$po"
   done
 }
 
-
-
 #
-
-
-
-
 #
-
-
-
-
 #
-
-
-
-
-
 #
-
 strip_php_locations() {
   local po tmp
   for po in "$LANG_DIR"/*.po; do
@@ -366,9 +252,6 @@ print_report() {
   printf 'I18N_FILES\n'
   find "$LANG_DIR" -maxdepth 1 -type f | sort
 }
-
-
-
 
 seed_out_dir_if_needed() {
   [[ "$LANG_DIR" == "languages" ]] && return

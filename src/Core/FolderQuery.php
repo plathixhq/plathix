@@ -113,7 +113,6 @@ final class FolderQuery
 		);
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
 		$attachment_filter = sanitize_key( self::requestScalar( wp_unslash( $_REQUEST['query']['attachment-filter'] ?? '' ) ) );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( $query_status === 'trash' || $attachment_filter === 'trash' ) {
@@ -149,7 +148,6 @@ final class FolderQuery
 	 */
 	public function filterRestAttachments(array $args, \WP_REST_Request $request): array
 	{
-
 		$status_param = $request->get_param('status');
 		if ( is_array( $status_param ) ) {
 			$status_param = reset( $status_param ) ?: null;
@@ -224,7 +222,6 @@ final class FolderQuery
 	/**
 	 * @param mixed $value
 	 */
-
 	private static function requestScalar(mixed $value): string {
 		return Sanitize::toScalarString( $value );
 	}

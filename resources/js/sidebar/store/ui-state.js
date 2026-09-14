@@ -1,4 +1,5 @@
 import { getRuntime } from '../runtime.js';
+import { captureActiveElement, restoreFocus } from '../focus-trap.js';
 
 const runtime = getRuntime();
 
@@ -6,15 +7,29 @@ export const uiStateModule = {
     isLoading: !!runtime.deferFoldersBootstrap && !(Array.isArray(runtime.folders) && runtime.folders.length > 0),
     alertMessage: null,
     error: null,
+    
+    
+    _alertOpener: null,
 
+    showAlert(message) {
+        this._alertOpener = captureActiveElement();
+        this.alertMessage = message;
+    },
 
-    selectedMediaCount: 0,
-    contextMenuFolderId: 0,
+    hideAlert() {
+        this.alertMessage = null;
+        restoreFocus(this._alertOpener);
+        this._alertOpener = null;
+    },
+    
+    
+    selectedMediaCount: 0,    
+    contextMenuFolderId: 0,   
 
-
-
-
-
+    
+    
+    
+    
     folderColorStyle(folder) {
         return this._colorImpl ? this._colorImpl.folderColorStyle(folder) : '';
     },
@@ -25,21 +40,21 @@ export const uiStateModule = {
 
     _colorImpl: null,
 
-
-
-
-
-
+    
+    
+    
+    
+    
     //
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
     isCurrentFolderTrashed() {
-        void this._trashedFolderIdsVersion;
+        void this._trashedFolderIdsVersion; 
         return this._trashImpl ? this._trashImpl.isCurrentFolderTrashed() : false;
     },
 

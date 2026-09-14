@@ -10,7 +10,6 @@ use Plathix\Modules\Dashboard\Widgets\OnboardingWidget;
 
 class Module implements ModuleInterface
 {
-
 	public function register(): void
 	{
 		add_action( 'plathix/modules/boot', [ $this, 'boot' ] );
@@ -18,7 +17,6 @@ class Module implements ModuleInterface
 
 	public function boot(): void
 	{
-
 		add_action( 'plathix/favorites/changed', [ UserFavoritesService::class, 'invalidate' ], 10, 2 );
 
 		if ( is_admin() ) {
@@ -31,7 +29,6 @@ class Module implements ModuleInterface
 	/**
 	 * @param array<string, mixed> $data
 	 */
-
 	public function renderOnboarding(array $data): void
 	{
 		( new OnboardingWidget() )->render( $data );

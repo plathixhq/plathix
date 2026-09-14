@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Plathix\Core;
 
+use Plathix\Infrastructure\Cache;
 use Plathix\Infrastructure\Logger;
 use Plathix\Modules\Trash\FolderTrashService;
 
 final class FolderTreeService
 {
-
 	public const DEFAULT_ON_CHILDREN = 'delete';
 
 	public function __construct(
@@ -27,7 +27,6 @@ final class FolderTreeService
 	/**
 	 * @return array{id: int, created: bool}|\WP_Error
 	 */
-
 	public function createDetailed(string $name, int $parent, string $taxonomy): array|\WP_Error {
 		$normalized = $this->normalizeName( $name );
 		if ( $error = $this->validateName( $normalized ) ) {
@@ -63,7 +62,6 @@ final class FolderTreeService
 
 	/** @return array{id: int, created: bool}|\WP_Error */
 	private function createLocked(string $normalized, int $parent, string $taxonomy): array|\WP_Error {
-
 		if ( $parent > 0 && $this->hasTrashedAncestor( $parent, $taxonomy ) ) {
 			return new \WP_Error( 'parent_trashed', __( 'Cannot create a folder inside a folder that is in Trash.', 'plathix' ), [ 'status' => 409 ] );
 		}
@@ -72,15 +70,21 @@ final class FolderTreeService
 		if ( $exists ) {
 			$existing_id = is_array( $exists ) ? (int) ( $exists['term_id'] ?? 0 ) : (int) $exists;
 			if ( $existing_id > 0 ) {
-
 				if ( ! in_array( $existing_id, HiddenFolders::ids( $taxonomy ), true ) ) {
 					return [ 'id' => $existing_id, 'created' => false ];
 				}
-
 				if ( ! $this->repository->getMeta( $existing_id, FolderTrashService::META_ORIGINAL_NAME ) ) {
 					$existing_term = $this->repository->getById( $existing_id, $taxonomy );
 					if ( $existing_term instanceof \WP_Term ) {
-						$this->repository->setMeta( $existing_id, FolderTrashService::META_ORIGINAL_NAME, $existing_term->name );
+						$original_name = $existing_term->name;
+						$old_name      = $this->repository->getMeta( $existing_id, FolderTrashService::META_ORIGINAL_NAME );
+						$old_name_str  = is_scalar( $old_name ) ? (string) $old_name : '';
+						$written       = update_term_meta( $existing_id, FolderTrashService::META_ORIGINAL_NAME, $original_name );
+						FolderRepository::clearRuntimeCache();
+
+						if ( ! $written && $old_name_str !== $original_name ) {
+							Logger::error( 'folder_trash_original_name_write_failed', [ 'term_id' => $existing_id ] );
+						}
 					}
 				}
 				// Soft-trashed term blocks wp_insert_term by both name and slug; free both so a fresh
@@ -106,8 +110,7 @@ final class FolderTreeService
 		/**
 		 * @var int $inserted
 		 */
-
-		$this->repository->setMeta( (int) $inserted, PLATHIX_TERM_POSITION, $this->nextPosition( (int) $inserted, $parent, $taxonomy ) );
+		$this->repository->setPosition( (int) $inserted, $this->nextPosition( (int) $inserted, $parent, $taxonomy ) );
 		$this->countService->invalidate( $taxonomy );
 		do_action( 'plathix/folder/created', (int) $inserted, $taxonomy );
 
@@ -168,7 +171,6 @@ final class FolderTreeService
 		$old_parent = $old_term instanceof \WP_Term ? (int) $old_term->parent : 0;
 
 		try {
-
 			if ( $parent > 0 && $this->hasTrashedAncestor( $parent, $taxonomy ) ) {
 				return new \WP_Error( 'parent_trashed', __( 'Cannot move a folder into a folder that is in Trash.', 'plathix' ), [ 'status' => 409 ] );
 			}
@@ -179,7 +181,6 @@ final class FolderTreeService
 		}
 
 		if ( ! is_wp_error( $result ) ) {
-
 			$moved_count = $this->countService->getRecursiveCount( $id, $taxonomy );
 			if ( $moved_count > 0 ) {
 				if ( $old_parent > 0 ) {
@@ -214,7 +215,6 @@ final class FolderTreeService
 	/**
 	 * @return array{mode: string, opt_key: string|null}
 	 */
-
 	public function acquireStructureLock(string $taxonomy): array {
 		return ( new \Plathix\Infrastructure\JobLockService() )->acquireOrder( $this->structureLockName( $taxonomy ) );
 	}
@@ -222,13 +222,11 @@ final class FolderTreeService
 	/**
 	 * @param array{mode: string, opt_key: string|null} $lock_result
 	 */
-
 	public function releaseStructureLock(string $taxonomy, array $lock_result): void {
 		( new \Plathix\Infrastructure\JobLockService() )->releaseOrder( $this->structureLockName( $taxonomy ), $lock_result );
 	}
 
 	public function getDepth(int $folder_id, string $taxonomy): int {
-
 		$depth = 0;
 		$current = $folder_id;
 		$visited = [];
@@ -254,7 +252,6 @@ final class FolderTreeService
 	/**
 	 * @param array<int, bool> $visited
 	 */
-
 	private function getSubtreeHeight(int $folder_id, string $taxonomy, array $visited = []): int {
 		if ( isset( $visited[ $folder_id ] ) ) {
 			return 0;
@@ -277,7 +274,6 @@ final class FolderTreeService
 	/**
 	 * @param string $on_children
 	 */
-
 	public function deleteRecursive(int $id, string $taxonomy, string $on_children = self::DEFAULT_ON_CHILDREN): bool {
 		$runner = apply_filters( 'plathix/folder/trash_runner', FolderTrashRunner::trash(...) );
 
@@ -313,6 +309,16 @@ final class FolderTreeService
 		if ( $id <= 0 || $this->repository->isUncategorizedFolder( $id, $taxonomy ) ) {
 			return false;
 		}
+
+		Cache::beginBulkInvalidation($taxonomy);
+		try {
+			return $this->deleteRecursiveBodyInner( $id, $taxonomy, $on_children );
+		} finally {
+			Cache::endBulkInvalidation($taxonomy);
+		}
+	}
+
+	private function deleteRecursiveBodyInner(int $id, string $taxonomy, string $on_children): bool {
 
 		$term_before_delete    = $this->repository->getById( $id, $taxonomy );
 		$parent_before_delete  = $term_before_delete instanceof \WP_Term ? (int) $term_before_delete->parent : 0;
@@ -360,11 +366,11 @@ final class FolderTreeService
 			/**
 			 * @var \WP_Error $result
 			 */
-
 			return $result;
 		}
 
 		clean_term_cache( $this->repository->getChildrenIds( $new_parent, $taxonomy ), $taxonomy );
+		// @phpstan-ignore plathix.discardedWriteReturn
 		delete_option( "{$taxonomy}_children" );
 		$this->countService->invalidate( $taxonomy );
 
@@ -372,7 +378,6 @@ final class FolderTreeService
 	}
 
 	public function setOrder(int $id, int $position, string $taxonomy): ?\WP_Error {
-
 		$lock = $this->acquireStructureLock( $taxonomy );
 
 		if ( 'none' === $lock['mode'] ) {
@@ -380,7 +385,7 @@ final class FolderTreeService
 		}
 
 		try {
-			$this->repository->setMeta( $id, PLATHIX_TERM_POSITION, $position );
+			$this->repository->setPosition( $id, $position );
 		} finally {
 			$this->releaseStructureLock( $taxonomy, $lock );
 		}
@@ -393,7 +398,6 @@ final class FolderTreeService
 
 
 	public function normalizeOrder(string $taxonomy, int $parent_id = 0): void {
-
 		$lock_service = new \Plathix\Infrastructure\JobLockService();
 		$lock_name    = $lock_service->orderLockName( $taxonomy, $parent_id );
 		$lock         = $lock_service->acquireOrder( $lock_name );
@@ -407,7 +411,7 @@ final class FolderTreeService
 			$position = 1000;
 			foreach ( array_chunk( $children, 100 ) as $chunk ) {
 				foreach ( $chunk as $child_id ) {
-					$this->repository->setMeta( $child_id, PLATHIX_TERM_POSITION, $position );
+					$this->repository->setPosition( $child_id, $position );
 					$position += 1000;
 				}
 			}
@@ -456,7 +460,6 @@ final class FolderTreeService
 	}
 
 	private function isDescendantOf(int $candidate_parent, int $folder_id, string $taxonomy): bool {
-
 		$visited = [];
 		$current = $candidate_parent;
 		while ( $current > 0 ) {
@@ -481,7 +484,6 @@ final class FolderTreeService
 	}
 
 	private function hasTrashedAncestor(int $parent, string $taxonomy): bool {
-
 		$hidden_ids = HiddenFolders::ids( $taxonomy );
 
 		$visited = [];

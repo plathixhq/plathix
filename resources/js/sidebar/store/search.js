@@ -28,7 +28,7 @@ let _hasChildrenSetCache = null;
 
 
 function parentChainHasCycle(id, parentById) {
-
+    
     const seen = new Set();
     let cur = Number(id) || 0;
     while (cur > 0) {
@@ -47,13 +47,13 @@ function ensureChildrenCache(ff, version) {
     if (_childrenCacheSrc === ff && _childrenCacheVersion === version) return;
     const map = new Map();
     const set = new Set();
-
+    
     const parentById = new Map();
     for (const f of ff) parentById.set(Number(f.id) || 0, Number(f.parentId) || 0);
 
     for (const f of ff) {
         let pid = Number(f.parentId) || 0;
-
+        
         if (pid > 0 && parentChainHasCycle(Number(f.id) || 0, parentById)) {
             pid = 0;
         }
@@ -157,9 +157,9 @@ export const searchModule = {
         const trashId = Number(window.Plathix?.trashFolderId || 0);
         return this._childrenByParent.get(0)?.filter((f) => {
             if (!f.isProtected) return false;
-
-
-
+            
+            
+            
             if (trashId > 0 && Number(f.id) === trashId
                 && Number(f.count || 0) === 0 && Number(f.foldersCount || 0) === 0) return false;
             return true;
@@ -174,18 +174,18 @@ export const searchModule = {
         return !!this.searchQuery && !this.filteredFolders.some((f) => !f.isProtected);
     },
 
-
-
-
-
-
+    
+    
+    
+    
+    
     favoriteMatchesSearch(folder) {
         if (!folder) return false;
         if (!this.searchQuery) return true;
         return String(folder.name || '').toLowerCase().includes(this.searchQuery.toLowerCase());
     },
 
-
+    // Существующие избранные папки, видимые при текущем поиске (для скрытия строк и блока).
     get _visibleFavoriteFolders() {
         const favs = this.favorites || [];
         return favs
@@ -193,12 +193,12 @@ export const searchModule = {
             .filter((folder) => folder !== null && this.favoriteMatchesSearch(folder));
     },
 
-
+    // true, если блок «Избранное» должен показываться (есть хотя бы одна видимая при поиске).
     get hasVisibleFavorites() {
         return this._visibleFavoriteFolders.length > 0;
     },
 
-
+    // Счётчик избранного: при активном поиске — число совпадений, иначе — всех.
     get visibleFavoritesCount() {
         return this._visibleFavoriteFolders.length;
     },
@@ -222,11 +222,11 @@ export const searchModule = {
         }
         this.searchQuery = normalizedQuery;
 
-
-
-
-
-
+        
+        
+        
+        
+        
         if (normalizedQuery && typeof this.expandAncestors === 'function') {
             const qLower = normalizedQuery.toLowerCase();
             const matchIds = this.folders

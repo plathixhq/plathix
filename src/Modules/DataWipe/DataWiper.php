@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plathix\Modules\DataWipe;
 
 use Plathix\Core\SqlSafeCast;
+use Plathix\Infrastructure\DirectoryGuard;
 use Plathix\Infrastructure\JobDispatcher;
 use Plathix\Infrastructure\Logger;
 use Plathix\PublicApi\TrashApi;
@@ -14,7 +15,6 @@ final class DataWiper
 	/**
 	 * @param int $blog_id
 	 */
-
 	public function wipe(int $blog_id): void
 	{
 		$this->wipeTerms();
@@ -32,7 +32,6 @@ final class DataWiper
 	{
 		foreach ( $this->taxonomies() as $taxonomy ) {
 			if ( ! taxonomy_exists( $taxonomy ) ) {
-
 				$this->deleteOrphanTermsForTaxonomy( $taxonomy );
 				continue;
 			}
@@ -92,7 +91,6 @@ final class DataWiper
 		if ( $term_ids ) {
 			$term_in = implode( ',', array_map( 'intval', $term_ids ) );
 			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
 			$wpdb->query( "DELETE FROM {$wpdb->termmeta} WHERE term_id IN ($term_in)" );
 			$wpdb->query(
 				"DELETE t FROM {$wpdb->terms} t
@@ -161,7 +159,6 @@ final class DataWiper
 	/**
 	 * @return array<string, bool>
 	 */
-
 	private function suffixedUserMetaFamilies(): array
 	{
 		return SuffixedUserMetaFamilies::FAMILIES;
@@ -222,7 +219,6 @@ final class DataWiper
 			$logs_tbl    = $wpdb->prefix . 'actionscheduler_logs';
 
 			// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-
 			$exists = (
 				$wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $groups_tbl ) ) === $groups_tbl &&
 				$wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $actions_tbl ) ) === $actions_tbl &&
@@ -267,7 +263,6 @@ final class DataWiper
 			'plathix_job_import',
 			'plathix_job_reorder',
 			'plathix_job_orphan_cleanup',
-
 			'plathix_job_import_checkpoint_cleanup',
 		];
 
@@ -280,6 +275,10 @@ final class DataWiper
 	{
 		foreach ( $this->tempDirs() as $dir ) {
 			$this->deleteDirContents( $dir );
+
+			if ( is_dir( $dir ) && ! is_link( $dir ) ) {
+				DirectoryGuard::ensure( $dir );
+			}
 		}
 	}
 
@@ -290,13 +289,17 @@ final class DataWiper
 			return;
 		}
 
-		$this->deleteDirContents( trailingslashit( (string) $upload['basedir'] ) . 'plathix/presets' );
+		$dir = trailingslashit( (string) $upload['basedir'] ) . 'plathix/presets';
+		$this->deleteDirContents( $dir );
+
+		if ( is_dir( $dir ) && ! is_link( $dir ) ) {
+			DirectoryGuard::ensure( $dir );
+		}
 	}
 
 	/**
 	 * @return list<string>
 	 */
-
 	private function taxonomies(): array
 	{
 		$tax_const = defined( 'PLATHIX_TAXONOMY' ) ? (string) PLATHIX_TAXONOMY : 'plathix_folder';
@@ -316,7 +319,6 @@ final class DataWiper
 	/**
 	 * @return list<string>
 	 */
-
 	private function tempDirs(): array
 	{
 		$temp_name = defined( 'PLATHIX_TEMP_DIR' ) ? (string) PLATHIX_TEMP_DIR : 'plathix-temp';

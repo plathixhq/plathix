@@ -50,9 +50,9 @@ describe('keeps REST transport behavior consistent under retry and error conditi
     });
 
     it('enforces request authorization', async () => {
-
-
-
+        
+        
+        
         const fetchMock = jest.fn().mockResolvedValueOnce(
             jsonResponse({ success: false, data: { message: 'Job not found.' } }, false, 403)
         );

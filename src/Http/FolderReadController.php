@@ -143,7 +143,6 @@ final class FolderReadController
 	 * @param \Closure(string): bool $has_field
 	 * @return array<string, mixed>
 	 */
-
 	private function projectFolder(\Plathix\Core\FolderDTO $folder, array $fields, \Closure $has_field, bool $has_children): array {
 		$data = $folder->toArray();
 		$data['hasChildren'] = $has_children;
@@ -184,7 +183,6 @@ final class FolderReadController
 	 * @param string[] $fields
 	 * @return array{items: list<array<string, int|string>>, total: int, page: int, per_page: int}
 	 */
-
 	private function loadFolderItems(int $folder_id, string $post_type, string $taxonomy, int $page, int $per_page, array $fields): array {
 		return ( new \Plathix\Core\FolderItemsLoader() )->load( $folder_id, $post_type, $taxonomy, $page, $per_page, $fields );
 	}

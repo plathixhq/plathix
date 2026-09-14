@@ -15,7 +15,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<Use_>
  */
-
 final class ForbiddenCrossModuleInternalsRule implements Rule
 {
 	private const ALLOWED_PREFIXES = [
@@ -68,9 +67,7 @@ final class ForbiddenCrossModuleInternalsRule implements Rule
 			}
 
 			$errors[] = RuleErrorBuilder::message( sprintf(
-				'Module "%s" must not "use" internal class %s of module "%s" directly — depend on a stable ' .
-				'contract instead (Plathix\PublicApi\*, or Plathix\Core\*/Infrastructure\*/User\*/Contracts\*, ' .
-				'Static analysis rule failed for a public contract violation.',
+				'Module "%s" must not "use" internal class %s of module "%s" directly — depend on a stable ' . 'contract instead (Plathix\PublicApi\*, or Plathix\Core\*/Infrastructure\*/User\*/Contracts\*, ' . 'or a plathix/* WP hook). ',
 				$currentModule,
 				$fqcn,
 				$targetModule

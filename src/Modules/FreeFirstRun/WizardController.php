@@ -10,7 +10,6 @@ use Plathix\User\AccessResolver;
 
 final class WizardController
 {
-
 	public const SKIP_ACTION = 'plathix_preset_skip';
 
 	public const RESET_WIZARD_ACTION = 'plathix_reset_wizard';

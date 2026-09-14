@@ -26,9 +26,9 @@ const searchStubs = {
     get _childrenByParent()  { return this._searchImpl ? this._searchImpl._childrenByParent.call(this)  : new Map(); },
     get _hasChildrenSet()    { return this._searchImpl ? this._searchImpl._hasChildrenSet.call(this)    : new Set(); },
     get systemRootFolders()  { return this._searchImpl ? this._searchImpl.systemRootFolders.call(this)  : []; },
-
-
-
+    
+    
+    
     favoriteMatchesSearch(folder)   { return this._searchImpl ? this._searchImpl.favoriteMatchesSearch.call(this, folder) : (folder !== null && folder !== undefined); },
     get _visibleFavoriteFolders()   { return this._searchImpl ? this._searchImpl._visibleFavoriteFolders.call(this) : (this.favorites || []).map((id) => this.folders.find((f) => Number(f.id) === Number(id)) || null).filter((f) => f !== null); },
     get hasVisibleFavorites()       { return this._searchImpl ? this._searchImpl.hasVisibleFavorites.call(this) : this._visibleFavoriteFolders.length > 0; },

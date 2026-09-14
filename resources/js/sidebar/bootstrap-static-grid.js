@@ -16,27 +16,27 @@ function applyInitialStaticGridFilter() {
         return;
     }
 
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
     //
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     const trashId = Number(getRuntime().trashFolderId || 0);
     const target = isTrashViewFromUrl() && trashId > 0
         ? trashId
@@ -48,9 +48,9 @@ function applyInitialStaticGridFilter() {
         const content = frame?.content?.get?.();
         const library = frame?.state?.()?.get?.('library');
         if (content?.collection?.props || library?.props) {
-
-
-
+            
+            
+            
             store.applyFolderFilter(target, { resetPage: true });
             return;
         }
@@ -83,7 +83,7 @@ function bindViewSwitchTrashPreservation() {
             url.searchParams.set('attachment-filter', 'trash');
             link.href = url.toString();
         } catch {
-
+            
         }
     }, true);
 }
@@ -113,16 +113,16 @@ export function bootstrapStaticGrid() {
     const canAssign = !!window.Plathix?.caps?.canAssign;
     const canManage = !!window.Plathix?.caps?.canManage;
 
-
-
+    
+    
     if (getRuntime().infiniteScroll) {
         infiniteScrollManager.init();
     }
 
     if (features.dnd && (canAssign || canManage)) {
         enableAttachmentDnD();
-
-
+        
+        
     }
 
     bindSelectedMediaCountEvents();
@@ -142,5 +142,5 @@ export function bootstrapStaticGrid() {
         attachInitialInfiniteScrollFrame();
     }
 
-
+    
 }

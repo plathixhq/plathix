@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Plathix\Infrastructure;
 
+use Plathix\Core\FolderRepository;
 use Plathix\Loader;
 
 final class JobDispatcher
 {
-
 	public const JOB_ZIP_GENERATE   = 'plathix_job_zip_generate';
 	public const JOB_IMPORT         = 'plathix_job_import';
 	public const JOB_CLEANUP_TEMP   = 'plathix_job_cleanup_temp';
@@ -40,8 +40,8 @@ final class JobDispatcher
 		$this->lock_service     = new JobLockService();
 		$this->status_repository = new JobStatusRepository();
 		$this->import_runner    = new Jobs\ImportJobRunner();
-		$this->reorder_runner   = new Jobs\ReorderJobRunner( $this->lock_service );
-		$this->orphan_runner    = new Jobs\OrphanCleanupJobRunner( $this->lock_service );
+		$this->reorder_runner   = new Jobs\ReorderJobRunner( $this->lock_service, new FolderRepository() );
+		$this->orphan_runner    = new Jobs\OrphanCleanupJobRunner( $this->lock_service, new FolderRepository() );
 		$this->cleanup_runner   = new Jobs\CleanupJobRunner();
 		$this->import_checkpoint_cleanup_runner = new Jobs\ImportCheckpointCleanupJobRunner();
 		$this->folder_count_reconcile_runner    = new Jobs\FolderCountReconcileJobRunner( $this->lock_service );
@@ -79,7 +79,6 @@ final class JobDispatcher
 	/**
 	 * @param array<string, mixed> $args
 	 */
-
 	public function dispatch(string $job, array $args = [], int $delay = 0): int {
 		if ( ! function_exists( 'as_schedule_single_action' ) ) {
 			Logger::warning( 'job_dispatch_skipped_no_action_scheduler', [ 'job' => $job ] );
@@ -111,7 +110,6 @@ final class JobDispatcher
 		$action_id = 0;
 
 		try {
-
 			$existing_action_id = (int) get_transient( Keys::transient( 'aid_' . $fingerprint ) );
 			if ( $existing_action_id > 0 && $this->isActionStillLive( $existing_action_id ) ) {
 				return $existing_action_id;
@@ -148,7 +146,6 @@ final class JobDispatcher
 	/**
 	 * @param array<string, mixed> $raw_args
 	 */
-
 	public function unschedule(string $job, array $raw_args): void {
 		if ( ! function_exists( 'as_unschedule_action' ) ) {
 			return;
@@ -160,8 +157,8 @@ final class JobDispatcher
 	/**
 	 * @param array<string, mixed> $raw_args
 	 * @param callable(array<string, mixed>): array<string, mixed> $work
+	 * @return self::RESULT_*
 	 */
-
 	public function runGuarded(string $job, array $raw_args, callable $work): string {
 		$blog_id = (int) ( $raw_args['blog_id'] ?? get_current_blog_id() );
 
@@ -211,18 +208,19 @@ final class JobDispatcher
 	/**
 	 * @param array<string, mixed> $payload
 	 */
-
 	private function storeJobResult(int $action_id, array $payload): void {
 		$filtered = array_filter( $payload, static fn ($value): bool => $value !== null );
 		$filtered['_created_at'] = time();
-		update_option( Keys::jobResult( $action_id ), $filtered, false );
+
+		if ( ! OptionWrite::ifChanged( Keys::jobResult( $action_id ), $filtered ) ) {
+			Logger::error( 'job_result_write_failed', [ 'action_id' => $action_id ] );
+		}
 	}
 
 	/**
 	 * @param array<string, mixed> $raw_args
 	 * @return array<string, mixed>
 	 */
-
 	private function enrichedForFingerprint(array $raw_args): array {
 		$args = $raw_args;
 
@@ -243,7 +241,6 @@ final class JobDispatcher
 	/**
 	 * @param array<string, mixed> $payload
 	 */
-
 	public function storeResultForAction(int $action_id, array $payload): void {
 		$this->storeJobResult( $action_id, $payload );
 	}
@@ -275,7 +272,6 @@ final class JobDispatcher
 	/**
 	 * @return array<int, array<string, int>>
 	 */
-
 	public static function recurringUnscheduleArgs(int $blog_id): array {
 		return [ [ 'blog_id' => $blog_id ] ];
 	}
@@ -353,9 +349,7 @@ final class JobDispatcher
 	 * @param array<string, mixed> $args
 	 * @return array<string, mixed>
 	 */
-
 	public static function addDedupeIdentity(array $args): array {
-
 		if ( isset( $args['user_id'] ) && ! isset( $args['_dedupe_identity'] ) ) {
 			$args['_dedupe_identity'] = IdentityKeyResolver::resolve( (int) $args['user_id'] );
 
@@ -389,7 +383,6 @@ final class JobDispatcher
 	 * @param callable(callable(): void): T $callback
 	 * @return T
 	 */
-
 	public function runInBlogContext(int $blog_id, callable $callback): mixed {
 		$multisite = is_multisite();
 		$restored  = false;
@@ -415,7 +408,6 @@ final class JobDispatcher
 	/**
 	 * @param array<mixed> $arr
 	 */
-
 	public static function ksortRecursive(array &$arr): void {
 		ksort( $arr );
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Plathix\Admin;
 
+use Plathix\Core\MbCompat;
+
 final class SidebarI18nBuilder
 {
 	/**
@@ -21,7 +23,7 @@ final class SidebarI18nBuilder
 			'no_items_selected' => __( 'No items selected.', 'plathix' ),
 			'invalid_move_target' => __( 'Open a destination folder first.', 'plathix' ),
 			/* translators: %s: plural post type label e.g. "Posts", "Pages", "Products" */
-			'move_selected' => sprintf( __( 'Move selected %s', 'plathix' ), mb_strtolower( $label_plural ) ),
+			'move_selected' => sprintf( __( 'Move selected %s', 'plathix' ), MbCompat::strtolower( $label_plural ) ),
 			'add_folder' => __( '+ Folder', 'plathix' ),
 			'create_subfolder' => __( 'New subfolder', 'plathix' ),
 			'save_label' => __( 'Save', 'plathix' ),
@@ -41,14 +43,13 @@ final class SidebarI18nBuilder
 			'drag_mode' => __( 'Drag mode', 'plathix' ),
 			'delete_folders' => __( 'Move folders to Trash', 'plathix' ),
 			'folder_deleted_success' => __( 'Folder moved to Trash. You can restore it from there.', 'plathix' ),
-			'gallery_shortcode' => __( 'Gallery shortcode', 'plathix' ),
 			'documents_label' => __( 'Documents', 'plathix' ),
 			'show_size_label' => __( 'Show file size', 'plathix' ),
 			'retry_label' => __( 'Refresh', 'plathix' ),
 			'max_depth_reached' => __( 'Maximum nesting depth reached', 'plathix' ),
 			'all_files' => $pt_obj?->labels->all_items ?? __( 'All Files', 'plathix' ),
 			/* translators: %s: plural post type label e.g. "posts", "pages", "products" */
-			'no_folders_yet' => sprintf( __( 'No folders yet. Create your first folder to organize your %s.', 'plathix' ), mb_strtolower( $label_plural ) ),
+			'no_folders_yet' => sprintf( __( 'No folders yet. Create your first folder to organize your %s.', 'plathix' ), MbCompat::strtolower( $label_plural ) ),
 			'no_folders_found' => __( 'No folders found.', 'plathix' ),
 			'favorites' => __( 'Favorites', 'plathix' ),
 			'add_favorite' => __( 'Add to favorites', 'plathix' ),
@@ -56,30 +57,25 @@ final class SidebarI18nBuilder
 			'favorites_save_failed' => __( 'Failed to save favorites.', 'plathix' ),
 			'unable_refresh_nonce' => __( 'Unable to refresh nonce.', 'plathix' ),
 			'request_failed' => __( 'Request failed.', 'plathix' ),
-
 			'file_uploaded_notif' => __( 'file uploaded', 'plathix' ),
 			'files_uploaded_notif' => __( 'files uploaded', 'plathix' ),
 			'upload_in_progress_notice' => __( 'Upload is still running. The view will return to the upload folder when it finishes.', 'plathix' ),
 			'upload_in_progress_folder_notice' => __( 'Upload is still running in the selected folder. The view will return there when it finishes.', 'plathix' ),
 			'upload_reload_warning' => __( 'Uploads are still in progress. Leaving now may interrupt them.', 'plathix' ),
 			'error' => __( 'Error', 'plathix' ),
-
+			'close_notification' => __( 'Close notification', 'plathix' ),
 			'replace_success' => __( 'File replaced successfully.', 'plathix' ),
 			'replace_partial_success' => __( 'File replaced, but some cleanup steps need manual review.', 'plathix' ),
 			'replace_failed' => __( 'Replace failed.', 'plathix' ),
-
 			'replace_in_progress' => __( 'Replacing…', 'plathix' ),
 			'replace_preview_refresh_failed' => __( 'File replaced, but the preview could not be refreshed. Reload the page to see the new file.', 'plathix' ),
-
 			'replace_write_indeterminate' => __( 'The file may have been replaced, but the server response could not be confirmed. Reload the page to check.', 'plathix' ),
 			/* translators: 1: image width in pixels, 2: image height in pixels. */
 			'replace_dimensions_format' => __( '%1$s by %2$s pixels', 'plathix' ),
 			'rest_write_blocked' => __( 'The server is blocking REST write requests. Contact your hosting.', 'plathix' ),
 			'rest_read_corrupted' => __( 'The server is corrupting REST responses (both /wp-json/ and rest_route returned invalid data). Contact your hosting.', 'plathix' ),
-
 			'rest_write_indeterminate' => __( 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.', 'plathix' ),
 			'upload_failed' => __( 'Upload failed.', 'plathix' ),
-
 			'folder_switch_move_to' => __( 'Move to folder', 'plathix' ),
 			'folder_switch_load_failed' => __( 'Failed to load folders.', 'plathix' ),
 			'folder_switch_move_failed' => __( 'Failed to move file.', 'plathix' ),
@@ -99,7 +95,6 @@ final class SidebarI18nBuilder
 			'folder_renamed_notif'      => __( 'Folder renamed', 'plathix' ),
 			'folder_deleted_notif'      => __( 'Moved to Trash', 'plathix' ),
 			'folders_deleted_notif'     => __( 'folders moved to Trash', 'plathix' ),
-
 			'drag_reorder_hidden_by_sort' => __( 'Position saved. Switch sorting to "Default" to see it.', 'plathix' ),
 			'folder_delete_failed_notif'  => __( 'folder could not be deleted', 'plathix' ),
 			'folders_delete_failed_notif' => __( 'folders could not be deleted', 'plathix' ),
@@ -109,7 +104,6 @@ final class SidebarI18nBuilder
 			'files_moved_notif' => __( 'files moved', 'plathix' ),
 			// Bulk-delete overlay (templates/overlays.js).
 			'bulk_delete_confirm_title' => __( 'Move the selected folders to Trash? You can restore them later.', 'plathix' ),
-
 			'bulk_delete_confirm_safe'  => __( 'Files won\'t be deleted — depending on your Trash settings, they either move with the folders or become unassigned.', 'plathix' ),
 			'bulk_delete_has_nested'    => __( 'Some selected folders contain subfolders. Choose how to handle them:', 'plathix' ),
 			'delete_folders_only'       => __( 'Move only selected, keep subfolders', 'plathix' ),
@@ -124,7 +118,6 @@ final class SidebarI18nBuilder
 		/**
 		 * @param array<string, string> $i18n
 		 */
-
 		return (array) apply_filters( 'plathix/sidebar/i18n', $i18n );
 	}
 }

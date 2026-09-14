@@ -715,6 +715,24 @@ body.plathix-body-sidebar #wpbody > #wpbody-content {
 	display: inline-block;
 }
 
+
+
+.plathix-folder__open {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	flex: 1;
+	min-width: 0;
+	border: none;
+	background: transparent;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	text-align: left;
+	color: inherit;
+	cursor: pointer;
+}
+
 /* Folder name takes all remaining space */
 .plathix-folder__name {
 	flex: 1;

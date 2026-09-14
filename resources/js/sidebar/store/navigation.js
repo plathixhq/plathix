@@ -72,9 +72,9 @@ export const navigationModule = {
         try {
             const data = await Api.getFolders(params, signal);
             if (requestId === _refreshRequestSeq) {
-
-
-
+                
+                
+                
                 const isFull = typeof data?.fullTree === 'boolean' ? data.fullTree : isFullTreeRequest(params);
                 const nextFolders = Array.isArray(data?.folders) ? data.folders : [];
                 if (replace) {
@@ -90,25 +90,25 @@ export const navigationModule = {
                 } else if (markFullTree === false) {
                     this.hasLoadedFullTree = false;
                 } else if (replace && isFull) {
-
-
-
-
-
+                    
+                    
+                    
+                    
+                    
                     this.hasLoadedFullTree = true;
                 }
 
-
-
-
-
+                
+                
+                
+                
                 //
-
-
-
-
-
-
+                
+                
+                
+                
+                
+                
                 if (replace && isFull) {
                     this.loadedParentIds = new Set([0]);
                     for (const folder of this.folders) {
@@ -142,16 +142,16 @@ export const navigationModule = {
             signal,
             replace: false,
             markParentLoaded: normalizedParentId,
-
-
-
+            
+            
+            
             params: { parent_id: normalizedParentId },
         });
     },
 
     async loadCompleteFolderTree({ silent = true, signal = undefined } = {}) {
-
-
+        
+        
         return this.refreshFolders({
             silent,
             signal,
@@ -174,15 +174,15 @@ export const navigationModule = {
     },
 
     async openFolder(id) {
-
+        
         this.clearSelectionDom();
         this.selected = [];
         this.openId = Number(id);
 
-
-
-
-
+        
+        
+        
+        
         await this.expandAncestors(Number(id));
 
         if (this.isUploading && Number(this.uploadLockedFolder) > 0 && Number(id) !== Number(this.uploadLockedFolder)) {
@@ -204,8 +204,8 @@ export const navigationModule = {
             /** @type {HTMLElement | null} */
             const node = document.querySelector(`[data-folder-id="${id}"]`);
             node?.focus();
-
-
+            
+            
             node?.scrollIntoView({ block: 'nearest' });
         });
     },
@@ -216,14 +216,14 @@ export const navigationModule = {
             return;
         }
 
-
-
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
+        
         try {
             /** @type {PlathixMediaLibrary | null | undefined} */
             const library = /** @type {PlathixMediaLibrary | null | undefined} */ (
@@ -276,12 +276,12 @@ export const navigationModule = {
 		const active = Number(folderId) || 0;
 		const trashId = Number(getRuntime().trashFolderId ?? 0);
 
-
-
-
-
-
-
+		
+		
+		
+		
+		
+		
 		doAction('plathix.folderFilterApplied', { folderId: active });
 
 		// static-list screens (upload list, edit.php) — never go through mediaFrame
@@ -305,12 +305,12 @@ export const navigationModule = {
 
 		const mediaFrame = getMediaFrame();
         if (mediaFrame) {
-
-
-
-
-
-
+            
+            
+            
+            
+            
+            
             ++_mediaFrameRetryToken;
             try {
                 const resolved = resolveMediaFrameTarget(mediaFrame);
@@ -341,7 +341,7 @@ export const navigationModule = {
 		const url = new URL(window.location.href);
         if (active === trashId && trashId > 0) {
             url.searchParams.delete('plathix_folder');
-
+            
             url.searchParams.set('attachment-filter', 'trash');
             url.searchParams.delete('post_status');
         } else if (active > 0) {

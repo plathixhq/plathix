@@ -12,7 +12,6 @@ use Plathix\Loader;
 
 final class Module implements ModuleInterface
 {
-
 	public function register(): void
 	{
 		add_action( 'plathix/modules/boot', [ $this, 'boot' ], 10, 3 );
@@ -23,7 +22,6 @@ final class Module implements ModuleInterface
 	 * @param RateLimiter|null   $rateLimiter
 	 * @param Loader|null        $loader
 	 */
-
 	public function boot(?JobDispatcher $jobs = null, ?RateLimiter $rateLimiter = null, ?Loader $loader = null): void
 	{
 		if ( $loader === null ) {

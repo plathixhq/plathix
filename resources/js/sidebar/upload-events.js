@@ -19,30 +19,30 @@ export function bindUploadCompleteEvents() {
     let _uploadTimer = null;
     let _activeUploads = 0;
     let _uploadLockedFolder = 0;
-
-
-
-
-
+    
+    
+    
+    
+    
     let _uploadSessionLocked = false;
     let _resetTimer = null;
     let _queueBound = false;
     const queueResetFallbackMs = 2500;
     const immediateResetFallbackMs = 2500;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     const REFRESH_DEBOUNCE_MS = 300;
     const REFRESH_MAX_WAIT_MS = 1000;
     let _refreshDebounceTimer = null;
@@ -60,15 +60,15 @@ export function bindUploadCompleteEvents() {
 
         const isLeadingCall = _refreshDebounceTimer === null && _refreshMaxWaitTimer === null;
         if (isLeadingCall) {
-
+            
             store.refreshMediaFrame?.();
         }
 
         clearTimeout(_refreshDebounceTimer);
         _refreshDebounceTimer = setTimeout(() => {
             if (!isLeadingCall) {
-
-
+                
+                
                 flushRefreshMediaFrame();
             } else {
                 clearTimeout(_refreshMaxWaitTimer);
@@ -79,8 +79,8 @@ export function bindUploadCompleteEvents() {
 
         if (_refreshMaxWaitTimer === null) {
             _refreshMaxWaitTimer = setTimeout(() => {
-
-
+                
+                
                 flushRefreshMediaFrame();
             }, REFRESH_MAX_WAIT_MS);
         }
@@ -113,8 +113,8 @@ export function bindUploadCompleteEvents() {
         store.notify('info', msg, { key: NOTICE_KEY, duration: 0 });
     };
     const beginSession = () => {
-
-
+        
+        
         clearTimeout(_resetTimer);
         _resetTimer = null;
         syncStoreState();
@@ -159,12 +159,12 @@ export function bindUploadCompleteEvents() {
             store.applyFolderFilter(returnFolder, { resetPage: true });
             store.refreshMediaFrame?.();
         } else {
-
+            
             // Attachments.all collection the moment the XHR completes, but the active
             // grid query filters by plathix_folder (a Plathix-specific taxonomy term) —
             // WP core client-side code has no knowledge of that field and cannot decide
             // whether the new model belongs to the current filtered view without asking
-
+            
             // the early return above keeps the "no reset-fetch on large libraries"
             // perf invariant intact there, where native pickup is confirmed to work.
             store.refreshMediaFrame?.();
@@ -221,10 +221,10 @@ export function bindUploadCompleteEvents() {
             _activeUploads++;
             syncStoreState();
             renderSessionNotice();
-
-
-
-
+            
+            
+            
+            
             this.addEventListener('loadend', function () {
                 _activeUploads = Math.max(0, _activeUploads - 1);
                 syncStoreState();
@@ -233,11 +233,11 @@ export function bindUploadCompleteEvents() {
                 }
                 if (this.status >= 200 && this.status < 300) {
                     onUpload();
-
-
-
-
-
+                    
+                    
+                    
+                    
+                    
                     if (_uploadLockedFolder > 0) {
                         debouncedRefreshMediaFrame();
                     }
@@ -259,7 +259,7 @@ export function bindUploadCompleteEvents() {
             _activeUploads++;
             syncStoreState();
             renderSessionNotice();
-
+            
             this.addEventListener('loadend', function () {
                 _activeUploads = Math.max(0, _activeUploads - 1);
                 syncStoreState();
@@ -268,7 +268,7 @@ export function bindUploadCompleteEvents() {
                 }
                 if (this.status >= 200 && this.status < 300) {
                     onUpload();
-
+                    
                     if (_uploadLockedFolder > 0) {
                         debouncedRefreshMediaFrame();
                     }
@@ -278,11 +278,11 @@ export function bindUploadCompleteEvents() {
 
         const isWpUpload = this._isWpUpload || isAjaxUpload;
         if (isWpUpload && data instanceof FormData) {
-
-
-
-
-
+            
+            
+            
+            
+            
             if (!_uploadSessionLocked) {
                 _uploadLockedFolder = Number(getStore()?.openId) || 0;
                 _uploadSessionLocked = true;
@@ -290,18 +290,18 @@ export function bindUploadCompleteEvents() {
                 renderSessionNotice();
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             const trashFolderId = Number(window.Plathix?.trashFolderId || 0);
             if (trashFolderId > 0 && _uploadLockedFolder === trashFolderId) {
                 getStore()?.notify?.(
@@ -321,8 +321,8 @@ export function bindUploadCompleteEvents() {
 
     proto[PATCHED_KEY] = true;
     bindQueue();
-
-
+    
+    
     onMediaFrameReady(bindQueue);
     setStateFlag('uploadEventsBound');
 }

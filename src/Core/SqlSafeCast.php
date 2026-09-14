@@ -10,7 +10,6 @@ final class SqlSafeCast
 	 * @param mixed $raw
 	 * @return int|null
 	 */
-
 	public static function nullSafeSqlCount(mixed $raw): ?int
 	{
 		if ( null === $raw ) {
@@ -24,7 +23,6 @@ final class SqlSafeCast
 	 * @param array<int, mixed>|null $raw
 	 * @return array<int, mixed>|null
 	 */
-
 	public static function nullSafeSqlRows(?array $raw): ?array
 	{
 		return $raw;

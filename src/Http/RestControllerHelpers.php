@@ -42,6 +42,9 @@ trait RestControllerHelpers
 		do_action( 'plathix/audit/record', $action, $payload );
 	}
 
+	/**
+	 * @return list<int>
+	 */
 	public function sanitizeIdsParam(mixed $value): array {
 		return Sanitize::idsFromCsvOrArray( $value );
 	}

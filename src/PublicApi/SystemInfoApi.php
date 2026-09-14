@@ -8,7 +8,6 @@ use Plathix\Modules\SystemInfo\SystemInfoPage;
 
 final class SystemInfoApi
 {
-
 	public function pageUrl(): string
 	{
 		return admin_url( 'admin.php?page=' . SystemInfoPage::PAGE_SLUG );

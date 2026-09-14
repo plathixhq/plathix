@@ -29,11 +29,9 @@ final class FolderSwitchUi
 		wp_enqueue_script( 'plathix-folder-switch', PLATHIX_ASSETS_URL . 'js/folder-switch.js', $deps, $version, true );
 		wp_localize_script( 'plathix-folder-switch', 'PlathixFolderSwitch', [
 			'restUrl'             => rest_url( 'plathix/v1/' ),
-
 			'restUrlFallback'     => RestController::restRouteFallbackBase(),
 			'restNonce'           => wp_create_nonce( 'wp_rest' ),
 			'taxonomy'            => $taxonomy,
-
 			'uncategorizedTermId' => ( new FolderRepository() )->getUncategorizedTermId( $taxonomy ),
 		] );
 

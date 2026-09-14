@@ -8,15 +8,15 @@ import { onMediaFrameReady } from './media-frame-watcher.js';
 import { getFeatures, getRuntime } from './runtime.js';
 
 function bindInitialModalFilter() {
-
-
-
+    
+    
+    
     onMediaFrameReady(() => {
-
-
-
-
-
+        
+        
+        
+        
+        
         if (getRuntime().isForeignContext) {
             return;
         }
@@ -27,10 +27,10 @@ function bindInitialModalFilter() {
             return;
         }
 
-
-
-
-
+        
+        
+        
+        
         store.applyFolderFilter(openId);
     });
 }
@@ -44,8 +44,8 @@ export function bootstrapModal() {
     const canAssign = !!window.Plathix?.caps?.canAssign;
     const canManage = !!window.Plathix?.caps?.canManage;
 
-
-
+    
+    
     if (getRuntime().infiniteScroll) {
         infiniteScrollManager.init();
     }

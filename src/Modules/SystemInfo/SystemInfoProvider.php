@@ -32,7 +32,6 @@ final class SystemInfoProvider
 	/**
 	 * @return array<int, array{label:string, value:string, ok:bool}>
 	 */
-
 	public function dbTablesRows(): array {
 		global $wpdb;
 
@@ -54,7 +53,6 @@ final class SystemInfoProvider
 	/**
 	 * @return array<int, array{label:string, value:string, ok?:bool|null}>
 	 */
-
 	public function plathixInfo(): array {
 		$post_types = [ 'attachment' ];
 
@@ -86,7 +84,6 @@ final class SystemInfoProvider
 	/**
 	 * @return array{label:string, value:string, ok?:bool|null}|null
 	 */
-
 	private function buildInfoRow(string $plugin_path, string $label): ?array {
 		$path = $plugin_path . 'BUILD_INFO';
 		if ( ! is_readable( $path ) ) {
@@ -125,7 +122,6 @@ final class SystemInfoProvider
 	/**
 	 * @return array<int, array{label:string, value:string, ok?:bool|null}>
 	 */
-
 	public function serverEnvironment(): array {
 		global $wpdb;
 
@@ -133,7 +129,7 @@ final class SystemInfoProvider
 
 		$temp_dir = ( new TempDirectory() )->path();
 
-		$server_software = $_SERVER['SERVER_SOFTWARE'] ?? '—'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput -- server signature for the diagnostics screen; sanitized on line 202 and escaped at render time in SystemInfoPage
+		$server_software = wp_unslash( $_SERVER['SERVER_SOFTWARE'] ?? '—' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- server signature for the diagnostics screen; unslashed here, sanitized on line 202 and escaped at render time in SystemInfoPage
 		$gd_version      = '';
 		if ( function_exists( 'gd_info' ) ) {
 			$gd_version = gd_info()['GD Version'] ?? 'Available';
@@ -161,7 +157,6 @@ final class SystemInfoProvider
 	/**
 	 * @return array<int, array{label:string, value:string, ok?:bool|null}>
 	 */
-
 	public function wpEnvironment(): array {
 		return [
 			[ 'label' => __( 'WordPress Version', 'plathix' ),   'value' => get_bloginfo( 'version' ) ],
@@ -180,7 +175,6 @@ final class SystemInfoProvider
 	/**
 	 * @return array<int, array{label:string, value:string}>
 	 */
-
 	public function themeInfo(): array {
 		$theme  = wp_get_theme();
 		$parent = $theme->parent();
@@ -199,9 +193,7 @@ final class SystemInfoProvider
 	/**
 	 * @return array<int, array{label:string, value:string}>
 	 */
-
 	public function activePlugins(): array {
-
 		$plugins = get_option( 'active_plugins', [] );
 		$rows    = [];
 		foreach ( $plugins as $plugin_file ) {

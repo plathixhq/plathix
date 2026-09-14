@@ -12,9 +12,9 @@ final class ImportCheckpointStore
 	 * @param array<int, int> $map
 	 * @param list<int>       $created
 	 */
-
 	public function save(string $adapter_key, array $map, int $moved, array $created): void {
-		update_option(
+		if (
+			! OptionWrite::ifChanged(
 			self::optionKey( $adapter_key ),
 			[
 				'map'        => $map,
@@ -22,15 +22,16 @@ final class ImportCheckpointStore
 				'created'    => $created,
 				'created_at' => gmdate( 'c' ),
 				'expires_at' => gmdate( 'c', time() + self::TTL_SECONDS ),
-			],
-			false
-		);
+			]
+			)
+		) {
+			Logger::error( 'import_checkpoint_write_failed', [ 'adapter_key' => $adapter_key ] );
+		}
 	}
 
 	/**
 	 * @return array{map: array<int,int>, moved: int, created?: list<int>, created_at: string, expires_at: string}|null
 	 */
-
 	public function get(string $adapter_key): ?array {
 		$checkpoint = get_option( self::optionKey( $adapter_key ), null );
 
@@ -43,7 +44,9 @@ final class ImportCheckpointStore
 	}
 
 	public function delete(string $adapter_key): void {
-		delete_option( self::optionKey( $adapter_key ) );
+		if ( ! OptionWrite::deleted( self::optionKey( $adapter_key ) ) ) {
+			Logger::error( 'import_checkpoint_delete_failed', [ 'adapter_key' => $adapter_key ] );
+		}
 	}
 
 	/**

@@ -21,7 +21,6 @@ final class Module
 
 	public function boot(): void
 	{
-
 		MediaModalEnqueue::register( [ $this, 'enqueueScripts' ], 20, 20 );
 
 		$controller = new FavoritesController(
@@ -41,7 +40,6 @@ final class Module
 						[
 							'methods'             => \WP_REST_Server::EDITABLE,
 							'callback'            => [ $controller, 'updateFavorites' ],
-
 							'permission_callback' => static fn(\WP_REST_Request $request): bool =>
 								RestController::check( 'assign', self::requestScalar( $request->get_param( 'post_type' ) ) ),
 							'args'                => [

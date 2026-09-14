@@ -12,7 +12,6 @@ final class ReplaceAuthorization
 	 * @param mixed $context
 	 * @return array{mode:string,user_id:int}
 	 */
-
 	public function normalize(mixed $context): array {
 		$context = is_array( $context ) ? $context : [];
 		$mode = sanitize_key( (string) ( $context['mode'] ?? 'wp_user' ) );
@@ -26,7 +25,6 @@ final class ReplaceAuthorization
 	/**
 	 * @param array{mode:string,user_id:int} $actor_context
 	 */
-
 	public function canReplace(array $actor_context, int $attachment_id): bool {
 		if ( $actor_context['mode'] === 'system_cli' ) {
 			return true;

@@ -10,13 +10,11 @@ use Plathix\User\AccessLevel;
 
 final class ListScreenAuthorizer
 {
-
 	private const ALLOWED_SCREEN_BASES = [ 'upload' ];
 
 	/**
 	 * @param array<string, mixed> $request
 	 */
-
 	public function authorize(array $request): void {
 		Nonce::verifyOrDie();
 

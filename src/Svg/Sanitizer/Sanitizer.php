@@ -31,7 +31,6 @@ class Sanitizer
 			}
 			$source = $result;
 		} else {
-
 			do_action( 'plathix/audit/record', 'svg_sanitizer_fallback_used', [] );
 		}
 
@@ -119,7 +118,6 @@ class Sanitizer
 	];
 
 	private function cleanDom(\DOMDocument $dom): bool {
-
 		$to_remove = [];
 		foreach ( $dom->getElementsByTagName('*') as $element ) {
 			if ( ! $element instanceof \DOMElement ) {

@@ -14,7 +14,7 @@ const MARKER = 'plathix-favorites-entry';
 
 
 const CTX_MARKER = 'plathix-fav-ctx-item';
-const CTX_ORDER = 5;
+const CTX_ORDER = 5; 
 
 function insertOrdered(slot, node, order) {
     node.setAttribute('data-order', String(order));
@@ -52,7 +52,7 @@ function fillCtxSlot(slot, addLabel, removeLabel, A) {
     tmp.innerHTML = favCtxItemHTML(addLabel, removeLabel);
     const node = tmp.firstElementChild;
     insertOrdered(slot, node, CTX_ORDER);
-
+    
     if (typeof A.initTree === 'function') {
         A.initTree(node);
     }
@@ -89,16 +89,16 @@ function onPlathixReady() {
     slot.replaceWith(node);
     A.initTree(node);
 
-
+    
     const addLabel = window.Plathix?.i18n?.add_favorite || 'Add to favorites';
     const removeLabel = window.Plathix?.i18n?.remove_favorite || 'Remove from favorites';
     fillAllCtxSlots(addLabel, removeLabel, A);
 
-
+    
     const mo = new MutationObserver(() => fillAllCtxSlots(addLabel, removeLabel, A));
     mo.observe(document.body, { childList: true, subtree: true });
-
-
+    
+    
     setStateValue('favoritesEntryBodyObserver', mo);
 }
 

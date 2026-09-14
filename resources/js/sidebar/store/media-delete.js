@@ -48,11 +48,11 @@ export const mediaDeleteModule = {
                 ? result.failed.map((id) => Number(id)).filter((id) => id > 0)
                 : [];
 
-
-
+            
+            
             this.clearSelectionDom();
             this.selected = failed.length ? failed : [];
-
+            
             this.setFromMutationResult(failed.length);
 
             cacheInvalidateFolder(this.openId);
@@ -80,9 +80,9 @@ export const mediaDeleteModule = {
             }
         } catch (error) {
             if (requestId === _mediaRestoreSeq) {
-
-
-
+                
+                
+                
                 if (error?.code === 'rest_write_indeterminate') {
                     this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
                     this.refreshFolders({ silent: true }).catch(() => {});
@@ -117,11 +117,11 @@ export const mediaDeleteModule = {
                 ? result.failed.map((id) => Number(id)).filter((id) => id > 0)
                 : [];
 
-
-
+            
+            
             this.clearSelectionDom({ removeIds: trashed });
             this.selected = failed.length ? failed : [];
-
+            
             this.setFromMutationResult(failed.length);
 
             cacheInvalidateFolder(this.openId);
@@ -152,8 +152,8 @@ export const mediaDeleteModule = {
             }
         } catch (error) {
             if (requestId === _mediaTrashSeq) {
-
-
+                
+                
                 if (error?.code === 'rest_write_indeterminate') {
                     this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
                     this.refreshFolders({ silent: true }).catch(() => {});

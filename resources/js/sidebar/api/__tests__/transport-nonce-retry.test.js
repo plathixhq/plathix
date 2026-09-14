@@ -62,9 +62,9 @@ describe('restRequest() nonce-refresh retry', () => {
 
         expect(out).toEqual({ ok: 1 });
         expect(calls).toHaveLength(3);
-
+        
         expect(calls[1].url).toBe(RUNTIME.ajaxUrl);
-
+        
         expect(calls[2].nonce).toBe('rn-new');
         expect(calls[2].nonce).not.toBe(RUNTIME.restNonce);
     });
@@ -76,7 +76,7 @@ describe('restRequest() nonce-refresh retry', () => {
 
         await expect(restRequest('media', { method: 'GET' })).rejects.toMatchObject({ code: 'rest_forbidden' });
 
-
+        
         expect(calls).toHaveLength(1);
     });
 });
@@ -108,8 +108,8 @@ describe('keeps upload links scoped to the active folder', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         calls = [];
-
-
+        
+        
         getRuntime.mockReturnValue(undefined);
     });
 
@@ -125,7 +125,7 @@ describe('keeps upload links scoped to the active folder', () => {
             uploadMultipart('attachments/1/replace', file, { includePostType: false, runtimeOverride: OVERRIDE })
         ).rejects.toMatchObject({ code: 'rest_cookie_invalid_nonce' });
 
-
+        
         expect(calls).toHaveLength(1);
     });
 });

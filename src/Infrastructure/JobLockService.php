@@ -24,7 +24,6 @@ final class JobLockService
 	/**
 	 * @param bool $option_fallback
 	 */
-
 	public function releaseDispatch(string $fingerprint, bool $option_fallback): void {
 		$lock_name = 'plx_d_' . md5( $fingerprint );
 		DbAdvisoryLock::release( $lock_name );
@@ -33,7 +32,6 @@ final class JobLockService
 	/**
 	 * @return array{mode: string, opt_key: string|null}
 	 */
-
 	public function acquireOrder(string $lock_name): array {
 		$lock = DbAdvisoryLock::acquire( $lock_name, 3 );
 

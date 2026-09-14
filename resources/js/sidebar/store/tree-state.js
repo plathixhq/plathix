@@ -37,10 +37,10 @@ export const treeStateModule = {
         _foldersVersion++;
     },
 
-
-
-
-
+    
+    
+    
+    
     patchFolder(id, patch) {
         const idx = this.folders.findIndex((f) => Number(f.id) === Number(id));
         if (idx === -1) return false;

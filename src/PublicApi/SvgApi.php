@@ -9,7 +9,6 @@ use Plathix\Modules\Svg\SvgSupport;
 
 final class SvgApi
 {
-
 	public function currentUserCanUploadSvg(): bool
 	{
 		return ( new SvgSupport() )->currentUserAllowed();

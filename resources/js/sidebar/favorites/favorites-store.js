@@ -32,14 +32,14 @@ export const favoritesModule = {
                 _lastSyncedFavorites = sent;
             })
             .catch((error) => {
-
-
+                
+                
                 if (error?.name === 'AbortError') {
                     return;
                 }
-
-
-
+                
+                
+                
                 this.favorites = [..._lastSyncedFavorites];
                 this._favoritesSet = new Set(_lastSyncedFavorites);
                 this.notify?.('error', t('favorites_save_failed', 'Failed to save favorites.'));

@@ -23,6 +23,9 @@ final class Module implements ModuleInterface
 
 	public const TRASH_TIME_META = '_plathix_trash_time';
 
+	/**
+	 * @var JobDispatcher|null
+	 */
 	private ?JobDispatcher $jobs = null;
 
 	public function register(): void
@@ -44,7 +47,6 @@ final class Module implements ModuleInterface
 	 * @param array<string, string> $strings
 	 * @return array<string, string>
 	 */
-
 	public function addSidebarI18n(array $strings): array
 	{
 		$strings['move_to_trash']             = __( 'Move to Trash', 'plathix' );
@@ -77,16 +79,12 @@ final class Module implements ModuleInterface
 		$strings['folder_restore_failed_notif'] = __( 'folder could not be restored', 'plathix' );
 		$strings['folder_purge_failed_notif']  = __( 'folder could not be deleted permanently', 'plathix' );
 		/* translators: Placeholder values are inserted at runtime. */
-
 		$strings['trash_files_short']         = __( 'F', 'plathix' );
 		/* translators: Placeholder values are inserted at runtime. */
-
 		$strings['trash_folders_short']       = __( 'D', 'plathix' );
 		/* translators: Placeholder values are inserted at runtime. */
-
 		$strings['trash_files_label']         = __( 'Files', 'plathix' );
 		/* translators: Placeholder values are inserted at runtime. */
-
 		$strings['trash_folders_label']       = __( 'Folders', 'plathix' );
 
 		return $strings;
@@ -97,10 +95,8 @@ final class Module implements ModuleInterface
 	 * @param mixed              $rateLimiter
 	 * @param mixed              $loader
 	 */
-
 	public function boot(?JobDispatcher $jobs = null, mixed $rateLimiter = null, mixed $loader = null): void
 	{
-
 		MediaModalEnqueue::register( [ $this, 'enqueueScripts' ], 20, 20 );
 
 		add_action( 'init', [ $this, 'ensureTrashTerms' ] );
@@ -124,19 +120,28 @@ final class Module implements ModuleInterface
 		}
 	}
 
+	public const RETENTION_SCHEDULE_CHECKED_OPTION = 'plathix_trash_retention_schedule_last_checked';
+
 	public function ensureRetentionSchedule(): void
 	{
 		if ( ! is_admin() ) {
 			return;
 		}
 
+		$last_checked = (int) get_option( self::RETENTION_SCHEDULE_CHECKED_OPTION, 0 );
+		if ( time() - $last_checked < DAY_IN_SECONDS ) {
+			return;
+		}
+
 		$this->jobs?->dispatchRecurring( self::RETENTION_JOB, self::RETENTION_JOB_INTERVAL );
+
+		// @phpstan-ignore plathix.discardedWriteReturn
+		update_option( self::RETENTION_SCHEDULE_CHECKED_OPTION, time(), false );
 	}
 
 	public function unscheduleRetentionJob(int $blog_id): void
 	{
 		if ( function_exists( 'as_unschedule_all_actions' ) ) {
-
 			as_unschedule_all_actions( self::RETENTION_JOB, JobDispatcher::recurringUnscheduleArgs( $blog_id ), JobDispatcher::groupForBlog( $blog_id ) );
 		}
 	}
@@ -170,20 +175,20 @@ final class Module implements ModuleInterface
 	/**
 	 * @param int $post_id
 	 */
-
 	public function onTrashedPost($post_id): void
 	{
 		$post_id = (int) $post_id;
 		if ( get_post_type( $post_id ) !== 'attachment' ) {
 			return;
 		}
+		// @phpstan-ignore plathix.discardedWriteReturn
 		delete_post_meta( $post_id, '_wp_trash_meta_time' );
 
 		$old    = get_post_meta( $post_id, self::TRASH_TIME_META, true );
 		$now    = time();
 		$result = update_post_meta( $post_id, self::TRASH_TIME_META, $now );
 
-		if ( ! $result && $old !== $now ) {
+		if ( ! $result && (int) $old !== $now ) {
 			Logger::error( 'trash_retention_meta_write_failed', [ 'post_id' => $post_id ] );
 		}
 	}
@@ -191,14 +196,19 @@ final class Module implements ModuleInterface
 	/**
 	 * @param int $post_id
 	 */
-
 	public function onUntrashedPost($post_id): void
 	{
 		$post_id = (int) $post_id;
 		if ( get_post_type( $post_id ) !== 'attachment' ) {
 			return;
 		}
+
+		// @phpstan-ignore plathix.discardedWriteReturn
 		delete_post_meta( $post_id, self::TRASH_TIME_META );
+
+		if ( '' !== get_post_meta( $post_id, self::TRASH_TIME_META, true ) ) {
+			Logger::error( 'trash_retention_meta_delete_failed', [ 'post_id' => $post_id ] );
+		}
 	}
 
 	/**
@@ -207,7 +217,6 @@ final class Module implements ModuleInterface
 	 * @param string   $previous_status
 	 * @return mixed
 	 */
-
 	public function blockTrashOfAlreadyTrashedPost($check, \WP_Post $post, string $previous_status) {
 		if ( $post->post_status === 'trash' ) {
 			return false;
@@ -224,7 +233,6 @@ final class Module implements ModuleInterface
 	 * @param array<int, string> $slugs
 	 * @return array<int, string>
 	 */
-
 	public function addTrashSlug(array $slugs): array
 	{
 		$slugs[] = self::TRASH_SLUG;
@@ -243,7 +251,6 @@ final class Module implements ModuleInterface
 	 * @param array<int, int> $ids
 	 * @return array<int, int>
 	 */
-
 	public function resolveHiddenFolderIds(array $ids, string $taxonomy): array
 	{
 		return ( new FolderRepository() )->getTrashedIds( $taxonomy );

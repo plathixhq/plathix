@@ -14,6 +14,7 @@ import { bootstrapStaticGrid } from './bootstrap-static-grid.js';
 import { bootstrapModal } from './bootstrap-modal.js';
 import { stripInitialFolderParamForMediaFrame } from './url-utils.js';
 import { guardTrashUrl, bindViewSwitchTrashHrefGuard } from './static-list/history.js';
+import { focusFirstIn, trapFocus } from './focus-trap.js';
 import '../../css/sidebar.css';
 
 export const PLATHIX_STORE_KEY = 'plathix';
@@ -23,13 +24,17 @@ function registerAlpineBindings() {
         Alpine.store(PLATHIX_STORE_KEY, sidebarStore);
         Alpine.data('folderTree', folderTree);
         Alpine.data('contextMenu', contextMenuComponent);
-
-
+        
+        
         Alpine.data('bulkActions', bulkActionsComponent);
-
-
-
-
+        
+        
+        
+        
+        
+        
+        Alpine.magic('focusFirstIn', () => focusFirstIn);
+        Alpine.magic('trapFocus', () => trapFocus);
     }, { once: true });
 }
 
@@ -62,9 +67,9 @@ async function plathixInit() {
     setStateFlag('bootstrapped');
 
     window.Plathix.isTouch = window.matchMedia?.('(pointer: coarse)')?.matches ?? false;
-
-
-
+    
+    
+    
     window.Plathix.mediaGridClear = memClear;
     registerAlpineBindings();
 
@@ -75,17 +80,17 @@ async function plathixInit() {
     window.Alpine = Alpine;
     Alpine.start();
 
-
-
-
-
-
+    
+    
+    
+    
+    
     guardTrashUrl(isTrashViewActive);
-
-
-
-
-
+    
+    
+    
+    
+    
     bindViewSwitchTrashHrefGuard(isTrashViewActive);
 
     if (shouldUseStaticListFiltering()) {
@@ -95,18 +100,18 @@ async function plathixInit() {
     } else if (shouldUseMediaFrameFiltering()) {
         bootstrapModal();
     } else {
-
-
-
-
-
-
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         doAction('plathix.sidebarBootstrapFallback', { filterStrategy: getFilterStrategy(), screenKind: getScreenKind() });
         if (window.Plathix?.debug) {
             console.warn(
@@ -117,19 +122,19 @@ async function plathixInit() {
 
     bindBeforeUnloadPersistence();
 
-
-
-
-
-
+    
+    
+    
+    
+    
     //
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
 
     doAction('plathix.sidebarReady', { postType: getPostType(), screenKind: window.Plathix?.screenKind ?? 'static' });
     window.__PlathixApiReady = true;

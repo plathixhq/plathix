@@ -67,10 +67,10 @@ describe('static-list cache', () => {
         expect(getData({ folder_id: 7, screen_base: 'edit' })).toEqual({ screen: 'edit-7' });
     });
 
-
-
-
-
+    
+    
+    
+    
     it('keeps store/selection state consistent across UI events', async () => {
         const params = { folder_id: 7, screen_base: 'upload' };
         let resolveFetch;
@@ -78,17 +78,17 @@ describe('static-list cache', () => {
             resolveFetch = resolve;
         });
 
-
+        
         const epochAtFetchStart = cacheEpoch();
         const fetchPromise = pendingFetch.then((data) => {
             cacheSet(params, data, epochAtFetchStart);
             return data;
         });
 
-
+        
         cacheInvalidateFolder(7);
 
-
+        
         resolveFetch({ stale: true });
         await fetchPromise;
 

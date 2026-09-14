@@ -45,14 +45,27 @@ export const folderMoveModule = {
     async moveFolderToParent(id, parentId) {
         await this.withLoading(async () => {
             const oldParentId = Number(this.folders.find((f) => Number(f.id) === Number(id))?.parentId || 0);
-            await withLockRetry(() => Api.moveFolderParent(id, parentId));
+            try {
+                await withLockRetry(() => Api.moveFolderParent(id, parentId));
+            } catch (error) {
+                
+                
+                
+                if (error?.code === 'rest_write_indeterminate') {
+                    this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
+                    this.refreshFolders({ silent: true }).catch(() => {});
+                    this.notify('info', this.error);
+                    return;
+                }
+                throw error;
+            }
             cacheInvalidateFolder(id);
             cacheInvalidateFolder(parentId);
             if (oldParentId !== Number(parentId)) {
                 cacheInvalidateFolder(oldParentId);
             }
-
-
+            
+            
             try {
                 await this.refreshFolders({ silent: true, skipCacheClear: true });
             } catch (error) {
@@ -67,14 +80,25 @@ export const folderMoveModule = {
     async moveFolderToSiblingOf(id, targetParentId, position) {
         await this.withLoading(async () => {
             const oldParentId = Number(this.folders.find((f) => Number(f.id) === Number(id))?.parentId || 0);
-            await withLockRetry(() => Api.moveFolderToSiblingOf(id, targetParentId, position));
+            try {
+                await withLockRetry(() => Api.moveFolderToSiblingOf(id, targetParentId, position));
+            } catch (error) {
+                
+                if (error?.code === 'rest_write_indeterminate') {
+                    this.error = t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.');
+                    this.refreshFolders({ silent: true }).catch(() => {});
+                    this.notify('info', this.error);
+                    return;
+                }
+                throw error;
+            }
             cacheInvalidateFolder(id);
             cacheInvalidateFolder(targetParentId);
             if (oldParentId !== Number(targetParentId)) {
                 cacheInvalidateFolder(oldParentId);
             }
-
-
+            
+            
             try {
                 await this.refreshFolders({ silent: true, skipCacheClear: true });
             } catch (error) {

@@ -6,7 +6,6 @@ namespace Plathix\Modules\DataWipe;
 
 final class DangerZoneTab
 {
-
 	public const TAB = 'danger';
 
 	public const WIPE_ACTION = 'plathix_delete_all_data';
@@ -69,7 +68,6 @@ final class DangerZoneTab
 			</div>
 		</div>
 		<?php
-
 		wp_add_inline_script( 'plathix-admin-ui', self::modalScript( $nonce, $ajax_url ), 'after' );
 	}
 
@@ -139,7 +137,6 @@ final class DangerZoneTab
 	/**
 	 * @return list<string>
 	 */
-
 	private function previewItems(): array {
 		$items = [
 			__( 'All folders and their structure', 'plathix' ),
@@ -151,7 +148,6 @@ final class DangerZoneTab
 		/**
 		 * @param list<string> $items
 		 */
-
 		$items = (array) apply_filters( 'plathix/cleanup/previewItems', $items );
 
 		return array_values( array_filter( array_map( 'strval', $items ) ) );

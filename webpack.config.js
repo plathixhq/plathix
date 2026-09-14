@@ -46,10 +46,10 @@ const minimizer = (defaultConfig.optimization?.minimizer || []).map((plugin) => 
     }
 
     const options = plugin.options || {};
-
-
-
-
+    
+    
+    
+    
     const inner = options.minimizer?.options || {};
 
     return new plugin.constructor({
@@ -70,9 +70,9 @@ const minimizer = (defaultConfig.optimization?.minimizer || []).map((plugin) => 
 });
 
 const plugins = (defaultConfig.plugins || [])
-
-
-
+    
+    
+    
     .filter((plugin) => plugin?.constructor?.name !== 'RtlCssPlugin')
     .map((plugin) => {
         if (plugin?.constructor?.name === 'MiniCssExtractPlugin') {
@@ -94,13 +94,13 @@ plugins.push(
             return lines ? lines.join('\n') : '';
         },
         entryOnly: false,
-
-
-
+        
+        
+        
         test: /\.js$/,
-
-
-
+        
+        
+        
     })
 );
 
@@ -194,9 +194,9 @@ class StableModuleIdsPlugin {
                 assignDeterministicIds(
                     modules,
                     getStableName,
-
-
-
+                    
+                    
+                    
                     (a, b) => {
                         const nameA = getStableName(a);
                         const nameB = getStableName(b);
@@ -229,83 +229,86 @@ module.exports = {
     ...defaultConfig,
     optimization: {
         ...defaultConfig.optimization,
-
-
+        
+        
         moduleIds: false,
         minimizer,
     },
     entry: {
         'admin-ui': path.resolve(__dirname, 'resources/js/admin-ui.js'),
-
-
-
+        
+        
+        
         'admin-ui/preset': path.resolve(__dirname, 'src/Modules/Preset/assets/preset.js'),
-
-
-
+        
+        
+        
         'admin-ui/settings': path.resolve(__dirname, 'src/Modules/Settings/assets/settings.js'),
-
-
-
+        
+        
+        
         'admin-ui/dashboard': path.resolve(__dirname, 'src/Modules/Dashboard/assets/dashboard.js'),
-
-
-
+        
+        
+        
         'admin-ui/system-info': path.resolve(__dirname, 'src/Modules/SystemInfo/assets/system-info.js'),
         'admin-menu': path.resolve(__dirname, 'resources/js/admin-menu.js'),
-
-
-
-
+        
+        
+        
+        
         'lib/escape-shared': path.resolve(__dirname, 'resources/js/lib/escape-shared.js'),
-
-
-
-
+        
+        
+        
+        
         'lib/transport-shared': path.resolve(__dirname, 'resources/js/lib/transport-shared.js'),
         sidebar: path.resolve(__dirname, 'resources/js/sidebar/index.js'),
-
-
+        
+        
         import: path.resolve(__dirname, 'resources/js/import/index.js'),
         'media-upload': path.resolve(__dirname, 'resources/js/media-upload.js'),
-
-
+        
+        
         'replace-media': path.resolve(__dirname, 'resources/js/replace/standalone.js'),
-
-
+        
+        
         'folder-switch': path.resolve(__dirname, 'resources/js/folder-switch/standalone.js'),
-
+        
         'search': path.resolve(__dirname, 'resources/js/sidebar/search-entry.js'),
-
-
-
+        
+        
+        
         'color': path.resolve(__dirname, 'resources/js/sidebar/color/color-entry.js'),
-
-
-
+        
+        
+        
         'trash': path.resolve(__dirname, 'resources/js/sidebar/trash/trash-entry.js'),
-
-
-
+        
+        
+        
         'favorites': path.resolve(__dirname, 'resources/js/sidebar/favorites/favorites-entry.js'),
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
         'free-wizard': path.resolve(__dirname, 'resources/js/free-wizard/standalone.js'),
-
-
-
-
+        
+        
+        
+        
         'propage': path.resolve(__dirname, 'resources/js/propage/standalone.js'),
-
-
-
-
-
+        
+        
+        
+        
+        
         'tools': path.resolve(__dirname, 'resources/js/tools/standalone.js'),
-
-
+        
+        
     },
     output: {
         ...defaultConfig.output,
@@ -313,11 +316,11 @@ module.exports = {
         filename: 'js/[name].js',
         chunkFilename: 'js/[name].js',
         clean: {
-
-
-
-
-
+            
+            
+            
+            
+            
             keep: /^(fonts|img|presets)\//,
         },
     },

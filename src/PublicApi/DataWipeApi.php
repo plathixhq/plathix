@@ -8,7 +8,6 @@ use Plathix\Modules\DataWipe\DangerZoneTab;
 
 final class DataWipeApi
 {
-
 	public function tabSlug(): string
 	{
 		return DangerZoneTab::TAB;

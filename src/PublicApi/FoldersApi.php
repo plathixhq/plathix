@@ -89,7 +89,6 @@ final class FoldersApi
 	/**
 	 * @return array{restored:bool, fallbackRoot:bool, parent:int}
 	 */
-
 	public function restoreFolder(int $id, string $taxonomy): array
 	{
 		$runner = apply_filters('plathix/folder/restore_runner', \Plathix\Core\FolderTrashRunner::restore(...));
@@ -128,7 +127,6 @@ final class FoldersApi
 	 */
 	private function defaultFolderLoader(int $id, string $taxonomy): ?array
 	{
-
 		foreach ( ($this->folders_loader)($taxonomy) as $folder ) {
 			if ( (int) ($folder['id'] ?? 0) === $id ) {
 				return $folder;

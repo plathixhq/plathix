@@ -1,21 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-
-
-
-
-
 #
 # Contract:
-
-
-
-
-
-
-
-
 
 usage() {
   cat >&2 <<'USAGE'
@@ -44,12 +31,6 @@ ensure_prereqs() {
     exit 2
   fi
 
-
-
-
-
-
-
   if ! command -v rg >/dev/null 2>&1; then
     echo "check-i18n-completeness: ripgrep (rg) is required." >&2
     exit 2
@@ -73,19 +54,9 @@ extract_untranslated() {
     | rg -v '^$' \
     || true
 
-
-
-
-
   # spec/skills/standards/i18n-code-completeness-standard.md.
   extract_partial_plurals "$po_file"
 }
-
-
-
-
-
-
 
 extract_partial_plurals() {
   local po_file="$1"
@@ -94,22 +65,15 @@ import re, sys
 
 lines = sys.stdin.read().splitlines()
 
-
-
 header = ''.join(l.strip().strip('\"') for l in lines if l.startswith('\"'))
 m = re.search(r'nplurals\s*=\s*([0-9]+)', header)
-
-
-
-
-
 
 has_plural = any(l.startswith('msgid_plural ') and not l.startswith('#~') for l in lines)
 if not m:
     if has_plural:
         sys.stderr.write('Public-facing message unavailable.'
                          'Public-facing message unavailable.'
-                         'Public-facing message unavailable.'
+                         'Public-facing message unavailable.')
         sys.exit(2)
     sys.exit(0)
 nplurals = int(m.group(1))
@@ -127,7 +91,6 @@ def flush():
     state['forms'] = {}
 
 for line in lines:
-
     if line.startswith('#~'):
         continue
     if not line.strip():
@@ -153,16 +116,6 @@ for mid in bad:
     return 0
   }
 }
-
-
-
-
-
-
-
-
-
-
 
 check_glued_msgstr() {
   local po_file="$1"
@@ -231,10 +184,6 @@ mode="check"
 if [[ $# -gt 0 && "$1" == "--report-stale-baseline" ]]; then
   mode="report-stale-baseline"
   shift
-
-
-
-
 elif [[ $# -gt 0 && "$1" == "--list-new" ]]; then
   mode="list-new"
   shift
@@ -276,7 +225,7 @@ while IFS= read -r line; do
 done <<<"$untranslated"
 
 if [[ -n "$new_untranslated" ]]; then
-  echo "line" >&2
+  echo "Public-facing message unavailable." >&2
   printf '%s' "$new_untranslated" >&2
   exit 1
 fi

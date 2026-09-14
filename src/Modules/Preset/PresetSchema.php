@@ -59,6 +59,7 @@ final class PresetSchema
 			$wpdb->query($sql); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared,WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- custom table DDL (CREATE TABLE) at install; runs once, caching N/A; prepare() inapplicable to identifiers; no user input. %i is not a candidate here either: it binds a single identifier inside $wpdb->prepare() for DML, not a multi-line CREATE TABLE body run via plain $wpdb->query(); table name still comes from self::tableName() (prefix + literal), not user input.
 		}
 
+		// @phpstan-ignore plathix.discardedWriteReturn
 		update_option('plathix_preset_schema_version', self::SCHEMA_VERSION, false);
 	}
 

@@ -20,7 +20,6 @@ final class MediaTrashPolicy
 	public function __construct(
 		private readonly Loader $loader
 	) {
-
 		$this->loader->addFilter( 'media_view_settings', $this, 'enableNativeMediaTrash', 10, 2 );
 
 		$this->loader->addFilter( 'bulk_actions-upload', $this, 'fixTrashBulkActions', 10, 1 );
@@ -39,7 +38,6 @@ final class MediaTrashPolicy
 	 * @param array<string, string> $actions
 	 * @return array<string, string>
 	 */
-
 	public function fixTrashBulkActions(array $actions): array {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only nav filter for building bulk-action labels; sanitized (sanitize_key), not written
 		$attachment_filter = sanitize_key( (string) wp_unslash( $_REQUEST['attachment-filter'] ?? '' ) );

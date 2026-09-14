@@ -29,7 +29,6 @@ final class PresetPostActions
 	}
 
 	public function handleApply(): void {
-
 		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ), 403 );
 		}
@@ -65,7 +64,6 @@ final class PresetPostActions
 	}
 
 	public function handleDelete(): void {
-
 		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ), 403 );
 		}
@@ -98,7 +96,6 @@ final class PresetPostActions
 	}
 
 	public function handleUpload(): void {
-
 		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ), 403 );
 		}
@@ -133,7 +130,6 @@ final class PresetPostActions
 	}
 
 	public function handleValidate(): void {
-
 		AjaxGuard::requireCap( AccessLevel::Full, 'manage_options' );
 
 		check_ajax_referer( PresetsPage::UPLOAD_ACTION );
@@ -153,7 +149,6 @@ final class PresetPostActions
 	}
 
 	public function handleScratch(): void {
-
 		if ( ! AccessResolver::currentUserIsFullAdmin() ) {
 			wp_die( esc_html__( 'Insufficient permissions.', 'plathix' ), 403 );
 		}
@@ -204,7 +199,6 @@ final class PresetPostActions
 	/**
 	 * @param int|null $new_preset_id
 	 */
-
 	private function redirectWithNotice(string $type, string $message, ?int $new_preset_id = null): void {
 		$args = [
 			'page'            => PresetsPage::PAGE_SLUG,

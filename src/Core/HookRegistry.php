@@ -62,6 +62,7 @@ final class HookRegistry
 		'svg/max_upload_bytes'                   => [ 'type' => 'filter', 'declared_in' => 'src/Modules/Svg/SvgSupport.php' ],
 		'svg/blocked_notice'                     => [ 'type' => 'filter', 'declared_in' => 'src/Modules/Svg/SvgSupport.php' ],
 		'svg/user_override_allows_upload'        => [ 'type' => 'filter', 'declared_in' => 'src/Modules/Svg/SvgSupport.php' ],
+		'list_screen/allowed_extra_keys'         => [ 'type' => 'filter', 'declared_in' => 'src/Modules/ListScreen/ListScreenFragmentsController.php' ],
 
 		// actions
 		'delete_plugin_data'                     => [ 'type' => 'action', 'declared_in' => 'uninstall.php' ],
@@ -89,7 +90,8 @@ final class HookRegistry
 		'settings/option_tab_map'                 => [ 'type' => 'filter', 'declared_in' => 'src/Modules/Settings/SettingsPage.php' ],
 		'dashboard/renderOnboarding'             => [ 'type' => 'action', 'declared_in' => 'src/Modules/Dashboard/HomeDashboardPage.php' ],
 		'onboarding/render_modal'                 => [ 'type' => 'action', 'declared_in' => 'src/Modules/Dashboard/HomeDashboardPage.php' ],
-		'license/activate'                        => [ 'type' => 'action', 'declared_in' => 'src/Modules/Pro/ProLicenseActions.php' ],
-		'license/deactivate'                      => [ 'type' => 'action', 'declared_in' => 'src/Modules/Pro/ProLicenseActions.php' ],
+		'license/activate'                        => [ 'type' => 'action', 'declared_in' => '../Pro/src/Modules/License/LicenseActions.php' ],
+		'license/deactivate'                      => [ 'type' => 'action', 'declared_in' => '../Pro/src/Modules/License/LicenseActions.php' ],
+		'pro_page/render_pro'                     => [ 'type' => 'action', 'declared_in' => 'src/Modules/Pro/ProPage.php' ],
 	];
 }

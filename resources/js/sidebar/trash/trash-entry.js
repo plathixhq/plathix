@@ -21,8 +21,8 @@ function fillSlot(slot, html, marker, A) {
     tmp.innerHTML = html;
     const node = tmp.firstElementChild;
     slot.appendChild(node);
-
-
+    
+    
     if (typeof A.initTree === 'function') {
         A.initTree(node);
     }
@@ -59,11 +59,11 @@ function initTrashToolbarImpl(store) {
         },
     };
 
-
-
-
-
-
+    
+    
+    
+    
+    
     onTrashedFolderIdsChange(() => { store._trashedFolderIdsVersion++; });
 
     const refresh = () => {
@@ -87,14 +87,14 @@ function onPlathixReady() {
         initTrashToolbarImpl(store);
     }
 
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
     const mo = new MutationObserver(() => {
         fillAllSlots(A);
         if (store) {
@@ -102,8 +102,8 @@ function onPlathixReady() {
         }
     });
     mo.observe(document.body, { childList: true, subtree: true });
-
-
+    
+    
     setStateValue('trashEntryBodyObserver', mo);
 }
 

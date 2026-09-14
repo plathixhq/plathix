@@ -10,7 +10,6 @@ final class FolderItemsLoader
 	 * @param string[] $fields
 	 * @return array{items: list<array<string, int|string>>, total: int, page: int, per_page: int}
 	 */
-
 	public function load(int $folder_id, string $post_type, string $taxonomy, int $page, int $per_page, array $fields): array {
 		global $wpdb;
 		$posts_alias = $wpdb->posts;

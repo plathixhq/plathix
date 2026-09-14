@@ -9,41 +9,17 @@ readonly BUILD_KIND="${1:-test}"
 # shellcheck source=bin/lib/verify-artifact-authenticity.sh
 source "${ROOT_DIR}/bin/lib/verify-artifact-authenticity.sh"
 
-
-
 #
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 readonly LOCK_FILE="${ROOT_DIR}/.build.lock"
 readonly LOCK_TIMEOUT_SEC=900
-
-
-
-
 
 record_lock_holder() {
   printf '%s %s\n' "$$" "$(date -Is)" > "$LOCK_FILE" || true
 }
 
 require_rg() {
-
-
-
-
   if ! command -v rg >/dev/null 2>&1; then
-    echo "UI is removed from the public build." >&2
+    echo "Required verification failed; build stopped." >&2
     echo "Install ripgrep: 'apt-get install ripgrep' or 'brew install ripgrep'." >&2
     exit 1
   fi
@@ -57,15 +33,13 @@ acquire_build_lock() {
   fi
   local holder
   holder="$(head -1 "$LOCK_FILE" 2>/dev/null || true)"
-  echo "UI is removed from the public build." >&2
+  echo "Build failed." >&2
   if ! flock -w "$LOCK_TIMEOUT_SEC" 9; then
-    echo "UI is removed from the public build." >&2
+    echo "Build failed." >&2
     exit 1
   fi
   record_lock_holder
 }
-
-
 
 purge_stale_stages() {
   find /tmp -maxdepth 1 -name 'plathix-release.*' -type d -mtime +1 \
@@ -80,12 +54,8 @@ STAGE_ROOT="$(mktemp -d /tmp/plathix-release.XXXXXX)"
 readonly STAGE_ROOT
 readonly SRC_STAGE_DIR="${STAGE_ROOT}/src"
 readonly STAGE_DIR="${STAGE_ROOT}/plathix"
-
-
 readonly BUILD_LOG="${STAGE_ROOT}/build.log"
 readonly COMPOSER_LOG="${STAGE_ROOT}/composer.log"
-
-
 
 cleanup_stage_root() {
   local rc=$?
@@ -98,55 +68,20 @@ cleanup_stage_root() {
 }
 trap cleanup_stage_root EXIT
 
-
 #
-
-
-
-
 #
-
-
-
-
-
 #
-
-
-
-
-
 #
-
-
 ROLE_DEV_ONLY_DIRS=(
-
-
   "src/PhpstanRules"
-
-
-
-
   "src/DevContracts"
-
-
-
   ".local-tools"
   "local-tools"
 )
 
-
-
 ROLE_BUILD_ONLY_PATHS=(
-
-
-
-
-
-
   "composer.json"
 )
-
 
 role_dev_only_patterns() {
   local dir
@@ -155,42 +90,25 @@ role_dev_only_patterns() {
   done
 }
 
-
-
-
-
 #
-
-
-
 COMMON_EXCLUDES=(
   .git
   .github
-
-
   .ci
   .claude
   .claudeignore
   node_modules
   dist
-
-
-
-
   builds
   tests
   scratch
   docs
   spec
-
-
-
   graphify-out
   resources
   playwright-report
   test-results
   .phpunit.result.cache
-
   .build.lock
   .gitignore
   .gitignore.public-template
@@ -206,17 +124,8 @@ COMMON_EXCLUDES=(
   CONTRIBUTING.md
   "*.po"
   "*.pot"
-
-
-
-
-
   "languages/*.mo"
   "languages/*.json"
-
-
-
-
   "*/__tests__/*"
   "*.test.js"
   "*.bak"
@@ -232,8 +141,6 @@ COMMON_EXCLUDES=(
   .wp-env.release.json
 )
 
-
-
 while IFS= read -r _role_pattern; do
   [[ -n "$_role_pattern" ]] && COMMON_EXCLUDES+=("$_role_pattern")
 done < <(role_dev_only_patterns)
@@ -245,9 +152,6 @@ DEV_RELEASE_EXCLUDES=(
   package.json
   phpunit.xml.dist
   phpcs.xml.dist
-
-
-
   jest.config.js
   phpstan.neon
   phpstan-baseline.neon
@@ -284,12 +188,11 @@ required_js_assets=(
   admin-ui.asset.php
   import.js
   import.asset.php
-
 )
 
 build_assets() {
   bash bin/build-assets.sh >"$BUILD_LOG" 2>&1 || {
-    echo "UI is removed from the public build." >&2
+    echo "Build failed." >&2
     cat "$BUILD_LOG" >&2
     exit 1
   }
@@ -300,18 +203,12 @@ build_i18n() {
     bash bin/build-i18n.sh
     assert_i18n_git_clean
   else
-
-
-
     I18N_TEST_STAGE_DIR="$(mktemp -d)"
     bash bin/build-i18n.sh --out="$I18N_TEST_STAGE_DIR"
   fi
 }
 
 assert_i18n_git_clean() {
-
-
-
   if [[ -n "$(git status --porcelain -- languages/ 2>/dev/null)" ]]; then
     echo "" >&2
     echo "BUILD BLOCKED: languages/ regenerated with uncommitted changes. Commit translations before cutting a release." >&2
@@ -327,8 +224,6 @@ detect_versions() {
     exit 1
   fi
 
-
-
   local raw
   raw="$(sed -n 's/^ \* Version:\s*//p' plathix.php | head -n 1 | tr -d '[:space:]')"
   BASE_VERSION="$(rg -o '^[0-9]+\.[0-9]+\.[0-9]+' <<<"$raw")"
@@ -338,8 +233,6 @@ detect_versions() {
   fi
 
   STAMP="$(date +%Y%m%d-%H%M%S)"
-
-
   BUILD_VERSION="${BASE_VERSION}.$(date +%Y%m%d%H%M%S)"
   mkdir -p "${ROOT_DIR}/builds"
   if [[ "$BUILD_KIND" == "release" ]]; then
@@ -350,22 +243,10 @@ detect_versions() {
 }
 
 reset_stage() {
-
-
-
   mkdir -p "$SRC_STAGE_DIR" "$STAGE_DIR"
 }
 
-
-
-
-
 #
-
-
-
-
-
 purge_unwired_rtl_css() {
   if [[ -d "$STAGE_DIR/assets" ]]; then
     find "$STAGE_DIR/assets" -maxdepth 1 -name '*-rtl.css' -delete
@@ -386,27 +267,8 @@ stage_source_tree() {
   local args=(-a --delete)
   append_excludes args "${COMMON_EXCLUDES[@]}" vendor
 
-
-
-
-
-
-
   #
-
-
-
-
-
   #
-
-
-
-
-
-
-
-
   local tracked_list filtered_list
   tracked_list="$(mktemp)"
   if ! git ls-files -z > "$tracked_list" 2>/dev/null || [[ ! -s "$tracked_list" ]]; then
@@ -416,8 +278,6 @@ stage_source_tree() {
     echo "Build failed." >&2
     exit 1
   fi
-
-
   filtered_list="$(mktemp)"
   python3 - "$tracked_list" "$filtered_list" "${COMMON_EXCLUDES[@]}" vendor <<'FILTER'
 import fnmatch, sys
@@ -443,30 +303,8 @@ FILTER
 
   rsync "${args[@]}" ./ "$SRC_STAGE_DIR/"
   rm -f "$filtered_list"
-
-
-
-
-
-
-
-
   strip_internal_comment_refs "$SRC_STAGE_DIR"
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 if ! declare -F log >/dev/null; then log() { echo "[build] $*"; }; fi
 
@@ -476,7 +314,6 @@ strip_internal_comment_refs() {
   export MARKER_PATTERN='PLX-[A-Z0-9]+(-[A-Za-z0-9]+)*|DEBT-[0-9]+|issue #[0-9]+|Skeptic Record|open-questions|root cause|non-goals'
   local f
   while IFS= read -r -d '' f; do
-
     # block comments often wrap continuation lines without a leading `*` (unlike PHP
     # docblocks), so a per-line anchor misses them. Non-greedy `.*?` stops at the first
     # literal `*/` inside the comment text if one exists — rare, and no worse than status quo.
@@ -489,21 +326,17 @@ strip_internal_comment_refs() {
       if (m{^\s*(<\?php\s+)?(//|\*)}) {
         s/($mp)[A-Za-z0-9#_-]*/[internal]/g;
       }
-
       # literal + trailing punctuation is the exact shape of multi-line
       # RuleErrorBuilder::message(sprintf(...)) text in src/PhpstanRules/*.php.
       if (m{^\s*'"'"'.*($mp).*'"'"'\s*[.,)]\s*$}) {
         s/($mp)[A-Za-z0-9#_-]*/[internal]/g;
       }
-
       # including local wrapper aliases (describeOrSkip) and common modifiers (.skip/.only) —
-
       # Anchored on the known Jest/Mocha API names, not arbitrary identifiers, so a random
       # function call with a marker-like first string arg is never touched.
       if (m{^\s*(describe|it|test)(OrSkip|\.skip|\.only|\.each\([^)]*\))?\(\s*['"'"'"]}) {
         s/($mp)[A-Za-z0-9#_-]*/[internal]/g;
       }
-
       # anchored on `; //` (not bare `//`) so a URL literal containing `//` is never touched.
       if (m{^(.*;\s*//\s+)(.*($mp).*)$}) {
         my ($pre, $rest) = ($1, $2);
@@ -514,23 +347,11 @@ strip_internal_comment_refs() {
   done < <(find "$target_dir" -type f \( -name '*.php' -o -name '*.js' -o -name '*.css' \) -print0)
 }
 
-
-
-
-
-
 verify_no_private_content() {
   local target_dir="$1"
   echo "Verifying no private/AI-tooling content in ${target_dir}..."
 
   local terms_file="${ROOT_DIR}/bin/private-content-terms.txt"
-
-
-
-
-
-
-
   if [[ ! -f "$terms_file" ]]; then
     echo "File not found" >&2
     exit 1
@@ -549,16 +370,11 @@ verify_no_private_content() {
   fi
 
   local pattern
-
-
   pattern="$(rg -v '^\s*(#|$)' "$terms_file" | paste -sd'|' -)" || pattern=""
   if [[ -z "$pattern" ]]; then
     echo "Required verification failed; build stopped." >&2
     exit 1
   fi
-
-
-
 
   local hits rc=0
   hits="$(rg -ni "$pattern" "$target_dir" --glob '!**/vendor/**' --glob '!**/*.mo' --glob '!**/*.min.js' --glob '!**/*.map')" || rc=$?
@@ -589,23 +405,9 @@ verify_no_internal_refs() {
   local target_dir="$1"
   echo "Verifying no internal process metadata remains in ${target_dir}..."
   local hits
-
-
-
-
-
   local rc=0
-
-
-
-
-
   local build_info_glob=()
   [[ "$BUILD_KIND" != "release" ]] && build_info_glob=(--glob '!BUILD_INFO')
-
-
-
-
   hits="$(rg -n 'PLX-[A-Z0-9]+(-[A-Za-z0-9]+)*|DEBT-[0-9]+|issue #[0-9]+|Skeptic Record|open-questions|root cause|non-goals' "$target_dir" --glob '!**/vendor/**' --glob '!**/*.mo' --glob '!**/*.min.js' --glob '!**/*.map' "${build_info_glob[@]}")" || rc=$?
   if [[ $rc -eq 0 ]]; then
     echo "BLOCKED: internal process metadata survived export sweep:" >&2
@@ -618,19 +420,8 @@ verify_no_internal_refs() {
   fi
 }
 
-
-
-
 #
-
-
-
 purge_build_only_role() {
-
-
-
-
-
   if [[ -n "${I18N_TEST_STAGE_DIR:-}" ]]; then
     rm -rf "$I18N_TEST_STAGE_DIR"
   fi
@@ -638,32 +429,12 @@ purge_build_only_role() {
   (( ${#ROLE_BUILD_ONLY_PATHS[@]} )) || return 0
   local relative
   for relative in "${ROLE_BUILD_ONLY_PATHS[@]}"; do
-
-
-
     rm -rf "${SRC_STAGE_DIR:?}/${relative}" "${STAGE_DIR:?}/${relative}"
   done
 }
 
 sync_runtime_vendor() {
-
-
-
-
-
-
-
-
-
-
   #
-
-
-
-
-
-
-
   composer install --working-dir="$SRC_STAGE_DIR" --no-dev --no-scripts --no-plugins -o >"$COMPOSER_LOG" 2>&1 || {
     echo "Install development dependencies: composer install" >&2
     cat "$COMPOSER_LOG" >&2
@@ -672,11 +443,9 @@ sync_runtime_vendor() {
 }
 
 stage_generated_assets() {
-
   # output (bin/build-assets.sh runs webpack with output.clean, wiping and rebuilding
   # them on every run). Neither directory is ever committed to git (no .gitignore entry
   # either — they simply live untracked between builds), so stage_source_tree()'s
-
   # problem as vendor/ (see sync_runtime_vendor() above) — same fix shape: copy straight
   # from the live working tree into $SRC_STAGE_DIR, bypassing the git filter entirely,
   # for this one explicitly named generated contour only.
@@ -702,17 +471,8 @@ stage_generated_assets() {
 }
 
 scope_runtime_vendor() {
-
-
-
-
-
   #
-
-
   #
-
-
   # bin/build-pro-zip.sh.
   local scoper="$ROOT_DIR/vendor/bin/php-scoper"
   if [[ ! -x "$scoper" ]]; then
@@ -724,9 +484,6 @@ scope_runtime_vendor() {
   local scoped_dir="${STAGE_ROOT}/scoped"
   rm -rf "$scoped_dir"
 
-
-
-
   "$scoper" add-prefix \
     --config="$ROOT_DIR/scoper.inc.php" \
     --working-dir="$SRC_STAGE_DIR" \
@@ -737,14 +494,11 @@ scope_runtime_vendor() {
     exit 1
   }
 
-
   local sub
   for sub in src vendor; do
     if [[ -d "$scoped_dir/$sub" ]]; then
       rm -rf "${SRC_STAGE_DIR:?}/$sub.pre-scope"
       mv "$SRC_STAGE_DIR/$sub" "$SRC_STAGE_DIR/$sub.pre-scope"
-
-
       mv "$SRC_STAGE_DIR/$sub.pre-scope" "$SRC_STAGE_DIR/$sub"
       cp -a "$scoped_dir/$sub/." "$SRC_STAGE_DIR/$sub/"
     fi
@@ -755,14 +509,7 @@ scope_runtime_vendor() {
 }
 
 sync_scoped_autoload_registry() {
-
-
-
-
-
   #
-
-
   php -r '
     $stage = $argv[1];
     $registry = $stage . "/vendor/composer/installed.json";
@@ -789,7 +536,6 @@ sync_scoped_autoload_registry() {
     exit 1
   }
 
-
   composer dump-autoload --working-dir="$SRC_STAGE_DIR" --no-dev -o >>"$COMPOSER_LOG" 2>&1 || {
     echo "Public-facing message unavailable." >&2
     cat "$COMPOSER_LOG" >&2
@@ -807,17 +553,6 @@ assemble_release_tree() {
 }
 
 assert_i18n_complete() {
-
-
-
-
-
-
-
-
-
-
-
   local po_source="languages/plathix-ru_RU.po"
   if [[ "$BUILD_KIND" != "release" && -n "${I18N_TEST_STAGE_DIR:-}" ]]; then
     po_source="${I18N_TEST_STAGE_DIR}/plathix-ru_RU.po"
@@ -826,12 +561,6 @@ assert_i18n_complete() {
 }
 
 stamp_release_version() {
-
-
-
-
-
-
   export BASE_VERSION
   sed -i -E "s#^( \\* Version:[[:space:]]*).*\$#\\1${BASE_VERSION}#" "$STAGE_DIR/plathix.php"
   sed -i -E "s#define\\([[:space:]]*'PLATHIX_VERSION'[[:space:]]*,[[:space:]]*'[^']+'[[:space:]]*\\);#define('PLATHIX_VERSION', '${BASE_VERSION}');#" "$STAGE_DIR/includes/bootstrap.php"
@@ -839,25 +568,13 @@ stamp_release_version() {
 }
 
 write_build_info() {
-
-
-
   local commit dirty
   commit="$(git rev-parse HEAD)"
-
-
-
-
   if [[ -n "$(git status --porcelain -uno)" ]]; then
     dirty=true
   else
     dirty=false
   fi
-
-
-
-
-
   if [[ "$BUILD_KIND" == "release" && "$dirty" == "true" ]]; then
     echo "" >&2
     echo "BUILD BLOCKED: working tree is dirty. Commit changes before cutting a release." >&2
@@ -868,19 +585,6 @@ write_build_info() {
     printf 'commit=%s\n' "$commit"
     printf 'dirty=%s\n' "$dirty"
     printf 'built_at=%s\n' "$(date +%Y%m%d-%H%M%S)"
-
-
-
-
-
-
-
-
-
-
-
-
-
     if [[ "$BUILD_KIND" != "release" ]]; then
       src_name="$(basename "$ROOT_DIR")"
       [[ "$src_name" == .* ]] && src_name="$(basename "$(dirname "$ROOT_DIR")")/${src_name}"
@@ -890,25 +594,9 @@ write_build_info() {
   } > "$STAGE_DIR/BUILD_INFO"
 }
 
-
-
-
-
-
-
 #
-
-
-
-
-
 #
-
-
-
 #
-
-
 normalize_stage_permissions() {
   find "$STAGE_ROOT" -type d -exec chmod 755 {} +
   find "$STAGE_ROOT" -type f -exec chmod 644 {} +
@@ -922,17 +610,10 @@ create_archive() {
   )
 }
 
-
-
-
 ZIP_ENTRIES=""
 load_zip_entries() {
   ZIP_ENTRIES=$( zipinfo -1 "$OUT" )
 }
-
-
-
-
 
 assert_zip_not_contains() {
   local pattern=$1 rc=0
@@ -955,7 +636,7 @@ assert_zip_contains_path() {
     exit 1
   fi
   if [[ $rc -ne 0 ]]; then
-    echo "UI is removed from the public build." >&2
+    echo "Required verification failed; build stopped." >&2
     exit 1
   fi
 }
@@ -968,33 +649,21 @@ assert_zip_contains_pattern() {
     exit 1
   fi
   if [[ $rc -ne 0 ]]; then
-    echo "UI is removed from the public build." >&2
+    echo "Required verification failed; build stopped." >&2
     exit 1
   fi
 }
 
-
-
-
-
 require_stage_present() {
   local at="$1"
   if [[ ! -d "$STAGE_DIR" ]] || [[ -z "$(find "$STAGE_DIR" -mindepth 1 -print -quit 2>/dev/null)" ]]; then
-    echo "UI is removed from the public build." >&2
+    echo "CSS lint zone is empty; check webpack.config.js and graph traversal." >&2
     exit 1
   fi
 }
 
 assert_scoper_autoload_safe() {
-
-
-
-
-
   #
-
-
-
   local scoper_autoload="$STAGE_DIR/vendor/scoper-autoload.php"
   [[ -f "$scoper_autoload" ]] || return 0
 
@@ -1023,8 +692,6 @@ verify_archive() {
     '^plathix/playwright-report/'
     '^plathix/test-results/'
     '^plathix/CLAUDE\.md$'
-
-
     '^plathix/wp\.md$'
     '^plathix/Makefile$'
     '^plathix/scoper\.inc\.php$'
@@ -1035,13 +702,6 @@ verify_archive() {
     '^plathix/jsconfig\.json$'
     '^plathix/phpstan-baseline\.neon$'
   )
-
-
-
-
-
-
-
 
   local _role_dir
   for _role_dir in "${ROLE_DEV_ONLY_DIRS[@]}" "${ROLE_BUILD_ONLY_PATHS[@]}"; do
@@ -1059,16 +719,6 @@ verify_archive() {
   assert_zip_contains_path 'plathix/plathix.php'
   assert_zip_contains_path 'plathix/readme.txt'
   assert_zip_contains_path 'plathix/uninstall.php'
-
-
-
-
-
-
-
-
-
-
   assert_stage_clean() {
     local pattern=$1 hint=$2 rc=0
     rg -q "$pattern" "$STAGE_DIR" --glob '!*.mo' --glob '!*.min.js' || rc=$?
@@ -1078,7 +728,7 @@ verify_archive() {
       exit 1
     fi
     if [[ $rc -ne 1 ]]; then
-      echo "line" >&2
+      echo "Required verification failed; build stopped." >&2
       exit 1
     fi
   }
@@ -1088,20 +738,9 @@ verify_archive() {
   assert_stage_clean 'render_post_list_fragments' 'Public-facing message unavailable.'
   assert_stage_clean 'PostListAdapter' 'Adapter is provided by the Pro bundle.'
   assert_stage_clean 'render_enabled_sections' 'UI is removed from the public build.'
-
-
-
-
-
-
   assert_stage_clean '"edit"[!=]==?[a-zA-Z_$.]*screenBase' 'Public-facing message unavailable.'
   assert_stage_clean "screenBase [!=]==? 'edit'" 'Public-facing message unavailable.'
   assert_stage_clean "screen_context === 'edit'" 'Free resolver supports the media library only.'
-
-
-
-
-
 
 
   local css_file
@@ -1109,15 +748,6 @@ verify_archive() {
     [[ -z "$css_file" ]] && continue
     assert_zip_contains_path "plathix/assets/css/${css_file}"
   done < <(find resources/css -maxdepth 1 -type f -printf '%f\n' | sort)
-
-
-
-
-
-
-
-
-
 
   if [[ -d "$STAGE_DIR/assets/img" ]]; then
     local img_file
@@ -1132,12 +762,6 @@ verify_archive() {
     assert_zip_contains_path "plathix/assets/js/${js_asset}"
   done
 
-
-
-
-
-
-
   local empty_js
   empty_js="$(unzip -l "$OUT" 'plathix/assets/js/*.js' 2>/dev/null | awk '$1 == "0" && $NF ~ /\.js$/ {print $NF}' || true)"
   if [[ -n "$empty_js" ]]; then
@@ -1149,10 +773,6 @@ verify_archive() {
   assert_zip_contains_pattern '^plathix/assets/presets/[^/]+/preset\.plx\.md$'
   assert_zip_contains_pattern '^plathix/assets/presets/[^/]+/preview\.(png|jpg|jpeg|webp)$'
 
-
-
-
-
   local pv bs rt
   pv="$(unzip -p "$OUT" plathix/plathix.php)"
   bs="$(unzip -p "$OUT" plathix/includes/bootstrap.php)"
@@ -1161,17 +781,8 @@ verify_archive() {
   rg -qF "'PLATHIX_VERSION', '${BASE_VERSION}'" <<<"$bs" || { echo "PLATHIX_VERSION does not match clean ${BASE_VERSION}" >&2; exit 1; }
   rg -q "^Stable tag:[[:space:]]*${BASE_VERSION}[[:space:]]*\$" <<<"$rt" || { echo "Stable tag in readme.txt does not match clean ${BASE_VERSION}" >&2; exit 1; }
 
-
-
-
-
   #
-
-
   #
-
-
-
   local allowed_exact=(
     'plathix/plathix\.php'
     'plathix/readme\.txt'
@@ -1179,28 +790,14 @@ verify_archive() {
     'plathix/license\.txt'
     'plathix/THIRD-PARTY-NOTICES\.txt'
     'plathix/BUILD_INFO'
-
-
-
-
     'plathix/composer\.json'
   )
-
   local allowed_dir_prefixes=(
     'plathix/assets/'
     'plathix/src/'
     'plathix/views/'
     'plathix/includes/'
   )
-
-
-
-
-
-
-
-
-
   local vendor_allow=( 'plathix/vendor/composer/' 'plathix/vendor/autoload\.php' 'plathix/vendor/scoper-autoload\.php' )
   local pkg
   while IFS= read -r pkg; do
@@ -1228,21 +825,7 @@ verify_archive() {
     fi
   done <<<"$ZIP_ENTRIES"
 
-
-
-
-
-
-
   #
-
-
-
-
-
-
-
-
   local artauth_generated_allowlist=(
     "assets"
     "BUILD_INFO"
@@ -1251,14 +834,8 @@ verify_archive() {
   for vp in "${vendor_allow[@]}"; do
     artauth_generated_allowlist+=( "${vp#plathix/}" )
   done
-
-
   artauth_generated_allowlist=( "${artauth_generated_allowlist[@]%/}" )
   artauth_generated_allowlist=( "${artauth_generated_allowlist[@]//\\/}" )
-
-
-
-
 
   local artauth_transform_rules=(
     "plathix.php|^( \\* Version:[[:space:]]*).*\$|\\1${BASE_VERSION}"
@@ -1266,26 +843,11 @@ verify_archive() {
     "readme.txt|^(Stable tag:[[:space:]]*).*\$|\\1${BASE_VERSION}"
   )
 
-
-
-
-
-
   #
-
-
-
-
-
-
-
   verify_artifact_content_authenticity "$ROOT_DIR" "$STAGE_DIR" \
     artauth_transform_rules artauth_generated_allowlist "${MARKER_PATTERN:-}" \
     "$ROOT_DIR/vendor/bin/php-scoper" "$ROOT_DIR/scoper.inc.php" "src"
 }
-
-
-
 
 publish_latest() {
   if [[ "$BUILD_KIND" == "release" ]]; then
@@ -1328,19 +890,8 @@ stage_source_tree
 sync_runtime_vendor
 scope_runtime_vendor
 stage_generated_assets
-
-
-
-
-
-
-
-
-
 strip_internal_comment_refs "$SRC_STAGE_DIR/assets"
 assemble_release_tree
-
-
 write_build_info
 verify_no_internal_refs "$STAGE_DIR"
 verify_no_private_content "$STAGE_DIR"

@@ -11,7 +11,6 @@ class SearchSortFields
 	}
 
 	public function render(string $post_type, string $which): void {
-
 		if ( ! in_array($which, [ 'top', 'bar' ], true) || 'attachment' !== $post_type ) {
 			return;
 		}

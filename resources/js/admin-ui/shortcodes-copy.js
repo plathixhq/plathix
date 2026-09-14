@@ -11,10 +11,10 @@ export function initShortcodesCopy(doc = document) {
                 if (!notice) {
                     return;
                 }
-
-
-
-
+                
+                
+                
+                
                 notice.style.opacity = '1';
                 setTimeout(() => { notice.style.opacity = '0'; }, 1800);
             };
@@ -24,8 +24,8 @@ export function initShortcodesCopy(doc = document) {
             } else {
                 const ta = doc.createElement('textarea');
                 ta.value = text;
-
-
+                
+                
                 ta.className = 'plathix-visually-offscreen';
                 doc.body.appendChild(ta);
                 ta.select();

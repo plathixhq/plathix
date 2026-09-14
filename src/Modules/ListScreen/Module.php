@@ -9,7 +9,6 @@ use Plathix\Core\FolderRepository;
 
 class Module implements ModuleInterface
 {
-
 	public function register(): void
 	{
 		add_action( 'plathix/modules/boot', [ $this, 'boot' ] );
@@ -33,7 +32,7 @@ class Module implements ModuleInterface
 			wp_doing_ajax() || wp_doing_cron(),
 			sanitize_key( (string) wp_unslash( $_GET['status'] ?? '' ) ),
 			! empty( $_GET['attachment-filter'] ),
-			(string) wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- passed through add_query_arg/remove_query_arg (WP core) before use, same pattern as core's own default REQUEST_URI usage
+			sanitize_text_field( (string) wp_unslash( $_SERVER['REQUEST_URI'] ?? '' ) )
 		);
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 

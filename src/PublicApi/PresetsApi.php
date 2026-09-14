@@ -44,7 +44,6 @@ final class PresetsApi
 	/**
 	 * @return array<int, array{id:int, title:string, description:string, folder_count:int, category:string}>
 	 */
-
 	public function builtinPresets(): array
 	{
 		return ( $this->builtin_lister )();
@@ -53,7 +52,6 @@ final class PresetsApi
 	/**
 	 * @return array{success:bool, created:int, errors:int, scope:string, error?:array{code:string, message:string, line:mixed, section:mixed, fatal:bool}}
 	 */
-
 	public function apply(int $presetId): array
 	{
 		return ( $this->applier )( $presetId );
@@ -67,7 +65,6 @@ final class PresetsApi
 	/**
 	 * @return array{title:string, folder_count:int, applied_at:string}|null
 	 */
-
 	public function lastApplied(): ?array
 	{
 		return ( $this->last_applied_reader )();
@@ -76,7 +73,6 @@ final class PresetsApi
 	/**
 	 * @return array{success:bool, zip_path?:string, temp_dir?:string, slug?:string, error?:array{message:string}}
 	 */
-
 	public function exportCurrentSiteAsPreset(): array
 	{
 		return ( $this->site_exporter )();
@@ -85,7 +81,6 @@ final class PresetsApi
 	/**
 	 * @return array<int, array{id:int, title:string, description:string, folder_count:int}>
 	 */
-
 	public function validPresets(): array
 	{
 		return ( $this->valid_presets_lister )();
@@ -104,7 +99,6 @@ final class PresetsApi
 
 		$result = [];
 		foreach ( $presets as $p ) {
-
 			if ( (string) ( $p['source_type'] ?? '' ) !== 'builtin' ) {
 				continue;
 			}
@@ -123,7 +117,6 @@ final class PresetsApi
 	/**
 	 * @return array{success:bool, created:int, errors:int, scope:string, error?:array{code:string, message:string, line:mixed, section:mixed, fatal:bool}}
 	 */
-
 	private function defaultApplier(int $presetId): array
 	{
 		$raw = ( new PresetApplyPipeline() )->run( $presetId );

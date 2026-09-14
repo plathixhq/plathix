@@ -6,8 +6,6 @@ declare(strict_types=1);
  * @var string                                                                       $plathix_current_page
  * @var array{main: array<int, array<string, mixed>>, footer: array<int, array<string, mixed>>} $plathix_nav_sections
  */
-
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -20,14 +18,12 @@ $plathix_footer_items = $plathix_nav_sections['footer'] ?? [];
 ?>
 <div class="plathix-layout">
 	<?php
-
 	\Plathix\Admin\Assets::printInlineScriptNow(
 		'plathix-rail-inline',
 		"try{var pl=document.currentScript.closest('.plathix-layout');if(pl&&localStorage.getItem('plathix_admin_rail')==='1'){pl.classList.add('is-rail');}}catch(e){}"
 	);
 	?>
 	<?php
-
 	?>
 	<button type="button" class="plathix-rail__toggle" aria-expanded="true"
 		aria-label="<?php esc_attr_e( 'Collapse navigation', 'plathix' ); ?>"
@@ -45,7 +41,6 @@ $plathix_footer_items = $plathix_nav_sections['footer'] ?? [];
 
 		<?php
 		// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-
 		foreach ( $plathix_main_items as $item ) :
 			$slug      = (string) ( $item['slug'] ?? '' );
 			$is_active = $plathix_current_page === $slug;
@@ -78,7 +73,6 @@ $plathix_footer_items = $plathix_nav_sections['footer'] ?? [];
 			<div class="plathix-nav__label"><?php esc_html_e( 'System', 'plathix' ); ?></div>
 			<?php
 			// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
-
 			foreach ( $plathix_footer_items as $item ) :
 				$slug      = (string) ( $item['slug'] ?? '' );
 				$is_active = $plathix_current_page === $slug;

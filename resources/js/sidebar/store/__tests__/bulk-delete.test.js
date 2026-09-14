@@ -202,9 +202,9 @@ describe('bulkDeleteModule — confirmDeleteSelectedFolders shouldLeaveCurrentVi
         expect(memClear).toHaveBeenCalled();
     });
 
-
-
-
+    
+    
+    
     it('dispatches a FOLDER_DELETED window event so the trash panel refreshes', async () => {
         Api.deleteFolder.mockResolvedValue({});
         const dispatchSpy = jest.spyOn(window, 'dispatchEvent');
@@ -304,8 +304,8 @@ describe('handles trash workflow consistently', () => {
         await store.confirmDeleteSelectedFolders();
 
         const folderIds = store.folders.map(f => Number(f.id));
-        expect(folderIds).not.toContain(10);
-        expect(folderIds).toContain(11);
+        expect(folderIds).not.toContain(10);  
+        expect(folderIds).toContain(11);      
     });
 
     it('calls refreshFolders and dispatches FOLDER_DELETED even on partial failure', async () => {
@@ -327,10 +327,10 @@ describe('handles trash workflow consistently', () => {
 
         await store.confirmDeleteSelectedFolders();
 
-
-
-
-
+        
+        
+        
+        
         expect(refreshFolders).toHaveBeenCalledWith({ silent: true });
         expect(dispatchSpy.mock.calls.map(([e]) => e?.type)).toContain('plathix:folder-deleted');
         dispatchSpy.mockRestore();

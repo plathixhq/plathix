@@ -22,7 +22,6 @@ use PHPStan\Type\TypeCombinator;
 /**
  * @implements Rule<Node\FunctionLike>
  */
-
 final class ForbiddenSnakeCaseResponseKeyRule implements Rule
 {
 	private const TARGET_FUNCTIONS = [ 'wp_send_json_success', 'wp_send_json_error' ];
@@ -143,7 +142,6 @@ final class ForbiddenSnakeCaseResponseKeyRule implements Rule
 	/**
 	 * @param array<string, list<string>|null> $collected
 	 */
-
 	private function collectTopLevelAssignments(Node\Stmt $stmt, array &$collected): void
 	{
 		if (

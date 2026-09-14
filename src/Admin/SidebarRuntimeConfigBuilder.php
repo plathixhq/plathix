@@ -59,7 +59,6 @@ final class SidebarRuntimeConfigBuilder
 			'ajaxurl'    => admin_url( 'admin-ajax.php' ),
 			'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
 			'restUrl'    => esc_url_raw( trailingslashit( rest_url( 'plathix/' . RestController::API_VERSION ) ) ),
-
 			'restUrlFallback' => RestController::restRouteFallbackBase(),
 			'wpMediaUrl' => esc_url_raw( rest_url( 'wp/v2/media' ) ),
 			'nonce'      => Nonce::create(),
@@ -77,7 +76,6 @@ final class SidebarRuntimeConfigBuilder
 			'lightboxZ' => (int) apply_filters( 'plathix/ui/z_index_lightbox', 160001 ),
 			'svgSupport' => Features::isEnabled( 'svg' ),
 			'postId' => (int) ( get_the_ID() ?: 0 ),
-
 			'autoLazyAt' => $auto_lazy_at,
 			'deferFoldersBootstrap' => $defer_folders_bootstrap,
 			'bootstrapLoadedParents' => array_values( array_map( 'intval', $bootstrap_loaded_parents ) ),
@@ -88,19 +86,15 @@ final class SidebarRuntimeConfigBuilder
 			'postTypeLabelPlural' => $label_plural,
 			'i18n' => $this->i18n_builder->build( $pt_obj, $label_plural ),
 			'features' => [
-
 			],
 			'screenBase' => $screen_context,
 			'screenKind' => $screen_kind,
 			'mediaMode' => $media_mode,
 			'filterStrategy' => $filter_strategy,
-
 			'isForeignContext' => RequestContext::isPageBuilderRequest(),
 			'infiniteScroll' => (bool) get_option( 'plathix_infinite_scroll', false ),
-
 			'dnd' => Features::isEnabled( 'dnd' ),
 			'uploadSync' => Features::isEnabled( 'upload_sync' ),
-
 			'mediaModalOnly' => $screen_kind === 'modal',
 			'isStaticLibraryScreen' => $screen_kind === 'static',
 			'bulkSafeMode' => (bool) get_option( 'plathix_bulk_safe_mode', true ),
@@ -115,7 +109,6 @@ final class SidebarRuntimeConfigBuilder
 	 * @param array<int, mixed> $folders
 	 * @return array<int, array<string, mixed>>
 	 */
-
 	private function normalizeFolderPayload(array $folders): array {
 		$has_children_map = [];
 		foreach ( $folders as $folder ) {
@@ -179,7 +172,6 @@ final class SidebarRuntimeConfigBuilder
 		/**
 		 * @param array[] $actions
 		 */
-
 		$toolbar_extra = (array) apply_filters( 'plathix/sidebar/toolbar_extra', [] );
 		if ( ! empty( $toolbar_extra ) ) {
 			$data['toolbarExtra'] = array_values( array_map(
@@ -208,7 +200,6 @@ final class SidebarRuntimeConfigBuilder
 	 * @param array<int, array<string, mixed>> $items
 	 * @return array<int, array<string, mixed>>
 	 */
-
 	private static function sortToolbarExtra(array $items): array {
 		$decorated = [];
 		$index     = 0;

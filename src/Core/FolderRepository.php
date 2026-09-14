@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Plathix\Core;
 
+use Plathix\Core\SqlSafeCast;
 use Plathix\Infrastructure\DbAdvisoryLock;
 use Plathix\Infrastructure\Logger;
 
@@ -20,9 +21,7 @@ final class FolderRepository
 	/**
 	 * @return array<int, string>
 	 */
-
 	public static function systemSlugs(): array {
-
 		/** @var array<int, string> $slugs */
 		$slugs = (array) apply_filters( 'plathix/folder/system_slugs', [ self::UNCATEGORIZED_SLUG ] );
 
@@ -46,7 +45,6 @@ final class FolderRepository
 				Logger::error( 'folder_repository_ensure_uncategorized_term_failed', [ 'taxonomy' => $taxonomy ] );
 			}
 		}
-
 
 		self::clearRuntimeCache();
 	}
@@ -78,9 +76,44 @@ final class FolderRepository
 		/**
 		 * @var array<int, \WP_Term> $terms
 		 */
-
-
 		return self::$runtime_cache[ $taxonomy ] = $terms;
+	}
+
+	/**
+	 * @param array<int, int|string> $ids
+	 * @return array<int, \WP_Term>
+	 */
+	public function getManyByIds(array $ids, string $taxonomy): array {
+		$ids = array_values( array_unique( array_map( 'intval', $ids ) ) );
+		if ( empty( $ids ) ) {
+			return [];
+		}
+
+		Taxonomy::ensureReady( true );
+		if ( PLATHIX_TAXONOMY !== $taxonomy && ! taxonomy_exists( $taxonomy ) ) {
+			do_action( 'plathix/taxonomy/ensure_missing', $taxonomy );
+		}
+
+		$terms = get_terms(
+			[
+				'taxonomy'   => $taxonomy,
+				'include'    => $ids,
+				'hide_empty' => false,
+			]
+		);
+
+		if ( is_wp_error($terms) ) {
+			return [];
+		}
+		/**
+		 * @var array<int, \WP_Term> $terms
+		 */
+		$map = [];
+		foreach ( $terms as $term ) {
+			$map[ (int) $term->term_id ] = $term;
+		}
+
+		return $map;
 	}
 
 	public function getById(int $id, string $taxonomy): ?\WP_Term {
@@ -102,7 +135,6 @@ final class FolderRepository
 
 		if ( $must_lookup ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-
 			$existing_id = $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT tt.term_id FROM {$wpdb->term_taxonomy} tt
@@ -128,13 +160,11 @@ final class FolderRepository
 			/**
 			 * @var array<string, int>|\WP_Error $result
 			 */
-
 			$result = wp_insert_term($name, $taxonomy, [ 'parent' => $parent ]);
 			if ( is_wp_error($result) ) {
 				/**
 				 * @var \WP_Error $result
 				 */
-
 				if ( $result->get_error_code() === 'term_exists' ) {
 					$term_id = (int) $result->get_error_data();
 					$term = $this->getById($term_id, $taxonomy);
@@ -147,8 +177,6 @@ final class FolderRepository
 			/**
 			 * @var array<string, int> $result
 			 */
-
-
 			unset(self::$runtime_cache[ $taxonomy ]);
 
 			return (int) $result['term_id'];
@@ -164,14 +192,12 @@ final class FolderRepository
 		/**
 		 * @var array<string, int>|\WP_Error $updated
 		 */
-
 		$updated = wp_update_term($id, $taxonomy, $args);
 
 		if ( is_wp_error($updated) ) {
 			/**
 			 * @var \WP_Error $updated
 			 */
-
 			return $updated;
 		}
 
@@ -192,11 +218,27 @@ final class FolderRepository
 	}
 
 	public function setMeta(int $id, string $key, mixed $value): void {
+		// @phpstan-ignore plathix.discardedWriteReturn
 		update_term_meta($id, $key, $value);
 		self::$runtime_cache = [];
 	}
 
+	public function setPosition(int $id, int $position): bool {
+		$old      = (int) get_term_meta( $id, PLATHIX_TERM_POSITION, true );
+		$written  = update_term_meta( $id, PLATHIX_TERM_POSITION, $position );
+		self::$runtime_cache = [];
+
+		if ( ! $written && $old !== $position ) {
+			Logger::error( 'folder_position_write_failed', [ 'term_id' => $id, 'position' => $position ] );
+
+			return false;
+		}
+
+		return true;
+	}
+
 	public function deleteMeta(int $id, string $key): void {
+		// @phpstan-ignore plathix.discardedWriteReturn
 		delete_term_meta($id, $key);
 		self::$runtime_cache = [];
 	}
@@ -205,7 +247,6 @@ final class FolderRepository
 	 * @param string $order_meta_key
 	 * @return array<int, int>
 	 */
-
 	public function getTrashedIds(string $taxonomy, string $order_meta_key = ''): array {
 		if ( '' === $order_meta_key ) {
 			$args = [
@@ -260,8 +301,6 @@ final class FolderRepository
 		/**
 		 * @var array<int, int|string> $terms
 		 */
-
-
 		return array_map('intval', $terms);
 	}
 
@@ -289,7 +328,6 @@ final class FolderRepository
 	/**
 	 * @internal
 	 */
-
 	public function bulkUpdateParent(int $old_parent, int $new_parent, string $taxonomy): int|\WP_Error {
 		global $wpdb;
 
@@ -333,10 +371,9 @@ final class FolderRepository
 
 	/**
 	 * @param int[]  $ids
-	 * @return int[]
+	 * @return int[]|null
 	 */
-
-	public function getParentIdsThatHaveChildren(array $ids, string $taxonomy): array {
+	public function getParentIdsThatHaveChildren(array $ids, string $taxonomy): ?array {
 		global $wpdb;
 
 		if ( empty( $ids ) ) {
@@ -362,7 +399,12 @@ final class FolderRepository
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery
 
-		return array_map( 'intval', $rows ?: [] );
+		$safe_rows = SqlSafeCast::nullSafeSqlRows( $rows );
+		if ( null === $safe_rows ) {
+			return null;
+		}
+
+		return array_map( 'intval', $safe_rows );
 	}
 
 	/**

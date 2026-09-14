@@ -17,7 +17,6 @@ final class BuilderDetect
 	 * @param string[] $post_types
 	 * @param array<string, string> $query
 	 */
-
 	public static function isFrontendBuilderRequest(
 		bool $is_admin,
 		array $post_types,
@@ -73,7 +72,6 @@ final class BuilderDetect
 	 * @param string $action
 	 * @param string $page
 	 */
-
 	public static function isAdminBuilderRequest(
 		bool $isAdmin,
 		string $elementorPreview,

@@ -55,14 +55,14 @@ describe('findReattachTarget', () => {
 
 describe('collectAncestorIds', () => {
     const folders = [
-        { id: 10, parentId: 0 },
-        { id: 12, parentId: 10 },
-        { id: 15, parentId: 12 },
-        { id: 20, parentId: 0 },
+        { id: 10, parentId: 0 },   
+        { id: 12, parentId: 10 },  
+        { id: 15, parentId: 12 },  
+        { id: 20, parentId: 0 },   
     ];
 
     it('returns ancestors ordered from root to folder (root first)', () => {
-
+        
         expect(collectAncestorIds(folders, 15)).toEqual([10, 12]);
     });
 
@@ -84,14 +84,14 @@ describe('collectAncestorIds', () => {
             { id: 1, parentId: 2 },
             { id: 2, parentId: 1 },
         ];
-
+        
         const result = collectAncestorIds(cyclic, 1);
         expect(result.length).toBeLessThanOrEqual(2);
     });
 
     it('stops at a dangling parentId (parent not in folders)', () => {
         const dangling = [{ id: 5, parentId: 999 }];
-
+        
         expect(collectAncestorIds(dangling, 5)).toEqual([999]);
     });
 });
@@ -105,7 +105,7 @@ describe('buildFolderTreeIndex', () => {
         ];
         const byParent = buildFolderTreeIndex(folders);
         const roots = byParent.get(0).map((f) => f.id);
-
+        
         expect(roots).toEqual([3, 2, 1]);
     });
 
@@ -114,11 +114,11 @@ describe('buildFolderTreeIndex', () => {
             { id: 1, parentId: 2, name: 'A' },
             { id: 2, parentId: 1, name: 'B' },
         ];
-
-
+        
+        
         const byParent = buildFolderTreeIndex(cyclic);
-
-
+        
+        
         expect(byParent.get(0)?.map((f) => f.id).sort()).toEqual([1, 2]);
         expect(byParent.get(1)).toBeUndefined();
         expect(byParent.get(2)).toBeUndefined();

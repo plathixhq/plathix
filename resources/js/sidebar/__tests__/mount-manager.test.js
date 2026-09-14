@@ -19,8 +19,8 @@ jest.mock('../dom.js', () => ({
 
 jest.mock('alpinejs', () => ({
     initTree: jest.fn((el) => {
-
-
+        
+        
         el._x_dataStack = [{}];
     }),
     store: jest.fn(() => ({ resetTransientState: jest.fn(), cleanup: jest.fn() })),
@@ -117,14 +117,14 @@ describe('MountManager', () => {
 
             expect(Alpine.initTree).toHaveBeenCalledTimes(1);
 
-
+            
             wpFrame.trigger('content:render');
 
-
+            
             expect(Alpine.initTree).toHaveBeenCalledTimes(1);
 
-
-
+            
+            
             const oldMenu = frameEl.querySelector('.media-frame-menu');
             const newMenu = document.createElement('div');
             newMenu.className = 'media-frame-menu';
@@ -133,7 +133,7 @@ describe('MountManager', () => {
             newMenu.appendChild(newInner);
             frameEl.replaceChild(newMenu, oldMenu);
 
-
+            
             Alpine.initTree.mockClear();
             wpFrame.trigger('content:render');
 
@@ -154,12 +154,12 @@ describe('MountManager', () => {
 
             Alpine.initTree.mockClear();
 
-
+            
             wpFrame.trigger('content:render');
             wpFrame.trigger('router:render');
             wpFrame.trigger('content:render');
 
-
+            
             expect(Alpine.initTree).not.toHaveBeenCalled();
         });
     });
@@ -169,7 +169,7 @@ describe('MountManager', () => {
             const frameEl = document.createElement('div');
             frameEl.className = 'media-frame';
 
-
+            
             const content = document.createElement('div');
             content.className = 'media-frame-content';
             frameEl.appendChild(content);
@@ -181,12 +181,12 @@ describe('MountManager', () => {
 
             const manager = new MountManager();
 
-
-
+            
+            
             jest.useFakeTimers();
             manager.mount();
 
-
+            
             for (let i = 0; i < 6; i++) {
                 jest.runAllTimers();
             }
@@ -201,8 +201,8 @@ describe('MountManager', () => {
 
     describe('keeps REST transport behavior consistent under retry and error conditions', () => {
         it('keeps REST transport behavior consistent under retry and error conditions', () => {
-
-
+            
+            
             onMediaFrameReady.mockImplementation(() => {});
 
             const manager = new MountManager();
@@ -220,10 +220,10 @@ describe('MountManager', () => {
         });
 
         it('keeps REST transport behavior consistent under retry and error conditions', () => {
-
-
-
-
+            
+            
+            
+            
             const frameEl = document.createElement('div');
             frameEl.className = 'media-frame';
             const menuPanel = document.createElement('div');
@@ -290,11 +290,11 @@ describe('MountManager', () => {
 
     describe('mounts or dismisses the UI element under the expected conditions', () => {
         it('keeps REST transport behavior consistent under retry and error conditions', () => {
-
-
-
-
-
+            
+            
+            
+            
+            
             const frameEl = buildMediaFrame();
             document.body.appendChild(frameEl);
             const wpFrame = buildWpMediaFrame(frameEl);
@@ -306,12 +306,12 @@ describe('MountManager', () => {
 
             expect(frameEl.querySelector('#plathix-modal-root')).not.toBeNull();
 
-
+            
             wpFrame.trigger('close');
             expect(frameEl.querySelector('#plathix-modal-root')).toBeNull();
 
-
-
+            
+            
             wpFrame.trigger('open');
 
             expect(frameEl.querySelector('#plathix-modal-root')).not.toBeNull();
@@ -334,9 +334,9 @@ describe('MountManager', () => {
             const openHandlerCountAfterFirst = wpFrame.on.mock.calls.filter(([event]) => event === 'open').length;
             expect(openHandlerCountAfterFirst).toBe(1);
 
-
-
-
+            
+            
+            
             openReadyCallback(wpFrame);
 
             const openHandlerCountAfterSecond = wpFrame.on.mock.calls.filter(([event]) => event === 'open').length;
@@ -355,9 +355,9 @@ describe('MountManager', () => {
 
             wpFrame.trigger('close');
 
-
-
-
+            
+            
+            
             const offCalledWithOpen = wpFrame.off.mock.calls.some(([event]) => event === 'open');
             expect(offCalledWithOpen).toBe(false);
         });
@@ -381,7 +381,7 @@ describe('mounts or dismisses the UI element under the expected conditions', () 
     });
 
     it('mounts or dismisses the UI element under the expected conditions', () => {
-
+        
         getRuntime.mockReturnValue({
             screenKind: 'static',
             screenBase: 'edit',
@@ -399,8 +399,8 @@ describe('mounts or dismisses the UI element under the expected conditions', () 
     });
 
     it('mounts or dismisses the UI element under the expected conditions', () => {
-
-
+        
+        
         getRuntime.mockReturnValue({ mediaModalOnly: false, skinClasses: [] });
 
         expect(ensureStaticRoot()).toBeNull();
@@ -413,8 +413,8 @@ describe('mounts or dismisses the UI element under the expected conditions', () 
     });
 
     it('mounts or dismisses the UI element under the expected conditions', () => {
-
-
+        
+        
         const placeholder = document.createElement('div');
         placeholder.id = 'plathix-sidebar-root';
         placeholder.setAttribute('aria-hidden', 'true');

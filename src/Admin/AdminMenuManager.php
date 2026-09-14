@@ -9,6 +9,9 @@ final class AdminMenuManager
 	private const SCRIPT_HANDLE = 'plathix-admin-menu';
 	private const STYLE_HANDLE  = 'plathix-admin-menu';
 
+	/**
+	 * @var array<int, array<string, mixed>>|null
+	 */
 	private ?array $pages = null;
 
 	public function register(): void {
@@ -118,13 +121,11 @@ final class AdminMenuManager
 	/**
 	 * @return array<int, array<string, mixed>>
 	 */
-
 	private function collectPages(): array {
 		if ( null === $this->pages ) {
 			/**
 			 * @param array<int, array<string, mixed>> $pages
 			 */
-
 			$pages = apply_filters( 'plathix/admin/menu_pages', [] );
 			$this->pages = is_array( $pages ) ? array_values( $pages ) : [];
 		}
@@ -135,7 +136,6 @@ final class AdminMenuManager
 	/**
 	 * @return array<int, array<string, mixed>>
 	 */
-
 	private function flyoutPages(): array {
 		$flyout = array_values( array_filter(
 			$this->collectPages(),
@@ -172,6 +172,6 @@ final class AdminMenuManager
 
 	private function getCurrentPageSlug(): string {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin routing check
-		return sanitize_key( (string) ( $_GET['page'] ?? '' ) );
+		return sanitize_key( (string) wp_unslash( $_GET['page'] ?? '' ) );
 	}
 }

@@ -80,7 +80,6 @@ class MultilingualIntegration
 	 * @return array<string, mixed>
 	 */
 	public function addLangAllAjax(array $args): array {
-
 		if ( isset( $args['tax_query'] ) && $this->hasPlathixTaxQuery( $args['tax_query'] ) ) {
 			return MultilingualCompat::suppressForArgs( $args );
 		}
@@ -92,7 +91,6 @@ class MultilingualIntegration
 	 * @param array<string, string> $taxonomies
 	 * @return array<string, string>
 	 */
-
 	public function excludePlathixTaxonomies(array $taxonomies, bool $hide): array {
 		foreach ( $taxonomies as $slug => $value ) {
 			if ( $this->isPlathixTaxonomy( (string) $slug ) ) {

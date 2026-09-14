@@ -8,10 +8,10 @@ export function bulkActionsComponent() {
             const isSystemFolder = openId <= 0
                 || openId === Number(this.$store.plathix.FOLDER_UNCATEGORIZED);
             const parentId = isSystemFolder ? 0 : openId;
-
-
-
-
+            
+            
+            
+            
             const current = this.$store.plathix.newFolderParentId;
             if (current !== null && Number(current) === Number(parentId)) {
                 this.$store.plathix.focusNewFolderInput();

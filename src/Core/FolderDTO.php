@@ -17,9 +17,7 @@ final class FolderDTO
 		public readonly string $taxonomy,
 		public readonly bool $isProtected = false,
 		public readonly bool $hasChildren = false,
-
 		public readonly ?int $foldersCount = null,
-
 		public readonly ?int $countRecursive = null
 	) {
 	}

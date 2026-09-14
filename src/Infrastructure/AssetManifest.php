@@ -12,7 +12,6 @@ final class AssetManifest
 	 * @param string|null $base_path
 	 * @return array{version: string, dependencies?: array<int, string>}
 	 */
-
 	public static function read(string $relative_path, bool $with_dependencies = true, ?string $base_path = null): array {
 		$file  = ( $base_path ?? PLATHIX_ASSETS_PATH ) . $relative_path;
 		$asset = file_exists( $file ) ? require $file : null;

@@ -21,7 +21,6 @@ final class MediaApi
 	 * @param  array<string,mixed> $options
 	 * @return array<string,mixed>|\WP_Error
 	 */
-
 	public function replace(int $attachmentId, array $input, array $options = []): array|\WP_Error
 	{
 		return ($this->replacer)($attachmentId, $input, $options);

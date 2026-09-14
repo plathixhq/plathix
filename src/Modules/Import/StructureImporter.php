@@ -134,8 +134,6 @@ final class StructureImporter
 				/**
 				 * @var int $created
 				 */
-
-
 				$map[ $old_id ] = (int) $created;
 				$stats['imported']++;
 			}

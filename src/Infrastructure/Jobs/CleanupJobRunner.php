@@ -13,7 +13,6 @@ use Plathix\Infrastructure\TempDirectory;
  */
 final class CleanupJobRunner
 {
-
 	private const CLEANUP_INTERVAL = JobDispatcher::JOB_CLEANUP_TEMP_INTERVAL;
 
 	public function run(callable $getTempDir): void {
@@ -46,7 +45,10 @@ final class CleanupJobRunner
 
 			$is_dir = is_dir( $real );
 			if ( $is_dir ) {
-				$is_managed_stage = str_starts_with( basename( $real ), 'plathix-stage-' );
+				$basename         = basename( $real );
+				$is_managed_stage = str_starts_with( $basename, 'plathix-stage-' )
+					|| str_starts_with( $basename, 'plathix_preset_' )
+					|| str_starts_with( $basename, 'plathix_export_' );
 				if ( ! $is_managed_stage ) {
 					return false;
 				}
@@ -54,9 +56,9 @@ final class CleanupJobRunner
 				return [ 'path' => $real, 'is_dir' => true ];
 			}
 
-			$is_managed_zip      = 'zip' === pathinfo( $real, PATHINFO_EXTENSION );
-			$is_collision_backup = str_starts_with( basename( $real ), 'replace_collision_' );
-			if ( ! $is_managed_zip && ! $is_collision_backup ) {
+			$is_managed_zip     = 'zip' === pathinfo( $real, PATHINFO_EXTENSION );
+			$is_replace_staging = str_starts_with( basename( $real ), 'replace_' );
+			if ( ! $is_managed_zip && ! $is_replace_staging ) {
 				return false;
 			}
 
@@ -65,15 +67,16 @@ final class CleanupJobRunner
 
 		$find_managed_files = static function () use ($real_dir): array {
 			$zips    = glob( $real_dir . DIRECTORY_SEPARATOR . '*.zip' ) ?: [];
-			$backups = glob( $real_dir . DIRECTORY_SEPARATOR . 'replace_collision_*' ) ?: [];
+			$backups = glob( $real_dir . DIRECTORY_SEPARATOR . 'replace_*' ) ?: [];
 			$stages  = glob( $real_dir . DIRECTORY_SEPARATOR . 'plathix-stage-*', GLOB_ONLYDIR ) ?: [];
-			return array_merge( $zips, $backups, $stages );
+			$presets = glob( $real_dir . DIRECTORY_SEPARATOR . 'plathix_preset_*', GLOB_ONLYDIR ) ?: [];
+			$exports = glob( $real_dir . DIRECTORY_SEPARATOR . 'plathix_export_*', GLOB_ONLYDIR ) ?: [];
+			return array_merge( $zips, $backups, $stages, $presets, $exports );
 		};
 
 		$directory_size = static function (string $dir): int {
 			$total = 0;
 			try {
-
 				foreach ( new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $dir, \FilesystemIterator::SKIP_DOTS ) ) as $entry ) {
 					if ( $entry->isFile() ) {
 						$total += (int) $entry->getSize();
@@ -100,7 +103,6 @@ final class CleanupJobRunner
 				}
 
 				if ( $entry['is_dir'] ) {
-
 					if ( (int) filemtime( $entry['path'] ) >= $threshold ) {
 						continue;
 					}
@@ -191,6 +193,7 @@ final class CleanupJobRunner
 				continue;
 			}
 
+			// @phpstan-ignore plathix.discardedWriteReturn
 			delete_option( (string) $option_name );
 		}
 	}

@@ -36,8 +36,8 @@ class FakeXHR {
         this.listeners[type] = handler;
     }
 
-
-
+    
+    
     dispatchEvent(event) {
         this.trigger(event.type);
         return true;
@@ -138,8 +138,8 @@ describe('bindUploadCompleteEvents', () => {
         jest.advanceTimersByTime(1000);
 
         expect(store.applyFolderFilter).not.toHaveBeenCalled();
-
-
+        
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(1);
         expect(store.uploadLockedFolder).toBe(7);
 
@@ -148,8 +148,8 @@ describe('bindUploadCompleteEvents', () => {
         expect(cacheInvalidateFolder).toHaveBeenCalledWith(7);
         expect(cacheInvalidateScreen).toHaveBeenCalledWith('upload');
         expect(store.applyFolderFilter).not.toHaveBeenCalled();
-
-
+        
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(2);
     });
 
@@ -166,7 +166,7 @@ describe('bindUploadCompleteEvents', () => {
 
         expect(cacheInvalidateFolder).toHaveBeenCalledWith(7);
         expect(store.applyFolderFilter).not.toHaveBeenCalled();
-
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(2);
     });
 
@@ -182,8 +182,8 @@ describe('bindUploadCompleteEvents', () => {
 
         jest.advanceTimersByTime(2600);
 
-
-
+        
+        
         expect(store.refreshMediaFrame).not.toHaveBeenCalled();
         expect(store.refreshFolders).not.toHaveBeenCalled();
     });
@@ -202,9 +202,9 @@ describe('bindUploadCompleteEvents', () => {
     });
 
     it('keeps upload links scoped to the active folder', () => {
-
-
-
+        
+        
+        
         store.openId = 0;
         bindUploadCompleteEvents();
 
@@ -212,9 +212,9 @@ describe('bindUploadCompleteEvents', () => {
         const firstData = new FormData();
         const firstSpy = jest.spyOn(firstData, 'append');
         first.open('POST', '/wp-admin/async-upload.php');
-        first.send(firstData);
+        first.send(firstData); 
 
-        store.openId = 7;
+        store.openId = 7; 
 
         const second = new XMLHttpRequest();
         const secondData = new FormData();
@@ -228,9 +228,9 @@ describe('bindUploadCompleteEvents', () => {
     });
 
     it('keeps upload links scoped to the active folder', () => {
-
-
-
+        
+        
+        
         store.openId = 7;
         bindUploadCompleteEvents();
 
@@ -238,9 +238,9 @@ describe('bindUploadCompleteEvents', () => {
         const firstData = new FormData();
         const firstSpy = jest.spyOn(firstData, 'append');
         first.open('POST', '/wp-admin/async-upload.php');
-        first.send(firstData);
+        first.send(firstData); 
 
-        store.openId = 99;
+        store.openId = 99; 
 
         const second = new XMLHttpRequest();
         const secondData = new FormData();
@@ -254,8 +254,8 @@ describe('bindUploadCompleteEvents', () => {
     });
 
     it('prevents concurrent state changes', () => {
-
-
+        
+        
         store.openId = 7;
         bindUploadCompleteEvents();
 
@@ -265,7 +265,7 @@ describe('bindUploadCompleteEvents', () => {
         first.open('POST', '/wp-admin/async-upload.php');
         first.send(firstData);
 
-
+        
         store.openId = 99;
 
         const second = new XMLHttpRequest();
@@ -342,7 +342,7 @@ describe('bindUploadCompleteEvents', () => {
 
         first.status = 200;
         first.trigger('loadend');
-
+        
         // does not delay the single/first-file case).
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(1);
     });
@@ -360,23 +360,23 @@ describe('bindUploadCompleteEvents', () => {
 
         first.status = 200;
         first.trigger('loadend');
-
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(1);
 
         second.status = 200;
         second.trigger('loadend');
-
-
-
-
+        
+        
+        
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(1);
 
         jest.advanceTimersByTime(300);
-
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(2);
 
         queue.trigger('reset');
-
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(3);
     });
 
@@ -394,9 +394,9 @@ describe('bindUploadCompleteEvents', () => {
         uploadOne();
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(1);
 
-
-
-
+        
+        
+        
         for (let i = 0; i < 4; i++) {
             jest.advanceTimersByTime(200);
             uploadOne();
@@ -404,8 +404,8 @@ describe('bindUploadCompleteEvents', () => {
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(1);
 
         jest.advanceTimersByTime(1000);
-
-
+        
+        
         expect(store.refreshMediaFrame).toHaveBeenCalledTimes(2);
     });
 
@@ -441,11 +441,11 @@ describe('bindUploadCompleteEvents', () => {
         expect(store.applyFolderFilter).not.toHaveBeenCalled();
     });
 
-
-
-
-
-
+    
+    
+    
+    
+    
     it('keeps upload links scoped to the active folder', () => {
         bindUploadCompleteEvents();
 
@@ -456,8 +456,8 @@ describe('bindUploadCompleteEvents', () => {
         expect(store.activeUploadCount).toBe(1);
         expect(store.isUploading).toBe(true);
 
-
-
+        
+        
         xhr.trigger('loadend');
 
         expect(store.activeUploadCount).toBe(0);
@@ -472,8 +472,8 @@ describe('bindUploadCompleteEvents', () => {
 
         const xhr = new XMLHttpRequest();
         xhr.open('POST', '/wp-admin/async-upload.php');
-
-
+        
+        
         expect(store.activeUploadCount).toBe(1);
 
         xhr.trigger('loadend');
@@ -548,7 +548,7 @@ describe('bindUploadCompleteEvents', () => {
         first.open('POST', '/wp-admin/admin-ajax.php?action=upload-attachment');
         first.send(fd1);
 
-
+        
         store.openId = 99;
 
         const second = new XMLHttpRequest();
@@ -576,9 +576,9 @@ describe('bindUploadCompleteEvents', () => {
             xhr.open('POST', '/wp-admin/async-upload.php');
             xhr.send(formData);
 
-
-
-
+            
+            
+            
             expect(xhr._data).toBeUndefined();
         });
 
@@ -615,9 +615,9 @@ describe('bindUploadCompleteEvents', () => {
             xhr.open('POST', '/wp-admin/async-upload.php');
             xhr.send(new FormData());
 
-
-
-
+            
+            
+            
             expect(store.activeUploadCount).toBe(0);
             expect(store.isUploading).toBe(false);
         });

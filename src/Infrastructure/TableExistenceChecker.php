@@ -9,7 +9,6 @@ final class TableExistenceChecker
 	/**
 	 * @param string $tableName
 	 */
-
 	public static function exists(string $tableName): bool
 	{
 		global $wpdb;

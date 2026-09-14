@@ -13,7 +13,6 @@ final class AttachmentFileCleanup
 	 * @param list<string> $new_size_paths
 	 * @return list<string>
 	 */
-
 	public function cleanup(?string $old_file, array $old_metadata, ?string $new_file, array $new_size_paths = []): array
 	{
 		$warnings = [];

@@ -1,39 +1,26 @@
-
-
-
 parameters:
 	ignoreErrors:
 		-
-
-
 			message: "#^Class ActionScheduler_NullAction not found\\.$#"
 			count: 1
 			path: src/Infrastructure/RateLimiter.php
 
 		-
-
-
 			message: "#^Class ActionScheduler_NullAction not found\\.$#"
 			count: 1
 			path: src/Infrastructure/Health/HealthCheckRegistry.php
 
 		-
-
-
 			message: "#^Call to protected method display_tablenav\\(\\) of class WP_List_Table\\.$#"
 			count: 2
 			path: src/Modules/ListScreen/ListScreenFragmentsController.php
 
 		-
-
-
 			message: "#^Parameter \\#1 \\$parent_slug of function add_submenu_page expects string, null given\\.$#"
 			count: 1
 			path: src/Modules/SystemInfo/SystemInfoPage.php
 
 		-
-
-
 			message: "#^Constant WP_MEMORY_LIMIT not found\\.$#"
 			count: 1
 			path: src/Modules/SystemInfo/SystemInfoProvider.php

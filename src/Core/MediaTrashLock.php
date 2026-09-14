@@ -10,6 +10,9 @@ final class MediaTrashLock
 {
 	private const LOCK_PREFIX = 'plx_at_';
 
+	/**
+	 * @return array{token:string,timestamp:int}|\WP_Error
+	 */
 	public function acquire(int $attachment_id): array|\WP_Error {
 		if ( $attachment_id <= 0 ) {
 			return new \WP_Error( 'invalid_attachment', __( 'Attachment ID must be positive.', 'plathix' ) );

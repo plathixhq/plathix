@@ -67,7 +67,6 @@ final class JobStatusRepository
 								'user_id'             => $jobResult['user_id'] ?? 0,
 								'blog_id'             => $jobResult['blog_id'] ?? 0,
 								'post_type'           => $jobResult['post_type'] ?? '',
-
 								'created_by_token_id' => $jobResult['created_by_token_id'] ?? null,
 							],
 							static fn ($value): bool => $value !== null
@@ -88,7 +87,6 @@ final class JobStatusRepository
 					$result = [ 'expired' => true ];
 				}
 			} else {
-
 				$result = array_diff_key(
 					$jobResult,
 					[

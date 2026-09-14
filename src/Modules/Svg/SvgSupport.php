@@ -22,7 +22,6 @@ class SvgSupport
 		private readonly ?Loader $loader = null,
 		?SvgUploadPolicy $svg_upload_policy = null
 	) {
-
 		$this->svg_upload_policy = $svg_upload_policy ?? new SvgUploadPolicy( $this->sanitizer );
 
 		if ( $this->loader ) {
@@ -232,7 +231,8 @@ class SvgSupport
 
 	private function logSanitizeFailure(string $filename, int $size, string $reason): void {
 		$user_id   = get_current_user_id();
-		$ip_hash   = md5( (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
+		$ip_hash   = md5( sanitize_text_field( (string) wp_unslash( $_SERVER['REMOTE_ADDR'] ?? '' ) ) );
 
 		$rate_key  = Keys::transient( 'svg_log_' . $ip_hash . '_' . $user_id );
 		$log_count = (int) get_transient( $rate_key );

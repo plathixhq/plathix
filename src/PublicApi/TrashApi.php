@@ -8,7 +8,6 @@ use Plathix\Modules\Trash\Module;
 
 final class TrashApi
 {
-
 	public function trashTimeMetaKey(): string
 	{
 		return Module::TRASH_TIME_META;

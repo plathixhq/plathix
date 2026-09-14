@@ -32,7 +32,7 @@ describe('selectionModule — media selection owner', () => {
                 state: () => ({ get: (k) => (k === 'selection' ? { models: [{ id: 2 }, { id: 4 }] } : null) }),
             });
             const store = makeStore();
-
+            
             expect(store.getSelectedItemIds().sort()).toEqual([1, 2, 3, 4]);
         });
 
@@ -47,7 +47,7 @@ describe('selectionModule — media selection owner', () => {
                 <div class="attachment selected" data-id="1"></div>
                 <div class="attachment selected" data-id="2"></div>
             `;
-
+            
             getMediaFrame.mockReturnValue({
                 state: () => ({ get: (k) => (k === 'selection' ? { length: 2 } : null) }),
             });
@@ -78,18 +78,18 @@ describe('selectionModule — media selection owner', () => {
         });
     });
 
-
-
+    
+    
     it('keeps store/selection state consistent across UI events', () => {
-        document.body.innerHTML = '';
+        document.body.innerHTML = ''; 
         getMediaFrame.mockReturnValue(null);
         const store = makeStore();
 
         store.recountFromUi();
-        expect(store.selectedMediaCount).toBe(0);
+        expect(store.selectedMediaCount).toBe(0); 
 
         store.setFromMutationResult(1);
-        expect(store.selectedMediaCount).toBe(1);
+        expect(store.selectedMediaCount).toBe(1); 
     });
 
     describe('clearSelectionDom()', () => {
@@ -111,7 +111,7 @@ describe('selectionModule — media selection owner', () => {
             expect(document.querySelector('#cb-select-all-1').checked).toBe(false);
         });
 
-        it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
+        it('keeps store/selection state consistent across UI events', () => {
             document.body.innerHTML = `
                 <div class="attachment" data-id="7"></div>
                 <tr id="post-7"></tr>

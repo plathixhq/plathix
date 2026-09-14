@@ -6,7 +6,6 @@ namespace Plathix\Core;
 
 final class OpenFolderResolver
 {
-
 	public static function normalize(int $folder_id, string $post_type): int {
 		if ( $folder_id <= 0 ) {
 			return 0;

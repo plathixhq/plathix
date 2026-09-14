@@ -110,8 +110,6 @@ final class PresetApplyPipeline
 			/**
 			 * @var int $term_id
 			 */
-
-
 			$depth_map[ $depth ] = $term_id;
 
 			foreach ( array_keys($depth_map) as $known_depth ) {
@@ -132,6 +130,7 @@ final class PresetApplyPipeline
 
 				if ( ! $color_written && $old_color !== $sanitized_color ) {
 					Logger::error('preset_apply_color_meta_write_failed', ['term_id' => $term_id]);
+					$errors++;
 				}
 			}
 		}
@@ -140,16 +139,13 @@ final class PresetApplyPipeline
 			$user_id = get_current_user_id();
 
 			if ( $start_from_scratch ) {
-
 				\Plathix\User\Preferences::setFavorites( $user_id, $favorite_term_ids, 'attachment' );
 			} else {
-
 				\Plathix\User\Preferences::mergeFavorites( $user_id, $favorite_term_ids, 'attachment' );
 			}
 		}
 
-		// Step 8: invalidate caches (FolderTreeService::create already does count invalidation;
-		// delete the taxonomy children cache so WP rebuilds it)
+		// @phpstan-ignore plathix.discardedWriteReturn
 		delete_option("{$taxonomy}_children");
 
 		// Step 9: update last applied timestamp

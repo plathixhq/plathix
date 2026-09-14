@@ -17,7 +17,6 @@ final class ProPageAssets
 	/**
 	 * @param string $hook
 	 */
-
 	public function enqueue(string $hook = ''): void {
 		if ( ! $this->isPropage( $hook ) ) {
 			return;

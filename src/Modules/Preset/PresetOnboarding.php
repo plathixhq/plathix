@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Plathix\Modules\Preset;
 
+use Plathix\Infrastructure\Logger;
+use Plathix\Infrastructure\OptionWrite;
+
 final class PresetOnboarding
 {
 	private const OPTION_KEY = 'plathix_preset_onboarding';
@@ -24,16 +27,22 @@ final class PresetOnboarding
 	}
 
 	public static function markSkipped(): void {
-		update_option( self::OPTION_KEY, self::STATE_SKIPPED, false );
+		if ( ! OptionWrite::ifChanged( self::OPTION_KEY, self::STATE_SKIPPED ) ) {
+			Logger::error( 'preset_onboarding_skip_write_failed', [] );
+		}
 	}
 
 	/** Records the wizard as completed (preset was chosen and applied). */
 	public static function markCompleted(): void {
-		update_option( self::OPTION_KEY, self::STATE_COMPLETED, false );
+		if ( ! OptionWrite::ifChanged( self::OPTION_KEY, self::STATE_COMPLETED ) ) {
+			Logger::error( 'preset_onboarding_complete_write_failed', [] );
+		}
 	}
 
 	/** Resets state so the wizard is shown again on next page load. */
 	public static function reset(): void {
-		delete_option( self::OPTION_KEY );
+		if ( ! OptionWrite::deleted( self::OPTION_KEY ) ) {
+			Logger::error( 'preset_onboarding_reset_failed', [] );
+		}
 	}
 }

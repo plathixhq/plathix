@@ -60,6 +60,7 @@ describe('plathixInit grid bootstrap order', () => {
             store: jest.fn(() => store),
             data: alpineData,
             start: jest.fn(),
+            magic: jest.fn(),
         }));
         jest.doMock('../hooks.js', () => ({ doAction }));
         jest.doMock('../store.js', () => ({ sidebarStore: store }));
@@ -111,30 +112,30 @@ describe('plathixInit grid bootstrap order', () => {
         jest.runOnlyPendingTimers();
         await Promise.resolve();
 
-
-
-
+        
+        
+        
         document.dispatchEvent(new Event('alpine:init'));
         expect(alpineData).not.toHaveBeenCalledWith('shortcodeBuilder', expect.any(Function));
 
-
-
+        
+        
         expect(applyFolderFilter).toHaveBeenCalledWith(7, { resetPage: true });
 
-
-
-
+        
+        
+        
         expect(refreshFolders).not.toHaveBeenCalled();
 
-
+        
         void resolveRefresh;
         await Promise.resolve();
     });
 
     it('refreshes cached state when data changes', async () => {
-
-
-
+        
+        
+        
         window.Plathix.deferFoldersBootstrap = true;
 
         const applyFolderFilter = jest.fn();
@@ -143,7 +144,7 @@ describe('plathixInit grid bootstrap order', () => {
 
         Object.defineProperty(document, 'readyState', { configurable: true, value: 'loading' });
 
-        jest.doMock('alpinejs', () => ({ store: jest.fn(() => store), data: jest.fn(), start: jest.fn() }));
+        jest.doMock('alpinejs', () => ({ store: jest.fn(() => store), data: jest.fn(), start: jest.fn(), magic: jest.fn() }));
         jest.doMock('../hooks.js', () => ({ doAction: jest.fn() }));
         jest.doMock('../store.js', () => ({ sidebarStore: store }));
         jest.doMock('../components/FolderTree.js', () => ({ folderTree: jest.fn() }));
@@ -189,13 +190,13 @@ describe('plathixInit grid bootstrap order', () => {
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         const store = { openId: 7, applyFolderFilter: jest.fn(), refreshFolders: jest.fn(() => Promise.resolve()) };
 
-        jest.doMock('alpinejs', () => ({ store: jest.fn(() => store), data: jest.fn(), start: jest.fn() }));
+        jest.doMock('alpinejs', () => ({ store: jest.fn(() => store), data: jest.fn(), start: jest.fn(), magic: jest.fn() }));
         jest.doMock('../store.js', () => ({ sidebarStore: store }));
         jest.doMock('../state.js', () => ({ hasStateFlag: jest.fn(() => false), setStateFlag: jest.fn() }));
 
-
-
-
+        
+        
+        
         let memClear;
         await jest.isolateModulesAsync(async () => {
             ({ memClear } = await import('../media-grid-cache.js'));
@@ -213,9 +214,9 @@ describe('plathixInit grid bootstrap order', () => {
     });
 
     it('first open with no saved folder (openId=0) still applies the "All files" filter', async () => {
-
-
-
+        
+        
+        
         const applyFolderFilter = jest.fn();
         const refreshFolders = jest.fn(() => Promise.resolve({}));
         const store = { openId: 0, applyFolderFilter, refreshFolders };
@@ -229,6 +230,7 @@ describe('plathixInit grid bootstrap order', () => {
             store: jest.fn(() => store),
             data: jest.fn(),
             start: jest.fn(),
+            magic: jest.fn(),
         }));
         jest.doMock('../hooks.js', () => ({ doAction: jest.fn() }));
         jest.doMock('../store.js', () => ({ sidebarStore: store }));
@@ -320,6 +322,7 @@ describe('bindBeforeUnloadPersistence', () => {
             store: jest.fn(() => store),
             data: jest.fn(),
             start: jest.fn(),
+            magic: jest.fn(),
         }));
         jest.doMock('../hooks.js', () => ({ doAction: jest.fn() }));
         jest.doMock('../store.js', () => ({ sidebarStore: store }));
@@ -375,7 +378,7 @@ describe('bindBeforeUnloadPersistence', () => {
     });
 
     it('keeps upload links scoped to the active folder', async () => {
-
+        
         let capturedHandler;
         const origAdd = window.addEventListener.bind(window);
         window.addEventListener = (type, fn, ...rest) => {
@@ -413,7 +416,7 @@ describe('keeps REST transport behavior consistent under retry and error conditi
     });
 
     function mockFallbackBranchDeps({ bootstrapStaticList, bootstrapStaticGrid, bootstrapModal, doActionMock, store }) {
-        jest.doMock('alpinejs', () => ({ store: jest.fn(() => store), data: jest.fn(), start: jest.fn() }));
+        jest.doMock('alpinejs', () => ({ store: jest.fn(() => store), data: jest.fn(), start: jest.fn(), magic: jest.fn() }));
         jest.doMock('../hooks.js', () => ({ doAction: doActionMock }));
         jest.doMock('../store.js', () => ({ sidebarStore: store }));
         jest.doMock('../components/FolderTree.js', () => ({ folderTree: jest.fn() }));

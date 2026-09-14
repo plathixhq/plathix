@@ -16,6 +16,16 @@ final class Cache
 	/** @var array<int, bool> */
 	private static array $upload_dedup_pending = [];
 
+	/**
+	 * @var array<string, int>
+	 */
+	private static array $bulk_invalidation_active = [];
+
+	/**
+	 * @var array<string, bool>
+	 */
+	private static array $bulk_invalidation_pending = [];
+
 	private function __construct(
 		private readonly bool $use_object_cache = false
 	) {
@@ -108,9 +118,47 @@ final class Cache
 	}
 
 	public static function onAttachmentChange(mixed $arg = null, string $taxonomy = ''): void {
+		$resolved_taxonomy = $taxonomy ?: PLATHIX_TAXONOMY;
+
+		if ( isset( self::$bulk_invalidation_active[ $resolved_taxonomy ] ) ) {
+			self::$bulk_invalidation_pending[ $resolved_taxonomy ] = true;
+			return;
+		}
+
+		self::flushAttachmentChangeGroups( $resolved_taxonomy );
+	}
+
+	public static function beginBulkInvalidation(string $taxonomy): void {
+		$resolved_taxonomy = $taxonomy ?: PLATHIX_TAXONOMY;
+
+		self::$bulk_invalidation_active[ $resolved_taxonomy ] =
+			( self::$bulk_invalidation_active[ $resolved_taxonomy ] ?? 0 ) + 1;
+	}
+
+	public static function endBulkInvalidation(string $taxonomy): void {
+		$resolved_taxonomy = $taxonomy ?: PLATHIX_TAXONOMY;
+
+		if ( ! isset( self::$bulk_invalidation_active[ $resolved_taxonomy ] ) ) {
+			return;
+		}
+
+		--self::$bulk_invalidation_active[ $resolved_taxonomy ];
+		if ( self::$bulk_invalidation_active[ $resolved_taxonomy ] > 0 ) {
+			return;
+		}
+
+		unset( self::$bulk_invalidation_active[ $resolved_taxonomy ] );
+
+		if ( isset( self::$bulk_invalidation_pending[ $resolved_taxonomy ] ) ) {
+			unset( self::$bulk_invalidation_pending[ $resolved_taxonomy ] );
+			self::flushAttachmentChangeGroups( $resolved_taxonomy );
+		}
+	}
+
+	private static function flushAttachmentChangeGroups(string $resolved_taxonomy): void {
 		$cache = self::make();
 
-		$cache->deleteGroup('folders_' . ( $taxonomy ?: PLATHIX_TAXONOMY ));
+		$cache->deleteGroup( 'folders_' . $resolved_taxonomy );
 		$cache->bumpVersion('folders_tree');
 		$cache->bumpVersion('gallery_items');
 		$cache->deleteGroup( self::DASHBOARD_STATS_GROUP );

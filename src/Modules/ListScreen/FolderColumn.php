@@ -18,12 +18,10 @@ class FolderColumn
 	public function register(): void {
 		$this->post_types = [ 'attachment' ];
 
-
 		if ( in_array('attachment', $this->post_types, true) ) {
 			add_filter('manage_upload_columns', [ $this, 'addMediaColumn' ]);
 			add_action('manage_media_custom_column', [ $this, 'renderMediaColumn' ], 10, 2);
 		}
-
 	}
 
 	/**
@@ -88,7 +86,6 @@ class FolderColumn
 	}
 
 	protected function filterUrl(string $post_type, int $folder_id): string {
-
 		$context = ListScreenQueryContext::fromRequest();
 
 		unset( $context['s'] );
@@ -97,7 +94,6 @@ class FolderColumn
 			// Carry stable display prefs from the current screen so the link works
 			// correctly even if JS is unavailable.
 			unset( $context['post_status'] );
-
 			$args = [ 'plathix_folder' => $folder_id ] + $context;
 			$args['mode'] = sanitize_key( (string) wp_unslash( $_GET['mode'] ?? 'list' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only nav param to build admin list-screen link via add_query_arg; sanitized (sanitize_key), output esc_url'd
 			return add_query_arg( $args, admin_url( 'upload.php' ) );

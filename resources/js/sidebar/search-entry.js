@@ -1,43 +1,44 @@
 import './search/search.css';
 import { searchModule } from './store/search.js';
 import { t } from './i18n.js';
+import { escapeHtml, escapeAttr } from './utils/escape.js';
 
-const searchWrapHTML = () => `
+export const searchWrapHTML = () => `
     <div class="plathix-search__wrap" x-data="{ showSort: false }">
         <div class="plathix-search__inner">
             <span class="plathix-search__icon">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </span>
-            <input type="search" class="plathix-search__input" @input.debounce.500ms="$store.plathix.setSearchQuery($event.target.value)" placeholder="${t('search_folders', 'Search folders')}">
+            <input type="search" class="plathix-search__input" @input.debounce.500ms="$store.plathix.setSearchQuery($event.target.value)" placeholder="${escapeAttr(t('search_folders', 'Search folders'))}">
             <span class="plathix-search-spinner" x-show="$store.plathix.isSearching"></span>
-            <button type="button" class="plathix-sort__btn" title="${t('sort_folders', 'Sort')}" @click.stop="showSort = !showSort" :class="{ 'is-active': showSort || $store.plathix.sortBy !== 'default' }">
+            <button type="button" class="plathix-sort__btn" title="${escapeAttr(t('sort_folders', 'Sort'))}" @click.stop="showSort = !showSort" :class="{ 'is-active': showSort || $store.plathix.sortBy !== 'default' }">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="7" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="21" y1="18" x2="7" y2="18"/></svg>
             </button>
         </div>
         <div class="plathix-sort__dropdown" x-show="showSort" @click.outside="showSort = false" x-cloak>
-            <div class="plathix-sort__header">${t('sort_label', 'SORT')}</div>
+            <div class="plathix-sort__header">${escapeHtml(t('sort_label', 'SORT'))}</div>
             <button type="button" class="plathix-sort__opt" :class="{ 'is-active': $store.plathix.sortBy === 'default' }" @click="$store.plathix.setSortBy('default'); showSort = false">
-                <span>${t('sort_default', 'By default')}</span>
+                <span>${escapeHtml(t('sort_default', 'By default'))}</span>
                 <svg x-show="$store.plathix.sortBy === 'default'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
             <button type="button" class="plathix-sort__opt" :class="{ 'is-active': $store.plathix.sortBy === 'alpha' }" @click="$store.plathix.setSortBy('alpha'); showSort = false">
-                <span>${t('sort_alpha_az', 'A → Z')}</span>
+                <span>${escapeHtml(t('sort_alpha_az', 'A → Z'))}</span>
                 <svg x-show="$store.plathix.sortBy === 'alpha'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
             <button type="button" class="plathix-sort__opt" :class="{ 'is-active': $store.plathix.sortBy === 'alpha_z' }" @click="$store.plathix.setSortBy('alpha_z'); showSort = false">
-                <span>${t('sort_alpha_za', 'Z → A')}</span>
+                <span>${escapeHtml(t('sort_alpha_za', 'Z → A'))}</span>
                 <svg x-show="$store.plathix.sortBy === 'alpha_z'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
             <button type="button" class="plathix-sort__opt" :class="{ 'is-active': $store.plathix.sortBy === 'new' }" @click="$store.plathix.setSortBy('new'); showSort = false">
-                <span>${t('sort_new', 'Newest first')}</span>
+                <span>${escapeHtml(t('sort_new', 'Newest first'))}</span>
                 <svg x-show="$store.plathix.sortBy === 'new'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
             <button type="button" class="plathix-sort__opt" :class="{ 'is-active': $store.plathix.sortBy === 'old' }" @click="$store.plathix.setSortBy('old'); showSort = false">
-                <span>${t('sort_old', 'Oldest first')}</span>
+                <span>${escapeHtml(t('sort_old', 'Oldest first'))}</span>
                 <svg x-show="$store.plathix.sortBy === 'old'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
             <button type="button" class="plathix-sort__opt" :class="{ 'is-active': $store.plathix.sortBy === 'size' }" @click="$store.plathix.setSortBy('size'); showSort = false">
-                <span>${t('sort_size', 'By size')}</span>
+                <span>${escapeHtml(t('sort_size', 'By size'))}</span>
                 <svg x-show="$store.plathix.sortBy === 'size'" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </button>
         </div>
@@ -57,8 +58,8 @@ function onPlathixReady() {
         }
         store._searchImpl = impl;
 
-
-
+        
+        
         store.setSearchQuery = searchModule.setSearchQuery.bind(store);
         store.clearSearch    = searchModule.clearSearch.bind(store);
         store.setSortBy      = searchModule.setSortBy.bind(store);

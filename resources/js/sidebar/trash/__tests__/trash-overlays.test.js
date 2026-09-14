@@ -55,18 +55,42 @@ describe('handles trash workflow consistently', () => {
         const container = document.createElement('div');
         container.innerHTML = trashOverlaysHTML();
 
-
-
+        
+        
         const template = container.querySelector('template');
         const span = template.content.querySelector('.plathix-delete__title span');
         expect(span).not.toBeNull();
 
-
-
+        
+        
         const attr = span.getAttribute('x-text');
         // eslint-disable-next-line no-new-func
         const evaluate = new Function('$store', 'return ' + attr);
         const result = evaluate({ plathix: { mediaTrashConfirm: [1, 2, 3] } });
         expect(result).toBe("3 file's selected");
+    });
+});
+
+describe('handles trash workflow consistently', () => {
+    afterEach(() => {
+        mockTranslateOverride = null;
+    });
+
+    it('handles trash workflow consistently', () => {
+        mockTranslateOverride = (key, fallback) => (key === 'trash_confirm_hint' ? '<img src=x onerror=alert(1)>' : fallback);
+
+        const html = trashOverlaysHTML();
+
+        expect(html).not.toContain('<img src=x onerror=alert(1)>');
+        expect(html).toContain('&lt;img src=x onerror=alert(1)&gt;');
+    });
+
+    it('handles trash workflow consistently', () => {
+        mockTranslateOverride = (key, fallback) => (key === 'restore_label' ? '<b>Restore</b>' : fallback);
+
+        const html = trashOverlaysHTML();
+
+        expect(html).not.toContain('<b>Restore</b>');
+        expect(html).toContain('&lt;b&gt;Restore&lt;/b&gt;');
     });
 });

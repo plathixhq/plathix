@@ -19,14 +19,14 @@ export class BaseAdapter {
         if (resetPage) url.searchParams.delete('paged');
 
         if (isTrash) {
-
-
-
+            
+            
+            
             url.searchParams.set('attachment-filter', 'trash');
         } else if (folderId > 0) {
-
-
-
+            
+            
+            
             url.searchParams.set('plathix_folder', String(folderId));
         }
 
@@ -67,8 +67,8 @@ export class BaseAdapter {
             applied = true;
         }
         if (fragments.topNav && liveTop) {
-
-
+            
+            
             const el = parseFragmentBySelector(fragments.topNav, SEL_TABLENAV_TOP);
             if (el) { safeReplace(liveTop, el); applied = true; }
         }

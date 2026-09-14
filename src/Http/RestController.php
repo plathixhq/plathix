@@ -27,7 +27,6 @@ final class RestController implements RestRouteHandlers, RestRoutePermissions
 		return esc_url_raw( home_url( '/index.php?rest_route=/plathix/' . self::API_VERSION . '/' ) );
 	}
 
-
 	private FolderCountService $folders;
 	private FolderTreeService $tree;
 	private FolderAssignmentService $assignment;
@@ -103,7 +102,6 @@ final class RestController implements RestRouteHandlers, RestRoutePermissions
 		 * @param array<string, bool> $caps
 		 * @param string              $post_type
 		 */
-
 		return (array) apply_filters( 'plathix/sidebar/caps', $caps, $post_type );
 	}
 
@@ -194,7 +192,6 @@ final class RestController implements RestRouteHandlers, RestRoutePermissions
 	public function getFolderItems(\WP_REST_Request $request): \WP_REST_Response {
 		return $this->folderReadController()->getFolderItems( $request, $this->folder_items_loader );
 	}
-
 
 	public function updatePreferences(\WP_REST_Request $request): \WP_REST_Response|\WP_Error {
 		return $this->preferencesController()->updatePreferences( $request );

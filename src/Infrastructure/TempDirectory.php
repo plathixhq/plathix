@@ -6,13 +6,10 @@ namespace Plathix\Infrastructure;
 
 final class TempDirectory
 {
-
 	public function path(): string
 	{
 		$temp_name = 'plathix-temp' . ( is_multisite() ? '-' . get_current_blog_id() : '' );
-		$preferred = [
-			\rtrim( \sys_get_temp_dir(), '/\\' ) . '/' . $temp_name,
-		];
+		$preferred = \rtrim( \get_temp_dir(), '/\\' ) . '/' . $temp_name;
 		$upload     = \wp_upload_dir();
 		$fallback   = \trailingslashit( (string) ( $upload['basedir'] ?? '' ) ) . 'plathix-temp';
 		$configured = \apply_filters( 'plathix/infrastructure/temp_dir', '' );
@@ -21,18 +18,12 @@ final class TempDirectory
 			return \trailingslashit( $configured );
 		}
 
-		foreach ( $preferred as $candidate ) {
-			if ( @\is_dir( $candidate ) || @\wp_mkdir_p( $candidate ) ) {
-				return \trailingslashit( $candidate );
-			}
+		if ( @\is_dir( $preferred ) || @\wp_mkdir_p( $preferred ) ) {
+			return \trailingslashit( $preferred );
 		}
 
 		return \trailingslashit( $fallback );
 	}
-
-	/**
-	 * @param string $dir
-	 */
 
 	public static function removeTree(string $dir): void
 	{
@@ -46,6 +37,12 @@ final class TempDirectory
 		);
 
 		foreach ( $entries as $entry ) {
+			if ( $entry->isLink() ) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
+				\unlink( $entry->getPathname() );
+				continue;
+			}
+
 			if ( $entry->isDir() ) {
 				// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir -- WP has no directory-removal API; WP_Filesystem would demand FTP credentials for a directory this plugin created itself
 				\rmdir( $entry->getRealPath() );

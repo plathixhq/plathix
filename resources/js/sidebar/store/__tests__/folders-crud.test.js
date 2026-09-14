@@ -36,8 +36,8 @@ import { cacheInvalidateFolder } from '../../static-list/cache.js';
 import { memClear } from '../../media-grid-cache.js';
 
 function makeStore(extraState = {}) {
-
-
+    
+    
     const base = mergeStore(makeBaseStore(), notificationsModule, foldersCrudModule, foldersTreeModule);
     return Object.assign(Object.create(null), base, {
         notifications: [],
@@ -108,9 +108,9 @@ describe('foldersCrudModule — createFolder', () => {
     });
 
     it('preserves folder tree behavior', async () => {
-
-
-
+        
+        
+        
         Api.createFolder.mockResolvedValue({ id: 312 });
         Api.getFolder.mockResolvedValue({
             folder: { id: 312, name: 'Фото Альбом', parentId: 7, count: 5, color: '#ff0000', hasChildren: true },
@@ -122,21 +122,21 @@ describe('foldersCrudModule — createFolder', () => {
         });
         await store.createFolder('Фото  Альбом', 7);
         expect(Api.getFolder).toHaveBeenCalledWith(312);
-
+        
         expect(store.mergeFolders).toHaveBeenCalledTimes(2);
         const [optimistic] = store.mergeFolders.mock.calls[0][0];
         expect(optimistic).toMatchObject({ id: 312, count: 0, color: '' });
         const [full] = store.mergeFolders.mock.calls[1][0];
-
+        
         expect(full).toMatchObject({ id: 312, count: 5, color: '#ff0000', hasChildren: true });
-
+        
         expect(store.refreshFolders).not.toHaveBeenCalled();
     });
 
     it('falls back to a silent refresh when getFolder fails — optimistic folder stays visible', async () => {
-
-
-
+        
+        
+        
         Api.createFolder.mockResolvedValue({ id: 312 });
         Api.getFolder.mockRejectedValue(new Error('Folder no longer exists.'));
         const store = makeStore({
@@ -145,7 +145,7 @@ describe('foldersCrudModule — createFolder', () => {
             openFolder: jest.fn(),
         });
         await store.createFolder('NewFolder', 0);
-
+        
         expect(store.mergeFolders).toHaveBeenCalledTimes(1);
         expect(store.mergeFolders.mock.calls[0][0][0]).toMatchObject({ id: 312, name: 'NewFolder', count: 0 });
         expect(cacheInvalidateFolder).toHaveBeenCalledWith(312);
@@ -155,8 +155,8 @@ describe('foldersCrudModule — createFolder', () => {
     });
 
     it('refreshes cached state when data changes', async () => {
-
-
+        
+        
         Api.createFolder.mockResolvedValue({ id: 312 });
         Api.getFolder.mockRejectedValue(new Error('Folder no longer exists.'));
         const dispatchSpy = jest.spyOn(window, 'dispatchEvent');
@@ -173,8 +173,8 @@ describe('foldersCrudModule — createFolder', () => {
     });
 
     it('preserves folder tree behavior', async () => {
-
-
+        
+        
         Api.createFolder.mockResolvedValue({ id: 42 });
         Api.getFolder.mockResolvedValue({ folder: { id: 42, name: 'foo', parentId: 3, count: 7, color: 'blue', hasChildren: false } });
         const store = makeStore({ mergeFolders: jest.fn(), refreshFolders: jest.fn().mockResolvedValue({}) });
@@ -188,8 +188,8 @@ describe('foldersCrudModule — createFolder', () => {
     });
 
     it('preserves folder tree behavior', async () => {
-
-
+        
+        
         Api.createFolder.mockResolvedValue({ id: 312 });
         Api.getFolder.mockResolvedValue({ folder: { id: 312, name: 'NewFolder', parentId: 0 } });
         const store = makeStore({
@@ -228,6 +228,19 @@ describe('foldersCrudModule — createFolder', () => {
         await store.createFolder('X', 0);
         expect(store.isLoading).toBe(false);
     });
+
+    it('refreshes cached state when data changes', async () => {
+        Api.createFolder.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
+        const store = makeStore({
+            refreshFolders: jest.fn().mockResolvedValue({}),
+        });
+
+        await store.createFolder('NewFolder', 0);
+
+        expect(store.refreshFolders).toHaveBeenCalledWith({ silent: true });
+        expect(store.notifications[0].type).toBe('info');
+        expect(store.notifications[0].message).toContain('Refreshing to confirm the result');
+    });
 });
 
 describe('foldersCrudModule — showNewFolderForm / hideNewFolderForm', () => {
@@ -239,9 +252,9 @@ describe('foldersCrudModule — showNewFolderForm / hideNewFolderForm', () => {
         expect(store.newFolderParentId).toBeNull();
     });
 
-
+    
     it('preserves folder tree behavior', async() => {
-
+        
         const store = makeStore({
             folders: [
                 { id: 1, parentId: 0 },
@@ -253,7 +266,7 @@ describe('foldersCrudModule — showNewFolderForm / hideNewFolderForm', () => {
 
         await store.showNewFolderForm(3);
 
-
+        
         expect(store.collapsedIds).toEqual({});
         expect(store.newFolderParentId).toBe(3);
     });
@@ -274,7 +287,7 @@ describe('foldersCrudModule — showNewFolderForm / hideNewFolderForm', () => {
 
         await store.showNewFolderForm(3);
 
-
+        
         expect(loadFolderChildren.mock.calls.map((c) => c[0])).toEqual([1, 2]);
     });
 
@@ -313,7 +326,7 @@ describe('preserves folder tree behavior', () => {
     it('coalesces repeated events into a single handled call', async() => {
         const store = makeStore();
         await store.showNewFolderForm(0);
-        jest.runOnlyPendingTimers();
+        jest.runOnlyPendingTimers(); 
         expect(clickListeners(addSpy)).toHaveLength(1);
     });
 
@@ -321,9 +334,9 @@ describe('preserves folder tree behavior', () => {
         const store = makeStore();
         await store.showNewFolderForm(0);
         jest.runOnlyPendingTimers();
-        await store.showNewFolderForm(3);
+        await store.showNewFolderForm(3); 
         jest.runOnlyPendingTimers();
-
+        
         expect(clickListeners(addSpy).length).toBe(2);
         expect(clickListeners(removeSpy).length).toBeGreaterThanOrEqual(1);
     });
@@ -342,7 +355,7 @@ describe('preserves folder tree behavior', () => {
     it('coalesces repeated events into a single handled call', async() => {
         const store = makeStore();
         await store.showNewFolderForm(0);
-        store.hideNewFolderForm();
+        store.hideNewFolderForm(); 
         jest.runOnlyPendingTimers();
         expect(store._newFolderOutsideClickHandler).toBeNull();
         expect(clickListeners(addSpy)).toHaveLength(0);
@@ -380,7 +393,7 @@ describe('preserves folder tree behavior', () => {
         const store = makeStore();
         store.showRenameForm({ id: 1, name: 'A' });
         jest.runOnlyPendingTimers();
-        store.showRenameForm({ id: 2, name: 'B' });
+        store.showRenameForm({ id: 2, name: 'B' }); 
         jest.runOnlyPendingTimers();
         expect(clickListeners(addSpy).length).toBe(2);
         expect(clickListeners(removeSpy).length).toBeGreaterThanOrEqual(1);
@@ -410,7 +423,7 @@ describe('preserves folder tree behavior', () => {
     it('coalesces repeated events into a single handled call', () => {
         const store = makeStore();
         store.showRenameForm({ id: 1, name: 'A' });
-        store.hideRenameForm();
+        store.hideRenameForm(); 
         jest.runOnlyPendingTimers();
         expect(store._renameOutsideClickHandler).toBeNull();
         expect(clickListeners(addSpy)).toHaveLength(0);
@@ -464,6 +477,33 @@ describe('foldersCrudModule — renameFolder', () => {
         expect(dispatchSpy.mock.calls.map(([e]) => e?.type)).toContain('plathix:folder-moved');
         expect(store.notifications[0].message).toContain('Folder renamed');
         dispatchSpy.mockRestore();
+    });
+
+    it('refreshes cached state when data changes', async () => {
+        Api.renameFolder.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
+        const store = makeStore({
+            folders: [{ id: 2, name: 'Archive', parentId: 0 }],
+            refreshFolders: jest.fn().mockResolvedValue({}),
+        });
+
+        await store.renameFolder(2, 'Photos');
+
+        expect(store.refreshFolders).toHaveBeenCalledWith({ silent: true });
+        expect(store.notifications[0].type).toBe('info');
+        expect(store.notifications[0].message).toContain('Refreshing to confirm the result');
+    });
+
+    it('sets generic error and does not refresh on a non-indeterminate failure (regression guard)', async () => {
+        Api.renameFolder.mockRejectedValue(new Error('network'));
+        const store = makeStore({
+            folders: [{ id: 2, name: 'Archive', parentId: 0 }],
+            refreshFolders: jest.fn().mockResolvedValue({}),
+        });
+
+        await store.renameFolder(2, 'Photos');
+
+        expect(store.refreshFolders).not.toHaveBeenCalled();
+        expect(store.error).toBe('network');
     });
 });
 
@@ -582,10 +622,33 @@ describe('foldersCrudModule — deleteFolder', () => {
         expect(store.notifications[0].message).toContain('could not be deleted');
     });
 
+    it('refreshes cached state when data changes', async() => {
+        Api.deleteFolder.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
+        const store = makeStore({
+            folders: [
+                { id: 77, name: 'Trash', parentId: 0, isProtected: true },
+                { id: 5, name: 'Uncategorized', parentId: 0, isProtected: true },
+                { id: 10, name: 'Work', parentId: 0, isProtected: false },
+            ],
+            refreshFolders: jest.fn().mockResolvedValue({}),
+            openFolder: jest.fn(),
+            openId: 10,
+            deletingFolder: { id: 10, name: 'Work' },
+        });
+
+        await store.deleteFolder(10);
+
+        
+        expect(store.folders.map((f) => f.id).sort((a, b) => a - b)).toEqual([5, 77]);
+        expect(store.refreshFolders).toHaveBeenCalledWith({ silent: true });
+        expect(store.notifications[0].type).toBe('info');
+        expect(store.notifications[0].message).toContain('Refreshing to confirm the result');
+    });
+
     it('handles trash workflow consistently', async() => {
-
-
-
+        
+        
+        
         Api.deleteFolder.mockResolvedValue({});
         const dispatchSpy = jest.spyOn(window, 'dispatchEvent');
         const store = makeStore({
@@ -630,6 +693,59 @@ describe('foldersCrudModule — deleteFolder', () => {
 
         expect(store.folderSelectMode).toBe(true);
         expect(store.selectedFolderIds).toEqual([42]);
+    });
+});
+
+describe('handles trash workflow consistently', () => {
+    let triggerButton;
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        triggerButton = document.createElement('button');
+        document.body.appendChild(triggerButton);
+        triggerButton.focus();
+    });
+
+    afterEach(() => {
+        triggerButton.remove();
+    });
+
+    it('showDeleteConfirm captures the currently focused element as opener', () => {
+        const store = makeStore({ folders: [{ id: 10, name: 'Work', parentId: 0 }] });
+
+        store.showDeleteConfirm({ id: 10, name: 'Work' });
+
+        expect(store._deleteConfirmOpener).toBe(triggerButton);
+        expect(store.deletingFolder).toEqual({ id: 10, name: 'Work' });
+    });
+
+    it('hideDeleteConfirm restores focus to the opener (Cancel/Escape/click-outside path)', () => {
+        const store = makeStore({ folders: [{ id: 10, name: 'Work', parentId: 0 }] });
+        store.showDeleteConfirm({ id: 10, name: 'Work' });
+
+        
+        document.activeElement.blur();
+
+        store.hideDeleteConfirm();
+
+        expect(document.activeElement).toBe(triggerButton);
+        expect(store._deleteConfirmOpener).toBeNull();
+        expect(store.deletingFolder).toBeNull();
+    });
+
+    it('deleteFolder restores focus to the opener on confirm path', async() => {
+        Api.deleteFolder.mockResolvedValue({});
+        const store = makeStore({
+            folders: [{ id: 10, name: 'Work', parentId: 0, isProtected: false }],
+            refreshFolders: jest.fn().mockResolvedValue({}),
+        });
+        store.showDeleteConfirm({ id: 10, name: 'Work' });
+        document.activeElement.blur();
+
+        await store.deleteFolder(10);
+
+        expect(document.activeElement).toBe(triggerButton);
+        expect(store._deleteConfirmOpener).toBeNull();
     });
 });
 

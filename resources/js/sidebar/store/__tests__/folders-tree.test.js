@@ -89,7 +89,7 @@ describe('foldersTreeModule', () => {
 });
 
 describe('preserves folder tree behavior', () => {
-
+    
     const nestedFolders = [
         { id: 1, parentId: 0 },
         { id: 2, parentId: 1 },
@@ -108,7 +108,7 @@ describe('preserves folder tree behavior', () => {
         });
 
         return store.expandAncestors(3).then(() => {
-
+            
             expect(store.collapsedIds).toEqual({});
             expect(Object.prototype.hasOwnProperty.call(store.collapsedIds, '1')).toBe(false);
             expect(Object.prototype.hasOwnProperty.call(store.collapsedIds, '2')).toBe(false);
@@ -138,7 +138,7 @@ describe('preserves folder tree behavior', () => {
         });
 
         return store.expandAncestors(1).then(() => {
-            expect(store.collapsedIds).toEqual({ 1: true });
+            expect(store.collapsedIds).toEqual({ 1: true }); 
             expect(loadFolderChildren).not.toHaveBeenCalled();
         });
     });
@@ -150,12 +150,12 @@ describe('preserves folder tree behavior', () => {
             folders: nestedFolders,
             collapsedIds: {},
             shouldUseDeferredTree: () => true,
-            hasLoadedChildren: () => false,
+            hasLoadedChildren: () => false, 
             loadFolderChildren,
         });
 
         return store.expandAncestors(3).then(() => {
-
+            
             expect(calls).toEqual([1, 2]);
         });
     });
@@ -166,7 +166,7 @@ describe('preserves folder tree behavior', () => {
             folders: nestedFolders,
             collapsedIds: {},
             shouldUseDeferredTree: () => true,
-            hasLoadedChildren: (id) => Number(id) === 1,
+            hasLoadedChildren: (id) => Number(id) === 1, 
             loadFolderChildren,
         });
 
@@ -176,10 +176,10 @@ describe('preserves folder tree behavior', () => {
         });
     });
 
-
-
-
-
+    
+    
+    
+    
     it('regression control: WITHOUT expandAncestors ancestors stay collapsed (proves the bug)', () => {
         const store = makeStore({
             folders: nestedFolders,
@@ -187,13 +187,13 @@ describe('preserves folder tree behavior', () => {
             shouldUseDeferredTree: () => false,
         });
 
-
+        
         store.openId = 3;
 
-
+        
         expect(store.collapsedIds).toEqual({ 1: true, 2: true });
 
-
+        
         return store.expandAncestors(3).then(() => {
             expect(store.collapsedIds).toEqual({});
         });

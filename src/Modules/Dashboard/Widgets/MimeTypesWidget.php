@@ -8,7 +8,6 @@ use Plathix\Core\BentoWidget;
 
 class MimeTypesWidget
 {
-
 	private const COLORS = [
 		'image/jpeg'      => '#0d9488',
 		'image/png'       => '#14b8a6',

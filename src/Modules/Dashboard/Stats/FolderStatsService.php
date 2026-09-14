@@ -16,7 +16,6 @@ class FolderStatsService
 	private ?FolderCountService $folderService;
 
 	public function __construct(?FolderCountService $folderService = null) {
-
 		$this->folderService = $folderService;
 	}
 
@@ -34,7 +33,6 @@ class FolderStatsService
 	 * }
 	 */
 	public function collect(array $post_types): array {
-
 		$sorted    = $post_types;
 		sort( $sorted );
 		$cache     = Cache::make();
@@ -76,7 +74,6 @@ class FolderStatsService
 			}
 
 			foreach ( $folders as $f ) {
-
 				$parent_map[ (int) $f->id ] = $f->parentId;
 			}
 		}
@@ -124,7 +121,6 @@ class FolderStatsService
 
 	private function countPublishedPosts(string $post_type): ?int {
 		if ( 'attachment' === $post_type ) {
-
 			return AttachmentVisibility::countVisibleOrNull( [ 'inherit', 'private' ] );
 		}
 		$counts = wp_count_posts( $post_type );

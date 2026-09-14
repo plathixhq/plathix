@@ -9,8 +9,6 @@ use Plathix\PublicApi\ReplaceApi;
 
 final class MediaDeleteService
 {
-
-
 	/**
 	 * Move a batch of attachments to WP trash.
 	 *
@@ -31,54 +29,58 @@ final class MediaDeleteService
 			_prime_post_caches( $primed_ids, false, false );
 		}
 
-		foreach ( $ids as $raw_id ) {
-			$id = (int) $raw_id;
+		Cache::beginBulkInvalidation($taxonomy);
+		try {
+			foreach ( $ids as $raw_id ) {
+				$id = (int) $raw_id;
 
-			if ( $id <= 0 ) {
-				$skipped[] = $id;
-				continue;
-			}
-
-			$post = get_post($id);
-			if ( ! $post instanceof \WP_Post || $post->post_type !== 'attachment' ) {
-				$skipped[] = $id;
-				continue;
-			}
-
-			if ( $post->post_status === 'trash' ) {
-				$skipped[] = $id;
-				continue;
-			}
-
-			if ( ! current_user_can('delete_post', $id) ) {
-				$failed[] = $id;
-				continue;
-			}
-
-			$lock = ( new MediaTrashLock() )->acquire( $id );
-			if ( is_wp_error( $lock ) ) {
-				$failed[] = $id;
-				continue;
-			}
-
-			try {
-
-				$post = get_post( $id );
-				if ( ! $post instanceof \WP_Post || $post->post_status === 'trash' ) {
+				if ( $id <= 0 ) {
 					$skipped[] = $id;
 					continue;
 				}
 
-				$result = wp_trash_post($id);
-
-				if ( $result !== false && $result !== null ) {
-					$trashed[] = $id;
-				} else {
-					$failed[] = $id;
+				$post = get_post($id);
+				if ( ! $post instanceof \WP_Post || $post->post_type !== 'attachment' ) {
+					$skipped[] = $id;
+					continue;
 				}
-			} finally {
-				( new MediaTrashLock() )->release( $id, $lock['token'] ?? '' );
+
+				if ( $post->post_status === 'trash' ) {
+					$skipped[] = $id;
+					continue;
+				}
+
+				if ( ! current_user_can('delete_post', $id) ) {
+					$failed[] = $id;
+					continue;
+				}
+
+				$lock = ( new MediaTrashLock() )->acquire( $id );
+				if ( is_wp_error( $lock ) ) {
+					$failed[] = $id;
+					continue;
+				}
+
+				try {
+					$post = get_post( $id );
+					if ( ! $post instanceof \WP_Post || $post->post_status === 'trash' ) {
+						$skipped[] = $id;
+						continue;
+					}
+
+					$result = wp_trash_post($id);
+
+					if ( $result !== false && $result !== null ) {
+						$trashed[] = $id;
+					} else {
+						$failed[] = $id;
+					}
+				} finally {
+					( new MediaTrashLock() )->release( $id, $lock['token'] ?? '' );
+				}
 			}
+		} finally {
+			Cache::endBulkInvalidation($taxonomy);
 		}
 
 		if ( $trashed !== [] ) {
@@ -109,63 +111,67 @@ final class MediaDeleteService
 			update_object_term_cache( $primed_ids, $taxonomy );
 		}
 
-		foreach ( $ids as $raw_id ) {
-			$id = (int) $raw_id;
+		Cache::beginBulkInvalidation($taxonomy);
+		try {
+			foreach ( $ids as $raw_id ) {
+				$id = (int) $raw_id;
 
-			if ( $id <= 0 ) {
-				$skipped[] = $id;
-				continue;
-			}
-
-			$post = get_post($id);
-			if ( ! $post instanceof \WP_Post || $post->post_type !== 'attachment' ) {
-				$skipped[] = $id;
-				continue;
-			}
-
-			if ( $post->post_status !== 'trash' ) {
-				$skipped[] = $id;
-				continue;
-			}
-
-			if ( ! current_user_can('delete_post', $id) ) {
-				$failed[] = $id;
-				continue;
-			}
-
-			$lock = ( new MediaTrashLock() )->acquire( $id );
-			if ( is_wp_error( $lock ) ) {
-				$failed[] = $id;
-				continue;
-			}
-
-			try {
-
-				$post = get_post( $id );
-				if ( ! $post instanceof \WP_Post || $post->post_status !== 'trash' ) {
+				if ( $id <= 0 ) {
 					$skipped[] = $id;
 					continue;
 				}
 
-				$result = wp_untrash_post($id);
-				if ( $result === false || $result === null ) {
+				$post = get_post($id);
+				if ( ! $post instanceof \WP_Post || $post->post_type !== 'attachment' ) {
+					$skipped[] = $id;
+					continue;
+				}
+
+				if ( $post->post_status !== 'trash' ) {
+					$skipped[] = $id;
+					continue;
+				}
+
+				if ( ! current_user_can('delete_post', $id) ) {
 					$failed[] = $id;
 					continue;
 				}
 
-				$folder_id     = $this->resolveRestoreTarget( $id, $target_folder_id, $taxonomy, $repo );
-				$terms_result  = $folder_id > 0
-					? wp_set_object_terms($id, [ $folder_id ], $taxonomy)
-					: wp_set_object_terms($id, [], $taxonomy, false);
-				if ( is_wp_error( $terms_result ) ) {
+				$lock = ( new MediaTrashLock() )->acquire( $id );
+				if ( is_wp_error( $lock ) ) {
 					$failed[] = $id;
 					continue;
 				}
 
-				$restored[] = $id;
-			} finally {
-				( new MediaTrashLock() )->release( $id, $lock['token'] ?? '' );
+				try {
+					$post = get_post( $id );
+					if ( ! $post instanceof \WP_Post || $post->post_status !== 'trash' ) {
+						$skipped[] = $id;
+						continue;
+					}
+
+					$result = wp_untrash_post($id);
+					if ( $result === false || $result === null ) {
+						$failed[] = $id;
+						continue;
+					}
+
+					$folder_id     = $this->resolveRestoreTarget( $id, $target_folder_id, $taxonomy, $repo );
+					$terms_result  = $folder_id > 0
+						? wp_set_object_terms($id, [ $folder_id ], $taxonomy)
+						: wp_set_object_terms($id, [], $taxonomy, false);
+					if ( is_wp_error( $terms_result ) ) {
+						$failed[] = $id;
+						continue;
+					}
+
+					$restored[] = $id;
+				} finally {
+					( new MediaTrashLock() )->release( $id, $lock['token'] ?? '' );
+				}
 			}
+		} finally {
+			Cache::endBulkInvalidation($taxonomy);
 		}
 
 		if ( $restored !== [] ) {
@@ -186,9 +192,7 @@ final class MediaDeleteService
 	 * @param FolderRepository $repo
 	 * @return int
 	 */
-
 	private function resolveRestoreTarget(int $file_id, int $target_folder_id, string $taxonomy, FolderRepository $repo): int {
-
 		if ( $target_folder_id > FolderId::ROOT && $this->isLiveUserFolder( $target_folder_id, $taxonomy, $repo ) ) {
 			return $target_folder_id;
 		}
@@ -212,16 +216,12 @@ final class MediaDeleteService
 		}
 		if ( ! $repo->getById( $term_id, $taxonomy ) instanceof \WP_Term ) {
 			return false;
-
 		}
 		if ( $repo->isUncategorizedFolder( $term_id, $taxonomy ) || $term_id === TrashFolder::id( $taxonomy ) ) {
 			return false;
-
 		}
-
 		if ( in_array( $term_id, HiddenFolders::ids( $taxonomy ), true ) ) {
 			return false;
-
 		}
 		return true;
 	}
@@ -238,7 +238,6 @@ final class MediaDeleteService
 		}
 
 		try {
-
 			$post = get_post( $id );
 			if ( ! $post instanceof \WP_Post || $post->post_status !== 'trash' ) {
 				return false;

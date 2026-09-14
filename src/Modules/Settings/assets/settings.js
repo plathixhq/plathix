@@ -6,9 +6,9 @@ import { fallbackCopy } from '../../../../resources/js/admin-ui/copy-utils.js';
 import './settings.css';
 
 function initSvgConditional() {
-
-
-
+    
+    
+    
     const svgPolicy = document.getElementById('plathix-svg-policy');
     const svgFields = document.getElementById('plathix-svg-dependent');
     if (!svgPolicy || !svgFields) return;
@@ -21,16 +21,16 @@ function initSvgConditional() {
 }
 
 function initSavedNotice() {
-
-
-
-
+    
+    
+    
+    
     //
-
-
-
-
-
+    
+    
+    
+    
+    
     const notice = document.querySelector('[data-plathix-tab-panel]:not([hidden]) [id^="plathix-saved-notice-"]');
     if (!notice || notice.style.display === 'none') return;
     setTimeout(() => { notice.style.display = 'none'; }, 2400);

@@ -13,7 +13,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<BooleanNot>
  */
-
 final class ForbiddenBareFullAdminGateRule implements Rule
 {
 	private const TARGET_FILE_SUFFIX = 'src/User/AccessResolver.php';
@@ -43,15 +42,7 @@ final class ForbiddenBareFullAdminGateRule implements Rule
 
 		return [
 			RuleErrorBuilder::message(
-				'Bare full-admin gate (current_user_can(\'manage_options\') without a paired ' .
-				'AccessResolver::forCurrentUser() === AccessLevel::Full check) — this does not see ' .
-				'PRO RolePolicy per-role/per-user access-level override (plathix/user/access_level). ' .
-				'Use AccessResolver::currentUserIsFullAdmin() for non-AJAX call sites, or ' .
-				'Plathix\\Http\\AjaxGuard::requireCap(AccessLevel::Full, \'manage_options\') for AJAX ' .
-				'Static analysis rule failed for a public contract violation.' .
-				'occurrences of this exact blind spot — ForbiddenManualFullAdminGateRule/#535 only ' .
-				'catches the paired && / || form). If this is a genuine unrelated check, add ' .
-				'@phpstan-ignore with a one-line justification.'
+				'Bare full-admin gate (current_user_can(\'manage_options\') without a paired ' . 'AccessResolver::forCurrentUser() === AccessLevel::Full check) — this does not see ' . 'PRO RolePolicy per-role/per-user access-level override (plathix/user/access_level). ' . 'Use AccessResolver::currentUserIsFullAdmin() for non-AJAX call sites, or ' . 'Plathix\\Http\\AjaxGuard::requireCap(AccessLevel::Full, \'manage_options\') for AJAX ' . 'call sites with their own check_ajax_referer(). ' . 'If this is a genuine unrelated check, add ' . '@phpstan-ignore with a one-line justification'
 			)->identifier( 'plathix.manualFullAdminGate' )->build(),
 		];
 	}

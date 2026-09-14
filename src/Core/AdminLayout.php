@@ -23,7 +23,6 @@ class AdminLayout
 	 * @param string   $slug
 	 * @param callable $body
 	 */
-
 	public static function renderPage(string $slug, callable $body): void {
 		ob_start();
 		$body();
@@ -31,7 +30,6 @@ class AdminLayout
 
 		if ( '' === trim( $html ) ) {
 			return;
-
 		}
 
 		self::open( $slug );

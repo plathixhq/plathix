@@ -36,7 +36,6 @@ final class ImportCheckpointCleanupJobRunner
 
 					$checkpoint = $checkpoint_store->get( $adapter_key );
 					if ( null !== $checkpoint && $checkpoint_store->isExpired( $checkpoint ) ) {
-
 						$import_manager->rollbackPartial( $adapter_key );
 					}
 				}

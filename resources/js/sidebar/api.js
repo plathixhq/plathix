@@ -47,10 +47,10 @@ export const Api = {
         return restRequest(`folders/${folderId}/items?${buildQuery(params)}`, { method: 'GET', signal });
     },
 
-
-
-
-
+    
+    
+    
+    
     getFolder(id, signal = undefined) {
         return restRequest(`folders/${Number(id)}?${buildQuery()}`, { method: 'GET', signal });
     },
@@ -73,7 +73,7 @@ export const Api = {
         return restRequest(`folders/${id}?${buildQuery()}&on_children=${onChildren}`, { method: 'DELETE' });
     },
 
-
+    
     getTrashedFolders(signal = undefined) {
         return restRequest(`folders/trashed?${buildQuery()}`, { method: 'GET', signal });
     },
@@ -172,9 +172,9 @@ export const Api = {
     uploadFile,
 
     replaceAttachment(id, file, signal = undefined) {
-
-
-
+        
+        
+        
         return uploadMultipart(`attachments/${id}/replace`, file, { signal, includePostType: false });
     },
 
@@ -196,15 +196,15 @@ export const Api = {
         });
     },
 
-
-
-
-
-
+    
+    
+    
+    
+    
     //
-
-
-
-
-
+    
+    
+    
+    
+    
 };

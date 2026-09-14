@@ -25,9 +25,9 @@ describe('shortcodes table AND filtering', () => {
 
     it('combines type AND folder — both must pass', () => {
         expect(rowMatchesShortcodeFilters(row, { type: 'page', folder: 'Sale' })).toBe(true);
-
+        
         expect(rowMatchesShortcodeFilters(row, { type: 'page', folder: 'Missing' })).toBe(false);
-
+        
         expect(rowMatchesShortcodeFilters(row, { type: 'product', folder: 'Sale' })).toBe(false);
     });
 
@@ -55,7 +55,7 @@ describe('initShortcodesFilter — DOM wiring and no-results row', () => {
         `;
     }
 
-
+    
     it('hides rows that do not match and keeps no-results hidden while something is visible', () => {
         buildTable();
         initShortcodesFilter(document);
@@ -65,8 +65,8 @@ describe('initShortcodesFilter — DOM wiring and no-results row', () => {
         typeEl.dispatchEvent(new Event('change'));
 
         const rows = document.querySelectorAll('tr[data-folders]');
-        expect(rows[0].classList.contains('is-hidden')).toBe(false);
-        expect(rows[1].classList.contains('is-hidden')).toBe(true);
+        expect(rows[0].classList.contains('is-hidden')).toBe(false); 
+        expect(rows[1].classList.contains('is-hidden')).toBe(true);  
         expect(document.querySelector('.plathix-no-results').classList.contains('is-hidden')).toBe(true);
     });
 

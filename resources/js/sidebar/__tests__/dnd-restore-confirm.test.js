@@ -106,14 +106,14 @@ describe('handles trash workflow consistently', () => {
         expect(store.moveItemsBulk).toHaveBeenCalledWith([1], 7);
     });
 
-
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
+    
     it('keeps upload links scoped to the active folder', () => {
         t.mockImplementation((_key, fallback) => fallback);
         const store = makeStore({ openId: 158 });

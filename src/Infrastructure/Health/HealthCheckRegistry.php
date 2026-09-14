@@ -29,7 +29,6 @@ final class HealthCheckRegistry
 	/**
 	 * @return array{key:string, label:string, ok:bool, severity:'error'|'ignored', value:string}
 	 */
-
 	public function svgSanitizer(): array {
 		return $this->checkSvgSanitizer();
 	}
@@ -37,7 +36,6 @@ final class HealthCheckRegistry
 	/**
 	 * @return array<int, string>
 	 */
-
 	public function issues(): array {
 		$labels = [];
 		foreach ( $this->checks() as $check ) {
@@ -63,7 +61,6 @@ final class HealthCheckRegistry
 		}
 
 		if ( $status['idle'] ) {
-
 			return [
 				'key'      => 'cron',
 				'label'    => __( 'WP Cron / Action Scheduler', 'plathix' ),
@@ -177,7 +174,6 @@ final class HealthCheckRegistry
 	/**
 	 * @return array{0:int, 1:bool}
 	 */
-
 	private function runningAndStuck(string $hook, int $cap): array {
 		if ( ! function_exists( 'as_get_scheduled_actions' ) || ! class_exists( '\\ActionScheduler_Store' ) ) {
 			return [ 0, false ];
@@ -205,7 +201,6 @@ final class HealthCheckRegistry
 					}
 				}
 			} catch ( \Throwable ) {
-
 			}
 		}
 
@@ -223,7 +218,6 @@ final class HealthCheckRegistry
 	/**
 	 * @return array{key:string, label:string, ok:bool, severity:'error', value:string}
 	 */
-
 	private function checkBootIntegrity(): array {
 		$recovered = 1 === (int) get_option( 'plathix_boot_recovered_lazily', 0 );
 
@@ -241,7 +235,6 @@ final class HealthCheckRegistry
 	/**
 	 * @return array{key:string, label:string, ok:bool, severity:'error'|'ignored', value:string}
 	 */
-
 	private function checkSvgSanitizer(): array {
 		$svg_enabled = Features::isEnabled( 'svg' );
 		[ $ok, $value ] = $this->svgSanitizerStatus();
@@ -258,7 +251,6 @@ final class HealthCheckRegistry
 	/**
 	 * @return array{0:bool, 1:string}
 	 */
-
 	private function svgSanitizerStatus(): array {
 		if ( ! class_exists( \enshrined\svgSanitize\Sanitizer::class ) ) {
 			return [ false, __( 'Missing or outdated', 'plathix' ) ];
@@ -274,7 +266,6 @@ final class HealthCheckRegistry
 	/**
 	 * @param class-string $engineClass
 	 */
-
 	private function isOwnSanitizerEngine(string $engineClass): bool {
 		try {
 			$file = ( new \ReflectionClass( $engineClass ) )->getFileName();
@@ -299,7 +290,6 @@ final class HealthCheckRegistry
 	/**
 	 * @return array{key:string, label:string, ok:bool, severity:'error', value:string}
 	 */
-
 	private function checkPresetsDirGuard(): array {
 		$upload = wp_upload_dir();
 		$dir    = ! empty( $upload['basedir'] ) ? trailingslashit( $upload['basedir'] ) . 'plathix/presets' : '';

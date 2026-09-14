@@ -27,9 +27,9 @@ function positionContainer(container) {
     }
     const anchor = form.querySelector(TABLENAV_TOP_SEL) || form.querySelector('.wp-list-table');
     if (container.parentElement === form && container.nextElementSibling === anchor) {
-        return true;
+        return true; 
     }
-
+    
     form.insertBefore(container, anchor);
     return true;
 }
@@ -53,7 +53,7 @@ async function refresh(store) {
         container.className = 'plathix-folder-trash-panel';
     }
     if (!positionContainer(container)) {
-        return;
+        return; 
     }
     await fetchAndRenderTiles(container, store);
 }
@@ -87,14 +87,14 @@ export function initFolderTrashPanelList(store) {
         return;
     }
 
-
-
-
+    
+    
+    
     window.wp?.hooks?.addAction?.('plathix.navigationComplete', 'plathix/folder-trash-panel-list', () => refresh(store));
 
-
+    
     window.addEventListener(Events.FOLDER_DELETED, () => refresh(store));
 
-
+    
     scheduleInitialMount(store);
 }

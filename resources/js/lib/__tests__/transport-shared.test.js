@@ -57,9 +57,9 @@ describe('enforces request authorization', () => {
         expect(calls[2].nonce).toBe('rn-new');
     });
 
-
-
-
+    
+    
+    
     it('enforces request authorization', async () => {
         mockFetchSequence([
             res(false, 401, { code: 'rest_cookie_invalid_nonce', message: 'expired, wrong status' }),
@@ -94,7 +94,7 @@ describe('window.PlathixTransport.restRequest — write-405-fallback', () => {
         expect(calls[1].url).toContain('rest_route');
     });
 
-    it('prevents concurrent state changes', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             res(false, 405, null),
             res(false, 405, null),
@@ -159,7 +159,7 @@ describe('keeps REST transport behavior consistent under retry and error conditi
         });
     });
 
-    it('prevents concurrent state changes', async () => {
+    it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         mockFetchSequence([
             res(false, 405, null),
             res(false, 405, null),

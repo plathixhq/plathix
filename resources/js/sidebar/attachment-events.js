@@ -8,12 +8,12 @@ let _recountTimer = null;
 function updateSelectedMediaCount() {
     const store = Alpine.store('plathix');
     if (!store) return;
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     clearTimeout(_recountTimer);
     _recountTimer = setTimeout(() => {
         store.recountFromUi();
@@ -24,12 +24,12 @@ export function bindSelectedMediaCountEvents() {
     if (hasStateFlag('selectedCountBound')) return;
     setStateFlag('selectedCountBound');
 
-
+    
     document.addEventListener('click', updateSelectedMediaCount, true);
     document.addEventListener('change', updateSelectedMediaCount, true);
     document.addEventListener('keyup', updateSelectedMediaCount, true);
 
-
+    
     const bindFrameSelection = (frame) => {
         if (!frame?.on || frame._plathixSelCountBound) return;
         frame._plathixSelCountBound = true;
@@ -46,8 +46,8 @@ export function bindSelectedMediaCountEvents() {
 
     const frame = getMediaFrame();
     if (frame) bindFrameSelection(frame);
-
-
+    
+    
     onMediaFrameReady(() => bindFrameSelection(getMediaFrame()));
 }
 
@@ -85,13 +85,13 @@ export function bindAttachmentDeleteEvents() {
         frame._plathixDeleteEventsBound = true;
     };
 
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
     let retries = 0;
     const tryBind = () => {
         const frame = getMediaFrame();
@@ -105,8 +105,8 @@ export function bindAttachmentDeleteEvents() {
     };
     tryBind();
 
-
-
+    
+    
     onMediaFrameReady(() => {
         const frame = getMediaFrame();
         if (frame) {

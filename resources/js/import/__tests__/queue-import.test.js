@@ -14,7 +14,7 @@ async function loadModuleAndClick() {
     await import('../index.js');
     const button = document.querySelector('.plathix-import-button');
     button.click();
-
+    
     await new Promise((resolve) => setTimeout(resolve, 0));
     await new Promise((resolve) => setTimeout(resolve, 0));
 }
@@ -60,9 +60,9 @@ describe('covers preset import and export behavior', () => {
 
         await loadModuleAndClick();
 
-
-
-
+        
+        
+        
         const statusNode = document.getElementById('plathix-import-status');
         expect(statusNode.innerHTML).not.toContain('Unexpected token');
         expect(statusNode.innerHTML).not.toContain('SyntaxError');

@@ -24,7 +24,6 @@ final class FolderBatchController
 	}
 
 	public function batchCreateFolders(\WP_REST_Request $request, ?\Closure $runner_override = null, ?\Closure $audit_runner = null): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attempt( 'batch_create_folders', get_current_user_id(), max: 20, window: 60 ) ) {
 			return new \WP_REST_Response( [ 'message' => __( 'Too many requests.', 'plathix' ) ], 429 );
 		}
@@ -62,7 +61,6 @@ final class FolderBatchController
 	}
 
 	public function batchDeleteFolders(\WP_REST_Request $request, ?\Closure $runner_override = null, ?\Closure $audit_runner = null): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attempt( 'batch_delete_folders', get_current_user_id(), max: 10, window: 60 ) ) {
 			return new \WP_REST_Response( [ 'message' => __( 'Too many requests.', 'plathix' ) ], 429 );
 		}
@@ -108,7 +106,6 @@ final class FolderBatchController
 	}
 
 	public function batchUpdateFolders(\WP_REST_Request $request, ?\Closure $runner_override = null, ?\Closure $audit_runner = null): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attempt( 'batch_update_folders', get_current_user_id(), max: 20, window: 60 ) ) {
 			return new \WP_REST_Response( [ 'message' => __( 'Too many requests.', 'plathix' ) ], 429 );
 		}
@@ -162,7 +159,6 @@ final class FolderBatchController
 	}
 
 	public function reorderTree(\WP_REST_Request $request, ?\Closure $runner_override = null, ?\Closure $audit_runner = null): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attempt( 'reorder_tree', get_current_user_id(), max: 10, window: 60 ) ) {
 			return new \WP_REST_Response( [ 'message' => __( 'Too many requests.', 'plathix' ) ], 429 );
 		}
@@ -220,15 +216,12 @@ final class FolderBatchController
 				/**
 				 * @var \WP_Error $result
 				 */
-
 				$failed[] = RestFailureValues::batchCreate( $name, $parent_id, $result );
 				continue;
 			}
 			/**
 			 * @var int $result
 			 */
-
-
 			$created[] = RestFailureValues::batchCreatedRow( (int) $result, $name, $parent_id );
 		}
 
@@ -244,6 +237,8 @@ final class FolderBatchController
 		$deleted_names = [];
 		$failed        = [];
 
+		$terms = $this->repository->getManyByIds( $ids, $taxonomy );
+
 		foreach ( $ids as $id ) {
 			$folder_id = (int) $id;
 			if ( $folder_id <= 0 ) {
@@ -251,7 +246,7 @@ final class FolderBatchController
 				continue;
 			}
 
-			$term = $this->repository->getById( $folder_id, $taxonomy );
+			$term = $terms[ $folder_id ] ?? null;
 			$name = $term instanceof \WP_Term ? $term->name : '';
 
 			if ( $this->tree->deleteRecursive( $folder_id, $taxonomy, $on_children ) ) {
@@ -270,10 +265,12 @@ final class FolderBatchController
 	 * @param array<int, array<string, mixed>> $items
 	 * @return array{updated: list<int>, failed: list<array{id: int, message: string}|array{id: int, code: string, message: string}>}
 	 */
-
 	private function runBatchUpdateFolders(array $items, string $taxonomy): array {
 		$updated = [];
 		$failed  = [];
+
+		$ids   = array_map( static fn (array $item): int => absint( $item['id'] ?? 0 ), $items );
+		$terms = $this->repository->getManyByIds( $ids, $taxonomy );
 
 		foreach ( $items as $item ) {
 			$id = absint( $item['id'] ?? 0 );
@@ -282,7 +279,7 @@ final class FolderBatchController
 				continue;
 			}
 
-			$term = $this->repository->getById( $id, $taxonomy );
+			$term = $terms[ $id ] ?? null;
 			if ( ! $term instanceof \WP_Term ) {
 				$failed[] = RestFailureValues::missingFolder( $id );
 				continue;
@@ -293,7 +290,6 @@ final class FolderBatchController
 				/**
 				 * @var \WP_Error $error
 				 */
-
 				$failed[] = RestFailureValues::wpError( $id, $error );
 				continue;
 			}
@@ -327,7 +323,6 @@ final class FolderBatchController
 				/**
 				 * @var \WP_Error $moved
 				 */
-
 				$failed[] = RestFailureValues::wpError( $id, $moved );
 				continue;
 			}
@@ -337,7 +332,6 @@ final class FolderBatchController
 				/**
 				 * @var \WP_Error $ordered
 				 */
-
 				$failed[] = RestFailureValues::wpError( $id, $ordered );
 				continue;
 			}

@@ -150,23 +150,23 @@ export function enableFolderReorder() {
 export function confirmAndMoveItems(itemIds, targetFolderId, folderEl) {
     const plathixStore = Alpine.store('plathix');
 
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
     const trashFolderId = Number(window.Plathix?.trashFolderId || 0);
     const dragSourceIsTrash = plathixStore.isCurrentFolderTrashed()
         || (trashFolderId > 0 && Number(plathixStore.openId) === trashFolderId);
 
     if (dragSourceIsTrash) {
         const folderName = folderEl?.querySelector('.plathix-folder__name')?.textContent?.trim() || '';
-
-
-
-
+        
+        
+        
+        
         const msg = folderName
             ? t('dragdrop_restore_confirm_named', 'Restore file and move it to folder "%s"?').replace('%s', folderName)
             : t('dragdrop_restore_confirm', 'Restore file and move it to this folder?');

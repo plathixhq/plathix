@@ -31,8 +31,8 @@ describe('escapes untrusted output for the destination context', () => {
         const html = favCtxItemHTML(addLabel, removeLabel);
         const xText = extractXText(html);
 
-
-
+        
+        
         expect(() => evaluateXText(xText, false)).not.toThrow();
 
         expect(evaluateXText(xText, false)).toBe(addLabel);
@@ -46,7 +46,7 @@ describe('escapes untrusted output for the destination context', () => {
 
         const container = document.createElement('div');
         container.innerHTML = html;
-
+        
         expect(container.querySelectorAll('span').length).toBe(1);
         expect(container.querySelectorAll('button').length).toBe(1);
 

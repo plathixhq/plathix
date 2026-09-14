@@ -5,12 +5,12 @@ import { t } from '../sidebar/i18n.js';
 const cfg = window.PlathixReplace || {};
 
 async function replaceAttachment(id, file) {
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     return uploadMultipart(`attachments/${id}/replace`, file, {
         includePostType: false,
         runtimeOverride: { restUrl: cfg.restUrl || '', restUrlFallback: cfg.restUrlFallback, restNonce: cfg.restNonce },
@@ -30,13 +30,13 @@ function buildNoticeMessage(result) {
 function notify(type, message, options) {
     const store = window.Alpine?.store?.('plathix');
     if (store?.notify) {
-
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
+        
         if (options === undefined) {
             store.notify(type, message);
         } else {
@@ -84,9 +84,9 @@ function updateAttachmentModel(attachmentId, result) {
         filename: String(result?.newFile || '').split('/').pop() || '',
         mime: result?.newMime || '',
         modified: result?.version || '',
-
-
-
+        
+        
+        
         sizes: result?.sizes || {},
     };
 
@@ -112,11 +112,11 @@ function patchDomForAttachment(attachmentId, result) {
         node.setAttribute('href', nextUrl);
     });
 
-
-
-
-
-
+    
+    
+    
+    
+    
     const modal = document.querySelector('.media-modal.wp-core-ui');
     const previews = document.querySelectorAll('.media-modal img.details-image');
     previews.forEach((node) => {
@@ -124,12 +124,12 @@ function patchDomForAttachment(attachmentId, result) {
         node.setAttribute('src', nextUrl);
     });
 
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     const fullpagePreview = document.querySelector(`#media-head-${attachmentId} img.thumbnail`);
     if (fullpagePreview) {
         fullpagePreview.removeAttribute('srcset');
@@ -138,9 +138,9 @@ function patchDomForAttachment(attachmentId, result) {
 
     patchAttachmentInfoPanel(result);
 
-
-
-
+    
+    
+    
     return Boolean(modal) && previews.length === 0;
 }
 
@@ -205,16 +205,16 @@ function showReplaceOverlay() {
     }
 
     const container = preview.parentNode;
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     const previousPosition = container.style.position;
-
-
-
+    
+    
+    
     const addedAnchorClass = !previousPosition;
     if (addedAnchorClass) {
         container.classList.add('plathix-replace__anchor');
@@ -237,9 +237,9 @@ function showReplaceOverlay() {
 }
 
 function hideReplaceOverlay(overlay) {
-
-
-
+    
+    
+    
     if (!overlay || !document.contains(overlay)) {
         return;
     }
@@ -248,9 +248,9 @@ function hideReplaceOverlay(overlay) {
     const anchorClassAdded = overlay.dataset.plathixAnchorClassAdded === '1';
     overlay.remove();
     if (container instanceof HTMLElement && anchorClassAdded) {
-
-
-
+        
+        
+        
         container.classList.remove('plathix-replace__anchor');
     }
 }
@@ -275,10 +275,10 @@ async function handleReplaceInput(input) {
         const result = await replaceAttachment(attachmentId, file);
         const previewRefreshFailed = updateUiAfterReplace(attachmentId, result);
         if (result?.partialSuccess) {
-
-
-
-
+            
+            
+            
+            
             notify('warning', buildNoticeMessage(result), { duration: 0 });
         } else {
             notify('success', buildNoticeMessage(result));
@@ -287,9 +287,9 @@ async function handleReplaceInput(input) {
             notify('warning', t('replace_preview_refresh_failed', 'File replaced, but the preview could not be refreshed. Reload the page to see the new file.'));
         }
     } catch (error) {
-
-
-
+        
+        
+        
         if (error?.code === 'rest_write_indeterminate') {
             notify('warning', t('replace_write_indeterminate', 'The file may have been replaced, but the server response could not be confirmed. Reload the page to check.'));
         } else {

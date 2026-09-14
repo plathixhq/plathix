@@ -16,7 +16,7 @@ final class AdminUiEnqueueService
 
 	public function isPlathixAdminPage(string $hook): bool {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin routing check
-		$page = sanitize_key( (string) ( $_GET['page'] ?? '' ) );
+		$page = sanitize_key( (string) wp_unslash( $_GET['page'] ?? '' ) );
 		if ( '' !== $page && $this->isUiPageRegistered( $page ) ) {
 			return true;
 		}
@@ -40,14 +40,13 @@ final class AdminUiEnqueueService
 	}
 
 	public function isPlathixSettingsPage(string $hook): bool {
-
 		$slug = ( new SettingsApi() )->pageSlug();
 		if ( $hook === 'plathix_page_' . $slug ) {
 			return true;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only admin routing check
-		return sanitize_key( (string) ( $_GET['page'] ?? '' ) ) === $slug;
+		return sanitize_key( (string) wp_unslash( $_GET['page'] ?? '' ) ) === $slug;
 	}
 
 	private function enqueueAdminUi(string $hook): void {

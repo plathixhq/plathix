@@ -11,7 +11,6 @@ final class OptionWrite
 	 * @param mixed  $newValue
 	 * @param bool   $network
 	 */
-
 	public static function ifChanged(string $option, mixed $newValue, bool $network = false): bool
 	{
 		$oldValue = $network ? get_site_option( $option, null ) : get_option( $option, null );
@@ -30,15 +29,16 @@ final class OptionWrite
 	 * @param string $option
 	 * @param bool   $network
 	 */
-
 	public static function deleted(string $option, bool $network = false): bool
 	{
 		if ( $network ) {
+			// @phpstan-ignore plathix.discardedWriteReturn
 			delete_site_option( $option );
 
 			return null === get_site_option( $option, null );
 		}
 
+		// @phpstan-ignore plathix.discardedWriteReturn
 		delete_option( $option );
 
 		return null === get_option( $option, null );

@@ -27,7 +27,6 @@ final class MediaController
 	}
 
 	public function bulkTrashMedia(\WP_REST_Request $request): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attempt( 'bulk_trash_media', get_current_user_id(), max: 60, window: 60 ) ) {
 			return new \WP_REST_Response( [ 'code' => 'rate_limit', 'message' => __( 'Too many requests. Please try again later.', 'plathix' ) ], 429 );
 		}
@@ -63,7 +62,6 @@ final class MediaController
 	}
 
 	public function bulkRestoreMedia(\WP_REST_Request $request): \WP_REST_Response {
-
 		if ( ! $this->rateLimiter->attempt( 'bulk_restore_media', get_current_user_id(), max: 60, window: 60 ) ) {
 			return new \WP_REST_Response( [ 'code' => 'rate_limit', 'message' => __( 'Too many requests. Please try again later.', 'plathix' ) ], 429 );
 		}

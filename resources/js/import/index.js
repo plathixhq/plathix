@@ -20,8 +20,8 @@ import { escapeHtml } from '../sidebar/utils/escape.js';
     }
 
     const setStatus = (type, message) => {
-
-
+        
+        
         statusNode.className = `notice inline notice-${type}`;
         statusNode.innerHTML = `<p>${escapeHtml(message)}</p>`;
     };
@@ -52,8 +52,8 @@ import { escapeHtml } from '../sidebar/utils/escape.js';
             body: formData,
         });
 
-
-
+        
+        
         let payload = null;
         try {
             payload = await response.json();

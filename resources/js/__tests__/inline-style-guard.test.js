@@ -70,9 +70,9 @@ describe('inline style guard (JS)', () => {
 		for (const [file, count] of Object.entries(actual)) {
 			const allowed = BASELINE[file] || 0;
 
-
-
-
+			
+			
+			
 			expect(count).toBeLessThanOrEqual(allowed);
 		}
 	});
@@ -83,8 +83,8 @@ describe('inline style guard (JS)', () => {
 		for (const [file, expected] of Object.entries(BASELINE)) {
 			const current = actual[file] || 0;
 
-
-
+			
+			
 			expect(current).toBe(expected);
 		}
 	});

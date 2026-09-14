@@ -54,7 +54,6 @@ final class ImportExportApi
 	/**
 	 * @return array<string, bool>
 	 */
-
 	public function importedSources(): array
 	{
 		return ($this->imported_loader)();
@@ -77,7 +76,6 @@ final class ImportExportApi
 	 * @param string[]|null $taxonomies
 	 * @return array<string, mixed>
 	 */
-
 	public function exportStructureFiltered(?array $taxonomies = null): array
 	{
 		return ($this->export_builder_filtered)($taxonomies);
@@ -88,7 +86,6 @@ final class ImportExportApi
 	 * @param  string[]|null        $taxonomies
 	 * @return array{imported:int, taxonomies:int, skipped:int, errors:int, error_details:list<array{taxonomy: string, code: string, message: string}>}
 	 */
-
 	public function importStructure(array $payload, ?array $taxonomies = null): array
 	{
 		return ($this->structure_importer)($payload, $taxonomies);
@@ -172,7 +169,6 @@ final class ImportExportApi
 
 		return [
 			'imported'      => (int) ( $stats['imported'] ?? 0 ),
-
 			'taxonomies'    => (int) ( $stats['imported'] ?? 0 ) + (int) ( $stats['skipped'] ?? 0 ),
 			'skipped'       => (int) ( $stats['skipped'] ?? 0 ),
 			'errors'        => (int) ( $stats['errors'] ?? 0 ),

@@ -31,10 +31,8 @@ class ListScreenFragmentsController
 
 	public function handle(): void {
 		$request = $this->parseRequest();
-		$this->authorizer->authorize( $request );
 
 		try {
-
 			$fragments = $this->renderUploadFragments( $request );
 		} catch ( \Throwable $e ) {
 			Logger::error( __METHOD__ . ': renderUploadFragments failed.', [], $e );
@@ -52,20 +50,20 @@ class ListScreenFragmentsController
 	}
 
 	/**
-	 * Parses read-only list-screen navigation params from $_REQUEST.
-	 *
-	 * Nonce/cap are verified in authorize() (Nonce::verifyOrDie + current_user_can),
-	 * which handle() calls BEFORE any parsed value is used to render or query. No value
-	 * here is written to the DB or output unescaped; the sniff's NonceVerification.Recommended
-	 * is satisfied by the authorize() gate, hence the per-line ignores below.
-	 *
 	 * @return array<string, mixed>
 	 */
 	protected function parseRequest(): array {
-		$order_raw = strtoupper( sanitize_key( (string) wp_unslash( $_REQUEST['order'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only nav param; nonce+cap verified in authorize() before use
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only nav params; nonce+cap verified by performRequestAuthorization() below, before extra_params is collected
+		$screen_base = sanitize_key( (string) wp_unslash( $_REQUEST['screen_base'] ?? 'upload' ) );
+		$post_type   = sanitize_key( (string) wp_unslash( $_REQUEST['post_type'] ?? 'attachment' ) );
 
-		// Keys consumed by this handler; everything else passes through to the list table
-		// so third-party plugin filters (WooCommerce, CPT taxonomies, etc.) are preserved.
+		$this->performRequestAuthorization( [
+			'screen_base' => $screen_base,
+			'post_type'   => $post_type,
+		] );
+
+		$order_raw = strtoupper( sanitize_key( (string) wp_unslash( $_REQUEST['order'] ?? '' ) ) );
+
 		static $known_keys = [
 			'action', 'nonce', '_wpnonce', '_wp_http_referer',
 			'screen_base', 'post_type', 'folder_id', 'paged',
@@ -75,15 +73,21 @@ class ListScreenFragmentsController
 
 		static $blocked_extra_keys = [ 'page', 'mode', 'status', 'plathix_folder' ];
 
+		$allowed_extra_keys = (array) apply_filters(
+			'plathix/list_screen/allowed_extra_keys',
+			[],
+			[ 'screen_base' => $screen_base, 'post_type' => $post_type ]
+		);
+
 		$extra_params = [];
-		foreach ( $_REQUEST as $key => $raw ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only nav params; nonce+cap verified in authorize() before use
+		foreach ( $_REQUEST as $key => $raw ) {
 			$safe_key = sanitize_key( (string) $key );
 			if (
 				$safe_key !== ''
 				&& ! in_array( $safe_key, $known_keys, true )
 				&& ! in_array( $safe_key, $blocked_extra_keys, true )
+				&& in_array( $safe_key, $allowed_extra_keys, true )
 			) {
-
 				$value = Sanitize::deepText( wp_unslash( $raw ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 				if ( is_array( $value ) ? $value !== [] : $value !== '' ) {
@@ -92,13 +96,11 @@ class ListScreenFragmentsController
 			}
 		}
 
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- read-only nav params; nonce+cap verified in authorize() before any parsed value is used
 		return [
-			'screen_base'    => sanitize_key( (string) wp_unslash( $_REQUEST['screen_base'] ?? 'upload' ) ),
-			'post_type'      => sanitize_key( (string) wp_unslash( $_REQUEST['post_type'] ?? 'attachment' ) ),
+			'screen_base'    => $screen_base,
+			'post_type'      => $post_type,
 			'folder_id'      => absint( wp_unslash( $_REQUEST['folder_id'] ?? 0 ) ),
 			'paged'          => max( 1, absint( wp_unslash( $_REQUEST['paged'] ?? 1 ) ) ),
-
 			'orderby'        => ListScreenQueryContext::sanitizeOrderby( (string) wp_unslash( $_REQUEST['orderby'] ?? '' ) ), // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized inside sanitizeOrderby() via sanitize_key() per token
 			'order'          => in_array( $order_raw, [ 'ASC', 'DESC' ], true ) ? $order_raw : '',
 			's'              => sanitize_text_field( (string) wp_unslash( $_REQUEST['s'] ?? '' ) ),
@@ -109,6 +111,13 @@ class ListScreenFragmentsController
 			'extra_params'   => $extra_params,
 		];
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+	}
+
+	/**
+	 * @param array{screen_base: string, post_type: string} $auth_context
+	 */
+	protected function performRequestAuthorization(array $auth_context): void {
+		$this->authorizer->authorize( $auth_context );
 	}
 
 	/**
@@ -192,7 +201,6 @@ class ListScreenFragmentsController
 			}
 
 			if ( $folder_id === TrashFolder::id( $taxonomy ) ) {
-
 				$q->set( 'tax_query', [] );
 				$q->set( 'post_status', 'trash' );
 				$q->set( 'post_type', $post_type );
@@ -241,7 +249,6 @@ class ListScreenFragmentsController
 			$get['plathix_folder'] = (string) $args['folder_id'];
 		}
 		if ( $is_trash ) {
-
 			$get['attachment-filter'] = 'trash';
 		}
 		if ( $args['paged'] > 1 ) {
@@ -291,10 +298,8 @@ class ListScreenFragmentsController
 		}
 
 		if ( $is_trash ) {
-
 			$params['attachment-filter'] = 'trash';
 		} elseif ( $request_folder_id > 0 ) {
-
 			$params['plathix_folder'] = (string) $request_folder_id;
 		}
 
@@ -335,15 +340,6 @@ class ListScreenFragmentsController
 
 		return $params;
 	}
-
-	/**
-	 * @param array<string, string> $get_args
-	 * @return array{get: array<string, mixed>, request: array<string, mixed>}
-	 */
-	/**
-	 * @param array<string, mixed> $get_args
-	 * @return array{get: array<string, mixed>, request: array<string, mixed>, pagenow: mixed, typenow: mixed}
-	 */
 
 	/**
 	 * @param array<string, mixed> $get_args

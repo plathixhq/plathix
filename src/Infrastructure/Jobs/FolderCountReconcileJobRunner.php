@@ -58,6 +58,7 @@ final class FolderCountReconcileJobRunner
 			$last_logged = (int) get_option( self::LOCK_BUSY_LOGGED_OPTION, 0 );
 			if ( time() - $last_logged >= DAY_IN_SECONDS ) {
 				Logger::warning( 'folder_count_reconcile_lock_busy', [ 'fingerprint' => $fingerprint ] );
+				// @phpstan-ignore plathix.discardedWriteReturn
 				update_option( self::LOCK_BUSY_LOGGED_OPTION, time(), false );
 			}
 			return;
@@ -112,7 +113,6 @@ final class FolderCountReconcileJobRunner
 		/**
 		 * @var array<int, int> $parents
 		 */
-
 		$parents = [];
 		foreach ( $terms as $term_id => $parent_id ) {
 			$term_id = (int) $term_id;
@@ -144,7 +144,6 @@ final class FolderCountReconcileJobRunner
 				$children[ $parent_id ][] = $id;
 			}
 		}
-
 		$recursive   = [];
 		$in_progress = [];
 		$resolve     = function (int $id) use (&$resolve, &$recursive, &$in_progress, $children, $direct): int {

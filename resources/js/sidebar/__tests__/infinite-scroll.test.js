@@ -97,9 +97,9 @@ describe('InfiniteScrollManager', () => {
     });
 
     it('triggers load more on WINDOW scroll near bottom (upload.php grid, container does not scroll)', () => {
-
-
-
+        
+        
+        
         const wrapper = document.createElement('div');
         wrapper.className = 'attachments-wrapper';
         Object.defineProperty(wrapper, 'scrollTop', { value: 0, writable: true });
@@ -127,7 +127,7 @@ describe('InfiniteScrollManager', () => {
 
         jest.advanceTimersByTime(250);
 
-
+        
         Object.defineProperty(document.documentElement, 'scrollHeight', { value: 5000, configurable: true });
         window.innerHeight = 800;
         window.scrollY = 4000;
@@ -147,7 +147,7 @@ describe('InfiniteScrollManager', () => {
         manager.attachFrame(frame);
         jest.advanceTimersByTime(250);
 
-        frame.trigger('close');
+        frame.trigger('close'); 
 
         expect(removeSpy).toHaveBeenCalledWith('scroll', expect.any(Function));
         removeSpy.mockRestore();
@@ -165,14 +165,14 @@ describe('InfiniteScrollManager', () => {
         jest.advanceTimersByTime(250);
         expect(root.classList.contains('plathix-infinite-active')).toBe(true);
 
-        frame.trigger('close');
+        frame.trigger('close'); 
         expect(root.classList.contains('plathix-infinite-active')).toBe(false);
     });
 
     it('does NOT trigger load more when scroll position is outside the near-bottom threshold (unified formula)', () => {
-
-
-
+        
+        
+        
         const wrapper = document.createElement('div');
         wrapper.className = 'attachments-wrapper';
         Object.defineProperty(wrapper, 'scrollTop', { value: 100, writable: true });
@@ -199,19 +199,19 @@ describe('InfiniteScrollManager', () => {
         manager.attachFrame(frame);
 
         jest.advanceTimersByTime(250);
-
-
+        
+        
         Object.defineProperty(wrapper, 'scrollTop', { value: 50, writable: true });
         wrapper.dispatchEvent(new Event('scroll'));
 
-
+        
         expect(button.click).not.toHaveBeenCalled();
     });
 
     it('shows spinner synchronously on load start and hides it on completion (fallback path)', () => {
-
-
-
+        
+        
+        
         const wrapper = document.createElement('div');
         wrapper.className = 'attachments-wrapper';
         Object.defineProperty(wrapper, 'scrollTop', { value: 750, writable: true });
@@ -243,11 +243,11 @@ describe('InfiniteScrollManager', () => {
     });
 
     it('uses native wp.media.view.Spinner via frame.content.get().toolbar when available (native path)', () => {
-
-
-
-
-
+        
+        
+        
+        
+        
         const wrapper = document.createElement('div');
         wrapper.className = 'attachments-wrapper';
         Object.defineProperty(wrapper, 'scrollTop', { value: 750, writable: true });

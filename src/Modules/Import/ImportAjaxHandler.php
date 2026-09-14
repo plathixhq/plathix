@@ -38,7 +38,6 @@ final class ImportAjaxHandler
 		}
 
 		if ( $restart ) {
-
 			if ( 'locked' === ( new ImportManager() )->rollbackPartial( $adapter ) ) {
 				wp_send_json_error(
 					[
@@ -95,7 +94,6 @@ final class ImportAjaxHandler
 	/**
 	 * @return string
 	 */
-
 	private function requestPostType(): string
 	{
 		return sanitize_key( (string) wp_unslash( $_POST['post_type'] ?? $_REQUEST['post_type'] ?? 'attachment' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended -- read while evaluating the AjaxGuard::require() argument, i.e. BEFORE the nonce check inside it (PHP evaluates arguments first). Safe because the value is only sanitize_key()'d and used to resolve which capability to demand; it causes no side effect and no data access before AjaxGuard::require() verifies nonce+capability. Do not add side effects here.

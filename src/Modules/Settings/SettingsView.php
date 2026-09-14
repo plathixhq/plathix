@@ -24,17 +24,14 @@ class SettingsView
 	/**
 	 * @return array<int, array{slug:string,label:string,render:callable}>
 	 */
-
 	private function tabs(): array {
 		$host = [
 			[ 'slug' => 'general',  'label' => __( 'General', 'plathix' ),  'render' => [ $this, 'renderTabGeneral' ] ],
-
 		];
 
 		/**
 		 * @param array<int, array{slug:string,label:string,render:callable}> $tabs
 		 */
-
 		$tabs = apply_filters( 'plathix/admin/settings_tabs', $host );
 		$tabs = is_array( $tabs ) ? array_values( $tabs ) : $host;
 
@@ -44,16 +41,13 @@ class SettingsView
 	/**
 	 * @return array<int, array{id:string,priority:int,render:callable}>
 	 */
-
 	private function generalSections(): array {
 		$host = [
-
 		];
 
 		/**
 		 * @param array<int, array{id:string,priority:int,render:callable}> $sections
 		 */
-
 		$sections = apply_filters( 'plathix/settings/generalSections', $host );
 		$sections = is_array( $sections ) ? $sections : $host;
 
@@ -64,7 +58,6 @@ class SettingsView
 	 * @param array<int, mixed> $sections
 	 * @return array<int, array{id:string,priority:int,render:callable}>
 	 */
-
 	public static function dedupSections(array $sections): array {
 		$winners = [];
 		foreach ( $sections as $section ) {
@@ -87,14 +80,13 @@ class SettingsView
 	/**
 	 * @return array<int, string>
 	 */
-
 	public function tabSlugs(): array {
 		return array_map( static fn (array $t): string => (string) $t['slug'], $this->tabs() );
 	}
 
 	private function resolveActiveTab(): string {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only UI state
-		$tab    = sanitize_key( (string) ( $_GET['tab'] ?? 'general' ) );
+		$tab    = sanitize_key( (string) wp_unslash( $_GET['tab'] ?? 'general' ) );
 		$slugs  = $this->tabSlugs();
 		return in_array( $tab, $slugs, true ) ? $tab : ( $slugs[0] ?? 'general' );
 	}
@@ -152,7 +144,6 @@ class SettingsView
 							<?php echo $active_tab === $slug ? '' : 'hidden'; ?>
 						>
 							<?php
-
 							if ( ( new DataWipeApi() )->tabSlug() === $slug ) {
 								( $tab['render'] )();
 							} else {
@@ -172,18 +163,16 @@ class SettingsView
 	/**
 	 * @param callable $render
 	 */
-
 	private function renderTabForm(string $slug, callable $render): void {
-		$form_url = esc_url( admin_url( 'admin-post.php' ) );
+		$form_url = admin_url( 'admin-post.php' );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-
-		$just_saved     = isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] === 'true';
+		$just_saved     = isset( $_GET['settings-updated'] ) && sanitize_text_field( wp_unslash( $_GET['settings-updated'] ) ) === 'true';
 		$notice_style   = $just_saved ? '' : ' style="display:none;"';
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- same read-only UI-visibility rationale as $just_saved above
 		$partial_failed = isset( $_GET['plathix_settings_partial_fail'] );
 		$error_style    = $partial_failed ? '' : ' style="display:none;"';
 		?>
-		<form method="post" action="<?php echo $form_url; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $form_url is already esc_url()'d where it is assigned; escaping twice would corrupt the &amp; entities ?>">
+		<form method="post" action="<?php echo esc_url( $form_url ); ?>">
 			<input type="hidden" name="action" value="plathix_save_<?php echo esc_attr( $slug ); ?>">
 			<?php wp_nonce_field( 'plathix_save_' . $slug ); ?>
 			<input type="hidden" name="_plathix_redirect_tab" value="<?php echo esc_attr( $slug ); ?>">
@@ -206,7 +195,6 @@ class SettingsView
 	// -------------------------------------------------------------------------
 
 	private function renderTabGeneral(): void {
-
 		foreach ( $this->generalSections() as $section ) {
 			( $section['render'] )();
 		}
@@ -269,7 +257,6 @@ class SettingsView
 
 		$choices = [];
 		$walk    = static function (int $parent_id, int $depth) use (&$walk, &$choices, $children): void {
-
 			if ( $depth > 20 || ! isset( $children[ $parent_id ] ) ) {
 				return;
 			}
@@ -287,14 +274,9 @@ class SettingsView
 		?>
 		<?php if ( $is_broken ) : ?>
 			<?php
-
 			?>
 			<input type="hidden" name="plathix_default_folder_id" value="<?php echo esc_attr( (string) $selected ); ?>">
 		<?php endif; ?>
-		<?php
-?>
-		<?php
-?>
 		<select name="plathix_default_folder_id" class="plathix-select plathix-settings__folder-select">
 			<?php if ( $is_broken ) : ?>
 				<option value="<?php echo esc_attr( (string) $selected ); ?>" selected disabled><?php esc_html_e( '(folder unavailable)', 'plathix' ); ?></option>

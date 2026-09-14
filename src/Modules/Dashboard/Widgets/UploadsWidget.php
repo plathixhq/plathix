@@ -55,9 +55,7 @@ class UploadsWidget
 	 * @param array<int, array<string, mixed>> $by_day
 	 * @return list<array{date: string, count: int}>
 	 */
-
 	private function sparkPoints(array $by_day, int $days): array {
-
 		$grid = [];
 		for ( $i = $days - 1; $i >= 0; $i-- ) {
 			$grid[ gmdate( 'Y-m-d', (int) strtotime( current_time( 'mysql' ) . " -{$i} days" ) ) ] = 0;
@@ -77,9 +75,7 @@ class UploadsWidget
 	/**
 	 * @param array<int, array<string, mixed>> $by_day
 	 */
-
 	private function peak(array $by_day, int $days): int {
-
 		$cutoff = gmdate( 'Y-m-d', (int) strtotime( current_time( 'mysql' ) . " -{$days} days" ) );
 		$max    = 0;
 		foreach ( $by_day as $row ) {
@@ -93,9 +89,7 @@ class UploadsWidget
 	/**
 	 * @param array<int, array<string, mixed>> $by_day
 	 */
-
 	private function sparkline(array $by_day, int $days): string {
-
 		$cutoff = gmdate( 'Y-m-d', (int) strtotime( current_time( 'mysql' ) . " -{$days} days" ) );
 
 		$grid = [];

@@ -1,58 +1,11 @@
 #!/usr/bin/env bash
-
-
-
-
 #
-
-
-
-
-
 
 set -euo pipefail
 
 # verify_artifact_content_authenticity <repo_root> <artifact_root> <transform_rules_var> <generated_allowlist_var> [marker_pattern] [scoper_bin] [scoper_config] [scoper_src_prefix]
 #
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #
-
-
-
-
-
-
-
-
-
 verify_artifact_content_authenticity() {
   local repo_root="$1" artifact_root="$2"
   local -n vaca_transform_rules="$3"
@@ -63,8 +16,6 @@ verify_artifact_content_authenticity() {
   local scoper_reprint_dir=""
   if [[ -n "$scoper_bin" && -n "$scoper_config" ]]; then
     scoper_reprint_dir="$(_build_scoper_reprint_tree "$repo_root" "$scoper_bin" "$scoper_config" "$scoper_src_prefix")"
-
-
     trap "rm -rf '${scoper_reprint_dir}'" RETURN
   fi
 
@@ -76,12 +27,6 @@ verify_artifact_content_authenticity() {
       "$scoper_reprint_dir" "$scoper_src_prefix"
   done < <(find "$artifact_root" -type f -print0)
 }
-
-
-
-
-
-
 
 _build_scoper_reprint_tree() {
   local repo_root="$1" scoper_bin="$2" scoper_config="$3" scoper_src_prefix="$4"
@@ -97,20 +42,7 @@ _build_scoper_reprint_tree() {
   rmdir "$tmp_out"
 
   mkdir -p "${tmp_in}/vendor"
-
-
-
-
-
-
-
-
-
   cp -aL "${repo_root}/vendor/enshrined" "${tmp_in}/vendor/enshrined"
-
-
-
-
 
   local src_file rel_src
   while IFS= read -r -d '' src_file; do
@@ -133,9 +65,6 @@ _build_scoper_reprint_tree() {
   printf '%s' "$tmp_out"
 }
 
-
-
-
 _verify_one_artifact_file() {
   local repo_root="$1" artifact_root="$2" rel_path="$3"
   local -n vopf_rules="$4"
@@ -143,10 +72,6 @@ _verify_one_artifact_file() {
   local marker_pattern="$6" scoper_reprint_dir="$7" scoper_src_prefix="$8"
 
   if git -C "$repo_root" ls-files --error-unmatch -- "$rel_path" >/dev/null 2>&1; then
-
-
-
-
     if [[ -n "$scoper_reprint_dir" && "$rel_path" == *.php && ( "$rel_path" == "$scoper_src_prefix" || "$rel_path" == "$scoper_src_prefix"/* ) ]]; then
       _verify_scoped_file_content "$scoper_reprint_dir" "$artifact_root" "$rel_path" "$marker_pattern"
     else
@@ -166,27 +91,7 @@ _verify_one_artifact_file() {
   exit 1
 }
 
-
-
-
-
-
-
 #
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # fix.
 _normalize_markers() {
   local content="$1" marker_pattern="$2"
@@ -201,10 +106,6 @@ _normalize_markers() {
     }
   ' <<<"$content"
 }
-
-
-
-
 
 _verify_tracked_file_content() {
   local repo_root="$1" artifact_root="$2" rel_path="$3"
@@ -225,12 +126,6 @@ _verify_tracked_file_content() {
   _assert_matches_or_transform "$rel_path" "$actual_content" "$normalized_blob" vtfc_rules
 }
 
-
-
-
-
-
-
 _verify_scoped_file_content() {
   local scoper_reprint_dir="$1" artifact_root="$2" rel_path="$3" marker_pattern="$4"
 
@@ -249,8 +144,6 @@ _verify_scoped_file_content() {
   local empty_rules=()
   _assert_matches_or_transform "$rel_path" "$actual_content" "$normalized_reprint" empty_rules
 }
-
-
 
 _assert_matches_or_transform() {
   local rel_path="$1" actual_content="$2" normalized_blob="$3"

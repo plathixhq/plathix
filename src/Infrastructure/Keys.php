@@ -36,10 +36,6 @@ final class Keys
 		return "plathix_dl_job_{$action_id}";
 	}
 
-	public static function licenseError(): string {
-		return 'plathix_license_last_error';
-	}
-
 	public static function blogSuffix(): string {
 		return is_multisite() ? '_' . get_current_blog_id() : '';
 	}

@@ -261,7 +261,7 @@ describe('refreshes cached state when data changes', () => {
 
 
 
-describe('prevents concurrent state changes', () => {
+describe('preserves folder tree behavior', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
@@ -296,5 +296,53 @@ describe('prevents concurrent state changes', () => {
 
         expect(Api.moveFolderToSiblingOf).toHaveBeenCalledTimes(1);
         expect(store.error).toBe('Invalid parent folder.');
+    });
+});
+
+describe('preserves folder tree behavior', () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it('moveFolderToParent reconciles via silent refresh instead of a generic error', async () => {
+        Api.moveFolderParent.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
+        const refreshFolders = jest.fn().mockResolvedValue({});
+        const store = makeStore({
+            folders: [{ id: 10, parentId: 3 }],
+            refreshFolders,
+        });
+
+        await store.moveFolderToParent(10, 5);
+
+        expect(refreshFolders).toHaveBeenCalledWith({ silent: true });
+        expect(store.notifications[0].type).toBe('info');
+        expect(store.notifications[0].message).toContain('Refreshing to confirm the result');
+    });
+
+    it('moveFolderToSiblingOf reconciles via silent refresh instead of a generic error', async () => {
+        Api.moveFolderToSiblingOf.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
+        const refreshFolders = jest.fn().mockResolvedValue({});
+        const store = makeStore({
+            folders: [{ id: 10, parentId: 3 }],
+            refreshFolders,
+        });
+
+        await store.moveFolderToSiblingOf(10, 7, 2);
+
+        expect(refreshFolders).toHaveBeenCalledWith({ silent: true });
+        expect(store.notifications[0].type).toBe('info');
+        expect(store.notifications[0].message).toContain('Refreshing to confirm the result');
+    });
+
+    it('does not retry rest_write_indeterminate as a lock code (regression guard)', async () => {
+        Api.moveFolderToSiblingOf.mockRejectedValue(Object.assign(new Error('indeterminate'), { code: 'rest_write_indeterminate' }));
+        const store = makeStore({
+            folders: [{ id: 10, parentId: 3 }],
+            refreshFolders: jest.fn().mockResolvedValue({}),
+        });
+
+        await store.moveFolderToSiblingOf(10, 7, 2);
+
+        expect(Api.moveFolderToSiblingOf).toHaveBeenCalledTimes(1);
     });
 });

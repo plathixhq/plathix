@@ -15,7 +15,6 @@ final class AttachmentDetails
 	 * @return array<string, mixed>
 	 */
 	public function addFolderField(array $form_fields, \WP_Post $post): array {
-
 		if ( AttachmentEditContext::isAttachmentEditPage() ) {
 			return $form_fields;
 		}

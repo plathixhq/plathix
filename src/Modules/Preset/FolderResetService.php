@@ -21,7 +21,6 @@ final class FolderResetService
 	 * @param bool $skip_own_lock
 	 * @return array{success: bool, removed: int, skipped: int, errors: int, locked?: bool}
 	 */
-
 	public function run(bool $skip_own_lock = false): array {
 		$taxonomy = Taxonomy::taxonomyForPostType('attachment');
 		if ( ! taxonomy_exists($taxonomy) ) {
@@ -47,9 +46,26 @@ final class FolderResetService
 	}
 
 	/**
-	 * @return array{success: bool, removed: int, skipped: int, errors: int}
+	 * @return array{success: bool, removed: int, skipped: int, errors: int, locked?: bool}
 	 */
 	private function runLocked(string $taxonomy): array {
+		$tree = new \Plathix\Core\FolderTreeService( $this->getRepository(), new FolderCountService( $this->getRepository(), Cache::make() ) );
+		$lock = $tree->acquireStructureLock( $taxonomy );
+		if ( 'none' === $lock['mode'] ) {
+			return [ 'success' => false, 'removed' => 0, 'skipped' => 0, 'errors' => 0, 'locked' => true ];
+		}
+
+		try {
+			return $this->deleteAllUnderStructureLock( $taxonomy, $tree );
+		} finally {
+			$tree->releaseStructureLock( $taxonomy, $lock );
+		}
+	}
+
+	/**
+	 * @return array{success: bool, removed: int, skipped: int, errors: int}
+	 */
+	private function deleteAllUnderStructureLock(string $taxonomy, \Plathix\Core\FolderTreeService $tree): array {
 		do_action( 'plathix/audit/record', 'preset_reset_started', [ 'taxonomy' => $taxonomy ]);
 
 		$repo    = $this->getRepository();
@@ -86,8 +102,13 @@ final class FolderResetService
 
 			$term_id = (int) $term->term_id;
 
-			// Step 3: delete the folder (files stay, they lose their taxonomy assignment naturally)
-			$deleted = $repo->delete($term_id, $taxonomy);
+			// Step 3: delete the folder under the already-held structure-lock (files stay,
+			// they lose their taxonomy assignment naturally). deleteRecursiveUnderLock()
+			// is used (not deleteRecursivePermanent()) because this method already holds
+			// the structure-lock — a second acquireOrder() with the same lock name would
+			// self-deadlock (GET_LOCK is not reentrant), same reasoning as
+			// TrashCleanupJobRunner::cleanupFolders().
+			$deleted = $tree->deleteRecursiveUnderLock( $term_id, $taxonomy, 'delete' );
 			if ( $deleted ) {
 				// Step 4: term meta is removed automatically by wp_delete_term → delete_term_meta cascade.
 				$removed++;
@@ -98,6 +119,7 @@ final class FolderResetService
 
 		// Step 5: clear related caches
 		( new FolderCountService($repo, Cache::make()) )->invalidate($taxonomy);
+		// @phpstan-ignore plathix.discardedWriteReturn
 		delete_option("{$taxonomy}_children");
 
 		// Step 6: write audit log
@@ -131,7 +153,6 @@ final class FolderResetService
 	 * @param \WP_Term[] $all_terms
 	 */
 	private function termDepth(\WP_Term $term, array $all_terms): int {
-
 		$depth   = 0;
 		$parent  = (int) $term->parent;
 		$visited = [];

@@ -28,9 +28,9 @@ describe('toolbar template', () => {
     });
 
     it('renders the search slot for the search module to fill', () => {
-
-
-
+        
+        
+        
         const template = toolbarTemplate();
 
         expect(template).toContain('data-slot="plathix-search"');
@@ -39,30 +39,30 @@ describe('toolbar template', () => {
     describe('handles trash workflow consistently', () => {
         it('renders a split files/folders counter on the Trash system node', () => {
             const template = toolbarTemplate();
-
+            
             expect(template).toContain('plathix-trash-counts');
             expect(template).toContain('folder.foldersCount !== null');
-
+            
             expect(template).toContain('x-text="folder.count || 0"');
             expect(template).toContain('x-text="folder.foldersCount || 0"');
         });
 
         it('uses file/folder icons with aria-labels instead of letter labels', () => {
             const template = toolbarTemplate();
-
+            
             const icoCount = (template.match(/plathix-trash-counts__icon/g) || []).length;
             expect(icoCount).toBe(2);
-
+            
             expect(template).toContain('aria-label="Files"');
             expect(template).toContain('aria-label="Folders"');
-
+            
             expect(template).not.toMatch(/x-text="folder\.count \|\| 0"><\/span>\s*F/);
             expect(template).not.toMatch(/x-text="folder\.foldersCount \|\| 0"><\/span>\s*D/);
         });
 
         it('handles trash workflow consistently', () => {
             const template = toolbarTemplate();
-
+            
             expect(template).toContain('class="plathix-trash-counts__icon" width="11" height="11"');
             expect(template).not.toContain('class="plathix-trash-counts__icon" width="14"');
         });
@@ -73,7 +73,7 @@ describe('toolbar template', () => {
         });
     });
 
-    describe('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
+    describe('declares the required ARIA attribute or role for assistive technology', () => {
         it('renders aria-pressed bound to folderSelectMode on the Select folders button', () => {
             const template = toolbarTemplate();
             expect(template).toContain(':aria-pressed="String($store.plathix.folderSelectMode)"');
@@ -82,6 +82,25 @@ describe('toolbar template', () => {
         it('renders aria-pressed bound to folderDragMode on the Drag mode button', () => {
             const template = toolbarTemplate();
             expect(template).toContain(':aria-pressed="String($store.plathix.folderDragMode)"');
+        });
+    });
+
+    describe('escapes untrusted output for the destination context', () => {
+        it('escapes HTML special characters in postTypeLabel before inserting into the template', () => {
+            window.Plathix.postTypeLabel = '<img src=x onerror=alert(1)>';
+
+            const template = toolbarTemplate();
+
+            expect(template).not.toContain('<img src=x onerror=alert(1)>');
+            expect(template).toContain('&lt;img src=x onerror=alert(1)&gt;');
+        });
+
+        it('renders an ordinary postTypeLabel unchanged', () => {
+            window.Plathix.postTypeLabel = 'Media';
+
+            const template = toolbarTemplate();
+
+            expect(template).toContain('<span class="plathix-section__title">Media</span>');
         });
     });
 

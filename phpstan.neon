@@ -4,17 +4,10 @@ includes:
 
 parameters:
     level: 8
-
-
-
-
     paths:
         - src
     bootstrapFiles:
         - vendor/autoload.php
-
-
-
     scanFiles:
         - vendor/php-stubs/wp-cli-stubs/wp-cli-stubs.php
     treatPhpDocTypesAsCertain: false
@@ -25,61 +18,44 @@ parameters:
         - '#Constant (PLATHIX_|ABSPATH|WPINC|DB_|AUTH_|SECURE_|LOGGED_IN_|NONCE_|WP_DEBUG|WP_CONTENT_|WP_PLUGIN_|WPMU_|SUBDOMAIN_INSTALL|COOKIEHASH|WEEK_IN_SECONDS|DAY_IN_SECONDS|HOUR_IN_SECONDS|MINUTE_IN_SECONDS|MONTH_IN_SECONDS|YEAR_IN_SECONDS|ARRAY_A|ARRAY_N|OBJECT)#'
 
 services:
-
-
-
     -
         class: Plathix\PhpstanRules\ForbiddenCrossModuleInternalsRule
         tags:
             - phpstan.rules.rule
-
-
-
-
-
-
     -
         class: Plathix\PhpstanRules\ForbiddenCrossModuleInternalsInlineReferenceRule
         tags:
             - phpstan.rules.rule
-
-
-
     -
         class: Plathix\PhpstanRules\ForbiddenManualAccessLevelRankingRule
         tags:
             - phpstan.rules.rule
-
-
-
     -
         class: Plathix\PhpstanRules\ForbiddenManualAccessLevelRankTableRule
         tags:
             - phpstan.rules.rule
-
-
-
-
-
-
-
     -
         class: Plathix\PhpstanRules\ForbiddenManualFullAdminGateRule
         tags:
             - phpstan.rules.rule
-
-
-
-
-
     -
         class: Plathix\PhpstanRules\ForbiddenBareFullAdminGateRule
         tags:
             - phpstan.rules.rule
-
-
-
     -
         class: Plathix\PhpstanRules\ForbiddenSnakeCaseResponseKeyRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Plathix\PhpstanRules\ForbiddenDiscardedWriteReturnRule
+        tags:
+            - phpstan.rules.rule
+    # src/PhpstanRules/ForbiddenOptionalExtensionUsageRule.php.
+    -
+        class: Plathix\PhpstanRules\ForbiddenOptionalExtensionUsageRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Plathix\PhpstanRules\ForbiddenUnslashOrderRule
         tags:
             - phpstan.rules.rule

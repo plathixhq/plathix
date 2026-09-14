@@ -14,8 +14,8 @@ describe('covers the attachment replace flow', () => {
         jest.resetModules();
         jest.doMock('../runtime.js', () => ({
             getRuntime: jest.fn(() => ({ restUrl: 'https://example.test/wp-json/plathix/v1/', restNonce: 'n' })),
-
-
+            
+            
             getPostType: jest.fn(() => 'plathix_document'),
         }));
         Api = require('../api.js').Api;

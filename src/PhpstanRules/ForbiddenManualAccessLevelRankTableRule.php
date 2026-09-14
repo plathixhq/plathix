@@ -16,7 +16,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<Array_>
  */
-
 final class ForbiddenManualAccessLevelRankTableRule implements Rule
 {
 	private const TARGET_CLASS = 'Plathix\\User\\AccessLevel';
@@ -58,12 +57,7 @@ final class ForbiddenManualAccessLevelRankTableRule implements Rule
 
 		return [
 			RuleErrorBuilder::message( sprintf(
-				'Manual AccessLevel rank table (%d entries mapping AccessLevel::Case->value to an ' .
-				'integer) — use AccessLevel::satisfies() instead of a hand-written ranking table. ' .
-				'Static analysis rule failed for a public contract violation.' .
-				'required" comparison was found in RestController::level_satisfies() before the ' .
-				'fix). If this is a genuine non-ranking lookup map, add @phpstan-ignore with a ' .
-				'one-line justification.',
+				'Manual AccessLevel rank table (%d entries mapping AccessLevel::Case->value to an ' . 'integer) — use AccessLevel::satisfies() instead of a hand-written ranking table. ' . 'If this is a genuine non-ranking lookup map, add @phpstan-ignore with a ' . 'one-line justification',
 				$rankEntries
 			) )->identifier( 'plathix.manualAccessLevelRankTable' )->build(),
 		];

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Plathix\Modules\Preset;
 
+use Plathix\Core\MbCompat;
+
 final class PresetRepository
 {
 	/**
@@ -56,7 +58,6 @@ final class PresetRepository
 			/**
 			 * @var \WP_Error $updated
 			 */
-
 			return $updated;
 		}
 
@@ -122,11 +123,9 @@ final class PresetRepository
 	}
 
 	/**
-	 * phpcs:ignore каждый. Колонка при�
 	 * @param 'id'|'slug' $column
 	 * @return array<string, mixed>|null
 	 */
-
 	private function findOneBy(string $column, int|string $value): ?array {
 		global $wpdb;
 
@@ -148,7 +147,6 @@ final class PresetRepository
 	/**
 	 * @return array<string, mixed>|null
 	 */
-
 	public function findLastApplied(): ?array {
 		global $wpdb;
 
@@ -247,7 +245,7 @@ final class PresetRepository
 			: (string) ($record['created_at'] ?? $now);
 		$updated_at = $now;
 
-		$description = \mb_substr(\trim( wp_strip_all_tags( (string) ($record['description'] ?? '')) ), 0, 2000);
+		$description = MbCompat::substr(\trim( wp_strip_all_tags( (string) ($record['description'] ?? '')) ), 0, 2000);
 		$title       = \trim( sanitize_text_field( (string) ($record['title'] ?? '')) );
 		$slug        = sanitize_key( (string) ($record['slug'] ?? ''));
 
@@ -255,17 +253,16 @@ final class PresetRepository
 			'blog_id'           => (int) get_current_blog_id(),
 			'source_type'       => PresetSourceType::normalize( (string) ($record['source_type'] ?? PresetSourceType::CUSTOM)),
 			'slug'              => $slug,
-			'title'             => \mb_substr($title, 0, 191),
-			'version'           => \mb_substr(\trim( (string) ($record['version'] ?? '1')), 0, 32),
+			'title'             => MbCompat::substr($title, 0, 191),
+			'version'           => MbCompat::substr(\trim( (string) ($record['version'] ?? '1')), 0, 32),
 			'description'       => $description,
 			'tags_json'         => wp_json_encode(\array_values(\array_map('strval', (array) ($record['tags'] ?? [])))),
-			'author_name'       => \mb_substr(\trim( sanitize_text_field( (string) ($record['author_name'] ?? $record['author'] ?? '')) ), 0, 191),
-
-			'author_url'        => \mb_substr(esc_url_raw(\trim( (string) ($record['author_url'] ?? '')), ['http', 'https']), 0, 255),
-			'preview_ref'       => \mb_substr(\trim( (string) ($record['preview_ref'] ?? '')), 0, 255),
-			'storage_path'      => \mb_substr(\trim( (string) ($record['storage_path'] ?? '')), 0, 255),
-			'validation_status' => \mb_substr(sanitize_key( (string) ($record['validation_status'] ?? 'valid')), 0, 32),
-			'last_error_code'   => \mb_substr(sanitize_key( (string) ($record['last_error_code'] ?? '')), 0, 64),
+			'author_name'       => MbCompat::substr(\trim( sanitize_text_field( (string) ($record['author_name'] ?? $record['author'] ?? '')) ), 0, 191),
+			'author_url'        => MbCompat::substr(esc_url_raw(\trim( (string) ($record['author_url'] ?? '')), ['http', 'https']), 0, 255),
+			'preview_ref'       => MbCompat::substr(\trim( (string) ($record['preview_ref'] ?? '')), 0, 255),
+			'storage_path'      => MbCompat::substr(\trim( (string) ($record['storage_path'] ?? '')), 0, 255),
+			'validation_status' => MbCompat::substr(sanitize_key( (string) ($record['validation_status'] ?? 'valid')), 0, 32),
+			'last_error_code'   => MbCompat::substr(sanitize_key( (string) ($record['last_error_code'] ?? '')), 0, 64),
 			'folder_count'      => max(0, (int) ($record['folder_count'] ?? 0)),
 			'structure_json'    => wp_json_encode($record['structure'] ?? []),
 			'created_at'        => $created_at,

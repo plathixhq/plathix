@@ -41,7 +41,7 @@ describe('keeps store/selection state consistent across UI events', () => {
     });
 
     it('regression: old parseFragment returns the wrong first element for topNav', () => {
-
+        
         const wrong = parseFragment(TOP_NAV_HTML);
         expect(wrong.tagName).toBe('INPUT');
         expect(wrong.id).toBe('_wpnonce');

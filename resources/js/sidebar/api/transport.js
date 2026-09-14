@@ -69,19 +69,19 @@ export async function restRequest(path, requestOptions = {}) {
         retry = true,
         signal = undefined,
         overrideMethod = null,
-
-
+        
+        
         useFallbackBase = false,
-
-
-
-
-
+        
+        
+        
+        
+        
         runtimeOverride = null,
     } = requestOptions;
     const runtime = runtimeOverride || getRuntime();
-
-
+    
+    
     const effectiveRetry = runtimeOverride ? false : retry;
     /** @type {Record<string, string>} */
     const headers = {
@@ -114,11 +114,11 @@ export async function restRequest(path, requestOptions = {}) {
         return restRequest(path, { method, data, retry: false, signal, overrideMethod, useFallbackBase, runtimeOverride });
     }
 
-
-
-
-
-
+    
+    
+    
+    
+    
     if (
         !response.ok
         && response.status === 405
@@ -129,8 +129,8 @@ export async function restRequest(path, requestOptions = {}) {
         return restRequest(path, { method, data, retry, signal, overrideMethod, useFallbackBase: true, runtimeOverride });
     }
 
-
-
+    
+    
     if (
         !response.ok
         && response.status === 405
@@ -141,13 +141,13 @@ export async function restRequest(path, requestOptions = {}) {
         return restRequest(path, { method, data, retry, signal, overrideMethod: method, useFallbackBase: true, runtimeOverride });
     }
 
-
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
+    
     if (
         response.ok
         && json === null
@@ -158,8 +158,8 @@ export async function restRequest(path, requestOptions = {}) {
         return restRequest(path, { method, data, retry, signal, overrideMethod, useFallbackBase: true, runtimeOverride });
     }
 
-
-
+    
+    
     if (response.ok && json === null && useFallbackBase && !WRITE_METHODS.includes(overrideMethod || method)) {
         const error = /** @type {PlathixRequestError} */ (
             new Error(t('rest_read_corrupted', 'The server is corrupting REST responses (both /wp-json/ and rest_route returned invalid data). Contact your hosting.'))
@@ -168,11 +168,11 @@ export async function restRequest(path, requestOptions = {}) {
         throw error;
     }
 
-
-
-
-
-
+    
+    
+    
+    
+    
     if (response.ok && json === null && WRITE_METHODS.includes(overrideMethod || method)) {
         const error = /** @type {PlathixRequestError} */ (
             new Error(t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.'))
@@ -182,8 +182,8 @@ export async function restRequest(path, requestOptions = {}) {
     }
 
     if (!response.ok) {
-
-
+        
+        
         const isBlockedWrite = response.status === 405 && WRITE_METHODS.includes(overrideMethod || method);
         const message = isBlockedWrite
             ? t('rest_write_blocked', 'The server is blocking REST write requests (both /wp-json/ and rest_route returned 405). Contact your hosting.')
@@ -253,10 +253,10 @@ export async function uploadFile(file, signal = undefined, retry = true) {
         throw error;
     }
 
-
-
-
-
+    
+    
+    
+    
     if (json === null) {
         const error = /** @type {PlathixRequestError} */ (
             new Error(t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.'))
@@ -268,8 +268,14 @@ export async function uploadFile(file, signal = undefined, retry = true) {
     return json;
 }
 
-
-
+/**
+ * @typedef {Object} UploadMultipartOptions
+ * @property {AbortSignal | undefined} [signal]
+ * @property {boolean} [retry]
+ * @property {boolean} [useFallback]
+ * @property {boolean} [includePostType]
+ * @property {RestRuntimeOverride} [runtimeOverride]
+ */
 
 /**
  * @param {string} path
@@ -287,12 +293,12 @@ export async function uploadMultipart(path, file, options = {}) {
     } = options;
     const runtime = runtimeOverride || getRuntime();
     const nonce = runtime.restNonce || runtime.nonce || '';
-
-
-
+    
+    
+    
     const effectiveRetry = runtimeOverride ? false : retry;
-
-
+    
+    
     const body = new FormData();
     body.append('file', file, file.name);
     if (includePostType) {
@@ -317,8 +323,8 @@ export async function uploadMultipart(path, file, options = {}) {
         return uploadMultipart(path, file, { signal, retry: false, useFallback, includePostType, runtimeOverride });
     }
 
-
-
+    
+    
     if (
         !response.ok
         && response.status === 405
@@ -339,10 +345,10 @@ export async function uploadMultipart(path, file, options = {}) {
         throw error;
     }
 
-
-
-
-
+    
+    
+    
+    
     if (json === null) {
         const error = /** @type {PlathixRequestError} */ (
             new Error(t('rest_write_indeterminate', 'The server accepted the request, but the response could not be read. Refreshing to confirm the result.'))

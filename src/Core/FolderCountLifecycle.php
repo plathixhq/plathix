@@ -8,11 +8,16 @@ use Plathix\Infrastructure\Logger;
 
 final class FolderCountLifecycle
 {
-
 	private static bool $suppressed = false;
 
+	/**
+	 * @var array<int, int>
+	 */
 	private static array $tt_to_term = [];
 
+	/**
+	 * @var array<int, array{terms: array<int, int>, taxonomy: string}>
+	 */
 	private static array $pending_delete_deltas = [];
 
 	public function __construct(private readonly FolderCountService $countService)
@@ -21,7 +26,6 @@ final class FolderCountLifecycle
 
 	public function register(): void
 	{
-
 		add_action( 'added_term_relationship', [ $this, 'onAddedTermRelationship' ], 10, 3 );
 		add_action( 'deleted_term_relationships', [ $this, 'onDeletedTermRelationships' ], 10, 3 );
 		add_action( 'trashed_post', [ $this, 'onTrashedPost' ], 10, 1 );
@@ -51,7 +55,6 @@ final class FolderCountLifecycle
 	 * @param int|string $tt_id
 	 * @param string     $taxonomy
 	 */
-
 	public function onAddedTermRelationship($object_id, $tt_id, $taxonomy): void
 	{
 		if ( self::$suppressed ) {
@@ -79,7 +82,6 @@ final class FolderCountLifecycle
 	 * @param array<int|string> $tt_ids
 	 * @param string            $taxonomy
 	 */
-
 	public function onDeletedTermRelationships($object_id, $tt_ids, $taxonomy): void
 	{
 		if ( self::$suppressed ) {
@@ -91,8 +93,10 @@ final class FolderCountLifecycle
 		}
 
 		$object_id = (int) $object_id;
+		if ( array_key_exists( $object_id, self::$pending_delete_deltas ) ) {
+			return;
+		}
 		if ( null === get_post( $object_id ) ) {
-
 			return;
 		}
 		if ( get_post_type( $object_id ) !== Taxonomy::postTypeForTaxonomy( $taxonomy ) ) {
@@ -114,7 +118,6 @@ final class FolderCountLifecycle
 	/**
 	 * @param int|string $post_id
 	 */
-
 	public function onTrashedPost($post_id): void
 	{
 		$this->applyTrashTransitionDelta( (int) $post_id, -1 );
@@ -123,7 +126,6 @@ final class FolderCountLifecycle
 	/**
 	 * @param int|string $post_id
 	 */
-
 	public function onUntrashedPost($post_id): void
 	{
 		$this->applyTrashTransitionDelta( (int) $post_id, +1 );
@@ -138,7 +140,6 @@ final class FolderCountLifecycle
 			return;
 		}
 		if ( ! AttachmentVisibility::isVisibleByMeta( $post_id ) ) {
-
 			return;
 		}
 
@@ -157,7 +158,6 @@ final class FolderCountLifecycle
 	/**
 	 * @param int|string $post_id
 	 */
-
 	public function onDeleteAttachment($post_id): void
 	{
 		if ( self::$suppressed ) {
@@ -188,7 +188,6 @@ final class FolderCountLifecycle
 	 * @param int|string $post_id
 	 * @param mixed      $post
 	 */
-
 	public function onBeforeDeletePost($post_id, $post = null): void
 	{
 		if ( self::$suppressed ) {
@@ -223,7 +222,6 @@ final class FolderCountLifecycle
 	/**
 	 * @param int|string $post_id
 	 */
-
 	public function onDeletedPost($post_id): void
 	{
 		$post_id = (int) $post_id;
@@ -234,7 +232,6 @@ final class FolderCountLifecycle
 		unset( self::$pending_delete_deltas[ $post_id ] );
 
 		if ( self::$suppressed ) {
-
 			return;
 		}
 
@@ -250,7 +247,6 @@ final class FolderCountLifecycle
 	 * @param string            $meta_key
 	 * @param mixed             $meta_value
 	 */
-
 	public function onAddedPostMeta($meta_id, $object_id, $meta_key, $meta_value = null): void
 	{
 		$this->applyVisibilityTransitionDelta( (int) $object_id, (string) $meta_key, -1 );
@@ -262,7 +258,6 @@ final class FolderCountLifecycle
 	 * @param string            $meta_key
 	 * @param mixed             $meta_value
 	 */
-
 	public function onDeletedPostMeta($meta_ids, $object_id, $meta_key, $meta_value = null): void
 	{
 		$this->applyVisibilityTransitionDelta( (int) $object_id, (string) $meta_key, +1 );
@@ -280,11 +275,9 @@ final class FolderCountLifecycle
 			return;
 		}
 		if ( ! AttachmentVisibility::isVisibleStatus( (string) get_post_status( $post_id ) ) ) {
-
 			return;
 		}
 		if ( ! AttachmentVisibility::isVisibleByMetaExcept( $post_id, $meta_key ) ) {
-
 			return;
 		}
 
@@ -303,7 +296,6 @@ final class FolderCountLifecycle
 	/**
 	 * @return array<int, int>
 	 */
-
 	private function readFolderIds(int $post_id, string $taxonomy): array
 	{
 		if ( function_exists( 'get_object_term_cache' ) ) {
@@ -331,7 +323,6 @@ final class FolderCountLifecycle
 	 * @param array<int, int> $tt_ids
 	 * @return array<int, int>
 	 */
-
 	private function ttIdsToTermIds(array $tt_ids, string $taxonomy): array
 	{
 		$missing = array_values( array_filter( $tt_ids, static fn (int $tt): bool => ! isset( self::$tt_to_term[ $tt ] ) ) );
@@ -349,7 +340,6 @@ final class FolderCountLifecycle
 			foreach ( SqlSafeCast::nullSafeSqlRows( $rows ) ?? [] as $row ) {
 				self::$tt_to_term[ (int) $row->term_taxonomy_id ] = (int) $row->term_id;
 			}
-
 			foreach ( $missing as $tt ) {
 				self::$tt_to_term[ $tt ] ??= $tt;
 			}

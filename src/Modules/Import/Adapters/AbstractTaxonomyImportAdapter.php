@@ -10,7 +10,6 @@ use Plathix\Modules\Import\ImportAdapterInterface;
 
 abstract class AbstractTaxonomyImportAdapter implements ImportAdapterInterface
 {
-
 	protected const TAXONOMY = '';
 
 	private bool $last_export_query_failed = false;
@@ -23,7 +22,6 @@ abstract class AbstractTaxonomyImportAdapter implements ImportAdapterInterface
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-
 		$count = $wpdb->get_var(
 			$wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->term_taxonomy} WHERE taxonomy = %s", static::TAXONOMY )
 		);
@@ -44,7 +42,6 @@ abstract class AbstractTaxonomyImportAdapter implements ImportAdapterInterface
 		$this->last_export_query_failed = false;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
 		$terms = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT tt.term_taxonomy_id, tt.term_id, tt.parent, t.name, t.slug
@@ -107,7 +104,6 @@ abstract class AbstractTaxonomyImportAdapter implements ImportAdapterInterface
 	 * @param array{id: int, name: string, parent: int, items: list<int>} $entry
 	 * @param array<string, mixed>                                       $raw
 	 */
-
 	protected function skipTerm(array $entry, array $raw): bool {
 		return false;
 	}
@@ -116,7 +112,6 @@ abstract class AbstractTaxonomyImportAdapter implements ImportAdapterInterface
 	 * @param list<array{id: int, name: string, parent: int, items: list<int>}> $tree
 	 * @return list<array{id: int, name: string, parent: int, items: list<int>}>
 	 */
-
 	protected function sortTree(array $tree): array {
 		return $tree;
 	}
@@ -125,7 +120,6 @@ abstract class AbstractTaxonomyImportAdapter implements ImportAdapterInterface
 	 * @param list<int> $term_taxonomy_ids
 	 * @return array<int, list<int>>|null
 	 */
-
 	protected static function fetchItemsByTermTaxonomyIds(array $term_taxonomy_ids): ?array {
 		if ( $term_taxonomy_ids === [] ) {
 			return [];
@@ -136,7 +130,6 @@ abstract class AbstractTaxonomyImportAdapter implements ImportAdapterInterface
 		$id_list = implode( ',', array_map( 'intval', $term_taxonomy_ids ) );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter
-
 		$rows = $wpdb->get_results(
 			"SELECT term_taxonomy_id, object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN ({$id_list})",
 			ARRAY_A

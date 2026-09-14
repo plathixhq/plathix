@@ -41,8 +41,8 @@ function getSpinnerHandle(frame, root) {
         return { show: () => nativeSpinner.show(), hide: () => nativeSpinner.hide() };
     }
 
-
-
+    
+    
     let el = root.querySelector(':scope > .plathix-infinite-scroll-spinner');
     if (!el) {
         el = document.createElement('span');
@@ -61,8 +61,8 @@ export class InfiniteScrollManager {
     #frameRef = null;
     #frameOff = [];  // cleanup fns for backbone frame listeners
     #scrollOff = []; // cleanup fns for DOM scroll listeners
-    #rootEl = null;
-    #spinner = null;
+    #rootEl = null;  
+    #spinner = null; 
 
     init() {
         if (!getRuntime().infiniteScroll) return;
@@ -70,8 +70,8 @@ export class InfiniteScrollManager {
         this.#initialized = true;
 
         // Modal context: listen for any wp.media frame opening.
-
-
+        
+        
         onMediaFrameReady((frame) => this.attachFrame(frame));
     }
 
@@ -113,26 +113,26 @@ export class InfiniteScrollManager {
         const root = frame.el || frame.$el?.[0];
         if (!root) return;
 
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
         root.classList.add('plathix-infinite-active');
         this.#rootEl = root;
         this.#spinner = getSpinnerHandle(frame, root);
 
-
-
+        
+        
         const containers = [
             root.querySelector('.attachments-wrapper'),
             root.querySelector('.media-frame-content'),
             root.querySelector('.attachments-browser'),
         ].filter(Boolean);
 
-
-
+        
+        
         const onContainerScroll = () => {
             for (const container of containers) {
                 const { scrollTop, scrollHeight, clientHeight } = container;
@@ -143,12 +143,12 @@ export class InfiniteScrollManager {
             }
         };
 
-
-
-
-
-
-
+        
+        
+        
+        
+        
+        
         const onWindowScroll = () => {
             const doc = document.documentElement;
             if (isNearBottom(window.scrollY, window.innerHeight, doc.scrollHeight)) {
@@ -177,9 +177,9 @@ export class InfiniteScrollManager {
         if (!canUseButton && !library?.hasMore?.()) return;
 
         this.#loading = true;
-
-
-
+        
+        
+        
         this.#spinner?.show();
         const done = () => {
             this.#loading = false;
@@ -208,9 +208,9 @@ export class InfiniteScrollManager {
 
     #detach() {
         this.#unbindScroll();
-
-
-
+        
+        
+        
         this.#rootEl?.querySelector(':scope > .plathix-infinite-scroll-spinner')?.remove();
         this.#spinner = null;
         this.#rootEl?.classList?.remove('plathix-infinite-active');

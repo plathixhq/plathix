@@ -18,7 +18,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * @implements Rule<BinaryOp>
  */
-
 final class ForbiddenManualAccessLevelRankingRule implements Rule
 {
 	private const TARGET_CLASS = 'Plathix\\User\\AccessLevel';
@@ -55,11 +54,7 @@ final class ForbiddenManualAccessLevelRankingRule implements Rule
 
 		return [
 			RuleErrorBuilder::message( sprintf(
-				'Manual AccessLevel ranking comparison (%d case checks in one %s expression) — ' .
-				'Authorization checks must use the approved access helpers.' .
-				'(3 independent reimplementations of the same "level not below required" check ' .
-				'found across Free and PRO). If this is a genuine single-case check unrelated to ' .
-				'ranking, add @phpstan-ignore with a one-line justification.',
+				'Manual AccessLevel ranking comparison (%d case checks in one %s expression) — ' . 'use AccessLevel::satisfies() instead of comparing cases by hand. ' . 'If this is a genuine single-case check unrelated to ' . 'ranking, add @phpstan-ignore with a one-line justification',
 				$accessLevelComparisons,
 				$node instanceof BooleanOr ? '||' : '&&'
 			) )->identifier( 'plathix.manualAccessLevelRanking' )->build(),
@@ -70,7 +65,6 @@ final class ForbiddenManualAccessLevelRankingRule implements Rule
 	 * @param class-string<BooleanAnd|BooleanOr> $rootClass
 	 * @return list<Node>
 	 */
-
 	private function flattenChain(Node $node, string $rootClass): array
 	{
 		if ( ( $node instanceof BooleanAnd || $node instanceof BooleanOr ) && $node::class === $rootClass ) {

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Plathix\Core;
 
+use Plathix\Infrastructure\Logger;
+
 final class FolderMutationService
 {
 	public function __construct(
@@ -15,7 +17,6 @@ final class FolderMutationService
 	/**
 	 * @param array<string, mixed> $changes
 	 */
-
 	public function applyChanges(int $id, array $changes, string $taxonomy): ?\WP_Error {
 		$applied = [];
 
@@ -25,7 +26,6 @@ final class FolderMutationService
 				/**
 				 * @var \WP_Error $error
 				 */
-
 				return $this->withApplied( $error, $applied );
 			}
 			$applied[] = 'name';
@@ -50,7 +50,14 @@ final class FolderMutationService
 		}
 
 		if ( array_key_exists( 'color', $changes ) ) {
-			update_term_meta( $id, PLATHIX_TERM_COLOR, sanitize_hex_color( (string) $changes['color'] ) ?? '' );
+			$color   = sanitize_hex_color( (string) $changes['color'] ) ?? '';
+			$old     = get_term_meta( $id, PLATHIX_TERM_COLOR, true );
+			$written = update_term_meta( $id, PLATHIX_TERM_COLOR, $color );
+
+			if ( ! $written && (string) $old !== $color ) {
+				Logger::error( 'folder_color_write_failed', [ 'term_id' => $id ] );
+			}
+
 			$this->folders->invalidate( $taxonomy );
 		}
 
@@ -60,7 +67,6 @@ final class FolderMutationService
 	/**
 	 * @param list<string> $applied
 	 */
-
 	private function withApplied(\WP_Error $error, array $applied): \WP_Error {
 		if ( [] === $applied ) {
 			return $error;

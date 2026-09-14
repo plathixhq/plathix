@@ -46,8 +46,8 @@ import { getMediaFrame } from '../../runtime.js';
 
 function makeStore(extraState = {})
 {
-
-
+    
+    
     const base = mergeStore(treeStateModule, navigationModule, selectionModule, foldersTreeModule);
     return Object.assign(Object.create(null), base, {
         folders: [],
@@ -272,7 +272,7 @@ describe('navigationModule — openFolder', () => {
 
     it('preserves folder tree behavior', async() => {
         Api.savePreference.mockResolvedValue({});
-
+        
         const store = makeStore({
             folders: [
                 { id: 1, parentId: 0 },
@@ -284,7 +284,7 @@ describe('navigationModule — openFolder', () => {
 
         await store.openFolder(3);
 
-
+        
         expect(store.collapsedIds).toEqual({});
     });
 
@@ -305,7 +305,7 @@ describe('navigationModule — openFolder', () => {
 
         await store.openFolder(3);
 
-
+        
         expect(loadFolderChildren.mock.calls.map((c) => c[0])).toEqual([1, 2]);
     });
 
@@ -441,8 +441,8 @@ describe('prevents concurrent state changes', () => {
     });
 
     it('does not let a stale retry cycle overwrite a newer synchronous filter application', () => {
-
-
+        
+        
         getMediaFrame.mockReturnValue({
             content: { get: () => ({ collection: null }) },
             state: () => ({ get: () => null }),
@@ -451,8 +451,8 @@ describe('prevents concurrent state changes', () => {
         const store = makeStore();
         navigationModule.applyFolderFilter.call(store, 11);
 
-
-
+        
+        
         const set = jest.fn();
         const unset = jest.fn();
         const fetch = jest.fn();
@@ -467,9 +467,9 @@ describe('prevents concurrent state changes', () => {
 
         expect(set).toHaveBeenCalledWith({ plathix_folder: 22 });
 
-
-
-
+        
+        
+        
         jest.advanceTimersByTime(20 * 150 + 100);
 
         expect(set).toHaveBeenCalledTimes(1);
@@ -479,7 +479,7 @@ describe('prevents concurrent state changes', () => {
     
 
     it('keeps REST transport behavior consistent under retry and error conditions', () => {
-
+        
         getMediaFrame.mockReturnValue({
             content: { get: () => ({ collection: null }) },
             state: () => ({ get: () => null }),
@@ -488,10 +488,10 @@ describe('prevents concurrent state changes', () => {
         const store = makeStore();
         navigationModule.applyFolderFilter.call(store, 33);
 
-
-
-
-
+        
+        
+        
+        
         const set = jest.fn();
         const unset = jest.fn();
         const fetch = jest.fn();

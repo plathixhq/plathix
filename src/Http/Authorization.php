@@ -9,7 +9,9 @@ use Plathix\User\AccessResolver;
 
 final class Authorization
 {
-
+	/**
+	 * @var array<string, array<string, AccessLevel>>
+	 */
 	private static array $cap_map = [
 		'attachment' => [
 			'view' => AccessLevel::View,
@@ -45,7 +47,6 @@ final class Authorization
 	/**
 	 * @return array{0: string, 1: AccessLevel}
 	 */
-
 	public static function capEntry(string $operation, string $post_type): array {
 		$map_key = match ( true ) {
 			$post_type === '' || $post_type === 'attachment' => 'attachment',

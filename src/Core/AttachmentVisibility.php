@@ -10,13 +10,11 @@ final class AttachmentVisibility
 	 * @param string[] $keys
 	 * @return string[]
 	 */
-
 	public const EXCLUDE_META_FILTER = 'plathix/count_exclude_meta';
 
 	/**
 	 * @return string[]
 	 */
-
 	public static function excludeMetaKeys(): array {
 		$default = [ '_elementor_is_screenshot' ];
 		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.DynamicHooknameFound -- EXCLUDE_META_FILTER constant already resolves to the prefixed literal 'plathix/count_exclude_meta'; static analysis doesn't evaluate the constant.
@@ -38,8 +36,8 @@ final class AttachmentVisibility
 
 	/**
 	 * @param string $posts_alias
+	 * @throws \InvalidArgumentException
 	 */
-
 	public static function sqlPredicate(string $posts_alias): string {
 		self::assertValidPostsAlias( $posts_alias );
 
@@ -65,7 +63,6 @@ final class AttachmentVisibility
 	 * @param array<int> $ids
 	 * @return array<int>
 	 */
-
 	public static function filterIds(array $ids): array {
 		$ids = array_values( array_unique( array_filter( array_map( 'absint', $ids ) ) ) );
 		if ( $ids === [] ) {
@@ -75,7 +72,6 @@ final class AttachmentVisibility
 		$keys = self::excludeMetaKeys();
 		if ( $keys === [] ) {
 			return $ids;
-
 		}
 
 		global $wpdb;
@@ -98,16 +94,13 @@ final class AttachmentVisibility
 	/**
 	 * @param list<string> $statuses
 	 */
-
 	public static function countVisible(array $statuses): int {
-
 		return self::countVisibleOrNull( $statuses ) ?? 0;
 	}
 
 	/**
 	 * @param list<string> $statuses
 	 */
-
 	public static function countVisibleOrNull(array $statuses): ?int {
 		$statuses = array_values( array_unique( array_filter(
 			array_map( static fn ($s): string => is_string( $s ) ? $s : '', $statuses ),
@@ -136,12 +129,15 @@ final class AttachmentVisibility
 		return SqlSafeCast::nullSafeSqlCount( $count );
 	}
 
+	/**
+	 * @var string[]
+	 */
 	private const NON_VISIBLE_STATUSES = [ 'trash', 'auto-draft' ];
 
 	/**
 	 * @param string $posts_alias
+	 * @throws \InvalidArgumentException
 	 */
-
 	public static function statusSqlPredicate(string $posts_alias): string {
 		self::assertValidPostsAlias( $posts_alias );
 
@@ -183,8 +179,8 @@ final class AttachmentVisibility
 	/**
 	 * @param list<string> $statuses
 	 * @param string        $posts_alias
+	 * @throws \InvalidArgumentException
 	 */
-
 	public static function statusInPredicate(array $statuses, string $posts_alias): string {
 		self::assertValidPostsAlias( $posts_alias );
 
@@ -204,6 +200,9 @@ final class AttachmentVisibility
 		return "{$posts_alias}.post_status IN ({$in_list})";
 	}
 
+	/**
+	 * @throws \InvalidArgumentException
+	 */
 	private static function assertValidPostsAlias(string $posts_alias): void {
 		if ( $posts_alias === '' || ! preg_match( '/^[A-Za-z0-9_.]+$/', $posts_alias ) ) {
 			throw new \InvalidArgumentException(

@@ -63,10 +63,10 @@ describe('folder switch ui', () => {
         jest.clearAllMocks();
         document.body.innerHTML = '';
         window.Alpine = { store: mockAlpineStore };
-
-
-
-
+        
+        
+        
+        
         bindFolderSwitchUi();
         __resetFolderSwitchCacheForTests();
     });
@@ -86,7 +86,7 @@ describe('folder switch ui', () => {
         expect(document.querySelector('.plathix-folder-switch__field').classList.contains('is-open')).toBe(true);
 
         const rows = document.querySelectorAll('.plathix-folder-switch__tree-row');
-
+        
         expect(rows.length).toBe(5);
 
         const currentRow = document.querySelector('.plathix-folder-switch__tree-row.is-current');
@@ -94,8 +94,8 @@ describe('folder switch ui', () => {
     });
 
     it('falls back to the default popover title when the translated string is an empty string', async() => {
-
-
+        
+        
         mockAlpineStore.mockReturnValue({ notify: jest.fn() });
         document.body.innerHTML = fieldHtml(4);
         window.Plathix = { ...window.Plathix, i18n: { folder_switch_move_to: '' } };
@@ -189,8 +189,8 @@ describe('folder switch ui', () => {
         expect(document.querySelector('.plathix-folder-switch__popover')).toBeNull();
         expect(notify).toHaveBeenCalledWith('success', expect.any(String));
 
-
-
+        
+        
         expect(refreshFolders).toHaveBeenCalledWith({ silent: true });
     });
 
@@ -212,7 +212,7 @@ describe('folder switch ui', () => {
         await flushAsyncUi();
 
         expect(notify).toHaveBeenCalledWith('error', 'Server error');
-
+        
         expect(document.querySelector('.plathix-folder-switch__popover')).not.toBeNull();
         expect(document.querySelector('.plathix-folder-switch__field').dataset.currentFolderId).toBe('4');
     });
@@ -256,9 +256,9 @@ describe('folder switch ui', () => {
     });
 
     it('handles trash workflow consistently', async() => {
-
-
-
+        
+        
+        
         const notify = jest.fn();
         mockAlpineStore.mockReturnValue({ notify });
         window.PlathixFolderSwitch = { ...window.PlathixFolderSwitch, uncategorizedTermId: 157 };
@@ -282,7 +282,7 @@ describe('folder switch ui', () => {
             expect.objectContaining({ method: 'DELETE', data: { item_ids: [8], post_type: 'attachment' } })
         );
 
-
+        
         expect(document.querySelector('.plathix-folder-switch__field').dataset.currentFolderId).toBe('157');
         const nameEl = document.querySelector('.plathix-folder-switch__name');
         expect(nameEl.textContent).toBe('Несортированные');

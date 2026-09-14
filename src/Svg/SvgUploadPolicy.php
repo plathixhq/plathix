@@ -18,7 +18,6 @@ final class SvgUploadPolicy
 	 * @param bool   $safeMode
 	 * @return string|\WP_Error
 	 */
-
 	public function sanitizeMarkup(string $contents, bool $safeMode): string|\WP_Error {
 		if ( $safeMode && $this->sanitizer->hasUnsafeUseOrImageReference( $contents ) ) {
 			return new \WP_Error( 'invalid_mime', __( 'SVG file contains unsafe content and was rejected.', 'plathix' ) );
@@ -48,7 +47,6 @@ final class SvgUploadPolicy
 	 * @param bool   $safeMode
 	 * @return string|\WP_Error
 	 */
-
 	public function enforceUploadLimitsAndSanitize(string $tmpName, bool $safeMode): string|\WP_Error {
 		$maxBytes = (int) apply_filters( 'plathix/svg/max_upload_bytes', 2 * 1024 * 1024 ); // 2 MB default
 		if ( filesize( $tmpName ) > $maxBytes ) {

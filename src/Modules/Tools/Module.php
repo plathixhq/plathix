@@ -8,7 +8,6 @@ use Plathix\Contracts\ModuleInterface;
 
 class Module implements ModuleInterface
 {
-
 	public function register(): void
 	{
 		add_action( 'plathix/modules/boot', [ $this, 'boot' ] );

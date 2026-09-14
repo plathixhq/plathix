@@ -2,8 +2,8 @@ export function fallbackCopy(text) {
     const textarea = document.createElement('textarea');
     textarea.value = text;
     textarea.setAttribute('readonly', 'readonly');
-
-
+    
+    
     textarea.className = 'plathix-visually-offscreen';
     document.body.appendChild(textarea);
     textarea.select();

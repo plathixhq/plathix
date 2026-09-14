@@ -15,12 +15,12 @@ function applySkinClasses(rootEl) {
 
 export function ensureStaticRoot() {
     const runtime = getRuntime();
-
-
-
-
-
-
+    
+    
+    
+    
+    
+    
     if (runtime.screenKind !== 'static') {
         return null;
     }
@@ -50,16 +50,16 @@ export function ensureStaticRoot() {
     if (!wrapper.children.length) {
         wrapper.innerHTML = sidebarMarkup();
         applySkinClasses(wrapper);
-
-
-
+        
+        
+        
         wrapper.removeAttribute('aria-hidden');
     }
 
     const _saved = SidebarResizer.loadState(getPostType());
     if (_saved.collapsed) {
-
-
+        
+        
         wrapper.classList.add('is-collapsed');
     } else if (_saved.width >= 320) {
         wrapper.style.width = _saved.width + 'px';
@@ -92,9 +92,9 @@ export class MountManager {
 
         this.#bootstrapped = true;
 
-
-
-
+        
+        
+        
         onMediaFrameReady((frame) => this.#onOpen(frame));
 
         if (this.#resolveFrameElement()) {
@@ -134,11 +134,11 @@ export class MountManager {
     #ensureMounted() {
         const mediaFrame = this.#resolveFrameElement();
         if (!mediaFrame) {
-
-
-
-
-
+            
+            
+            
+            
+            
             this.#mountRetryCount++;
             if (this.#mountRetryCount < 5) {
                 this.#queueEnsureMounted();
@@ -173,10 +173,10 @@ export class MountManager {
 
         const menuInner = menuPanel.querySelector('.media-menu');
         if (!menuInner) {
-
-
-
-
+            
+            
+            
+            
             this.#mountRetryCount++;
             if (this.#mountRetryCount < 5) {
                 this.#queueEnsureMounted();
@@ -248,9 +248,9 @@ export class MountManager {
             this.#frame = null;
             this.#frameEl = null;
             this.#teardownMountedFrame();
-
-
-
+            
+            
+            
         };
         const onContentRender = () => this.#ensureMounted();
         const onRouterRender = () => this.#ensureMounted();

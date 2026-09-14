@@ -31,7 +31,7 @@ function makeComponent(storeOverrides = {}) {
 
 describe('preserves folder tree behavior', () => {
     it('gates the bulk/drag-and-drop action behind the expected confirmation', () => {
-
+        
         const { component, store } = makeComponent({ newFolderParentId: null });
         component.createRootFolder();
         expect(store.showNewFolderForm).toHaveBeenCalledWith(5);
@@ -39,7 +39,7 @@ describe('preserves folder tree behavior', () => {
     });
 
     it('keeps REST transport behavior consistent under retry and error conditions', () => {
-
+        
         const { component, store } = makeComponent({ newFolderParentId: 5 });
         component.createRootFolder();
         expect(store.focusNewFolderInput).toHaveBeenCalledTimes(1);
@@ -48,7 +48,7 @@ describe('preserves folder tree behavior', () => {
     });
 
     it('preserves folder tree behavior', () => {
-
+        
         const { component, store } = makeComponent({ newFolderParentId: 99 });
         component.createRootFolder();
         expect(store.showNewFolderForm).toHaveBeenCalledWith(5);
@@ -95,7 +95,7 @@ describe('BulkActions.moveSelected', () => {
         });
         component.moveSelected(7);
         expect(confirmAndMoveItems).toHaveBeenCalledWith([1, 2, 3], 7, null);
-
+        
         expect(store.moveItemsBulk).not.toHaveBeenCalled();
     });
 });

@@ -36,7 +36,6 @@ class HomeDashboardData
 	 * @return array<string, mixed>
 	 */
 	public function collect(): array {
-
 		$post_types    = [ 'attachment' ];
 		$enabled_count = count( $post_types );
 
@@ -84,7 +83,6 @@ class HomeDashboardData
 	/**
 	 * @return array<int, string>
 	 */
-
 	private function collectHealthIssues(): array {
 		$issues = [];
 
@@ -123,7 +121,6 @@ class HomeDashboardData
 		 * @param array<int, array{title:string, desc:string, url:string}> $cards
 		 * @param string[] $post_types
 		 */
-
 		/** @var array<int, array{title:string, desc:string, url:string}> $cards */
 		$cards = (array) apply_filters( 'plathix/dashboard/onboarding_cards', $cards, $post_types );
 
@@ -137,7 +134,6 @@ class HomeDashboardData
 	 * @param array<int, array{title:string, desc:string, url:string, id:string}> $cards
 	 * @return array<int, array{title:string, desc:string, url:string, id:string}>
 	 */
-
 	private function filterDismissedOnboardingCards(array $cards): array {
 		$dismissed = get_user_meta( get_current_user_id(), HomeDashboardPage::blogScopedMetaKey( HomeDashboardPage::DISMISS_META_KEY ), true );
 

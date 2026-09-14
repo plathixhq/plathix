@@ -11,6 +11,9 @@ final class AttachmentReplaceLock
 {
 	private const LOCK_PREFIX = 'plx_replace_';
 
+	/**
+	 * @return array{token:string,timestamp:int}|\WP_Error
+	 */
 	public function acquire(int $attachment_id): array|\WP_Error
 	{
 		if ( $attachment_id <= 0 ) {

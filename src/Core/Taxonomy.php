@@ -19,6 +19,7 @@ final class Taxonomy
 		self::ensureSystemTerms();
 
 		if ( 1 === (int) get_option( 'plathix_boot_recovered_lazily', 0 ) ) {
+			// @phpstan-ignore plathix.discardedWriteReturn
 			delete_option( 'plathix_boot_recovered_lazily' );
 		}
 	}
@@ -28,7 +29,6 @@ final class Taxonomy
 	/**
 	 * @param bool $lazy_recovery
 	 */
-
 	public static function ensureReady(bool $lazy_recovery = false): void {
 		if ( self::$ready ) {
 			return;
@@ -53,11 +53,11 @@ final class Taxonomy
 		self::$ready = true;
 
 		if ( $lazy_recovery && $needed_registration ) {
-
 			\Plathix\Infrastructure\Logger::warning(
 				'system_terms_recovered_lazily',
 				[ 'reason' => 'init_hook_did_not_run', 'hint' => 'third-party plugin likely fataled on init before Plathix' ]
 			);
+			// @phpstan-ignore plathix.discardedWriteReturn
 			update_option( 'plathix_boot_recovered_lazily', 1, false );
 		}
 	}
@@ -104,9 +104,7 @@ final class Taxonomy
 	/**
 	 * @return array<string>
 	 */
-
 	public static function getEnabledPostTypes(): array {
-
 		return [ 'attachment' ];
 	}
 

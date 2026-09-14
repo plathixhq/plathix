@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Plathix\Modules\Replace;
 
 use Plathix\Core\AttachmentFileCleanup;
+use Plathix\Infrastructure\DirectoryGuard;
 use Plathix\Infrastructure\Logger;
 use Plathix\PublicApi\SvgApi;
 use Plathix\Svg\Sanitizer\Sanitizer;
@@ -25,7 +26,9 @@ final class AttachmentReplaceService
 	private \Closure $upload_runner;
 	/** @var \Closure(array<string,mixed>, array<string,mixed>): (array<string,mixed>|\WP_Error) */
 	private \Closure $sideload_runner;
-
+	/**
+	 * @var \Closure(): string
+	 */
 	private \Closure $temp_dir_resolver;
 	/** @var \Closure(int,string): (array<string,mixed>|false) */
 	private \Closure $metadata_generator;
@@ -117,8 +120,6 @@ final class AttachmentReplaceService
 		/**
 		 * @var array<string, mixed> $validated_input
 		 */
-
-
 		$actor_context = $this->authorization->normalize( $options['actor_context'] ?? [] );
 		$post = get_post( $attachment_id );
 		if ( ! $post instanceof \WP_Post || $post->post_type !== 'attachment' ) {
@@ -136,8 +137,6 @@ final class AttachmentReplaceService
 		/**
 		 * @var array{token: string, timestamp: int} $lock
 		 */
-
-
 		$staged_file = null;
 		$sideload_staged_file = null;
 		$committed = false;
@@ -147,7 +146,6 @@ final class AttachmentReplaceService
 		$collision_backup = null;
 
 		try {
-
 			$recheck_post = get_post( $attachment_id );
 			if ( $recheck_post instanceof \WP_Post && $recheck_post->post_status === 'trash' ) {
 				return new \WP_Error( 'attachment_trashed', __( 'Attachment was moved to trash.', 'plathix' ) );
@@ -168,8 +166,6 @@ final class AttachmentReplaceService
 			/**
 			 * @var array<string, mixed> $validated_input
 			 */
-
-
 			$upload_mode = sanitize_key( (string) ( $options['upload_mode'] ?? 'upload' ) );
 			$temp_dir = null;
 			if ( $upload_mode === 'sideload' ) {
@@ -178,13 +174,11 @@ final class AttachmentReplaceService
 					/**
 					 * @var \WP_Error $temp_dir
 					 */
-
 					return $temp_dir;
 				}
 				/**
 				 * @var string $temp_dir
 				 */
-
 				$validated_input = $this->stageSideloadFile( $validated_input, $temp_dir );
 				if ( is_wp_error( $validated_input ) ) {
 					return $validated_input;
@@ -192,7 +186,6 @@ final class AttachmentReplaceService
 				/**
 				 * @var array<string, mixed> $validated_input
 				 */
-
 				$sideload_staged_file = (string) ( $validated_input['tmp_name'] ?? '' );
 			}
 
@@ -202,13 +195,11 @@ final class AttachmentReplaceService
 					/**
 					 * @var \WP_Error $collision_backup
 					 */
-
 					return $collision_backup;
 				}
 				/**
 				 * @var string $collision_backup
 				 */
-
 			}
 
 			$uploaded = $this->runUploadPipeline( $validated_input, $upload_mode, $old_state['absolute_file'] );
@@ -218,8 +209,6 @@ final class AttachmentReplaceService
 			/**
 			 * @var array<string, mixed> $uploaded
 			 */
-
-
 			$staged_file = (string) ( $uploaded['file'] ?? '' );
 			$new_mime = (string) ( $uploaded['type'] ?? $new_mime );
 			if ( $staged_file === '' || $new_mime === '' ) {
@@ -254,7 +243,6 @@ final class AttachmentReplaceService
 				/**
 				 * @var \WP_Error $post_update
 				 */
-
 				return $this->rollbackPreCommit( $attachment_id, $old_state, $staged_file, $post_update->get_error_message(), $collision_backup );
 			}
 
@@ -263,14 +251,11 @@ final class AttachmentReplaceService
 				/**
 				 * @var \WP_Error $new_metadata
 				 */
-
 				return $this->rollbackPreCommit( $attachment_id, $old_state, $staged_file, $new_metadata->get_error_message(), $collision_backup );
 			}
 			/**
 			 * @var array<string, mixed> $new_metadata
 			 */
-
-
 			// wp_update_attachment_metadata returns false when update_post_meta sees no change — not a real failure.
 			$updated_meta = wp_update_attachment_metadata( $attachment_id, $new_metadata );
 			if ( $updated_meta === false && wp_get_attachment_metadata( $attachment_id ) !== $new_metadata ) {
@@ -300,7 +285,6 @@ final class AttachmentReplaceService
 			try {
 				($this->cache_invalidator)( $taxonomy );
 			} catch ( \Throwable $throwable ) {
-
 				Logger::error( 'Attachment replace: cache invalidation failed', [ 'attachment_id' => $attachment_id ], $throwable );
 				$warnings[] = sprintf( 'Cache invalidation failed: %s', $throwable->getMessage() );
 			}
@@ -344,7 +328,6 @@ final class AttachmentReplaceService
 
 			return $result;
 		} finally {
-
 			$collision_confirmed = is_string( $staged_file ) && $staged_file !== '' && $staged_file === $old_state['absolute_file'];
 			if (
 				! $committed
@@ -432,7 +415,6 @@ final class AttachmentReplaceService
 	/**
 	 * @return string|\WP_Error
 	 */
-
 	private function backupCollisionTarget(string $old_absolute_file): string|\WP_Error
 	{
 		$temp_dir = $this->ensureTempDir();
@@ -440,14 +422,11 @@ final class AttachmentReplaceService
 			/**
 			 * @var \WP_Error $temp_dir
 			 */
-
 			return $temp_dir;
 		}
 		/**
 		 * @var string $temp_dir
 		 */
-
-
 		$backup_path = rtrim( $temp_dir, '/\\' ) . '/' . uniqid( 'replace_collision_', true ) . '-' . basename( $old_absolute_file );
 
 		if ( ! @copy( $old_absolute_file, $backup_path ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_copy -- copying the attachment's own original file into the plugin's temp dir before an upload pipeline that may overwrite it, so a restorable copy exists regardless of whether the collision actually happens; local paths, not remote.
@@ -460,7 +439,6 @@ final class AttachmentReplaceService
 	/**
 	 * @return string|\WP_Error
 	 */
-
 	private function ensureTempDir(): string|\WP_Error
 	{
 		$path = rtrim( (string) ( $this->temp_dir_resolver )(), '/\\' );
@@ -472,26 +450,13 @@ final class AttachmentReplaceService
 			return new \WP_Error( 'tmp_dir_unwritable', __( 'Unable to create Plathix temporary directory.', 'plathix' ) );
 		}
 
-		$this->writeDirGuard( $path );
+		DirectoryGuard::ensure( $path );
 
 		if ( ! is_writable( $path ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_is_writable -- preflight writability check of the plugin's own just-ensured temp dir before staging an upload; a WP_Error is returned on failure, no file is written here.
 			return new \WP_Error( 'tmp_dir_unwritable', __( 'Plathix temporary directory is not writable.', 'plathix' ) );
 		}
 
 		return $path;
-	}
-
-	private function writeDirGuard(string $dir): void
-	{
-		$index = trailingslashit( $dir ) . 'index.php';
-		if ( ! file_exists( $index ) ) {
-			file_put_contents( $index, "<?php\n// Silence is golden.\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- writes a directory-index guard into the plugin's own just-created temp dir; WP_Filesystem credentials-flow may be unavailable and this runs on a local upload path.
-		}
-
-		$htaccess = trailingslashit( $dir ) . '.htaccess';
-		if ( ! file_exists( $htaccess ) ) {
-			file_put_contents( $htaccess, "Deny from all\n" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents -- writes an Apache deny-all guard into the plugin's own just-created temp dir; WP_Filesystem credentials-flow may be unavailable and this runs on a local upload path.
-		}
 	}
 
 	/**
@@ -525,8 +490,6 @@ final class AttachmentReplaceService
 		/**
 		 * @var string $sanitized
 		 */
-
-
 		if ( $actor_context['mode'] !== 'system_cli' && $actor_context['user_id'] <= 0 ) {
 			return new \WP_Error( 'forbidden', __( 'SVG replacement requires an identified actor context.', 'plathix' ) );
 		}
@@ -653,7 +616,6 @@ final class AttachmentReplaceService
 	 * @param array{attached_file:string,absolute_file:string,mime:string,metadata:array<string,mixed>} $old_state
 	 * @param array<string,mixed>|null $new_metadata
 	 */
-
 	private function rollbackPreCommit(int $attachment_id, array $old_state, string $uploaded_file, string $message, ?string $collision_backup = null, ?array $new_metadata = null): \WP_Error
 	{
 		if ( $old_state['absolute_file'] !== '' ) {
@@ -738,7 +700,6 @@ final class AttachmentReplaceService
 	/**
 	 * @return array<string,mixed>
 	 */
-
 	private function defaultSizesResolver(int $attachment_id): array
 	{
 		$js_data = wp_prepare_attachment_for_js( $attachment_id );
@@ -749,7 +710,6 @@ final class AttachmentReplaceService
 	/**
 	 * @return array<string,array<string,mixed>>
 	 */
-
 	private function defaultMissingSubsizesResolver(int $attachment_id): array
 	{
 		return (array) wp_get_missing_image_subsizes( $attachment_id );

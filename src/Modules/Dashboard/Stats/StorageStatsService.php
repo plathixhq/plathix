@@ -8,7 +8,6 @@ use Plathix\Infrastructure\Keys;
 
 class StorageStatsService
 {
-
 	private const SENTINEL_TTL = 5 * MINUTE_IN_SECONDS;
 
 	public function diskUsage(): int {
@@ -34,7 +33,6 @@ class StorageStatsService
 				}
 			}
 		} catch ( \Throwable $e ) {
-
 			return $this->cacheAndReturn( -1, self::SENTINEL_TTL );
 		}
 

@@ -20,7 +20,6 @@ class UserFavoritesService
 
 		$post_types = [ 'attachment' ];
 
-
 		$all_ids = $this->collectFavoriteIds( $post_types );
 
 		if ( null === $all_ids ) {
@@ -37,14 +36,12 @@ class UserFavoritesService
 	 * @param list<string> $post_types
 	 * @return list<int>|null
 	 */
-
 	private function collectFavoriteIds(array $post_types): ?array {
 		global $wpdb;
 
 		$pattern = $wpdb->esc_like( Preferences::FAVORITES_META . '_' ) . '%' . $wpdb->esc_like( Preferences::blogSuffix() );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
 		$rows = $wpdb->get_results(
 			$wpdb->prepare( "SELECT meta_key, meta_value FROM {$wpdb->usermeta} WHERE meta_key LIKE %s", $pattern ),
 			ARRAY_A
@@ -79,7 +76,6 @@ class UserFavoritesService
 	 * @param int    $user_id
 	 * @param string $post_type
 	 */
-
 	public static function invalidate(int $user_id = 0, string $post_type = ''): void {
 		Cache::make()->deleteGroup( Cache::DASHBOARD_STATS_GROUP );
 	}

@@ -42,10 +42,10 @@ export function getFilterStrategy() {
         return 'media-frame';
     }
 
-
-
-
-
+    
+    
+    
+    
     return runtime.filterStrategy || 'url';
 }
 
@@ -139,14 +139,14 @@ export function getDepthLimit() {
 export function getFeatures() {
     const runtime = getRuntime();
     return {
-
-
-
-
+        
+        
+        
+        
         dnd:        runtime.dnd        !== false,
         uploadSync: runtime.uploadSync !== false,
-
-
-
+        
+        
+        
     };
 }

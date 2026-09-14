@@ -20,7 +20,6 @@ class OnboardingWidget
 			<div class="plathix-onboarding__header">
 				<h2 class="plathix-onboarding__title">
 					<?php
-
 					esc_html_e( 'Set up Plathix', 'plathix' );
 					?>
 				</h2>

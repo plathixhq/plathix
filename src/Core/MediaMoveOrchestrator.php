@@ -12,7 +12,6 @@ final class MediaMoveOrchestrator
 	 * @param int[] $ids
 	 */
 	public static function route(array $ids, int $folder_id, string $taxonomy): MediaMoveResult {
-
 		$trash_folder_id = TrashFolder::id( $taxonomy );
 		$trash_ids       = [];
 		$normal_ids      = [];
@@ -30,7 +29,6 @@ final class MediaMoveOrchestrator
 			$is_into_trash_target = $trash_folder_id > 0 && $folder_id === $trash_folder_id;
 
 			if ( $is_trash && $is_into_trash_target ) {
-
 				++$already_trashed_skipped;
 			} elseif ( $is_trash ) {
 				$trash_ids[] = $id;
@@ -49,34 +47,39 @@ final class MediaMoveOrchestrator
 		$counts_recomputed = [];
 		$counts   = [];
 
-		if ( $trash_ids !== [] ) {
-			$restore_result = ( new MediaDeleteService() )->bulkRestore( $trash_ids, $folder_id, $taxonomy );
-			$restored        = $restore_result->restored;
-			$moved          += count( $restored );
-			$failed          = array_merge( $failed, $restore_result->failed );
-			$skipped        += count( $restore_result->skipped );
-		}
+		Cache::beginBulkInvalidation($taxonomy);
+		try {
+			if ( $trash_ids !== [] ) {
+				$restore_result = ( new MediaDeleteService() )->bulkRestore( $trash_ids, $folder_id, $taxonomy );
+				$restored        = $restore_result->restored;
+				$moved          += count( $restored );
+				$failed          = array_merge( $failed, $restore_result->failed );
+				$skipped        += count( $restore_result->skipped );
+			}
 
-		if ( $into_trash_ids !== [] ) {
-			$trash_result = ( new MediaDeleteService() )->bulkTrash( $into_trash_ids, $taxonomy );
-			$trashed       = $trash_result->trashed;
-			$moved        += count( $trashed );
-			$failed        = array_merge( $failed, $trash_result->failed );
-			$skipped      += count( $trash_result->skipped );
-		}
+			if ( $into_trash_ids !== [] ) {
+				$trash_result = ( new MediaDeleteService() )->bulkTrash( $into_trash_ids, $taxonomy );
+				$trashed       = $trash_result->trashed;
+				$moved        += count( $trashed );
+				$failed        = array_merge( $failed, $trash_result->failed );
+				$skipped      += count( $trash_result->skipped );
+			}
 
-		if ( $normal_ids !== [] ) {
-			$repository   = new FolderRepository();
-			$cache        = Cache::make();
-			$countService = new FolderCountService( $repository, $cache );
-			$assignment   = new FolderAssignmentService( $repository, $countService, $cache );
+			if ( $normal_ids !== [] ) {
+				$repository   = new FolderRepository();
+				$cache        = Cache::make();
+				$countService = new FolderCountService( $repository, $cache );
+				$assignment   = new FolderAssignmentService( $repository, $countService, $cache );
 
-			$move_result        = $assignment->moveItemsBulk( $normal_ids, $folder_id, $taxonomy );
-			$moved             += $move_result['moved'];
-			$skipped           += $move_result['skipped'];
-			$failed             = array_merge( $failed, $move_result['failed'] );
-			$counts_recomputed  = $move_result['counts_recomputed'];
-			$counts             = $move_result['counts'];
+				$move_result        = $assignment->moveItemsBulk( $normal_ids, $folder_id, $taxonomy );
+				$moved             += $move_result['moved'];
+				$skipped           += $move_result['skipped'];
+				$failed             = array_merge( $failed, $move_result['failed'] );
+				$counts_recomputed  = $move_result['counts_recomputed'];
+				$counts             = $move_result['counts'];
+			}
+		} finally {
+			Cache::endBulkInvalidation($taxonomy);
 		}
 
 		return new MediaMoveResult(

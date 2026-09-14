@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Plathix\Infrastructure\Jobs;
 
+use Plathix\Core\FolderRepository;
 use Plathix\Infrastructure\JobLockService;
-use Plathix\Infrastructure\Logger;
 
 /**
  * Handles the plathix_job_reorder Action Scheduler job.
@@ -13,9 +13,11 @@ use Plathix\Infrastructure\Logger;
 final class ReorderJobRunner
 {
 	private JobLockService $lock_service;
+	private FolderRepository $repository;
 
-	public function __construct(JobLockService $lock_service) {
+	public function __construct(JobLockService $lock_service, FolderRepository $repository) {
 		$this->lock_service = $lock_service;
+		$this->repository   = $repository;
 	}
 
 	/** @param array<string, mixed> $args */
@@ -37,7 +39,7 @@ final class ReorderJobRunner
 					$lock = $this->lock_service->acquireOrder( $lock_name );
 
 					if ( $lock['mode'] === 'none' ) {
-						return; // Lock held by setOrder(); bail to preserve DnD result.
+						return; // Lock held by normalizeOrder() or another reorder job; bail to preserve result.
 					}
 
 					try {
@@ -58,13 +60,7 @@ final class ReorderJobRunner
 
 						$position = 1000;
 						foreach ( $terms as $term_id ) {
-							$term_id      = (int) $term_id;
-							$old_position = get_term_meta( $term_id, PLATHIX_TERM_POSITION, true );
-							$written      = update_term_meta( $term_id, PLATHIX_TERM_POSITION, $position );
-
-							if ( ! $written && (int) $old_position !== $position ) {
-								Logger::error( 'reorder_job_position_meta_write_failed', [ 'term_id' => $term_id, 'taxonomy' => $taxonomy, 'parent_id' => $parent_id ] );
-							}
+							$this->repository->setPosition( (int) $term_id, $position );
 
 							$position += 1000;
 						}

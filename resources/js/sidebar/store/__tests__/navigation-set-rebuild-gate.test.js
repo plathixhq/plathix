@@ -61,8 +61,8 @@ function makeStore(extraState = {})
         error: null,
         applyFolderFilter: jest.fn(),
         notify: jest.fn(),
-
-
+        
+        
         hasLoadedFullTree: true,
         loadedParentIds: new Set([0, 1, 5]),
         ...extraState,
@@ -72,8 +72,8 @@ function makeStore(extraState = {})
 describe('refreshes cached state when data changes', () => {
     beforeEach(() => jest.clearAllMocks());
 
-
-
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: [TWO_BRANCHES[0]] });
@@ -83,7 +83,7 @@ describe('refreshes cached state when data changes', () => {
         expect([...store.loadedParentIds].sort()).toEqual([0, 1, 5]);
     });
 
-
+    
     it('keeps store/selection state consistent across UI events', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: [TWO_BRANCHES[0]] });
@@ -102,20 +102,20 @@ describe('refreshes cached state when data changes', () => {
         expect([...store.loadedParentIds].sort()).toEqual([0, 1, 5]);
     });
 
-
-
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore({ loadedParentIds: new Set([0, 1, 5, 777]) });
         Api.getFolders.mockResolvedValue({ folders: TWO_BRANCHES });
 
         await store.refreshFolders({ silent: true });
 
-
+        
         expect([...store.loadedParentIds].sort()).toEqual([0, 1, 5]);
     });
 
-
-
+    
+    
     it('covers the attachment replace flow', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: [TWO_BRANCHES[0]] });
@@ -133,8 +133,8 @@ describe('refreshes cached state when data changes', () => {
 describe('refreshes cached state when data changes', () => {
     beforeEach(() => jest.clearAllMocks());
 
-
-
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: TWO_BRANCHES, fullTree: true });
@@ -144,8 +144,8 @@ describe('refreshes cached state when data changes', () => {
         expect([...store.loadedParentIds].sort()).toEqual([0, 1, 5]);
     });
 
-
-
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore();
         Api.getFolders.mockResolvedValue({ folders: [TWO_BRANCHES[0]], fullTree: false });
@@ -155,8 +155,8 @@ describe('refreshes cached state when data changes', () => {
         expect([...store.loadedParentIds].sort()).toEqual([0, 1, 5]);
     });
 
-
-
+    
+    
     it('preserves folder tree behavior', async() => {
         const store = makeStore({ loadedParentIds: new Set([0, 1, 5, 777]) });
         Api.getFolders.mockResolvedValue({ folders: TWO_BRANCHES });

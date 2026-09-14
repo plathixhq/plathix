@@ -37,7 +37,6 @@ final class RateLimiter
 	/**
 	 * @param 'sliding'|'fixed' $window_strategy
 	 */
-
 	public function attempt(
 		string $action,
 		int $user_id,
@@ -88,7 +87,6 @@ final class RateLimiter
 	 * @param array<string, mixed> $args
 	 * @return array<string, mixed>
 	 */
-
 	private function buildDedupeArgs(array $args, int $user_id): array {
 		$user_args = array_merge(
 			$args,

@@ -38,8 +38,8 @@ describe('uploadFile()', () => {
         const file = new File(['content'], 'photo.jpg', { type: 'image/jpeg' });
         await uploadFile(file);
         const got = lastInit.body.get('file');
-
-
+        
+        
         expect(got.name).toBe(file.name);
         expect(got.size).toBe(file.size);
         expect(got.type).toBe(file.type);
@@ -58,8 +58,8 @@ describe('uploadFile()', () => {
         expect(lastInit.body.constructor.name).toBe('FormData');
     });
 
-
-
+    
+    
     it('keeps REST transport behavior consistent under retry and error conditions', async () => {
         global.fetch = () => Promise.resolve({
             ok: true,

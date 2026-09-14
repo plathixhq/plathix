@@ -93,23 +93,28 @@ class SettingsPage
 	}
 
 	public function registerSettings(): void {
-
 		do_action( 'plathix/settings/save', 'plathix_default_folder_id', static function (mixed $raw = null): bool {
-
 			$raw = wp_unslash( $raw );
 			if ( $raw === null || $raw === '' ) {
 				return true;
 			}
-
 			return \Plathix\Infrastructure\OptionWrite::ifChanged( 'plathix_default_folder_id', absint( $raw ) );
 		} );
 
 		do_action( 'plathix/settings/save', 'plathix_infinite_scroll', static function (mixed $raw = null): bool {
-			return \Plathix\Infrastructure\OptionWrite::ifChanged( 'plathix_infinite_scroll', (bool) wp_unslash( $raw ?? false ) );
+			$unslashed = wp_unslash( $raw ?? false );
+			// rest_sanitize_boolean()'s stub declares `T of bool|string|int`; $unslashed is
+			// genuinely `mixed` here (HTTP-derived) — WP core itself accepts/normalizes any
+			// input at runtime, this only trips PHPStan's template inference.
+			// @phpstan-ignore argument.templateType
+			return \Plathix\Infrastructure\OptionWrite::ifChanged( 'plathix_infinite_scroll', rest_sanitize_boolean( $unslashed ) );
 		} );
 
 		do_action( 'plathix/settings/save', 'plathix_bulk_safe_mode', static function (mixed $raw = null): bool {
-			return \Plathix\Infrastructure\OptionWrite::ifChanged( 'plathix_bulk_safe_mode', (bool) wp_unslash( $raw ?? false ) );
+			$unslashed = wp_unslash( $raw ?? false );
+			// see plathix_infinite_scroll above
+			// @phpstan-ignore argument.templateType
+			return \Plathix\Infrastructure\OptionWrite::ifChanged( 'plathix_bulk_safe_mode', rest_sanitize_boolean( $unslashed ) );
 		} );
 
 		add_settings_section(
@@ -130,13 +135,11 @@ class SettingsPage
 		/**
 		 * @param string $option_group
 		 */
-
 		do_action( 'plathix/settings/register', self::OPTION_GROUP );
 
 		/**
 		 * @param array<int, string> $option_names
 		 */
-
 		$general_options = apply_filters( 'plathix/settings/option_tab_map', [
 			'plathix_default_folder_id',
 			'plathix_infinite_scroll',
@@ -144,7 +147,6 @@ class SettingsPage
 		] );
 		$this->save_handler->registerTabHandler( 'general', is_array( $general_options ) ? $general_options : [] );
 	}
-
 
 	public function renderInfiniteScroll(): void {
 		$enabled = (bool) get_option( 'plathix_infinite_scroll', false );
@@ -165,7 +167,7 @@ class SettingsPage
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- read-only redirect param, no data modified
-		$tab = sanitize_key( (string) ( $_POST['_plathix_redirect_tab'] ?? '' ) );
+		$tab = sanitize_key( (string) wp_unslash( $_POST['_plathix_redirect_tab'] ?? '' ) );
 
 		if ( $tab !== '' && in_array( $tab, $this->view->tabSlugs(), true ) ) {
 			$location = add_query_arg( 'tab', $tab, $location );
@@ -181,7 +183,6 @@ class SettingsPage
 	/**
 	 * @param array<int, string> $option_names
 	 */
-
 	public function registerSaveTabHandler(string $tab_slug, array $option_names): void {
 		$this->save_handler->registerTabHandler( $tab_slug, $option_names );
 	}

@@ -78,7 +78,6 @@ class ToolsPage
 				</div>
 
 				<?php
-
 				do_action( 'plathix/tools/cards' );
 				?>
 

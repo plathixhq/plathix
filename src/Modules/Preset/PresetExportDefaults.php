@@ -147,14 +147,16 @@ final class PresetExportDefaults
 
 	private static function pluginPlaceholderPath(): ?string
 	{
-
 		$path = PLATHIX_ASSETS_PATH . 'img/placeholder.webp';
 
 		return is_file( $path ) ? $path : null;
 	}
 
 	/**
-	 * Resizes image to fit within 600×400 and stay under 300 KB.
+	 * Resizes image to fit within 600×400 if larger than 200 KB (skip threshold below).
+	 * Uses quality=82 as a best-effort size reducer — does NOT re-check the resulting
+	 * file size against any byte limit; the real 300 KB ceiling is enforced separately
+	 * by the caller pipeline (PresetExportPipeline::run()/PresetUploadPipeline::MAX_PREVIEW_BYTES).
 	 * Returns path to resized temp file, or null if resize unavailable/unnecessary.
 	 */
 	private static function resizeToFit(string $source_path): ?string
